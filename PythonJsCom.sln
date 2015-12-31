@@ -7,6 +7,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Runtime", "Runtime\Runtime.
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Learn", "Learn\Learn.pyproj", "{BCB0CBA8-323D-4733-91BC-B6CB3747B030}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen.T4", "CodeGen\CodeGen.T4.csproj", "{0090A10B-23DE-44CC-B4CD-35F2812E19AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{86EB8113-897D-41F6-9994-00735E8025F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCB0CBA8-323D-4733-91BC-B6CB3747B030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BCB0CBA8-323D-4733-91BC-B6CB3747B030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

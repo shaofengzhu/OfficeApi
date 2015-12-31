@@ -24,6 +24,15 @@ class ActionInfo:
     Arguments = None
     ObjectPaths = None
 
+def greet(name:str, hello: str):
+    """
+    Greet
+
+    :type name: str
+    :type hello: str
+    """
+    print("Nice to meet you " + name + ". " + hello)
+
 req = RequestInfo()
 req.Actions = []
 a1 = ActionInfo()
@@ -47,4 +56,5 @@ else:
 for (k, v) in j.items():
     print(k, v)
 
+greet("Shaofeng", "How are you")
 

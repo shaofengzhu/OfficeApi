@@ -1,0 +1,239 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ include file="Helper.tt" #>
+<#@ include file="Core.tt" #>
+<#@ output extension=".txt" #>
+
+<#
+	this.WriteVSDoc();
+#>
+
+<#+
+	void WriteVSDoc()
+	{
+		this.LaunchDebuggerIfNecessary();
+		if (this.CheckInputParameters())
+		{
+			var rootObjectClass = this.GetParameterValue("RootObjectClass");
+			var rootObjectName = this.GetParameterValue("RootObjectName");
+			if (String.IsNullOrWhiteSpace(rootObjectClass) || string.IsNullOrWhiteSpace(rootObjectName)) {
+				throw new Exception("Missing arguments for RootObjectClass (e.g., \"Workbook\") and/or RootObjectName (e.g., \"workbook\").");
+			}
+
+			XDocument xdoc = XDocument.Load(this.DocXmlFilePath);
+
+			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
+			var namespaces = new HashSet<string>();
+			templateFileManager.StartNewFile(this.FileBaseName + "-vsdoc.js");
+
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			assemblyReader.Process();
+			var typeInfos = assemblyReader.Types.OrderBy(type => type.FullName);
+			foreach (ClientCallableTypeInfo typeInfo in typeInfos)
+			{
+				namespaces.Add(typeInfo.TypescriptNamespace);
+
+				WriteType(typeInfo, xdoc);
+			}
+
+			if (namespaces.Count != 1) {
+				throw new Exception("Only expected a single namespace (like \"Excel\" or \"Word\" to be present");
+			}
+
+			WriteRequestContextAndRunMethod(namespaces.First(), rootObjectClass, rootObjectName);
+			RemoveExtraObjectsFromNamespace(namespaces.First());
+
+			templateFileManager.EndBlock();
+			templateFileManager.WriteTo(this.OutputDirectory, this.CheckoutCommandPrefix);
+		}
+	}
+
+
+	////////////////////////////////////////////////////////////////////
+	/////////////////////// PER-OBJECT CODE-GEN ////////////////////////
+	////////////////////////////////////////////////////////////////////
+
+
+	void WriteType(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	{
+		if (typeInfo.IsClientObject || typeInfo.IsValueObject)
+		{
+			WriteClientObject(typeInfo, xdoc);
+		}
+		else if (typeInfo.IsEnum)
+		{
+			WriteEnumType(typeInfo, xdoc);
+		}
+		else
+		{
+			throw new Exception("Unknown object type for object " + typeInfo.FullName + "; it is neither a client object, enum, or value object.");
+		}
+	}
+
+	void WriteClientObject(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	{
+		this.WriteLine(string.Empty);
+		WriteNamespacePreamble(typeInfo.TypescriptNamespace);
+#>
+	var <#= typeInfo.Name #> = (function(_super) {
+		__extends(<#= typeInfo.Name #>, _super);
+		function <#= typeInfo.Name #>() {
+			<#= Utility.BuildVsDocSummaryForType(typeInfo, xdoc) #>
+			/// <field name="context" type="<#= typeInfo.TypescriptNamespace #>.RequestContext">The request context associated with this object</field>
+<#+
+		WriteClientObjectFields(typeInfo, xdoc);
+#>
+		}
+
+		<#= typeInfo.Name #>.prototype.load = function(option) {
+			/// <summary>
+			/// Queues up a command to load the specified properties of the object. You must call "context.sync()" before reading the properties.
+			/// </summary>
+			/// <param name="option" type="string | string[] | OfficeExtension.LoadOption"/>
+			/// <returns type="<#= typeInfo.TypescriptNamespace #>.<#= typeInfo.Name #>"/>
+		}
+<#+
+		WriteClientObjectMethods(typeInfo, xdoc);
+#>
+		return <#= typeInfo.Name #>;
+	})(OfficeExtension.ClientObject);
+	<#= typeInfo.TypescriptNamespace #>.<#= typeInfo.Name #> = <#= typeInfo.Name #>;
+<#+;
+		WriteNamespacePostamble(typeInfo.TypescriptNamespace);
+	}
+
+	void WriteClientObjectFields(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	{
+		foreach (ClientCallablePropertyInfo propInfo in typeInfo.Properties.Where(p => !p.ExcludedFromClientLibrary))
+		{
+			if (propInfo.Name.StartsWith("_")) {
+				continue;
+			}
+#>
+			<#= Utility.BuildVsDocForProperty(typeInfo, propInfo, xdoc) #>
+<#+;
+		}
+		
+		if (typeInfo.ClientType.ChildItemClientType != null)
+		{
+#>
+			/// <field name="items" type="Array" <#= Utility.GetVSDocTypeOrValue(typeInfo.ClientType.ChildItemClientType, true /*isArrayElementType*/) #>>Gets the loaded child items in this collection.</field>
+<#+;
+		}
+	}
+
+	void WriteClientObjectMethods(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	{
+		foreach (ClientCallableMethodInfo methodInfo in typeInfo.Methods)
+		{
+			if (methodInfo.Name.StartsWith("_")) {
+				continue;
+			}
+#>
+		<#= typeInfo.Name #>.prototype.<#= Utility.ToCamelLowerCase(methodInfo.Name) #> = function(<#= string.Join(", ", methodInfo.Parameters.Select((p) => p.Name)) #>) {
+<#+;
+			var methodDoc = Utility.BuildVsDocForMethod(typeInfo, methodInfo, xdoc);
+			foreach (string line in methodDoc)
+			{
+#>
+			<#= line #>
+<#+;
+			}
+#>
+		}
+<#+;
+		}
+	}
+
+	private void WriteEnumType(ClientCallableTypeInfo type, XDocument xdoc)
+	{
+		this.WriteLine(string.Empty);
+		WriteNamespacePreamble(type.TypescriptNamespace);
+#>
+	var <#= type.Name #> = {
+		__proto__: null,
+<#+
+		foreach (KeyValuePair<string, int> field in type.EnumFields)
+		{
+#>
+		"<#= Utility.ToCamelLowerCase(field.Key) #>": "<#= Utility.ToCamelLowerCase(field.Key) #>",
+<#+
+		}
+#>
+	}
+	<#= type.TypescriptNamespace #>.<#= type.Name #> = <#= type.Name #>;
+<#+
+		WriteNamespacePostamble(type.TypescriptNamespace);
+	}
+
+	////////////////////////////////////////////////////////////////////
+	////////////////////// ONCE-PER-HOST CODE-GEN //////////////////////
+	////////////////////////////////////////////////////////////////////
+
+	void WriteRequestContextAndRunMethod(string typescriptNamespace, string rootObjectClass, string rootObjectName)
+	{
+		WriteNamespacePreamble(typescriptNamespace);
+#>
+	var RequestContext = (function (_super) {
+		__extends(RequestContext, _super);
+		function RequestContext() {
+			/// <summary>
+			/// The RequestContext object facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the request context is required to get access to the <#= typescriptNamespace #> object model from the add-in.
+			/// </summary>
+			/// <field name="<#= rootObjectName #>" type="<#= typescriptNamespace #>.<#= rootObjectClass #>">Root object for interacting with the document</field>
+			_super.call(this, null);
+		}
+		return RequestContext;
+	})(OfficeExtension.ClientRequestContext);
+	<#= typescriptNamespace #>.RequestContext = RequestContext;
+
+	<#= typescriptNamespace #>.run = function (batch) {
+		/// <summary>
+		/// Executes a batch script that performs actions on the <#= typescriptNamespace #> object model. When the promise is resolved, any tracked objects that were automatically allocated during execution will be released.
+		/// </summary>
+		/// <param name="batch" type="function(context) { ... }">
+		/// A function that takes in a RequestContext and returns a promise (typically, just the result of "context.sync()").
+		/// <br />
+		/// The context parameter facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the request context is required to get access to the <#= typescriptNamespace #> object model from the add-in.
+		/// </param>
+		batch(new <#= typescriptNamespace #>.RequestContext());
+		return new OfficeExtension.IPromise();
+	}
+<#+
+		WriteNamespacePostamble(typescriptNamespace);
+	}
+
+	void RemoveExtraObjectsFromNamespace(string typescriptNamespace)
+	{
+#>
+<#= typescriptNamespace #>.__proto__ = null;
+<#+
+	}
+
+
+	////////////////////////////////////////////////////////////////////
+	//////////// PREAMBLES & COMMON RUNTIME FUNCTIONALITY ///////////////
+	////////////////////////////////////////////////////////////////////
+	void WriteNamespacePreamble(string typescriptNamespace)
+	{
+#>
+var <#= typescriptNamespace #>;
+(function (<#= typescriptNamespace #>) {
+<#+
+	}
+
+	void WriteNamespacePostamble(string typescriptNamespace)
+	{
+#>
+})(<#= typescriptNamespace #> || (<#= typescriptNamespace #> = {}));
+<#+
+	}
+#>

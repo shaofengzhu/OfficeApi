@@ -1,0 +1,627 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+
+<#+
+	private Dictionary<string, string> m_parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+	private void LaunchDebuggerIfNecessary()
+	{
+		string debug = GetParameterValue(ParameterName_Debug);
+		if (!string.IsNullOrEmpty(debug) && debug.StartsWith("t", StringComparison.OrdinalIgnoreCase))
+		{
+			System.Diagnostics.Debugger.Launch();
+			System.Diagnostics.Debugger.Break();
+		}
+	}
+
+	private string GetTemplateFileDirectory(string templateFilePath)
+	{
+		string dir = System.IO.Path.GetDirectoryName(templateFilePath);
+		if (string.IsNullOrEmpty(dir))
+		{
+			dir = System.IO.Directory.GetCurrentDirectory();
+		}
+
+		return dir;
+	}
+
+	private string ResolveRelativePath(string templateFilePath, string path)
+	{
+		return System.IO.Path.Combine(GetTemplateFileDirectory(templateFilePath), path);
+	}
+
+	private void SetParameter(string name, string value)
+	{
+		m_parameters[name] = value;
+	}
+
+	private string GetParameterValue(string name)
+	{
+		string value;
+		if (m_parameters.TryGetValue(name, out value))
+		{
+			return value;
+		}
+
+		try
+		{
+			string ret = this.Host.ResolveParameterValue(null, null, name);
+			return ret;
+		}
+		catch(ArgumentNullException)
+		{
+			return null;
+		}
+		catch(Exception)
+		{
+			return null;
+		}
+	}
+
+	private string m_buildDateTime;
+	private string BuildDateTime
+	{
+		get
+		{
+			if (m_buildDateTime == null)
+			{
+				m_buildDateTime = DateTime.Now.ToString();
+			}
+			return m_buildDateTime;
+		}
+	}
+
+	private bool CheckInputParameters()
+	{
+		bool ok = true;
+		if (string.IsNullOrEmpty(this.InputFilePath))
+		{
+			this.Warning("Miss parameter: input");
+			ok = false;
+		}
+
+		if (string.IsNullOrEmpty(this.OutputDirectory))
+		{
+			this.Warning("Missing parameter: outdir");
+		}
+
+		return ok;
+	}
+
+	private static string[] SplitNamespace(string ns)
+	{
+		if (string.IsNullOrEmpty(ns))
+		{
+			return new string[0];
+		}
+
+		ns = ns.Replace("::", ".");
+
+		return ns.Split('.');
+	}
+
+	private static void SplitName(string fullName, out string ns, out string name)
+	{
+		ns = string.Empty;
+		name = fullName;
+		int index = fullName.LastIndexOf("::");
+		if (index > 0)
+		{
+			ns = fullName.Substring(0, index);
+			name = fullName.Substring(index + 2);
+			return;
+		}
+		index = fullName.LastIndexOf(".");
+		if (index > 0)
+		{
+			ns = fullName.Substring(0, index);
+			name = fullName.Substring(index + 1);
+			return;
+		}
+	}
+
+	private void EnsureNamespace(List<string> namespaceStack, string ns, bool forTypeScript, string indentString)
+	{		
+		string[] parts = SplitNamespace(ns);
+		int equalPos = -1;
+		for (int i = 0; i < namespaceStack.Count && i < parts.Length; i++)
+		{
+			if (namespaceStack[i] == parts[i])
+			{
+				equalPos = i;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		for (int i = namespaceStack.Count -1; i > equalPos; i--)
+		{
+			PopIndent();
+			this.WriteLine("} // " + namespaceStack[i]);
+			namespaceStack.RemoveAt(i);
+		}
+
+		for (int i = equalPos + 1; i < parts.Length; i++)
+		{
+			if (forTypeScript)
+			{
+				this.WriteLine((i == 0 ? "module " : "export module ") + parts[i]);
+			}
+			else
+			{
+				this.WriteLine("namespace " + parts[i]);
+			}
+
+			this.WriteLine("{");
+			PushIndent(indentString);
+			namespaceStack.Add(parts[i]);
+		}
+	}
+
+	string GetPlaceHolderBeginMarker(string placeHolderName)
+	{
+		return "/* Begin_PlaceHolder_" + placeHolderName + " */";
+	}
+
+	string GetPlaceHolderEndMarker(string placeHolderName)
+	{
+		return "/* End_PlaceHolder_" + placeHolderName + " */";
+	}
+
+	void WritePlaceHolderContent(string placeHolderName, string[] existingContent)
+	{
+		WritePlaceHolderContent(placeHolderName, existingContent, null);
+	}
+
+	void WritePlaceHolderContent(string placeHolderName, string[] existingContent, string defaultContent)
+	{
+		string beginMarker = GetPlaceHolderBeginMarker(placeHolderName);
+		string endMarker = GetPlaceHolderEndMarker(placeHolderName);
+		int indexBegin = -1;
+		for (int i = 0; i < existingContent.Length; i++)
+		{
+			if (existingContent[i].IndexOf(beginMarker) >= 0)
+			{
+				indexBegin = i;
+				break;
+			}
+		}
+			
+		int indexEnd = -1;
+		for (int i = indexBegin + 1; i< existingContent.Length; i++)
+		{
+			if (existingContent[i].IndexOf(endMarker) >= 0)
+			{
+				indexEnd = i;
+				break;
+			}
+		}
+
+		this.WriteLine(beginMarker);
+		bool hasContent = false;
+		for (int i = indexBegin + 1; i < indexEnd; i++)
+		{
+			string line = existingContent[i].TrimEnd(null);
+			if (line.StartsWith(CurrentIndent))
+			{
+				line = line.Substring(CurrentIndent.Length);
+			}
+			else
+			{
+				line = line.TrimStart(null);
+			}
+			this.WriteLine(line);
+			hasContent = true;
+		}
+
+		if (!hasContent && !string.IsNullOrEmpty(defaultContent))
+		{
+			this.WriteLine(defaultContent);
+		}
+
+		this.WriteLine(endMarker);
+	}
+
+	private string CreatedByToolStatement
+	{
+		get
+		{
+			if (!string.IsNullOrEmpty(ToolName))
+			{
+				return " Generated by " + ToolName + ". ";
+			}
+
+			return string.Empty;
+		}
+	}
+
+#region input parameters
+	const string ParameterName_Input = "input";
+	const string ParameterName_Refs = "refs";
+	const string ParameterName_Usings = "usings";
+	const string ParameterName_Includes = "includes";
+	const string ParameterName_PreIncludes = "preincludes";
+	const string ParameterName_Debug = "debug";
+	const string ParameterName_InteropInput = "interop";
+	const string ParameterName_OutputDirectory = "outdir";
+	const string ParameterName_OutputFile = "outfile";
+	const string ParameterName_Checkout = "checkout";
+	const string ParameterName_ToolName = "toolname";
+	const string ParameterName_IfFailRet = "iffailret";
+	const string ParameterName_SetHrRet = "sethrret";
+	const string ParameterName_CustomDeleter = "customdeleter";
+	const string ParameterName_FileNameBase = "filenamebase";
+	const string ParameterName_ImplNamespace = "implnamespace";
+	const string ParameterName_MsoDebugMethodMacroStart = "msodebugmethodmacrostart";
+	const string ParameterName_DocXmlFilePath = "docxml";
+	const string ParameterName_RichApiHostClassName = "hostclassname";
+	const string ParameterName_NewObjMacro = "newobj";
+	const string ParameterName_NewObjArg = "newobjarg";
+	const string ParameterName_MemFailRet = "memfailret";
+
+	private string InteropInputFilePath
+	{
+		get
+		{
+			if (m_interopFilePath == null)
+			{
+				m_interopFilePath = this.GetParameterValue(ParameterName_InteropInput);
+			}
+			return m_interopFilePath;
+		}
+	}
+
+	private string InputFilePath
+	{
+		get
+		{
+			if (m_inputFilePath == null)
+			{
+				m_inputFilePath = this.GetParameterValue(ParameterName_Input);
+			}
+			return m_inputFilePath;
+		}
+	}
+
+	private string[] ReferencedAssemblyPaths
+	{
+		get
+		{
+			if (m_referencedAssemblyPaths == null)
+			{
+				string paths = GetParameterValue(ParameterName_Refs);
+
+				if (string.IsNullOrWhiteSpace(paths))
+				{
+					m_referencedAssemblyPaths = new string[0];
+				}
+				else
+				{
+					m_referencedAssemblyPaths = paths.Split(';');
+				}
+			}
+
+			return m_referencedAssemblyPaths;
+		}
+	}
+
+	private string OutputDirectory
+	{
+		get
+		{
+			if (m_outputDirectory == null)
+			{
+				m_outputDirectory = GetParameterValue(ParameterName_OutputDirectory);
+			}
+
+			if (string.IsNullOrEmpty(m_outputDirectory))
+			{
+				string dir = System.IO.Path.GetDirectoryName(this.Host.TemplateFile);
+				return dir;
+			}
+
+			return m_outputDirectory;
+		}
+	}
+
+	private string[] AdditionalUsings
+	{
+		get
+		{
+			if (m_additionalUsings == null)
+			{
+				string usings = this.GetParameterValue(ParameterName_Usings);
+				if (string.IsNullOrWhiteSpace(usings))
+				{
+					m_additionalUsings = new string[0];
+				}
+				else
+				{
+					m_additionalUsings = usings.Split(';');
+				}
+			}
+
+			return m_additionalUsings;
+		}
+	}
+	
+	private string[] AdditionalIncludes
+	{
+		get
+		{
+			if (m_additionalIncludes == null)
+			{
+				string includes = GetParameterValue(ParameterName_Includes);
+				if (string.IsNullOrWhiteSpace(includes))
+				{
+					m_additionalIncludes = new string[0];
+				}
+				else
+				{
+					m_additionalIncludes = includes.Split(';');
+				}
+			}
+
+			return m_additionalIncludes;
+		}
+	}
+
+	private string[] AdditionalPreIncludes
+	{
+		get
+		{
+			if (m_additionalPreIncludes == null)
+			{
+				string includes = GetParameterValue(ParameterName_PreIncludes);
+				if (string.IsNullOrWhiteSpace(includes))
+				{
+					m_additionalPreIncludes = new string[0];
+				}
+				else
+				{
+					m_additionalPreIncludes = includes.Split(';');
+				}
+			}
+
+			return m_additionalPreIncludes;
+		}
+	}
+
+	private string CheckoutCommandPrefix
+	{
+		get
+		{
+			if (m_checkoutCommandPrefix == null)
+			{
+				m_checkoutCommandPrefix = GetParameterValue(ParameterName_Checkout);
+			}
+
+			return m_checkoutCommandPrefix;
+		}
+	}
+
+	private string ToolName
+	{
+		get
+		{
+			if (m_toolName == null)
+			{
+				m_toolName = GetParameterValue(ParameterName_ToolName);
+			}
+
+			return m_toolName;
+		}
+	}
+
+	private string IfFailRet
+	{
+		get
+		{
+			if (m_ifFailRet == null)
+			{
+				m_ifFailRet = GetParameterValue(ParameterName_IfFailRet);
+				if (string.IsNullOrWhiteSpace(m_ifFailRet))
+				{
+					m_ifFailRet = "IfFailRet";
+				}
+			}
+
+			return m_ifFailRet;
+		}
+	}
+
+	private string SetHrRet
+	{
+		get
+		{
+			if (m_setHrRet == null)
+			{
+				m_setHrRet = GetParameterValue(ParameterName_SetHrRet);
+				if (string.IsNullOrWhiteSpace(m_setHrRet))
+				{
+					m_setHrRet = "SetHrRet";
+				}
+			}
+
+			return m_setHrRet;
+		}
+	}
+
+	private string CustomDeleter
+	{
+		get
+		{
+			if (m_customDeleter == null)
+			{
+				m_customDeleter = GetParameterValue(ParameterName_CustomDeleter);
+				if (string.IsNullOrWhiteSpace(m_customDeleter))
+				{
+					m_customDeleter = string.Empty;
+				}
+			}
+
+			return m_customDeleter;
+		}
+	}
+
+	string FileBaseName
+	{
+		get
+		{
+			if (m_fileNameBase == null)
+			{
+				m_fileNameBase = GetParameterValue(ParameterName_FileNameBase);
+				if (string.IsNullOrWhiteSpace(m_fileNameBase))
+				{
+					m_fileNameBase = System.IO.Path.GetFileNameWithoutExtension(this.InputFilePath);
+				}
+			}
+
+			return m_fileNameBase;
+		}
+	}
+
+	string ImplNamespace
+	{
+		get
+		{
+			if (m_implNamespace == null)
+			{
+				m_implNamespace = GetParameterValue(ParameterName_ImplNamespace);
+				if (string.IsNullOrWhiteSpace(m_implNamespace))
+				{
+					m_implNamespace = this.FileBaseName.Replace(".", "::");
+				}
+			}
+
+			return m_implNamespace;
+		}
+	}
+
+	string MsoDebugMethodMacroStart
+	{
+		get
+		{
+			if (m_msoDebugMethodMacroStart == null)
+			{
+				m_msoDebugMethodMacroStart = GetParameterValue(ParameterName_MsoDebugMethodMacroStart);
+			}
+
+			return m_msoDebugMethodMacroStart;
+		}
+	}
+
+	string DocXmlFilePath
+	{
+		get
+		{
+			if (m_docxmlFilePath == null)
+			{
+				m_docxmlFilePath = GetParameterValue(ParameterName_DocXmlFilePath);
+			}
+
+			return m_docxmlFilePath;
+		}
+	}
+
+	string NewObjMacro
+	{
+		get
+		{
+			if (m_newObjMacro == null)
+			{
+				m_newObjMacro = GetParameterValue(ParameterName_NewObjMacro);
+				if (m_newObjMacro == null)
+				{
+					m_newObjMacro = string.Empty;
+				}
+			}
+
+			return m_newObjMacro;
+		}
+	}
+
+	string MemFailRet
+	{
+		get
+		{
+			if (m_memFailRet == null)
+			{
+				m_memFailRet = GetParameterValue(ParameterName_MemFailRet);
+				if (m_memFailRet == null)
+				{
+					m_memFailRet = string.Empty;
+				}
+			}
+
+			return m_memFailRet;
+		}
+	}
+
+	string NewObjArg
+	{
+		get
+		{
+			if (m_newObjArg == null)
+			{
+				m_newObjArg = GetParameterValue(ParameterName_NewObjArg);
+				if (m_newObjArg == null)
+				{
+					m_newObjArg = string.Empty;
+				}
+			}
+
+			return m_newObjArg;
+		}
+	}
+
+	string RichApiHostClassName
+	{
+		get
+		{
+			if (m_richApiHostClassName == null)
+			{
+				m_richApiHostClassName = GetParameterValue(ParameterName_RichApiHostClassName);
+				if (m_richApiHostClassName == null)
+				{
+					m_richApiHostClassName = this.FileBaseName + "RichApiHost";
+				}
+			}
+
+			return m_richApiHostClassName;
+		}
+	}
+
+	private string m_inputFilePath;
+	private string m_interopFilePath;
+	private string[] m_referencedAssemblyPaths;
+	private string m_outputDirectory;
+
+	private string[] m_additionalUsings;
+	private string[] m_additionalIncludes;
+	private string[] m_additionalPreIncludes;
+
+	private string m_checkoutCommandPrefix;
+	private string m_toolName;
+	private string m_ifFailRet;
+	private string m_setHrRet;
+	private string m_customDeleter;
+	private string m_fileNameBase;
+	private string m_implNamespace;
+	private string m_msoDebugMethodMacroStart;
+	private string m_docxmlFilePath;
+
+	private string m_richApiHostClassName;
+	private string m_newObjMacro;
+	private string m_newObjArg;
+	private string m_memFailRet;
+
+#endregion
+
+#>

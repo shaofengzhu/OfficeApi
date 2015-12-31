@@ -213,3 +213,6 @@ ModelManifest.xml
 
 # Python generated files
 __pycache__/
+
+# CodeGen generated files
+CodeGen/*.txt

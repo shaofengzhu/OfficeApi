@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0090A10B-23DE-44CC-B4CD-35F2812E19AF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Microsoft.OfficeExtension.CodeGen</RootNamespace>
+    <AssemblyName>Microsoft.OfficeExtension.CodeGen</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core.Gen.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Core.Gen.txt</LastGenOutput>
+    </None>
+    <None Include="Core.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Core.txt</LastGenOutput>
+    </None>
+    <None Include="WacCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WacCore.txt</LastGenOutput>
+    </None>
+    <None Include="WacMain.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WacMain.txt</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ComCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComCore.txt</LastGenOutput>
+    </None>
+    <None Include="ComMain.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComMain.txt</LastGenOutput>
+    </None>
+    <None Include="Helper.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Helper.txt</LastGenOutput>
+    </None>
+    <None Include="TypeScriptCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeScriptCore.txt</LastGenOutput>
+    </None>
+    <None Include="TypeRegCppCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeRegCppCore.txt</LastGenOutput>
+    </None>
+    <None Include="TypeRegCppMain.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeRegCppMain.txt</LastGenOutput>
+    </None>
+    <None Include="TypeScriptMain.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypeScriptMain.txt</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ComCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ComCore.tt</DependentUpon>
+    </Content>
+    <Content Include="Core.Gen.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Core.Gen.tt</DependentUpon>
+    </Content>
+    <Content Include="Core.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Core.tt</DependentUpon>
+    </Content>
+    <Content Include="ComMain.txt">
+      <DependentUpon>ComMain.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="CosmosDataMappingsV1.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CosmosDataMappingsV1.txt</LastGenOutput>
+    </Content>
+    <Content Include="Helper.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Helper.tt</DependentUpon>
+    </Content>
+    <Content Include="TypeRegCppCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TypeRegCppCore.tt</DependentUpon>
+    </Content>
+    <Content Include="TypeScriptCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TypeScriptCore.tt</DependentUpon>
+    </Content>
+    <Content Include="TypeRegCppMain.txt">
+      <DependentUpon>TypeRegCppMain.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="TypeScriptMain.txt">
+      <DependentUpon>TypeScriptMain.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Content>
+    <Content Include="VSDoc.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>VSDoc.cs</LastGenOutput>
+    </Content>
+    <Content Include="WacCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WacCore.tt</DependentUpon>
+    </Content>
+    <Content Include="WacMain.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WacMain.tt</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TransformOnBuild>true</TransformOnBuild>
+    <OverwriteReadOnlyOutputFiles>true</OverwriteReadOnlyOutputFiles>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

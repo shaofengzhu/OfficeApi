@@ -1,0 +1,65 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ import namespace="System.IO" #>
+<#@ output extension=".txt" #>
+
+<#
+	// The free version of Tangible T4 editor will not display intelissense for
+	// members defined in the DLL. To make the intellisense work, we will copy
+	// the code to a T4 template, core.tt, and then include the T4 template
+	// core.tt in the other T4 template.
+	// If we do not want to use the included T4 template, please add the following
+	// directives to the T4 template
+	// assembly name="$(SolutionDir)Lib\Microsoft.OfficeExtension.CodeGen.dll"
+	// import namespace="Microsoft.OfficeExtension.CodeGen"
+
+	string directiveStart = "<" + "#" + "@ ";
+	string directiveEnd = " #" + ">";
+	WriteLine(directiveStart + "assembly name=\"System\"" + directiveEnd);
+	WriteLine(directiveStart + "assembly name=\"System.Core\"" + directiveEnd);
+	WriteLine(directiveStart + "assembly name=\"System.Xml\"" + directiveEnd);
+	WriteLine(directiveStart + "assembly name=\"System.Xml.Linq\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Diagnostics\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.IO\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Globalization\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Linq\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Xml.Linq\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Reflection\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Text\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Text.RegularExpressions\"" + directiveEnd);
+	WriteLine(directiveStart + "import namespace=\"System.Collections.Generic\"" + directiveEnd);
+	WriteLine(directiveStart + "output extension=\".txt\"" + directiveEnd);
+	Write("<"); Write("#"); WriteLine("+");
+
+	WriteLine("    // DO NOT EDIT DIRECTLY -- this is a generated file");
+	WriteLine("    //");
+	WriteLine("    // Last generated on " + DateTime.Now.ToString());
+	WriteLine("    //");
+	WriteLine("    // Its content is copied from CodeGen.cs");
+	WriteLine("    // Please go to CodeGen directory and run");
+	WriteLine("    //     TextTransform.exe -out Core.tt Core.Gen.tt");
+	WriteLine("    // to generate this file.");
+
+	string inputFile = this.Host.ResolvePath(@"..\..\..\..\..\osfclient\RichApi\CodeGen\Core\CodeGen.cs");
+	string[] lines = File.ReadAllLines(inputFile);
+	bool started = false;
+	for (int i = 0; i < lines.Length; i++)
+	{
+		if (started)
+		{
+			if (lines[i].StartsWith("}"))
+			{
+				break;
+			}
+			WriteLine(lines[i]);
+		}
+		else
+		{
+			if (lines[i].StartsWith("{"))
+			{
+				started = true;
+			}
+		}
+	}
+	Write("#"); WriteLine(">");
+#>

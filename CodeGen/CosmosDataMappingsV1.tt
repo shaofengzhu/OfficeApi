@@ -1,0 +1,63 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ include file="Helper.tt" #>
+<#@ include file="Core.tt" #>
+<#@ output extension=".txt" #>
+<#
+	// Our "V1" of telemetry (for Office 2016 RTM (Sept 2015) and a November 2015 PU)
+	// uses Object GUIDs and dispatch IDs. This is not ideal, as dispatch IDs can
+	// (and have, even in this short of a time frame) change.
+	// From now on, will instead use string names. But need to still rely on this
+	// dispatch-ID approach for tracking RTM and November updated telemetry (splitting
+	// the analysis by minor verison, to avoid dispatch-ID overlap)
+	this.WriteCosmosMetadata();
+#>
+<#+
+	void WriteCosmosMetadata()
+	{
+		this.LaunchDebuggerIfNecessary();
+		if (this.CheckInputParameters())
+		{
+			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
+			templateFileManager.StartNewFile(this.FileBaseName + ".csv");
+
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			assemblyReader.Process();
+			var typeInfos = assemblyReader.Types.OrderBy(type => type.FullName);
+			foreach (ClientCallableTypeInfo typeInfo in typeInfos)
+			{
+				if (typeInfo.IsClientObject)
+				{
+					var dispatchMap = new SortedDictionary<int, string>();
+					foreach (ClientCallablePropertyInfo propInfo in typeInfo.Properties)
+					{
+						dispatchMap.Add(propInfo.ComMember.DispatchId, propInfo.Name);
+					}
+					foreach (ClientCallableMethodInfo methodInfo in typeInfo.Methods)
+					{
+						dispatchMap.Add(methodInfo.ComMember.DispatchId, methodInfo.Name);
+					}
+
+					foreach (var dispatchItem in dispatchMap)
+					{
+#>
+<#= typeInfo.ComType.InterfaceId #>, <#= dispatchItem.Key.ToString(CultureInfo.InvariantCulture) #>, <#= typeInfo.FullName #>, <#= dispatchItem.Value #>
+<#+
+					}
+				}
+			}
+
+			templateFileManager.EndBlock();
+
+			templateFileManager.WriteTo(this.OutputDirectory, this.CheckoutCommandPrefix);
+		}
+	}
+#>

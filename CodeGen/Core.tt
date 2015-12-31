@@ -1,0 +1,3691 @@
+﻿
+<#@ assembly name="System" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Globalization" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+<#+
+    // DO NOT EDIT DIRECTLY -- this is a generated file
+    //
+    // Last generated on 12/13/2015 9:31:24 PM
+    //
+    // Its content is copied from CodeGen.cs
+    // Please go to CodeGen directory and run
+    //     TextTransform.exe -out Core.tt Core.Gen.tt
+    // to generate this file.
+	[Serializable]
+	public class ClientCallableComType
+	{
+		public string Name
+		{
+			get;
+			set;
+		}
+
+		public string CoClassNamespace
+		{
+			get;
+			set;
+		}
+
+		public string InterfaceNamespace
+		{
+			get;
+			set;
+		}
+
+		public string InterfaceId
+		{
+			get;
+			set;
+		}
+
+		public string CoClassId
+		{
+			get;
+			set;
+		}
+
+		public string CoClassName
+		{
+			get;
+			set;
+		}
+
+		public bool SupportEnumeration
+		{
+			get;
+			set;
+		}
+
+		public bool SupportIEnumVARIANT
+		{
+			get;
+			set;
+		}
+	}
+
+	[Serializable]
+	public class ClientCallableComMember
+	{
+		public string Name
+		{
+			get;
+			set;
+		}
+
+		public int DispatchId
+		{
+			get;
+			set;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms")]
+		public int DispatchFlag
+		{
+			get;
+			set;
+		}
+
+		public ClientCallableComMember Clone()
+		{
+			return (ClientCallableComMember)this.MemberwiseClone();
+		}
+	}
+
+	[Serializable]
+	public class ClientType
+	{
+		public ClientType(Type type, IEnumerable<ClientCallableTypeInfo> referencedTypes)
+		{
+			Type nullableUnderlyingType = Nullable.GetUnderlyingType(type);
+			if (nullableUnderlyingType != null)
+			{
+				if (nullableUnderlyingType.IsPrimitive || nullableUnderlyingType.IsEnum)
+				{
+					this.IsNullable = true;
+					type = nullableUnderlyingType;
+				}
+				else
+				{
+					throw CodeGenException.CreateCodeGenException("Not supported type {0}", type.FullName);
+				}
+			}
+
+			this.FullName = type.FullName;
+			this.Name = type.Name;
+			ClientCallableTypeInfo clientTypeInfo = referencedTypes.FirstOrDefault(t => t.FullName == type.FullName);
+
+			if (clientTypeInfo != null)
+			{
+				if (clientTypeInfo.IsEnum)
+				{
+					this.IsEnum = true;
+				}
+				else if (clientTypeInfo.IsValueObject)
+				{
+					this.IsClientValueObject = true;
+				}
+				else if (clientTypeInfo.IsClientObject)
+				{
+					this.IsClientObject = true;
+				}
+				else
+				{
+					throw CodeGenException.CreateCodeGenException("Not supported type {0}", clientTypeInfo.FullName);
+				}
+			}
+
+			Type childItemType = Utility.GetChildItemType(type);
+			if (childItemType != null)
+			{
+				this.ChildItemClientType = new ClientType(childItemType, referencedTypes);
+			}
+
+			this.ClientCallableType = clientTypeInfo;
+		}
+
+		public string Name
+		{
+			get;
+			private set;
+		}
+
+		public string FullName
+		{
+			get;
+			private set;
+		}
+
+		public bool IsNullable
+		{
+			get;
+			private set;
+		}
+
+		public bool IsEnum
+		{
+			get;
+			private set;
+		}
+
+		public bool IsClientObject
+		{
+			get;
+			private set;
+		}
+
+		public bool IsClientValueObject
+		{
+			get;
+			private set;
+		}
+
+		public ClientCallableTypeInfo ClientCallableType
+		{
+			get;
+			private set;
+		}
+
+		public bool IsClientObjectCollection
+		{
+			get
+			{
+				return this.ChildItemClientType != null && this.ChildItemClientType.IsClientObject;
+			}
+		}
+
+		public ClientType ChildItemClientType
+		{
+			get;
+			private set;
+		}
+
+		public bool IsVoid
+		{
+			get
+			{
+				return this.FullName == "System.Void";
+			}
+		}
+
+		public bool IsSystemObject
+		{
+			get
+			{
+				return this.FullName == "System.Object";
+			}
+		}
+
+		public bool IsStream
+		{
+			get
+			{
+				return this.FullName == "System.IO.Stream";
+			}
+		}
+
+		public bool IsComVariantType
+		{
+			get
+			{
+				if (this.IsSystemObject)
+				{
+					return true;
+				}
+
+				if (this.IsStream)
+				{
+					return true;
+				}
+
+				if (this.ChildItemClientType != null &&
+					!this.IsClientObject &&
+					!this.IsClientValueObject)
+				{
+					return true;
+				}
+
+				if (this.IsNullable)
+				{
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		public string CustomTypeScriptTypeName
+		{
+			get;
+			set;
+		}
+
+		public string TypeScriptTypeName
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(this.CustomTypeScriptTypeName))
+				{
+					return this.CustomTypeScriptTypeName;
+				}
+
+				return Utility.GetTypeScriptTypeName(this);
+			}
+		}
+
+		public string WacScriptSharpTypeName
+		{
+			get
+			{
+				return Utility.GetWacScriptSharpTypeName(this);
+			}
+		}
+
+		public string TypeRegistrationTypeName
+		{
+			get
+			{
+				return Utility.GetTypeRegistrationTypeName(this);
+			}
+		}
+
+		public string TypeRegistrationTypeCategory
+		{
+			get
+			{
+				if (IsClientObject)
+				{
+					return "ClassObject";
+				}
+				
+				if (IsClientValueObject)
+				{
+					return "ValueObject";
+				}
+
+				if (IsVoid)
+				{
+					return "None";
+				}
+
+				if (this.ChildItemClientType != null)
+				{
+					return this.ChildItemClientType.TypeRegistrationTypeCategory;
+				}
+
+				return "Primitive";
+			}
+		}
+	}
+
+	[Serializable]
+	public abstract class ClientCallableMemberInfo
+	{
+		private List<HResultErrorInfo> m_hrErrors = new List<HResultErrorInfo>();
+
+		public string Name { get; set; }
+
+		public List<HResultErrorInfo> HResultErrors
+		{
+			get
+			{
+				return m_hrErrors;
+			}
+		}
+
+		public ClientCallableComMember ComMember
+		{
+			get;
+			set;
+		}
+
+		public abstract ClientCallableMethodInfo ComDispatchPropertyGetMethod
+		{
+			get;
+		}
+
+		public abstract ClientCallableMethodInfo ComDispatchPropertySetMethod
+		{
+			get;
+		}
+
+		public abstract ClientCallableMethodInfo ComDispatchMethodMethod
+		{
+			get;
+		}
+	}
+
+	[Serializable]
+	public class ClientCallablePropertyInfo : ClientCallableMemberInfo
+	{
+		public ClientType PropertyType
+		{
+			get;
+			set;
+		}
+
+		public bool IsReadonly
+		{
+			get;
+			set;
+		}
+
+		public bool IsVolatile
+		{
+			get;
+			set;
+		}
+
+		public bool InvalidateReturnObjectPathAfterRequest
+		{
+			get;
+			set;
+		}
+
+		public bool ExcludedFromRest
+		{
+			get;
+			set;
+		}
+
+		public bool ExcludedFromClientLibrary
+		{
+			get;
+			internal set;
+		}
+
+		public string FieldName
+		{
+			get
+			{
+				return "m_" + Utility.ToCamelLowerCase(this.Name);
+			}
+		}
+
+		public ClientCallableMethodInfo Getter
+		{
+			get;
+			set;
+		}
+
+		public ClientCallableMethodInfo Setter
+		{
+			get;
+			set;
+		}
+
+		public bool WacAsync
+		{
+			get;
+			set;
+		}
+
+		public bool IsOptional
+		{
+			get;
+			set;
+		}
+
+		public ClientType KnownType
+		{
+			get;
+			internal set;
+		}
+
+		public override ClientCallableMethodInfo ComDispatchPropertyGetMethod
+		{
+			get
+			{
+				return this.Getter;
+			}
+		}
+
+		public override ClientCallableMethodInfo ComDispatchPropertySetMethod
+		{
+			get
+			{
+				return this.Setter;
+			}
+		}
+
+		public override ClientCallableMethodInfo ComDispatchMethodMethod
+		{
+			get
+			{
+				return null;
+			}
+		}
+
+	}
+
+	[Serializable]
+	public class ClientCallableParameterInfo
+	{
+		public string Name
+		{
+			get;
+			set;
+		}
+
+		public ClientType ParameterType
+		{
+			get;
+			set;
+		}
+
+		public bool IsOptional
+		{
+			get;
+			set;
+		}
+
+		public bool IsParams
+		{
+			get;
+			set;
+		}
+
+		public ClientType KnownType
+		{
+			get;
+			set;
+		}
+	}
+
+	public enum ClientCallableOperationType
+	{
+		Default = 0,
+		Read = 1,
+	}
+
+	[Serializable]
+	public class ClientCallableMethodInfo: ClientCallableMemberInfo
+	{
+		private List<ClientCallableParameterInfo> m_parameters = new List<ClientCallableParameterInfo>();
+		private string m_restfulName;
+		private string m_wacName;
+
+		private static Dictionary<string, string> s_wacNameDefaultMap = new Dictionary<string, string>()
+		{
+			{"Delete", "DeleteObject"},
+			{"delete", "deleteObject"},
+		};
+
+		public ClientType ReturnType
+		{
+			get;
+			set;
+		}
+
+		public List<ClientCallableParameterInfo> Parameters
+		{
+			get
+			{
+				return m_parameters;
+			}
+		}
+
+		public bool IsIndexerMethod
+		{
+			get;
+			set;
+		}
+
+		public ClientCallableOperationType OperationType
+		{
+			get;
+			set;
+		}
+
+		public bool InvalidateReturnObjectPathAfterRequest
+		{
+			get;
+			set;
+		}
+
+		public string RESTfulName
+		{
+			get
+			{
+				if (m_restfulName == null)
+				{
+					if (this.Name.Length > 4 &&
+						this.Name.StartsWith("Get", StringComparison.Ordinal) &&
+						Char.IsUpper(this.Name[3]))
+					{
+						return this.Name.Substring(3);
+					}
+
+					return this.Name;
+				}
+
+				return m_restfulName;
+			}
+			set
+			{
+				m_restfulName = value;
+			}
+		}
+
+		public string WacName
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(m_wacName))
+				{
+					string defaultMappedName;
+					if (s_wacNameDefaultMap.TryGetValue(this.Name, out defaultMappedName))
+					{
+						return defaultMappedName;
+					}
+
+					return this.Name;
+				}
+
+				return m_wacName;
+			}
+			set
+			{
+				m_wacName = value;
+			}
+		}
+
+		public bool WacAsync
+		{
+			get;
+			set;
+		}
+
+		public bool ShouldGenerateScriptMethod
+		{
+			get
+			{
+				return this.Name != Constants.MemberNames.OnAccess;
+			}
+		}
+
+		public override ClientCallableMethodInfo ComDispatchPropertyGetMethod
+		{
+			get
+			{
+				if (this.ComMember.DispatchFlag == Constants.DISPATCH_PROPERTYGET)
+				{
+					ClientCallableMethodInfo method = new ClientCallableMethodInfo();
+					method.Name = "get_" + this.ComMember.Name;
+					method.OperationType = ClientCallableOperationType.Read;
+					method.ReturnType = this.ReturnType;
+					method.Parameters.AddRange(this.Parameters);
+					method.ComMember = this.ComMember.Clone();
+					method.ComMember.Name = "get_" + method.ComMember.Name;
+					return method;
+				}
+
+				return null;
+			}
+		}
+
+		public override ClientCallableMethodInfo ComDispatchPropertySetMethod
+		{
+			get
+			{
+				return null;
+			}
+		}
+
+		public override ClientCallableMethodInfo ComDispatchMethodMethod
+		{
+			get
+			{
+				if (this.ComMember.DispatchFlag == Constants.DISPATCH_PROPERTYGET)
+				{
+					return null;
+				}
+
+				return this;
+			}
+		}
+	}
+	
+	[Serializable]
+	public class ClientCallableTypeInfo
+	{
+		[NonSerialized]
+		private Type m_type;
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		private List<ClientCallablePropertyInfo> m_properties = new List<ClientCallablePropertyInfo>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		private List<ClientCallableMethodInfo> m_methods = new List<ClientCallableMethodInfo>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		private List<KeyValuePair<string, int>> m_enumFields = new List<KeyValuePair<string, int>>();
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		public ClientCallableTypeInfo(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			this.Name = type.Name;
+			this.FullName = type.FullName;
+			this.Namespace = type.Namespace;
+			this.TypescriptNamespace = Utility.GetTypeScriptNamespace(type);
+			this.ComInterfaceNamespace = Utility.GetComInterfaceNamespace(type);
+			this.WacNamespace = Utility.GetWacNamespace(type);
+
+			this.IsEnum = type.IsEnum;
+
+			if (this.IsEnum)
+			{
+				foreach (FieldInfo fi in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+				{
+					object objEnumFieldValue = fi.GetRawConstantValue();
+					int fieldValue = (int) Convert.ChangeType(objEnumFieldValue, typeof(int), CultureInfo.InvariantCulture);
+					this.m_enumFields.Add(new KeyValuePair<string, int>(fi.Name, fieldValue));
+				}
+			}
+			else
+			{
+				this.ComType = Utility.GetComType(type);
+				this.IsValueObject = type.IsValueType;
+				this.IsClientObject = !this.IsValueObject;
+				if (this.IsClientObject)
+				{
+					this.IsServiceRoot = Utility.IsServiceRoot(type);
+				}
+
+				if (this.IsClientObject || this.IsValueObject)
+				{
+					this.AllowCreation = !type.IsAbstract;
+					if (this.ComType != null && !string.IsNullOrEmpty(this.ComType.CoClassId))
+					{
+						this.AllowCreation = true;
+					}					
+				}
+			}
+
+			Utility.SetClientCallableTypeInfoFromAttribute(this, type);
+
+			this.Type = type;
+
+		}
+
+		internal Type Type
+		{
+			get
+			{
+				return m_type;
+			}
+			private set
+			{
+				m_type = value;
+			}
+		}
+
+		public bool IsEnum
+		{
+			get;
+			private set;
+		}
+
+		public bool IsClientObject
+		{
+			get;
+			private set;
+		}
+
+		public bool IsValueObject
+		{
+			get;
+			private set;
+		}
+
+		public ClientType ClientType
+		{
+			get;
+			internal set;
+		}
+
+		public ClientCallableComType ComType
+		{
+			get;
+			private set;
+		}
+
+		public bool AllowCreation
+		{
+			get;
+			private set;
+		}
+
+		public string Name
+		{
+			get;
+			private set;
+		}
+
+		public string FullName
+		{
+			get;
+			private set;
+		}
+
+		public string Namespace
+		{
+			get;
+			private set;
+		}
+
+		public string CustomTypeScriptTypeName
+		{
+			get;
+			set;
+		}
+
+		public string TypescriptNamespace
+		{
+			get;
+			private set;
+		}
+
+		public string WacNamespace
+		{
+			get;
+			private set;
+		}
+
+		public string ComInterfaceNamespace
+		{
+			get;
+			private set;
+		}
+
+		public bool IsServiceRoot
+		{
+			get;
+			private set;
+		}
+
+		public string CreateItemOperationName
+		{
+			get;
+			internal set;
+		}
+
+		public string DeleteOperationName
+		{
+			get;
+			internal set;
+		}
+
+		public bool HiddenIndexerMethod
+		{
+			get;
+			internal set;
+		}
+
+		public bool ConvertIntegerKeyValueToString
+		{
+			get;
+			internal set;
+		}
+
+		public List<ClientCallableMethodInfo> Methods
+		{
+			get
+			{
+				return m_methods;
+			}
+		}
+
+		public List<ClientCallablePropertyInfo> Properties
+		{
+			get
+			{
+				return m_properties;
+			}
+		}
+
+		public IEnumerable<ClientCallablePropertyInfo> ObjectProperties
+		{
+			get
+			{
+				return m_properties.Where(p => p.PropertyType.IsClientObject);
+			}
+		}
+
+		public IEnumerable<ClientCallablePropertyInfo> ScalarProperties
+		{
+			get
+			{
+				return m_properties.Where(p => !p.PropertyType.IsClientObject);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		public IEnumerable<KeyValuePair<string, int>> EnumFields
+		{
+			get
+			{
+				return m_enumFields;
+			}
+		}
+
+		public IEnumerable<ClientCallableMemberInfo> ComMembers
+		{
+			get
+			{
+				List<ClientCallableMemberInfo> members = new List<ClientCallableMemberInfo>();
+				foreach (ClientCallablePropertyInfo prop in m_properties.Where(p => p.ComMember != null))
+				{
+					members.Add(prop);
+				}
+
+				foreach (ClientCallableMethodInfo method in m_methods.Where(m => m.ComMember != null))
+				{
+					members.Add(method);
+				}
+
+				return members.OrderBy(m => m.ComMember.DispatchId).ThenBy(m => m.ComMember.Name);
+			}
+		}
+
+		public IEnumerable<ClientCallableMethodInfo> ObjectMethods
+		{
+			get
+			{
+				return m_methods.Where(m => m.ReturnType.IsClientObject);
+			}
+		}
+
+		public IEnumerable<ClientCallableMethodInfo> ScalarMethods
+		{
+			get
+			{
+				return m_methods.Where(m => !m.ReturnType.IsClientObject);
+			}
+		}
+
+		public Guid InterfaceId
+		{
+			get
+			{
+				if (this.ComType == null || string.IsNullOrEmpty(this.ComType.InterfaceId))
+				{
+					return Guid.Empty;
+				}
+
+				return new Guid(this.ComType.InterfaceId);
+			}
+		}
+
+		public Guid CoClassId
+		{
+			get
+			{
+				if (!this.AllowCreation)
+				{
+					return Guid.Empty;
+				}
+
+				if (this.ComType == null || string.IsNullOrEmpty(this.ComType.CoClassId))
+				{
+					return Guid.Empty;
+				}
+
+				return new Guid(this.ComType.CoClassId);
+			}
+		}
+	}
+
+	[Serializable]
+	public class HResultErrorInfo
+	{
+		public HResultErrorInfo(string hresultExpression, int statusCode, string errorCode, string errorMessageId)
+		{
+			this.HResultExpression = hresultExpression;
+			this.StatusCode = statusCode;
+			this.ErrorCode = errorCode;
+			this.ErrorMessageId = errorMessageId;
+		}
+
+		public string HResultExpression
+		{
+			get;
+			private set;
+		}
+
+		public string ErrorCode
+		{
+			get;
+			private set;
+		}
+
+		public string ErrorMessageId
+		{
+			get;
+			private set;
+		}
+
+		public int StatusCode
+		{
+			get;
+			private set;
+		}
+	}
+
+	[Serializable]
+	class AssemblyReaderResult: MarshalByRefObject
+	{
+		private List<ClientCallableTypeInfo> m_types;
+		private List<HResultErrorInfo> m_hresultErrors;
+		private string m_verifyResult;
+		private Guid m_assemblyId;
+		private HashSet<string> m_allErrorCodes;
+
+		public void SetResult(List<ClientCallableTypeInfo> types, List<HResultErrorInfo> hresultErrors, string verifyResult, Guid assemblyId, HashSet<string> allErrorCodes)
+		{
+			m_types = types;
+			m_hresultErrors = hresultErrors;
+			m_verifyResult = verifyResult;
+			m_assemblyId = assemblyId;
+			m_allErrorCodes = allErrorCodes;
+			m_allErrorCodes.Add(Constants.GeneralExceptionErrorCode);
+		}
+
+		public List<ClientCallableTypeInfo> Types
+		{
+			get
+			{
+				return m_types;
+			}
+		}
+
+		public List<HResultErrorInfo> HResultErrors
+		{
+			get
+			{
+				return m_hresultErrors;
+			}
+		}
+
+		public string VerificationResult
+		{
+			get
+			{
+				return m_verifyResult;
+			}
+		}
+
+		public Guid AssemblyId
+		{
+			get
+			{
+				return m_assemblyId;
+			}
+		}
+
+		public HashSet<string> AllErrorCodes
+		{
+			get
+			{
+				return m_allErrorCodes;
+			}
+		}
+	}
+
+	[Serializable]
+	public class AssemblyReader
+	{
+		private string m_inputAssemblyPath;
+		private string m_comInteropAssemblyPath;
+		private List<string> m_referencedAssemblyPaths;
+		private AssemblyReaderResult m_result;
+
+		public AssemblyReader(string inputAssemblyPath, string comInteropAssemblyPath, IEnumerable<string> referencedAssemblyPaths)
+		{
+			if (string.IsNullOrEmpty(inputAssemblyPath))
+			{
+				throw new ArgumentNullException("inputAssemblyPath");
+			}
+
+			if (referencedAssemblyPaths == null)
+			{
+				referencedAssemblyPaths = new string[0];
+			}
+
+			m_inputAssemblyPath = inputAssemblyPath;
+			m_comInteropAssemblyPath = comInteropAssemblyPath;
+			m_referencedAssemblyPaths = new List<string>();
+			m_referencedAssemblyPaths.AddRange(referencedAssemblyPaths);
+
+			m_result = new AssemblyReaderResult();
+		}
+
+		public void Process()
+		{
+			if (Assembly.GetEntryAssembly() != null &&
+				Assembly.GetEntryAssembly().Location.EndsWith("TextTransform.exe", StringComparison.OrdinalIgnoreCase))
+			{
+				ReadAssemblyInCurrentDomain();
+			}
+			else
+			{
+				AppDomainSetup appDomainSetup = new AppDomainSetup();
+				string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				appDomainSetup.ApplicationBase = dir;
+				appDomainSetup.ApplicationName = "CodeGenReflectionOnlyLoad";
+				System.Security.Policy.Evidence ev = new System.Security.Policy.Evidence(AppDomain.CurrentDomain.Evidence);
+
+				AppDomain workerDomain = AppDomain.CreateDomain("ReflectionOnlyLoadWorkerDomain", ev, appDomainSetup);
+				try
+				{
+					workerDomain.DoCallBack(ReadAssemblyInWorkerDomain);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.ToString());
+					throw;
+				}
+				finally
+				{
+					AppDomain.Unload(workerDomain);
+				}
+			}
+		}
+
+		public List<ClientCallableTypeInfo> Types
+		{
+			get
+			{
+				return m_result.Types;
+			}
+		}
+
+		public List<HResultErrorInfo> HResultErrors
+		{
+			get
+			{
+				return m_result.HResultErrors;
+			}
+		}
+
+		public string VerificationResult
+		{
+			get
+			{
+				return m_result.VerificationResult;
+			}
+		}
+
+		public Guid AssemblyId
+		{
+			get
+			{
+				return m_result.AssemblyId;
+			}
+		}
+
+		public IEnumerable<string> AllErrorCodes
+		{
+			get
+			{
+				return m_result.AllErrorCodes;
+			}
+		}
+
+
+		private void ReadAssemblyInWorkerDomain()
+		{
+			AssemblyReaderWorker worker = new AssemblyReaderWorker(m_inputAssemblyPath, m_comInteropAssemblyPath, m_referencedAssemblyPaths);
+			worker.Process();
+			m_result.SetResult(worker.Types, worker.HResultErrors, worker.VerificationResult, worker.AssemblyId, worker.AllErrorCodes);
+		}
+
+		private void ReadAssemblyInCurrentDomain()
+		{
+			AssemblyReaderWorker worker = new AssemblyReaderWorker(m_inputAssemblyPath, m_comInteropAssemblyPath, m_referencedAssemblyPaths);
+			worker.Process();
+			m_result.SetResult(worker.Types, worker.HResultErrors, worker.VerificationResult, worker.AssemblyId, worker.AllErrorCodes);
+		}
+	}
+
+	/// <summary>
+	/// The assembly reader that will be executed in another app domain.
+	/// Because FxCop Microsoft.Cci.dll cannot be used on non-Windows platform, we 
+	/// switch back to use reflection only load to load the assembly. As the reflection
+	/// only load will load the assembly in the current app domain and we cannot unload
+	/// it, we need to create another app domain and execute the AssemblyReaderWorker
+	/// code in that app domain. After that, we will unload the app domain.
+	/// </summary>
+	internal class AssemblyReaderWorker
+	{
+		private string m_inputAssemblyPath;
+		private string m_comInteropAssemblyPath;
+		private string m_verifyResult;
+		private Guid m_assemblyId;
+		private Dictionary<string, string> m_referencedAssemblyMap = new Dictionary<string, string>();
+		private List<ClientCallableTypeInfo> m_types = new List<ClientCallableTypeInfo>();
+		private List<HResultErrorInfo> m_hresultErrors = new List<HResultErrorInfo>();
+		private HashSet<string> m_allErrorCodes = new HashSet<string>();
+
+		public AssemblyReaderWorker(string inputAssemblyPath, string comInteropAssemblyPath, IEnumerable<string> referencedAssemblyPaths)
+		{
+			if (string.IsNullOrEmpty(inputAssemblyPath))
+			{
+				throw new ArgumentNullException("inputAssemblyPath");
+			}
+
+			if (referencedAssemblyPaths == null)
+			{
+				referencedAssemblyPaths = new string[0];
+			}
+
+			m_inputAssemblyPath = inputAssemblyPath;
+			m_comInteropAssemblyPath = comInteropAssemblyPath;
+
+			IEnumerable<string> refs = referencedAssemblyPaths;
+			if (!string.IsNullOrEmpty(m_comInteropAssemblyPath))
+			{
+				refs = refs.Concat(new string[1] { m_comInteropAssemblyPath });
+			}
+
+			foreach (string referencedAssemblyPath in refs)
+			{
+				System.Reflection.AssemblyName name = System.Reflection.AssemblyName.GetAssemblyName(referencedAssemblyPath);
+				m_referencedAssemblyMap[name.Name] = referencedAssemblyPath;
+			}
+		}
+
+		public void Process()
+		{
+			AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+
+			Assembly assembly = ReflectionOnlyLoad(m_inputAssemblyPath);
+			m_assemblyId = Utility.GetGuidAttribute(assembly);
+			ProcessOneAssembly(assembly);
+
+			foreach (ClientCallableTypeInfo type in m_types)
+			{
+				ProcessOneType(type);
+			}
+
+			foreach (HResultErrorInfo errorInfo in m_hresultErrors)
+			{
+				m_allErrorCodes.Add(errorInfo.ErrorCode);
+			}
+
+			foreach (ClientCallableTypeInfo type in m_types)
+			{
+				foreach (ClientCallablePropertyInfo prop in type.Properties)
+				{
+					foreach (HResultErrorInfo errorInfo in prop.HResultErrors)
+					{
+						m_allErrorCodes.Add(errorInfo.ErrorCode);
+					}
+				}
+
+				foreach (ClientCallableMethodInfo method in type.Methods)
+				{
+					foreach (HResultErrorInfo errorInfo in method.HResultErrors)
+					{
+						m_allErrorCodes.Add(errorInfo.ErrorCode);
+					}
+				}
+			}
+
+			m_verifyResult = this.Verify();
+		}
+
+		private string Verify()
+		{
+			StringBuilder sb = new StringBuilder();
+			using (TextWriter writer = new StringWriter(sb, CultureInfo.InvariantCulture))
+			{
+				if (!string.IsNullOrEmpty(m_comInteropAssemblyPath))
+				{
+					Assembly comInteropAssembly = ReflectionOnlyLoad(m_comInteropAssemblyPath);
+					foreach (ClientCallableTypeInfo type in m_types)
+					{
+						VerifyComInteropInfo(writer, type, comInteropAssembly);
+					}
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		public List<ClientCallableTypeInfo> Types
+		{
+			get
+			{
+				return m_types;
+			}
+		}
+
+		public List<HResultErrorInfo> HResultErrors
+		{
+			get
+			{
+				return m_hresultErrors;
+			}
+		}
+
+		public string VerificationResult
+		{
+			get
+			{
+				return m_verifyResult;
+			}
+		}
+
+		public Guid AssemblyId
+		{
+			get
+			{
+				return m_assemblyId;
+			}
+		}
+
+		public HashSet<string> AllErrorCodes
+		{
+			get
+			{
+				return m_allErrorCodes;
+			}
+		}
+
+		private void ProcessOneAssembly(Assembly assembly)
+		{
+			foreach (Type type in assembly.GetTypes())
+			{
+				if (type.IsPublic)
+				{
+					ClientCallableTypeInfo clientTypeInfo = new ClientCallableTypeInfo(type);
+					m_types.Add(clientTypeInfo);
+				}
+			}
+
+			m_hresultErrors.AddRange(Utility.GetHResultErrors(assembly));
+		}
+
+		private void ProcessOneType(ClientCallableTypeInfo clientTypeInfo)
+		{
+			clientTypeInfo.ClientType = new ClientType(clientTypeInfo.Type, this.m_types);
+
+			if (clientTypeInfo.IsClientObject || clientTypeInfo.IsValueObject)
+			{
+				foreach (PropertyInfo prop in clientTypeInfo.Type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+				{
+					// A property defined in the metadata type must be mapped as a property in the original type
+					if (prop.GetIndexParameters().Length > 0)
+					{
+						ProcessOnePropertyWithIndexParameters(clientTypeInfo, prop);
+					}
+					else
+					{
+						ProcessOneProperty(clientTypeInfo, prop);
+					}
+				}
+			}
+
+			if (clientTypeInfo.IsClientObject)
+			{
+				foreach (MethodInfo method in clientTypeInfo.Type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+				{
+					if (!method.IsStatic && !method.IsSpecialName)
+					{
+						// A method defined in metadata type must be mapped as a method in the original type or the property's Getter.
+						ProcessOneMethod(clientTypeInfo, method);
+					}
+				}
+			}
+
+			clientTypeInfo.Properties.Sort((p1, p2) => string.CompareOrdinal(p1.Name, p2.Name));
+			clientTypeInfo.Methods.Sort((m1, m2) => string.CompareOrdinal(m1.Name, m2.Name));
+		}
+
+		private void ProcessOneProperty(
+			ClientCallableTypeInfo clientTypeInfo,
+			PropertyInfo metadataPropInfo)
+		{
+			ClientCallablePropertyInfo clientPropInfo = new ClientCallablePropertyInfo();
+			clientPropInfo.HResultErrors.AddRange(Utility.GetHResultErrors(metadataPropInfo));
+			clientPropInfo.ComMember  = Utility.GetComMember(metadataPropInfo);
+			clientPropInfo.Name = metadataPropInfo.Name;
+			clientPropInfo.PropertyType = new ClientType(metadataPropInfo.PropertyType, m_types);
+			clientPropInfo.PropertyType.CustomTypeScriptTypeName = Utility.GetCustomTypeScriptTypeName(metadataPropInfo);
+			clientPropInfo.IsReadonly = (metadataPropInfo.SetMethod == null);
+			Utility.SetClientCallablePropertyInfoFromAttribute(clientPropInfo, metadataPropInfo);
+
+			Type knownType = Utility.GetKnownType(metadataPropInfo);
+			if (knownType != null)
+			{
+				clientPropInfo.KnownType = new ClientType(knownType, m_types);
+			}
+
+			clientTypeInfo.Properties.Add(clientPropInfo);
+
+			if (metadataPropInfo.GetMethod != null)
+			{
+				clientPropInfo.Getter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.GetMethod);
+				clientPropInfo.Getter.OperationType = ClientCallableOperationType.Read;
+				if (clientPropInfo.ComMember != null)
+				{
+					clientPropInfo.Getter.ComMember = clientPropInfo.ComMember.Clone();
+				}
+
+				if (clientPropInfo.Getter.ComMember != null)
+				{
+					clientPropInfo.Getter.ComMember.Name = "get_" + clientPropInfo.Getter.ComMember.Name;
+					clientPropInfo.Getter.ComMember.DispatchFlag = Constants.DISPATCH_PROPERTYGET;
+				}
+			}
+
+			if (metadataPropInfo.SetMethod != null)
+			{
+				clientPropInfo.Setter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.SetMethod);
+				clientPropInfo.Setter.OperationType = ClientCallableOperationType.Default;
+				if (clientPropInfo.ComMember != null)
+				{
+					clientPropInfo.Setter.ComMember = clientPropInfo.ComMember.Clone();
+				}
+
+				if (clientPropInfo.Setter.ComMember != null)
+				{
+					clientPropInfo.Setter.ComMember.Name = "put_" + clientPropInfo.Setter.ComMember.Name;
+					clientPropInfo.Setter.ComMember.DispatchFlag = Constants.DISPATCH_PROPERTYPUT;
+				}
+			}
+		}
+
+		private void ProcessOnePropertyWithIndexParameters(
+			ClientCallableTypeInfo clientTypeInfo,
+			PropertyInfo metadataPropInfo)
+		{
+			if (metadataPropInfo.SetMethod != null)
+			{
+				throw CodeGenException.CreateCodeGenException("Not supported indexer property set for type {0}", clientTypeInfo.FullName);
+			}
+
+			if (metadataPropInfo.GetMethod == null)
+			{
+				throw CodeGenException.CreateCodeGenException("Invalid indexer method for type {0}", clientTypeInfo.FullName);
+			}
+
+			if (clientTypeInfo.Methods.Any(m => m.IsIndexerMethod))
+			{
+				throw CodeGenException.CreateCodeGenException("Duplicated indexer method for type {0}", clientTypeInfo.FullName);
+			}
+
+			ClientCallableMethodInfo clientMethod = ProcessOneMethod(clientTypeInfo, metadataPropInfo.GetMethod);
+			clientMethod.Name = "Get" + metadataPropInfo.Name;
+			clientMethod.OperationType = ClientCallableOperationType.Read;
+			clientMethod.IsIndexerMethod = true;
+			clientMethod.ComMember = Utility.GetComMember(metadataPropInfo);
+			if (clientTypeInfo.HiddenIndexerMethod)
+			{
+				clientMethod.Name = "_" + clientMethod.Name;
+			}
+
+			if (clientMethod.ComMember != null)
+			{
+				if (clientMethod.ComMember.DispatchFlag == 0)
+				{
+					clientMethod.ComMember.DispatchFlag = Constants.DISPATCH_PROPERTYGET;
+				}
+			}
+
+			if (!clientMethod.ReturnType.IsClientObject)
+			{
+				throw CodeGenException.CreateCodeGenException("The indexer method in type {0} does not return client object type", clientTypeInfo.Type.FullName);
+			}
+		}
+
+		private ClientCallableMethodInfo CreateClientCallableMethodInfoFromMetadata(MethodInfo metadataMethodInfo)
+		{
+			ClientCallableMethodInfo clientMethodInfo = new ClientCallableMethodInfo();
+			clientMethodInfo.HResultErrors.AddRange(Utility.GetHResultErrors(metadataMethodInfo));
+			clientMethodInfo.Name = metadataMethodInfo.Name;
+			clientMethodInfo.ReturnType = new ClientType(metadataMethodInfo.ReturnType, m_types);
+			clientMethodInfo.ReturnType.CustomTypeScriptTypeName = Utility.GetCustomTypeScriptTypeName(metadataMethodInfo);
+			clientMethodInfo.ComMember = Utility.GetComMember(metadataMethodInfo);
+			Utility.SetClientCallableMethodInfoFromAttribute(clientMethodInfo, metadataMethodInfo);
+
+			if (clientMethodInfo.Name == Constants.MemberNames.OnAccess)
+			{
+				// _OnAccess method should be a read operation.
+				clientMethodInfo.OperationType = ClientCallableOperationType.Read;
+			}
+
+			if (clientMethodInfo.Name == Constants.MemberNames.Add &&
+				clientMethodInfo.ReturnType.IsClientObject)
+			{
+				clientMethodInfo.InvalidateReturnObjectPathAfterRequest = true;
+			}
+
+			foreach (ParameterInfo par in metadataMethodInfo.GetParameters())
+			{
+				ClientCallableParameterInfo clientPar = new ClientCallableParameterInfo();
+				clientPar.Name = par.Name;
+				clientPar.ParameterType = new ClientType(par.ParameterType, m_types);
+				clientPar.ParameterType.CustomTypeScriptTypeName = Utility.GetCustomTypeScriptTypeName(par);
+				clientPar.IsOptional = Utility.GetIsOptional(par);
+				Type knownType = Utility.GetKnownType(par);
+				if (knownType != null)
+				{
+					clientPar.KnownType = new ClientType(knownType, m_types);
+				}
+
+				foreach (CustomAttributeData attr in par.CustomAttributes)
+				{
+					if (attr.AttributeType.FullName == Constants.TypeFullNames.ParamArrayAttribute)
+					{
+						clientPar.IsParams = true;
+					}
+				}
+
+				clientMethodInfo.Parameters.Add(clientPar);
+			}
+
+			return clientMethodInfo;
+		}
+
+		private ClientCallableMethodInfo ProcessOneMethod(
+			ClientCallableTypeInfo clientTypeInfo,
+			MethodInfo metadataMethodInfo)
+		{
+			ClientCallableMethodInfo clientMethodInfo = CreateClientCallableMethodInfoFromMetadata(metadataMethodInfo);
+			if (clientMethodInfo.ComMember != null)
+			{
+				if (clientMethodInfo.ComMember.DispatchFlag == 0)
+				{
+					clientMethodInfo.ComMember.DispatchFlag = Constants.DISPATCH_METHOD;
+				}
+			}
+
+			clientTypeInfo.Methods.Add(clientMethodInfo);
+			return clientMethodInfo;
+		}
+
+		private static void VerifyComInteropInfo(TextWriter output, ClientCallableTypeInfo type, Assembly comInteropAssembly)
+		{
+			if (type.ComType == null)
+			{
+				output.WriteLine("Type:{0}: No ClientCallableComTypeAttribute", type.FullName);
+				return;
+			}
+
+			Type interfaceType = Utility.FindTypeByName(comInteropAssembly, type.ComType.Name);
+			if (interfaceType == null)
+			{
+				output.WriteLine("Type:{0}: Cannot find interface type with name {1}", type.FullName, type.ComType.Name);
+				return;
+			}
+
+			if (type.InterfaceId != Utility.GetGuidAttribute(interfaceType))
+			{
+				output.WriteLine("Type:{0}: InterfaceId should be {1}", type.FullName, Utility.GetGuidAttribute(interfaceType));
+			}
+
+			if (!string.IsNullOrEmpty(type.ComType.CoClassName))
+			{
+				Type coClassType = Utility.FindTypeByName(comInteropAssembly, type.ComType.CoClassName);
+				if (coClassType == null)
+				{
+					output.WriteLine("Type:{0}: Cannot find coclass type with name {1}", type.FullName, type.ComType.CoClassName);
+				}
+				else
+				{
+					if (type.CoClassId != Utility.GetGuidAttribute(coClassType))
+					{
+						output.WriteLine("Type:{0}: CoClassId should be {1}", type.FullName, Utility.GetGuidAttribute(coClassType));
+					}
+				}
+			}
+
+			if (type.AllowCreation && string.IsNullOrEmpty(type.ComType.CoClassName))
+			{
+				output.WriteLine("Type:{0}: CoClassName cannot be empty.", type.FullName);
+			}
+
+			foreach (ClientCallableMethodInfo method in type.Methods)
+			{
+				VerifyComInteropInfo(output, type, method, interfaceType);
+			}
+
+			foreach (ClientCallablePropertyInfo prop in type.Properties)
+			{
+				VerifyComInteropInfo(output, type, prop, interfaceType);
+			}
+		}
+
+		private static void VerifyComInteropInfo(TextWriter output, ClientCallableTypeInfo type, ClientCallableMethodInfo method, Type interopInterfaceType)
+		{
+			// A method is mapped to either COM's method or COM's property's Getter
+
+			if (method.ComMember == null)
+			{
+				output.WriteLine("Type:{0}: Method:{1}: No ClientCallableComMemberAttribute", type.FullName, method.Name);
+				return;
+			}
+
+			PropertyInfo interopProp = Utility.FindPropertyByName(interopInterfaceType, method.ComMember.Name);
+			MethodInfo interopMethod = Utility.FindMethodByName(interopInterfaceType, method.ComMember.Name);
+
+			if (interopMethod != null)
+			{
+				if (method.ComMember.DispatchId != Utility.GetDispatchId(interopMethod))
+				{
+					output.WriteLine("Type:{0}: Method:{1}: Its DispatchId should be {2}", type.FullName, method.Name, Utility.GetDispatchId(interopMethod));
+				}
+			}
+			else if (interopProp != null)
+			{
+				if (method.ComMember.DispatchId != Utility.GetDispatchId(interopProp))
+				{
+					output.WriteLine("Type:{0}: Method:{1}: Its DispatchId should be {2}", type.FullName, method.Name, Utility.GetDispatchId(interopProp));
+				}
+
+				if (method.ComMember.DispatchFlag != Constants.DISPATCH_PROPERTYGET)
+				{
+					output.WriteLine("Type:{0}: Method:{1}: Its MemberType should be PropertyGet", type.FullName, method.Name);
+				}
+			}
+			else
+			{
+				output.WriteLine("Type:{0}: Method:{1}: Cannot find {2} in the interop type {3}", type.FullName, method.Name, method.ComMember.Name, interopInterfaceType.FullName);
+				return;
+			}
+		}
+
+		private static void VerifyComInteropInfo(TextWriter output, ClientCallableTypeInfo type, ClientCallablePropertyInfo prop, Type interopInterfaceType)
+		{
+			// A property is always mapped to COM's property
+			if (prop.ComMember == null)
+			{
+				output.WriteLine("Type:{0}: Property:{1}: No ClientCallableComMemberAttribute", type.FullName, prop.Name);
+				return;
+			}
+
+			PropertyInfo interopProp = Utility.FindPropertyByName(interopInterfaceType, prop.ComMember.Name);
+			if (interopProp == null)
+			{
+				output.WriteLine("Type:{0}: Property:{1}: Cannot find {2} in the interop type {3}", type.FullName, prop.Name, prop.ComMember.Name, interopInterfaceType.FullName);
+				return;
+			}
+
+			if (!prop.IsReadonly && interopProp.SetMethod == null)
+			{
+				output.WriteLine("Type:{0}: Property:{1}: It should be readonly as interop property is readonly", type.FullName, prop.Name);
+			}
+
+			if (prop.ComMember.DispatchId != Utility.GetDispatchId(interopProp))
+			{
+				output.WriteLine("Type:{0}: Property:{1}: Its DispatchId should be {2}", type.FullName, prop.Name, Utility.GetDispatchId(interopProp));
+			}
+		}
+
+
+		private Dictionary<string, Assembly> m_loadedAssemblies = new Dictionary<string, Assembly>(StringComparer.OrdinalIgnoreCase);
+
+		private Assembly ReflectionOnlyLoad(string path)
+		{
+			Assembly ret;
+			if (m_loadedAssemblies.TryGetValue(path, out ret))
+			{
+				return ret;
+			}
+
+			byte[] bytes = File.ReadAllBytes(path);
+			ret = Assembly.ReflectionOnlyLoad(bytes);
+			m_loadedAssemblies[path] = ret;
+			return ret;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+		private Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+		{
+			string name = args.Name;
+			AssemblyName assemblyName = new AssemblyName(name);
+			string path;
+			if (m_referencedAssemblyMap.TryGetValue(assemblyName.Name, out path))
+			{
+				return ReflectionOnlyLoad(path);
+			}
+
+			Console.WriteLine("Cannot find assembly {0}", name);
+
+			return null;
+		}
+	}
+
+	public class CodeGenTemplateFileManager
+	{
+		public CodeGenTemplateFileManager(
+			StringBuilder generationEnvironment)
+		{
+			m_generationEnvironment = generationEnvironment;
+		}
+
+		private readonly List<Block> m_files = new List<Block>();
+		private Block m_footer;
+		private Block m_header;
+		private Block m_currentBlock;
+
+		private readonly StringBuilder m_generationEnvironment;
+
+		public void StartHeader()
+		{
+			m_header = StartBlock(null, false /*fileBody*/);
+		}
+
+		public void StartNewFile(string name)
+		{
+			StartBlock(name, true /*fileBody*/);
+		}
+
+		private Block StartBlock(string name, bool fileBody)
+		{
+			EndBlock();
+			m_currentBlock = new Block();
+			m_currentBlock.Name = name;
+			m_currentBlock.Start = m_generationEnvironment.Length;
+			if (fileBody)
+			{
+				m_files.Add(m_currentBlock);
+			}
+			return m_currentBlock;
+		}
+
+		public void EndBlock()
+		{
+			if (m_currentBlock != null)
+			{
+				m_currentBlock.Length = m_generationEnvironment.Length - m_currentBlock.Start;
+				m_currentBlock = null;
+			}
+		}
+
+		public void StartFooter()
+		{
+			m_footer = StartBlock(null, false /*fileBody*/);
+		}
+
+		private sealed class Block
+		{
+			public String Name;
+			public int Start;
+			public int Length;
+		}
+
+		public void WriteTo(string outputDirectory, string checkoutCommandPrefix)
+		{
+			string strHeader = string.Empty;
+			string strFooter = string.Empty;
+
+			if (m_header != null)
+			{
+				strHeader = m_generationEnvironment.ToString(m_header.Start, m_header.Length);
+			}
+
+			if (m_footer != null)
+			{
+				strFooter = m_generationEnvironment.ToString(m_footer.Start, m_footer.Length);
+			}
+
+			foreach (Block block in m_files)
+			{
+				string fullPath = Path.Combine(outputDirectory, block.Name);
+				EnsureDirectoryForFile(fullPath);
+				string content = strHeader.Trim() + Environment.NewLine + m_generationEnvironment.ToString(block.Start, block.Length).Trim() + Environment.NewLine + strFooter.Trim() + Environment.NewLine;
+				Utility.UpdateFileIfUpdated(fullPath, content, checkoutCommandPrefix);
+			}
+		}
+
+		private static void EnsureDirectoryForFile(string filePath)
+		{
+			FileInfo fi = new FileInfo(filePath);
+			DirectoryInfo di = fi.Directory;
+			EnsureDirectory(di);
+		}
+
+		private static void EnsureDirectory(DirectoryInfo dir)
+		{
+			if (!dir.Exists)
+			{
+				if (dir.Parent != null)
+				{
+					EnsureDirectory(dir.Parent);
+					dir.Create();
+				}
+			}
+		}
+	}
+
+	public static class Utility
+	{
+		/// <summary>
+		/// Whether a type is service root
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public static bool IsServiceRoot(Type type)
+		{
+			if (type != null)
+			{
+				foreach (CustomAttributeData attr in type.GetCustomAttributesData())
+				{
+					if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableServiceRootAttribute)
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		public static string GetComCoClassNamespace(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			IDictionary<string, NamespaceInfo> namespaceMap = GetNamespaceMap(type.Assembly);
+			NamespaceInfo info;
+			if (namespaceMap.TryGetValue(type.Namespace, out info))
+			{
+				if (!string.IsNullOrEmpty(info.ComCoClassNamespace))
+				{
+					return info.ComCoClassNamespace;
+				}
+
+				if (!string.IsNullOrEmpty(info.ComInterfaceNamespace))
+				{
+					return info.ComInterfaceNamespace;
+				}
+			}
+
+			return type.Namespace;
+		}
+
+		public static string GetComInterfaceNamespace(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			IDictionary<string, NamespaceInfo> namespaceMap = GetNamespaceMap(type.Assembly);
+			NamespaceInfo info;
+			if (namespaceMap.TryGetValue(type.Namespace, out info))
+			{
+				if (!string.IsNullOrEmpty(info.ComInterfaceNamespace))
+				{
+					return info.ComInterfaceNamespace;
+				}
+
+				if (!string.IsNullOrEmpty(info.ComCoClassNamespace))
+				{
+					return info.ComCoClassNamespace;
+				}
+			}
+
+			return type.Namespace;
+		}
+
+		public static string GetTypeScriptNamespace(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			IDictionary<string, NamespaceInfo> namespaceMap = GetNamespaceMap(type.Assembly);
+			NamespaceInfo info;
+			if (namespaceMap.TryGetValue(type.Namespace, out info) && !string.IsNullOrEmpty(info.TypeScriptNamespace))
+			{
+				return info.TypeScriptNamespace;
+			}
+
+			return type.Namespace;
+		}
+
+		public static string GetWacNamespace(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			IDictionary<string, NamespaceInfo> namespaceMap = GetNamespaceMap(type.Assembly);
+			NamespaceInfo info;
+			if (namespaceMap.TryGetValue(type.Namespace, out info) && !string.IsNullOrEmpty(info.WacNamespace))
+			{
+				return info.WacNamespace;
+			}
+
+			return type.Namespace;
+		}
+
+		public static ClientCallableComType GetComType(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			ClientCallableComType ret = null;
+			foreach(CustomAttributeData attr in type.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableComTypeAttribute)
+				{
+					ret = new ClientCallableComType();
+
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.Name)
+						{
+							ret.Name = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.InterfaceId)
+						{
+							ret.InterfaceId = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.CoClassName)
+						{
+							ret.CoClassName = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.CoClassId)
+						{
+							ret.CoClassId = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.SupportEnumeration)
+						{
+							ret.SupportEnumeration = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.SupportIEnumVARIANT)
+						{
+							ret.SupportIEnumVARIANT = (bool)arg.TypedValue.Value;
+						}
+					}
+
+					if (string.IsNullOrEmpty(ret.Name))
+					{
+						ret.Name = type.Name;
+					}
+
+					ret.CoClassNamespace = GetComCoClassNamespace(type);
+					ret.InterfaceNamespace = GetComInterfaceNamespace(type);
+				}
+			}
+
+			return ret;
+		}
+
+		public static ClientCallableComMember GetComMember(MemberInfo member)
+		{
+			if (member == null)
+			{
+				throw new ArgumentNullException("member");
+			}
+
+			ClientCallableComMember ret = null;
+			foreach (CustomAttributeData attr in member.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableComMemberAttribute)
+				{
+					ret = new ClientCallableComMember();
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.Name)
+						{
+							ret.Name = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.DispatchId)
+						{
+							ret.DispatchId = (int)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.MemberType)
+						{
+							ret.DispatchFlag = Convert.ToInt32(arg.TypedValue.Value, CultureInfo.InvariantCulture);
+						}
+					}
+
+					if (string.IsNullOrEmpty(ret.Name))
+					{
+						ret.Name = member.Name;
+					}
+				}
+			}
+
+			return ret;
+		}
+
+		public static void SetClientCallableMethodInfoFromAttribute(ClientCallableMethodInfo clientMethod, MethodInfo method)
+		{
+			if (method == null)
+			{
+				throw new ArgumentNullException("method");
+			}
+
+			if (clientMethod == null)
+			{
+				throw new ArgumentNullException("clientMethod");
+			}
+
+			foreach (CustomAttributeData attr in method.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableOperationAttribute)
+				{
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.OperationType)
+						{
+							clientMethod.OperationType = (ClientCallableOperationType)Convert.ToInt32(arg.TypedValue.Value, CultureInfo.InvariantCulture);
+						}
+						else if (arg.MemberName == Constants.MemberNames.RESTfulName)
+						{
+							clientMethod.RESTfulName = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.WacName)
+						{
+							clientMethod.WacName = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.InvalidateReturnObjectPathAfterRequest)
+						{
+							clientMethod.InvalidateReturnObjectPathAfterRequest = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.WacAsync)
+						{
+							clientMethod.WacAsync = (bool)arg.TypedValue.Value;
+						}
+					}
+				}
+			}
+		}
+
+		public static void SetClientCallableTypeInfoFromAttribute(ClientCallableTypeInfo clientType, Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (clientType == null)
+			{
+				throw new ArgumentNullException("clientType");
+			}
+
+			var attributes = type.GetCustomAttributesData();
+
+			foreach (CustomAttributeData attr in attributes)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableTypeAttribute)
+				{
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.CreateItemOperationName)
+						{
+							clientType.CreateItemOperationName = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.DeleteOperationName)
+						{
+							clientType.DeleteOperationName = (string)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.HiddenIndexerMethod)
+						{
+							clientType.HiddenIndexerMethod = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.ConvertIntegerKeyValueToString)
+						{
+							clientType.ConvertIntegerKeyValueToString = (bool)arg.TypedValue.Value;
+						}
+					}
+				}
+			}
+
+			clientType.CustomTypeScriptTypeName = Utility.GetCustomTypeScriptTypeName(attributes);
+		}
+
+		public static void SetClientCallablePropertyInfoFromAttribute(ClientCallablePropertyInfo clientProperty, PropertyInfo propInfo)
+		{
+			if (propInfo == null)
+			{
+				throw new ArgumentNullException("propInfo");
+			}
+
+			if (clientProperty == null)
+			{
+				throw new ArgumentNullException("clientProperty");
+			}
+
+			foreach (CustomAttributeData attr in propInfo.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallablePropertyAttribute)
+				{
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.IsVolatile)
+						{
+							clientProperty.IsVolatile = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.InvalidateReturnObjectPathAfterRequest)
+						{
+							clientProperty.InvalidateReturnObjectPathAfterRequest = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.WacAsync)
+						{
+							clientProperty.WacAsync = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.ExcludedFromRest)
+						{
+							clientProperty.ExcludedFromRest = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.ExcludedFromClientLibrary)
+						{
+							clientProperty.ExcludedFromClientLibrary = (bool)arg.TypedValue.Value;
+						}
+					}
+				}
+				else if (attr.AttributeType.FullName == Constants.TypeFullNames.OptionalAttribute)
+				{
+					clientProperty.IsOptional = true;
+				}
+			}
+
+			if (!clientProperty.PropertyType.IsClientObject)
+			{
+				clientProperty.IsVolatile = false;
+				clientProperty.InvalidateReturnObjectPathAfterRequest = false;
+			}
+
+			if (clientProperty.InvalidateReturnObjectPathAfterRequest)
+			{
+				clientProperty.IsVolatile = true;
+			}
+		}
+
+		public static IEnumerable<HResultErrorInfo> GetHResultErrors(Assembly assembly)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException("assembly");
+			}
+
+			return GetHResultErrors(assembly.GetCustomAttributesData());
+		}
+
+		public static IEnumerable<HResultErrorInfo> GetHResultErrors(MemberInfo member)
+		{
+			if (member == null)
+			{
+				throw new ArgumentNullException("member");
+			}
+
+			return GetHResultErrors(member.GetCustomAttributesData());
+		}
+
+		private static IEnumerable<HResultErrorInfo> GetHResultErrors(IEnumerable<CustomAttributeData> attrs)
+		{
+			List<HResultErrorInfo> ret = new List<HResultErrorInfo>();
+			foreach (CustomAttributeData attr in attrs)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.HResultErrorAttribute)
+				{
+					string hresultExpression = attr.ConstructorArguments[0].Value as string;
+					int statusCode = (int)attr.ConstructorArguments[1].Value;
+					string errorCode = attr.ConstructorArguments[2].Value as string;
+					string errorMessageId = attr.ConstructorArguments[3].Value as string;
+					ret.Add(new HResultErrorInfo(hresultExpression, statusCode, errorCode, errorMessageId));
+				}
+				else if (attr.AttributeType.FullName == Constants.TypeFullNames.HResultDefaultErrorAttribute)
+				{
+					string hresultExpression = "S_OK";
+					int statusCode = (int)attr.ConstructorArguments[0].Value;
+					string errorCode = attr.ConstructorArguments[1].Value as string;
+					string errorMessageId = attr.ConstructorArguments[2].Value as string;
+					ret.Add(new HResultErrorInfo(hresultExpression, statusCode, errorCode, errorMessageId));
+				}
+			}
+
+			return ret.OrderBy(h => h.HResultExpression);
+		}
+
+		public static string GetCustomTypeScriptTypeName(PropertyInfo prop)
+		{
+			if (prop == null)
+			{
+				throw new ArgumentNullException("prop");
+			}
+
+			return GetCustomTypeScriptTypeName(prop.GetCustomAttributesData());
+		}
+
+		public static string GetCustomTypeScriptTypeName(MethodInfo method)
+		{
+			if (method == null)
+			{
+				throw new ArgumentNullException("method");
+			}
+
+			if (method.ReturnParameter == null)
+			{
+				return null;
+			}
+
+			return GetCustomTypeScriptTypeName(method.ReturnParameter.GetCustomAttributesData());
+		}
+
+		public static string GetCustomTypeScriptTypeName(ParameterInfo par)
+		{
+			if (par == null)
+			{
+				throw new ArgumentNullException("par");
+			}
+
+			return GetCustomTypeScriptTypeName(par.GetCustomAttributesData());
+		}
+
+		public static bool GetIsOptional(ParameterInfo par)
+		{
+			if (par == null)
+			{
+				throw new ArgumentNullException("par");
+			}
+
+			foreach(CustomAttributeData attr in par.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.OptionalAttribute ||
+					attr.AttributeType.FullName == Constants.TypeFullNames.OpitionalAttribute)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		public static Type GetKnownType(ParameterInfo par)
+		{
+			if (par == null)
+			{
+				throw new ArgumentNullException("par");
+			}
+
+			return GetKnownType(par.GetCustomAttributesData());
+		}
+
+		public static Type GetKnownType(PropertyInfo property)
+		{
+			if (property == null)
+			{
+				throw new ArgumentNullException("property");
+			}
+
+			return GetKnownType(property.GetCustomAttributesData());
+		}
+
+		private static Type GetKnownType(IEnumerable<CustomAttributeData> attrs)
+		{ 
+			foreach (CustomAttributeData attr in attrs)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.KnownTypeAttribute)
+				{
+					return attr.ConstructorArguments[0].Value as Type;
+				}
+			}
+
+			return null;
+		}
+
+		private static string GetCustomTypeScriptTypeName(IEnumerable<CustomAttributeData> attrs)
+		{
+			foreach (CustomAttributeData attr in attrs)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.TypeScriptTypeAttribute)
+				{
+					string typeName = attr.ConstructorArguments[0].Value as string;
+					return typeName;
+				}
+			}
+
+			return null;
+		}
+
+		public static Type GetChildItemType(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.FullName == "System.String")
+			{
+				return null;
+			}
+
+			Type childItemType = null;
+			foreach (Type interfaceNode in type.GetInterfaces())
+			{
+				if (interfaceNode.IsGenericType && interfaceNode.FullName.IndexOf("System.Collections.Generic.IEnumerable`1", StringComparison.Ordinal) >= 0)
+				{
+					childItemType = interfaceNode.GetGenericArguments()[0];
+				}
+			}
+
+			return childItemType;
+		}
+
+		public static PropertyInfo FindPropertyByName(Type type, string name)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			PropertyInfo ret = type.GetProperty(name);
+			if (ret != null)
+			{
+				return ret;
+			}
+
+			foreach (PropertyInfo prop in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				if (prop.Name == name)
+				{
+					return prop;
+				}
+			}
+
+			return null;
+		}
+
+		public static MethodInfo FindMethodByName(Type type, string name)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			MethodInfo ret = type.GetMethod(name);
+			if (ret != null)
+			{
+				return ret;
+			}
+
+			foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+			{
+				if (method.Name == name)
+				{
+					return method;
+				}
+			}
+
+			return null;
+		}
+
+		public static Type FindTypeByName(Assembly assembly, string name)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException("assembly");
+			}
+
+			foreach (Type type in assembly.GetTypes())
+			{
+				if (type.Name == name)
+				{
+					return type;
+				}
+			}
+
+			return null;
+		}
+
+		public static int GetDispatchId(MemberInfo member)
+		{
+			if (member == null)
+			{
+				throw new ArgumentNullException("member");
+			}
+
+			foreach (CustomAttributeData attr in member.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.DispIdAttribute)
+				{
+					int dispId = (int) attr.ConstructorArguments[0].Value;
+					return dispId;
+				}
+			}
+
+			throw CodeGenException.CreateCodeGenException("Cannot find dispatch id for {0}", member.ToString());
+		}
+
+		public static Guid GetGuidAttribute(Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			foreach (CustomAttributeData attr in type.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.GuidAttribute)
+				{
+					string id = (string)attr.ConstructorArguments[0].Value;
+					return new Guid(id);
+				}
+			}
+
+			throw CodeGenException.CreateCodeGenException("Cannot get GuidAttribute for {0}", type.FullName);
+		}
+
+		public static Guid GetGuidAttribute(Assembly assemblyNode)
+		{
+			if (assemblyNode == null)
+			{
+				throw new ArgumentNullException("assemblyNode");
+			}
+
+			foreach (CustomAttributeData attr in assemblyNode.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.GuidAttribute)
+				{
+					string id = (string)attr.ConstructorArguments[0].Value;
+					return new Guid(id);
+				}
+			}
+
+			return Guid.Empty;
+		}
+
+		public static string GetTypeScriptTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsEnum)
+			{
+				return "string";
+			}
+			else if (type.IsStream)
+			{
+				return "string";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.ClientCallableType.TypescriptNamespace + "." + type.ClientCallableType.Name;
+			}
+			else if (type.ChildItemClientType != null)
+			{
+				return "Array<" + GetTypeScriptTypeName(type.ChildItemClientType) + ">";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Object":
+						return "any";
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+					case "System.Single":
+					case "System.Double":
+						return "number";
+					case "System.Boolean":
+						return "boolean";
+					case "System.String":
+						return "string";
+					case "System.Void":
+						return "void";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the "type", "elementType", or "value" tags for use in VSDOC
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="isArrayElementType">
+		/// If true, the type is only for array elements (e.g,. only for "elementType" tag).
+		/// If so, only do a more limited subset (what can go into elementType tag, so no value or custom attribute)
+		/// </param>
+		/// <returns></returns>
+		public static string GetVSDocTypeOrValue(ClientType type, bool isArrayElementType)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			var tagPrefix = (isArrayElementType ? "elementType" : "type") + "=\"";
+			var closingQuoteSuffix = "\"";
+
+			if (type.IsEnum)
+			{
+				return tagPrefix + "String" + closingQuoteSuffix;
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return tagPrefix + type.ClientCallableType.TypescriptNamespace + "." + type.ClientCallableType.Name + closingQuoteSuffix;
+			}
+			else if (type.ChildItemClientType != null)
+			{
+				return tagPrefix + "Array" + closingQuoteSuffix +
+					(isArrayElementType ? "" : (" " + GetVSDocTypeOrValue(type.ChildItemClientType, true /*isArrayElementType*/)));
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Object":
+						return "";
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+					case "System.Single":
+					case "System.Double":
+						return tagPrefix + "Number" + closingQuoteSuffix;
+					case "System.Boolean":
+						return tagPrefix + "Boolean" + closingQuoteSuffix;
+					case "System.String":
+						return tagPrefix + "String" + closingQuoteSuffix;
+					case "System.Void":
+						return "";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+		public static string GetJSPrimitiveInstanceForType(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsEnum || type.IsStream)
+			{
+				return "''";
+			}
+
+			if (type.ChildItemClientType != null)
+			{
+				return "[]";
+			}
+
+			if (type.IsClientValueObject)
+			{
+				return "{}";
+			}
+
+			switch (type.FullName)
+			{
+				case "System.Int16":
+				case "System.UInt16":
+				case "System.Int32":
+				case "System.UInt32":
+				case "System.Single":
+				case "System.Double":
+					return "0";
+				case "System.Boolean":
+					return "false";
+				case "System.String":
+					return "''";
+				case "System.Object":
+					return "null";
+				case "System.Void":
+					return "null";
+				default:
+					throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+			}
+		}
+
+		public static string GetTypeNameForCom(ClientType type)
+		{
+			return GetTypeNameForCom(type, forIdl: false);
+		}
+
+		private static string GetTypeNameForCom(ClientType type, bool forIdl)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsComVariantType)
+			{
+				return "VARIANT";
+			}
+			else if (type.IsEnum)
+			{
+				if (forIdl)
+				{
+					return type.Name;
+				}
+				else
+				{
+					return type.ClientCallableType.ComInterfaceNamespace + "::" + type.Name;
+				}
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				if (forIdl)
+				{
+					return type.ClientCallableType.ComType.Name; 
+				}
+				else
+				{
+					return type.ClientCallableType.ComType.InterfaceNamespace + "::" + type.ClientCallableType.ComType.Name;
+				}
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "int";
+					case "System.Single":
+						return "float";
+					case "System.Double":
+						return "double";
+					case "System.Boolean":
+						return "VARIANT_BOOL";
+					case "System.String":
+						return "BSTR";
+					case "System.Void":
+						return "void";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+		public static string GetTypeDeclarationNameForCom(ClientType type)
+		{
+			return GetTypeDeclarationNameForCom(type, forIdl: false);
+		}
+
+		public static string GetTypeDeclarationNameForCom(ClientType type, bool forIdl)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return GetTypeNameForCom(type, forIdl) + "*";
+			}
+
+			return GetTypeNameForCom(type, forIdl);
+		}
+
+		public static string GetArgumentVariableInitStatementFormat(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			string initStatement = string.Empty;
+
+			if (type.IsComVariantType)
+			{
+				initStatement = "Mso::VariantHolder {0};";
+			}
+			else if (type.IsEnum)
+			{
+				initStatement = GetTypeNameForCom(type) + " {0} = (" + GetTypeNameForCom(type) + ")0;";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				initStatement = "Mso::TCntPtr<" + GetTypeNameForCom(type) + "> {0};";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						initStatement = "int {0} = 0;";
+						break;
+					case "System.Single":
+						initStatement = "float {0} = 0;";
+						break;
+					case "System.Double":
+						initStatement = "double {0} = 0;";
+						break;
+					case "System.Boolean":
+						initStatement = "VARIANT_BOOL {0} = VARIANT_FALSE;";
+						break;
+					case "System.String":
+						initStatement = "Mso::BStrHolder {0};";
+						break;
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+
+			return initStatement;
+		}
+
+		public static string GetArgumentAddressExpression(ClientType type, string name)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject ||
+				type.IsClientValueObject ||
+				type.FullName == "System.String")
+			{
+				return name + ".ClearAndGetAddressOf()";
+			}
+
+			return "&" + name;
+		}		
+
+		/// <summary>
+		/// Get the VARIANT type
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		public static string GetVariantVarType(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			// keep the supported VT in sync with method 
+			// HRESULT RichApi::ValidateArgumentAndChangeType(VARIANT& var, VARTYPE vt) MSONOTHROW
+			// in %osfclient%\RichApi\RichApiExecutorLib\RichApi.cpp
+
+			if (type.IsComVariantType)
+			{
+				return "VT_VARIANT";
+			}
+			else if (type.IsEnum)
+			{
+				return "VT_I4";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return "VT_DISPATCH";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "VT_I4";
+					case "System.Single":
+						return "VT_R4";
+					case "System.Double":
+						return "VT_R8";
+					case "System.Boolean":
+						return "VT_BOOL";
+					case "System.String":
+						return "VT_BSTR";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+		public static string GetVariantMemberName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsComVariantType)
+			{
+				throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+			}
+
+			if (type.IsEnum)
+			{
+				return "lVal";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return "pdispVal";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "lVal";
+					case "System.Single":
+						return "fltVal";
+					case "System.Double":
+						return "dblVal";
+					case "System.Boolean":
+						return "boolVal";
+					case "System.String":
+						return "bstrVal";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+		public static string BuildMethodArgumentListForCom(ClientCallableMethodInfo method)
+		{
+			return BuildMethodArgumentListForCom(method, forIdl: false);
+		}
+
+		public static string BuildMethodArgumentListForCom(ClientCallableMethodInfo method, bool forIdl)
+		{
+			if (method == null)
+			{
+				throw new ArgumentNullException("method");
+			}
+
+			StringBuilder sb = new StringBuilder();
+			bool first = true;
+			foreach (ClientCallableParameterInfo par in method.Parameters)
+			{
+				if (!first)
+				{
+					sb.Append(", ");
+				}
+
+				if (forIdl)
+				{
+					sb.Append("[in] ");
+				}
+
+				sb.Append(GetTypeDeclarationNameForCom(par.ParameterType, forIdl));
+				sb.Append(" ");
+				sb.Append(par.Name);
+				first = false;
+			}
+
+			if (!method.ReturnType.IsVoid)
+			{
+				if (!first)
+				{
+					sb.Append(", ");
+				}
+
+				if (forIdl)
+				{
+					sb.Append("[out, retval] ");
+				}
+
+				sb.Append(GetTypeDeclarationNameForCom(method.ReturnType, forIdl));
+				sb.Append("*");
+				sb.Append(" ");
+				sb.Append("result");
+			}
+
+			return sb.ToString();
+		}
+
+		public static string GetWacScriptSharpTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.ClientCallableType.WacNamespace + "." + type.ClientCallableType.Name;
+			}
+
+			if (type.ChildItemClientType != null)
+			{
+				return GetWacScriptSharpTypeName(type.ChildItemClientType) + "[]";
+			}
+
+			string ret;
+
+			if (type.IsEnum)
+			{
+				ret = type.ClientCallableType.WacNamespace + "." + type.ClientCallableType.Name;
+			}
+			else if (type.IsStream)
+			{
+				ret = "string";
+			}
+			else
+			{
+				ret = type.Name;
+			}
+
+			if (type.IsNullable)
+			{
+				ret = ret + "?";
+			}
+
+			return ret;
+		}
+
+		public static string GetWacScriptSharpDefaultValueExpression(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return "null";
+			}
+
+			if (type.ChildItemClientType != null)
+			{
+				return "null";
+			}
+
+			if (type.IsNullable)
+			{
+				return "null";
+			}
+
+			if (type.IsEnum)
+			{
+				return "(" + type.WacScriptSharpTypeName + ")0";
+			}
+
+			if (type.IsSystemObject)
+			{
+				return "null";
+			}
+
+			if (type.IsStream)
+			{
+				return "null";
+			}
+
+			switch (type.FullName)
+			{
+				case "System.Int16":
+				case "System.UInt16":
+				case "System.Int32":
+				case "System.UInt32":
+					return "0";
+				case "System.Single":
+					return "0";
+				case "System.Double":
+					return "0";
+				case "System.Boolean":
+					return "false";
+				case "System.String":
+					return "null";
+				default:
+					throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+			}
+		}
+
+		public static string GetWacScriptSharpExptectedScriptType(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.WacScriptSharpTypeName;
+			}
+
+			if (type.ChildItemClientType != null)
+			{
+				return "Array<" + GetWacScriptSharpExptectedScriptType(type.ChildItemClientType) + ">";
+			}
+
+			string ret;
+
+			if (type.IsEnum)
+			{
+				ret = "int";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						ret = "int";
+						break;
+					case "System.Single":
+					case "System.Double":
+						ret = "number";
+						break;
+					case "System.Boolean":
+						ret = "boolean";
+						break;
+					case "System.String":
+						ret = "string";
+						break;
+					case "System.Object":
+						ret = "any";
+						break;
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+
+			if (type.IsNullable)
+			{
+				ret = ret + "?";
+			}
+
+			return ret;
+		}
+
+		public static string GetTypeRegistrationTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.ClientCallableType.FullName;
+			}
+
+			if (type.ChildItemClientType != null)
+			{
+				return GetTypeRegistrationTypeName(type.ChildItemClientType) + "[]";
+			}
+
+			string ret;
+
+			if (type.IsEnum)
+			{
+				ret = type.ClientCallableType.FullName;
+			}
+			else
+			{
+				ret = type.Name;
+			}
+
+			if (type.IsNullable)
+			{
+				ret = ret + "?";
+			}
+
+			return ret;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+		public static string ToCamelLowerCase(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return name;
+			}
+
+			int index = 0;
+			while (index < name.Length && Char.IsUpper(name[index]))
+			{
+				index++;
+			}
+
+			if (index < name.Length)
+			{
+				return name.Substring(0, index).ToLowerInvariant() + name.Substring(index);
+			}
+			else
+			{
+				return name.ToLowerInvariant();
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
+		public static string ToCamelUpperCase(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return name;
+			}
+
+			if (name.Length == 1)
+			{
+				return name.ToUpperInvariant();
+			}
+
+			return name.Substring(0, 1).ToUpperInvariant() + name.Substring(1);
+		}
+
+		public static string TrimUnderscore(string name)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return name;
+			}
+
+			return name.Trim('_');
+		}
+
+		public static string GetBooleanLiteral(bool value)
+		{
+			if (value)
+			{
+				return "true";
+			}
+
+			return "false";
+		}
+
+		public static string BuildDefineGuid(Guid value, string name, bool isInterfaceId)
+		{
+			if (isInterfaceId)
+			{
+				name = "IID_" + name;
+			}
+			else
+			{
+				name = "CLSID_" + name;
+			}
+
+			string strValue = value.ToString("N");
+
+			string result = string.Format(
+				CultureInfo.InvariantCulture,
+				"DEFINE_GUID({0}, 0x{1}, 0x{2}, 0x{3}, 0x{4}, 0x{5}, 0x{6}, 0x{7}, 0x{8}, 0x{9}, 0x{10}, 0x{11});",
+				name,
+				strValue.Substring(0, 8),
+				strValue.Substring(8, 4),
+				strValue.Substring(12, 4),
+				strValue.Substring(16, 2),
+				strValue.Substring(18, 2),
+				strValue.Substring(20, 2),
+				strValue.Substring(22, 2),
+				strValue.Substring(24, 2),
+				strValue.Substring(26, 2),
+				strValue.Substring(28, 2),
+				strValue.Substring(30, 2));
+			return result;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+		public static bool UpdateFileIfUpdated(string path, string content, string checkoutCommandPrefix)
+		{
+			if (!File.Exists(path))
+			{
+				Console.WriteLine("Write file {0}.", path);
+				File.WriteAllText(path, content, Encoding.UTF8);
+				return true;
+			}
+
+			string existingContent = File.ReadAllText(path);
+			string existingContentWithoutDatetime = Regex.Replace(existingContent, Constants.LastUpdatedMarkerPattern, "");
+			string newContentWithoutDatetime = Regex.Replace(content, Constants.LastUpdatedMarkerPattern, "");
+			if (!string.Equals(newContentWithoutDatetime, existingContentWithoutDatetime, StringComparison.Ordinal))
+			{
+				FileInfo fi = new FileInfo(path);
+				if (fi.IsReadOnly && !string.IsNullOrEmpty(checkoutCommandPrefix))
+				{
+					string cmd = checkoutCommandPrefix + " " + path;
+					Console.WriteLine("Checkout document by command: {0}", cmd);
+					int index = cmd.IndexOf(' ');
+					System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+					startInfo.FileName = cmd.Substring(0, index);
+					startInfo.Arguments = cmd.Substring(index + 1);
+					System.Diagnostics.Process process = System.Diagnostics.Process.Start(startInfo);
+					process.WaitForExit();
+				}
+
+				Console.WriteLine("Write file {0}.", path);
+				File.WriteAllText(path, content, Encoding.UTF8);
+				return true;
+			}
+
+			Console.WriteLine("Skip file {0}. It is not changed.", path);
+
+			return false;
+		}
+
+		private static class DocConstants
+		{
+			public const string XmlDocElementName_Member = "member";
+			public const string XmlDocElementName_Summary = "summary";
+			public const string XmlDocElementName_Param = "param";
+			public const string XmlDocElementName_Returns = "returns";
+			public const string XmlDocAttributeName_Name = "name";
+			public const string XmlDocTypePrefix = "T:";
+			public const string XmlDocPropertyPrefix = "P:";
+			public const string XmlDocMethodPrefix = "M:";
+			public const string XmlDocFieldPrefix = "F:";
+		}
+
+		public static IEnumerable<string> BuildJsDocForType(ClientCallableTypeInfo type, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName = DocConstants.XmlDocTypePrefix + type.FullName;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " */";
+			}
+		}
+
+		public static IEnumerable<string> BuildJsDocForProperty(ClientCallableTypeInfo type, ClientCallablePropertyInfo prop, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (prop == null)
+			{
+				throw new ArgumentNullException("prop");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName = DocConstants.XmlDocPropertyPrefix + type.FullName + "." + prop.Name;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " */";
+			}
+		}
+
+		public static IEnumerable<string> BuildJsDocForEnumField(ClientCallableTypeInfo type, string fieldName, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (fieldName == null)
+			{
+				throw new ArgumentNullException("fieldName");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName = DocConstants.XmlDocFieldPrefix + type.FullName + "." + fieldName;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " */";
+			}
+		}
+
+		public static IEnumerable<string> BuildJsDocForMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (method == null)
+			{
+				throw new ArgumentNullException("method");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName;
+			string methodNameNoArg = null;
+			if (method.IsIndexerMethod)
+			{
+				memberName = DocConstants.XmlDocPropertyPrefix + type.FullName + ".Item(";
+			}
+			else
+			{
+				memberName = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name + "(";
+				methodNameNoArg = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name;
+			}
+
+			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName)).FirstOrDefault();
+			if (member == null && methodNameNoArg != null)
+			{
+				member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == methodNameNoArg).FirstOrDefault();
+			}
+
+			if (member != null)
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " *";
+
+				foreach (XElement xePara in member.Elements(DocConstants.XmlDocElementName_Param))
+				{
+					yield return " * @param " + xePara.Attribute(DocConstants.XmlDocAttributeName_Name).Value + " " + xePara.Value.Trim();
+				}
+
+				if (member.Element("returns") != null)
+				{
+					yield return " * @returns " + member.Element(DocConstants.XmlDocElementName_Returns).Value.Trim();
+				}
+
+				yield return " */";
+			}
+		}
+
+		public static string BuildVsDocSummaryForType(ClientCallableTypeInfo type, XContainer xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName = DocConstants.XmlDocTypePrefix + type.FullName;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				return "/// <summary> " + PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim()) + " </summary>";
+			} else
+			{
+				return "";
+			}
+		}
+
+		public static string BuildVsDocForProperty(ClientCallableTypeInfo type, ClientCallablePropertyInfo prop, XContainer xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (prop == null)
+			{
+				throw new ArgumentNullException("prop");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string description = "";
+			string memberName = Utility.DocConstants.XmlDocPropertyPrefix + type.FullName + "." + prop.Name;
+			XElement member = xdoc
+				.Descendants(XName.Get(Utility.DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(Utility.DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				description = member.Element(Utility.DocConstants.XmlDocElementName_Summary).Value.Trim();
+			}
+
+			return "/// <field name=\"" + Utility.ToCamelLowerCase(prop.Name) + "\" " +
+				Utility.GetVSDocTypeOrValue(prop.PropertyType, false /*isArrayElementType*/) + ">" +
+				PrepVsDocDescription(description) +
+				"</field>";
+		}
+
+		public static IEnumerable<string> BuildVsDocForMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (method == null)
+			{
+				throw new ArgumentNullException("method");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName;
+			string methodNameNoArg = null;
+			if (method.IsIndexerMethod)
+			{
+				memberName = DocConstants.XmlDocPropertyPrefix + type.FullName + ".Item(";
+			}
+			else
+			{
+				memberName = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name + "(";
+				methodNameNoArg = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name;
+			}
+
+			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName)).FirstOrDefault();
+			if (member == null && methodNameNoArg != null)
+			{
+				member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == methodNameNoArg).FirstOrDefault();
+			}
+
+			if (member != null)
+			{
+				yield return "/// <summary>";
+				yield return "/// " + PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value);
+				yield return "/// </summary>";
+
+				foreach (XElement xePara in member.Elements(DocConstants.XmlDocElementName_Param))
+				{
+					var paramName = xePara.Attribute(DocConstants.XmlDocAttributeName_Name).Value.Trim();
+					var paramInfos = method.Parameters.Where((info) => info.Name == paramName);
+					if (paramInfos.Count() == 0)
+					{
+						throw new ArgumentNullException("On method " + memberName + ", parameter whose documentation name is \"" + paramName + "\" has no actual matching parameter! Cannot continue!");
+					}
+					else if (paramInfos.Count() > 1)
+					{
+						throw new ArgumentException("Method " + memberName + " has more than one parameters named " + paramName);
+					}
+					var paramInfo = paramInfos.First();
+					yield return "/// <param name=\"" + paramName + "\" " +
+						Utility.GetVSDocTypeOrValue(paramInfo.ParameterType, false /*isArrayElementType*/) +
+						(paramInfo.IsOptional ? " optional=\"true\"" : "") + ">" +
+						PrepVsDocDescription(xePara.Value) +
+						"</param>";
+				}
+			}
+
+			bool isClientResult = !(method.ReturnType.IsClientObject || method.ReturnType.IsVoid);
+			
+			// Note: If client result, using TypeScript notation for result type, because it only affects the description. And then setting the real result via body (where can also get .value to be reflected appropriately)
+			yield return "/// <returns " +
+				(isClientResult ? "type=\"OfficeExtension.ClientResult&lt;" + Utility.GetTypeScriptTypeName(method.ReturnType) + "&gt;\"" : Utility.GetVSDocTypeOrValue(method.ReturnType, false /*isArrayElementType*/)) + 
+				">" +
+				(member == null || member.Element("returns") == null ? "" : PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Returns).Value)) +
+				"</returns>";
+
+			if (isClientResult)
+			{
+				yield return "var result = new OfficeExtension.ClientResult();";
+				yield return "result.__proto__ = null;";
+				yield return "result.value = " + Utility.GetJSPrimitiveInstanceForType(method.ReturnType) + ";";
+				yield return "return result;";
+			}
+		}
+
+		static string PrepVsDocDescription(string input)
+		{
+			if (String.IsNullOrWhiteSpace(input))
+			{
+				return string.Empty;
+			}
+
+			// Make into single-line:
+			input = input.Trim();
+			input = Regex.Replace(input, @"\r\n?|\n", "  ");
+
+			return System.Security.SecurityElement.Escape(input);
+		}
+
+		private class NamespaceInfo
+		{
+			public string TypeScriptNamespace;
+			public string ComCoClassNamespace;
+			public string ComInterfaceNamespace;
+			public string WacNamespace;
+		}
+
+		private static IDictionary<string, NamespaceInfo> GetNamespaceMap(Assembly assembly)
+		{
+			Dictionary<string, NamespaceInfo> ret = new Dictionary<string, NamespaceInfo>();
+			foreach (CustomAttributeData attr in assembly.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ClientCallableNamespaceMapAttribute)
+				{
+					string ns = attr.ConstructorArguments[0].Value as string;
+					NamespaceInfo info = new NamespaceInfo();
+					CustomAttributeNamedArgument arg;
+					arg = attr.NamedArguments.FirstOrDefault(v => v.MemberName == Constants.MemberNames.ComCoClassNamespaceName);
+					if (arg != null)
+					{
+						info.ComCoClassNamespace = arg.TypedValue.Value as string;
+					}
+
+					arg = attr.NamedArguments.FirstOrDefault(v => v.MemberName == Constants.MemberNames.ComInterfaceNamespaceName);
+					if (arg != null)
+					{
+						info.ComInterfaceNamespace = arg.TypedValue.Value as string;
+					}
+
+					arg = attr.NamedArguments.FirstOrDefault(v => v.MemberName == Constants.MemberNames.TypeScriptNamespaceName);
+					if (arg != null)
+					{
+						info.TypeScriptNamespace = arg.TypedValue.Value as string;
+					}
+
+					arg = attr.NamedArguments.FirstOrDefault(v => v.MemberName == Constants.MemberNames.WacNamespaceName);
+					if (arg != null)
+					{
+						info.WacNamespace = arg.TypedValue.Value as string;
+					}
+
+					ret[ns] = info;
+				}
+			}
+
+			return ret;
+		}
+	}
+
+	[Serializable]
+	public class CodeGenException: Exception
+	{
+		public CodeGenException()
+		{
+
+		}
+
+		public CodeGenException(string message)
+			:base(message)
+		{
+
+		}
+		
+		public CodeGenException(string message, Exception innerException)
+			:base(message, innerException)
+		{
+		}
+
+		protected CodeGenException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+
+		}
+
+		public static CodeGenException CreateCodeGenException(string message)
+		{
+			return new CodeGenException(message);
+		}
+
+		public static CodeGenException CreateCodeGenException(string format, params object[] args)
+		{
+			return new CodeGenException(string.Format(CultureInfo.InvariantCulture, format, args));
+		}
+	}
+
+	public static class Constants
+	{
+		public const int DISPATCH_METHOD = 1;
+		public const int DISPATCH_PROPERTYGET = 2;
+		public const int DISPATCH_PROPERTYPUT = 4;
+
+		public const string IndentString = "\t";
+
+		public const string LastUpdatedBeginMarker = "<LastUpdated>";
+		public const string LastUpdatedEndMarker = "</LastUpdated>";
+
+		public const string LastUpdatedMarkerPattern = @"<LastUpdated>[^<]*</LastUpdated>";
+
+		public const string GeneralExceptionErrorCode = "GeneralException";
+
+		/// <summary>
+		/// Edm entity container name
+		/// </summary>
+		public const string EntityContainerName = "EntityContainer";
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+		public static class TypeFullNames
+		{
+			public const string ClientCallableComTypeAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableComTypeAttribute";
+			public const string ClientCallableComMemberAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableComMemberAttribute";
+			public const string ClientCallableServiceRootAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableServiceRootAttribute";
+			public const string ClientCallableNamespaceMapAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableNamespaceMapAttribute";
+			public const string ClientCallableOperationAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableOperationAttribute";
+			public const string ClientCallablePropertyAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallablePropertyAttribute";
+			public const string ClientCallableTypeAttribute = "Microsoft.OfficeExtension.CodeGen.ClientCallableTypeAttribute";
+			public const string HResultErrorAttribute = "Microsoft.OfficeExtension.CodeGen.HResultErrorAttribute";
+			public const string HResultDefaultErrorAttribute = "Microsoft.OfficeExtension.CodeGen.HResultDefaultErrorAttribute";
+			public const string TypeScriptTypeAttribute = "Microsoft.OfficeExtension.CodeGen.TypeScriptTypeAttribute";
+			public const string OpitionalAttribute = "Microsoft.OfficeExtension.CodeGen.OpitionalAttribute";
+			public const string OptionalAttribute = "Microsoft.OfficeExtension.CodeGen.OptionalAttribute";
+			public const string KnownTypeAttribute = "Microsoft.OfficeExtension.CodeGen.KnownTypeAttribute";
+
+			public const string DispIdAttribute = "System.Runtime.InteropServices.DispIdAttribute";
+			public const string GuidAttribute = "System.Runtime.InteropServices.GuidAttribute";
+			public const string ParamArrayAttribute = "System.ParamArrayAttribute";
+            public const string ObjectPathFactory = "OfficeExtension.ObjectPathFactory";
+			public const string ActionFactory = "OfficeExtension.ActionFactory";
+			public const string Utility = "OfficeExtension.Utility";
+			public const string ClientResultGenericPrefix = "OfficeExtension.ClientResult<";
+			public const string ClientResultGenericSuffix = ">";
+			public const string ClientObject = "OfficeExtension.ClientObject";
+			public const string ClientRequestContext = "OfficeExtension.ClientRequestContext";
+			public const string OperationType = "OfficeExtension.OperationType";
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+		public static class MemberNames
+		{
+			public const string Add = "Add";
+			public const string Name = "Name";
+			public const string InterfaceId = "InterfaceId";
+			public const string CoClassId = "CoClassId";
+			public const string CoClassName = "CoClassName";
+			public const string DispatchId = "DispatchId";
+			public const string MemberType = "MemberType";
+			public const string ComCoClassNamespaceName = "ComCoClassNamespaceName";
+			public const string ComInterfaceNamespaceName = "ComInterfaceNamespaceName";
+			public const string TypeScriptNamespaceName = "TypeScriptNamespaceName";
+			public const string WacNamespaceName = "WacNamespaceName";
+			public const string OperationType = "OperationType";
+			public const string IsVolatile = "IsVolatile";
+			public const string RESTfulName = "RESTfulName";
+			public const string WacName = "WacName";
+			public const string WacAsync = "WacAsync";
+			public const string CreateItemOperationName = "CreateItemOperationName";
+			public const string DeleteOperationName = "DeleteOperationName";
+			public const string InvalidateReturnObjectPathAfterRequest = "InvalidateReturnObjectPathAfterRequest";
+			public const string Id = "Id";
+			public const string IdPrivate = "_Id";
+			public const string SupportEnumeration = "SupportEnumeration";
+			public const string SupportIEnumVARIANT = "SupportIEnumVARIANT";
+			public const string HiddenIndexerMethod = "HiddenIndexerMethod";
+			public const string OnAccess = "_OnAccess";
+			public const string ReferenceId = "_ReferenceId";
+			public const string ExcludedFromRest = "ExcludedFromRest";
+			public const string ExcludedFromClientLibrary = "ExcludedFromClientLibrary";
+			public const string ConvertIntegerKeyValueToString = "ConvertIntegerKeyValueToString";
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+		public static class MemberFullNames
+		{
+			public const string CreatePropertyObjectPath = "_createPropertyObjectPath";
+			public const string CreateMethodObjectPath = "_createMethodObjectPath";
+			public const string CreateIndexerObjectPath = "_createIndexerObjectPath";
+			public const string CreateNewObjectObjectPath = "_createNewObjectObjectPath";
+			public const string CreateChildItemObjectPathUsingIndexer = "_createChildItemObjectPathUsingIndexer";
+			public const string CreateChildItemObjectPathUsingGetItemAt = "_createChildItemObjectPathUsingGetItemAt";
+			public const string CreateChildItemObjectPathUsingIndexerOrGetItemAt = "_createChildItemObjectPathUsingIndexerOrGetItemAt";
+
+			public const string CreateSetPropertyAction = "_createSetPropertyAction";
+			public const string CreateMethodAction = "_createMethodAction";
+
+			public const string IsNullOrUndefined = "_isNullOrUndefined";
+			public const string IsUndefined = "_isUndefined";
+			public const string ThrowIfNotLoaded = "_throwIfNotLoaded";
+			public const string Load = "_load";
+			public const string FixObjectPathIfNecessary = "_fixObjectPathIfNecessary";
+			public const string AddActionResultHandler = "_addActionResultHandler";
+			public const string HandleNavigationPropertyResults = "_handleNavigationPropertyResults";
+        }
+	}
+#>
