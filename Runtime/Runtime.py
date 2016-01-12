@@ -391,7 +391,7 @@ class ClientObject(IResultHandler):
 
 class ActionFactory:
     @staticmethod
-    def createSetPropertyAction(context, parent, propertyName, value):
+    def createSetPropertyAction(context: ClientRequestContext, parent: ClientObject, propertyName: str, value):
         Utility.validateObjectPath(parent)
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId()
@@ -409,7 +409,7 @@ class ActionFactory:
         return ret
 
     @staticmethod
-    def createMethodAction(context, parent, methodName, operationType, args):
+    def createMethodAction(context: ClientRequestContext, parent: ClientObject, methodName: str, operationType, args):
         Utility.validateObjectPath(parent)
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId()
@@ -427,7 +427,7 @@ class ActionFactory:
         return ret
 
     @staticmethod
-    def createQueryAction(context, parent, queryInfo): 
+    def createQueryAction(context: ClientRequestContext, parent: ClientObject, queryInfo): 
         Utility.validateObjectPath(parent)
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId(),
@@ -441,22 +441,22 @@ class ActionFactory:
         return ret
 
     @staticmethod
-    def createInstantiateAction(context, obj):
-        Utility.validateObjectPath(obj)
+    def createInstantiateAction(context: ClientRequestContext, clientObject: ClientObject):
+        Utility.validateObjectPath(clientObject)
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId()
         actionInfo.ActionType = ActionType.Instantiate
         actionInfo.Name = ""
-        actionInfo.ObjectPathId = obj._objectPath.objectPathInfo.Id
+        actionInfo.ObjectPathId = clientObject._objectPath.objectPathInfo.Id
         ret = Action(actionInfo, False)
         context._pendingRequest.addAction(ret)
-        context._pendingRequest.addReferencedObjectPath(obj._objectPath)
-        handler = InstantiateActionResultHandler(obj)
+        context._pendingRequest.addReferencedObjectPath(clientObject._objectPath)
+        handler = InstantiateActionResultHandler(clientObject)
         context._pendingRequest.addActionResultHandler(ret, handler)
         return ret
 
     @staticmethod
-    def createTraceAction(context, message):
+    def createTraceAction(context: ClientRequestContext, message: str) -> Action:
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId()
         actionInfo.ActionType = ActionType.Trace
@@ -482,7 +482,7 @@ class ObjectPathFactory:
                           )
 
     @staticmethod
-    def createNewObjectObjectPath(context, typeName, isCollection):
+    def createNewObjectObjectPath(context: ClientRequestContext, typeName: str, isCollection: bool):
         objectPathInfo = ObjectPathInfo()
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.NewObject
@@ -494,7 +494,7 @@ class ObjectPathFactory:
                           )
 
     @staticmethod
-    def createPropertyObjectPath(context, parent, propertyName, isCollection, isInvalidAfterRequest):
+    def createPropertyObjectPath(context: ClientRequestContext, parent: ClientObject, propertyName: str, isCollection: bool, isInvalidAfterRequest: bool) -> ObjectPath:
         objectPathInfo = ObjectPathInfo()
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Property
@@ -504,23 +504,23 @@ class ObjectPathFactory:
     
 
     @staticmethod
-    def createIndexerObjectPath(context, parent, args):
+    def createIndexerObjectPath(context: ClientRequestContext, parentObject: ClientObject, args: list):
         objectPathInfo = ObjectPathInfo()
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Indexer
         objectPathInfo.Name = ""
-        objectPathInfo.ParentObjectPathId = parent._objectPath.objectPathInfo.Id
+        objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id
         objectPathInfo.ArgumentInfo = {}
         objectPathInfo.ArgumentInfo.Arguments = args
         return ObjectPath(objectPathInfo, 
-                          parent._objectPath, 
+                          parentObject._objectPath, 
                           False,    # isCollection
                           False     # isInvalidAfterRequest
                           )
     
 
     @staticmethod
-    def createIndexerObjectPathUsingParentPath(context, parentObjectPath, args):
+    def createIndexerObjectPathUsingParentPath(context: ClientRequestContext, parentObjectPath: ObjectPath, args: list):
         objectPathInfo = ObjectPathInfo()
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Indexer
@@ -535,7 +535,7 @@ class ObjectPathFactory:
                           )
     
     @staticmethod
-    def createMethodObjectPath(context, parentObject, methodName, operationType, args, isCollection, isInvalidAfterRequest):
+    def createMethodObjectPath(context: ClientRequestContext, parentObject: ClientObject, methodName: str, operationType, args, isCollection: bool, isInvalidAfterRequest: bool):
         objectPathInfo = ObjectPathInfo()
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Method
@@ -550,7 +550,7 @@ class ObjectPathFactory:
         return ret
     
     @staticmethod
-    def createChildItemObjectPathUsingIndexerOrGetItemAt(hasIndexerMethod, context, parentObject, childItem, index):
+    def createChildItemObjectPathUsingIndexerOrGetItemAt(hasIndexerMethod: bool, context: ClientRequestContext, parentObject: ClientObject, childItem, index):
         id = childItem.get(Constants.id, None)
         if Utility.isNullOrUndefined(id):
             id = childItem.get(Constants.idPrivate)
@@ -561,7 +561,7 @@ class ObjectPathFactory:
             return ObjectPathFactory.createChildItemObjectPathUsingGetItemAt(context, parentObject, childItem, index)
 
     @staticmethod
-    def createChildItemObjectPathUsingIndexer(context, parentObject, childItem):
+    def createChildItemObjectPathUsingIndexer(context: ClientRequestContext, parentObject: ClientObject, childItem):
         id = childItem.get(Constants.id)
         if Utility.isNullOrUndefined(id):
             id = childItem.get(Constants.idPrivate)
@@ -579,7 +579,7 @@ class ObjectPathFactory:
                           )
     
     @staticmethod
-    def createChildItemObjectPathUsingGetItemAt(context, parentObject, childItem, index):
+    def createChildItemObjectPathUsingGetItemAt(context: ClientRequestContext, parentObject: ClientObject, childItem, index):
         indexFromServer = childItem.get(Constants.index)
         if indexFromServer:
             index = indexFromServer

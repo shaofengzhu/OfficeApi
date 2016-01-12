@@ -123,6 +123,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Helper.tt</DependentUpon>
     </Content>
+    <Content Include="PythonCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PythonCore.txt</LastGenOutput>
+    </Content>
+    <Content Include="PythonCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PythonCore.tt</DependentUpon>
+    </Content>
     <Content Include="TypeRegCppCore.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

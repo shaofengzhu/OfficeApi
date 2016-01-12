@@ -33,6 +33,17 @@ def greet(name:str, hello: str):
     """
     print("Nice to meet you " + name + ". " + hello)
 
+class MyAddress:
+    def __init__(self):
+        pass
+    @property
+    def street(self):
+        return self._street
+
+    @street.setter
+    def street(self, value):
+        self._street = value
+
 req = RequestInfo()
 req.Actions = []
 a1 = ActionInfo()
@@ -55,6 +66,8 @@ else:
     print("key not exists")
 for (k, v) in j.items():
     print(k, v)
-
-greet("Shaofeng", "How are you")
+print("Address")
+address = MyAddress()
+#address.street = "5990"
+print(address.street)
 

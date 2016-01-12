@@ -8,6 +8,12 @@
 <#+
 	private Dictionary<string, string> m_parameters = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+	private bool UsePoundCommentStyle
+	{
+		get;
+		set;
+	}
+
 	private void LaunchDebuggerIfNecessary()
 	{
 		string debug = GetParameterValue(ParameterName_Debug);
@@ -166,11 +172,21 @@
 
 	string GetPlaceHolderBeginMarker(string placeHolderName)
 	{
+		if (this.UsePoundCommentStyle)
+		{
+			return "# Begin_PlaceHolder_" + placeHolderName;
+		}
+
 		return "/* Begin_PlaceHolder_" + placeHolderName + " */";
 	}
 
 	string GetPlaceHolderEndMarker(string placeHolderName)
 	{
+		if (this.UsePoundCommentStyle)
+		{
+			return "# End_PlaceHolder_" + placeHolderName;
+		}
+
 		return "/* End_PlaceHolder_" + placeHolderName + " */";
 	}
 
