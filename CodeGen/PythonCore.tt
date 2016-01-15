@@ -51,6 +51,8 @@
 		this.WritePlaceHolderContent("GlobalHeader", existingFileContent);
 		this.WriteLine(string.Empty);
 
+		this.WriteMethodAlias();
+
 		XDocument xdoc;
 		if (string.IsNullOrWhiteSpace(this.DocXmlFilePath))
 		{
@@ -73,6 +75,27 @@
 		this.WriteLine(string.Empty);
 		this.WritePlaceHolderContent("GlobalFooter", existingFileContent);
 		this.WriteLine(string.Empty);
+	}
+
+	private void WriteMethodAlias()
+	{
+#>
+_createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath;
+_createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath;
+_createIndexerObjectPath = OfficeExtension.ObjectPathFactory.createIndexerObjectPath;
+_createNewObjectObjectPath = OfficeExtension.ObjectPathFactory.createNewObjectObjectPath;
+_createChildItemObjectPathUsingIndexer = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexer;
+_createChildItemObjectPathUsingGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingGetItemAt;
+_createChildItemObjectPathUsingIndexerOrGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexerOrGetItemAt;
+_createMethodAction = OfficeExtension.ActionFactory.createMethodAction;
+_createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction;
+_isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined;
+_isUndefined = OfficeExtension.Utility.isUndefined;
+_throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded;
+_load = OfficeExtension.Utility.load;
+_fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary;
+_addActionResultHandler = OfficeExtension.Utility._addActionResultHandler;
+<#+
 	}
 
 	private void WriteErrorCode(IEnumerable<string> errorCodes)
@@ -136,6 +159,7 @@ class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 		this.PushIndent(Constants.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
 		WriteConstructor(type);
+		this.WriteLine(string.Empty);
 		WriteObjectProperties(type, xdoc);
 		WriteScalarProperties(type, xdoc);
 		WriteMethods(type, xdoc, existingFileContent);
@@ -181,7 +205,6 @@ self.__items = None
 	{
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
-			this.PushIndent(Constants.IndentString);
 #>
 @property
 def <#=Utility.ToCamelLowerCase(prop.Name)#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
@@ -355,10 +378,10 @@ def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(metho
 	{
 #>
 @staticmethod
-def newObject(context: -> <#=Constants.TypeFullNames.ClientRequestContext#>): <#=type.ClientType.TypeScriptTypeName#> {
-		var ret = new <#=type.ClientType.TypeScriptTypeName#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=Utility.GetBooleanLiteral(type.ClientType.IsClientObjectCollection)#> /*isCollection*/));
-		return ret;
-	} 
+def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#=type.ClientType.PythonTypeName#>':
+    var ret = <#=type.ClientType.PythonTypeName#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=Utility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
+    return ret
+	}
 <#+
 	}
 
@@ -402,58 +425,43 @@ def newObject(context: -> <#=Constants.TypeFullNames.ClientRequestContext#>): <#
 	private void WriteHandleResult(ClientCallableTypeInfo type)
 	{
 #>
-	/** Handle results returned from the document
-	 * @private
-	 */
-	_handleResult(value: any): void {
-		if (<#=Constants.MemberFullNames.IsNullOrUndefined#>(value))
-			return;
-		var obj: Object = value;
-		<#=Constants.MemberFullNames.FixObjectPathIfNecessary#>(this, obj);
+# Handle results returned from the document
+def _handleResult(self, value: dict) -> None:
+    if <#=Constants.MemberFullNames.IsNullOrUndefined#>(value)):
+        return
+    obj = value;
+    <#=Constants.MemberFullNames.FixObjectPathIfNecessary#>(self, obj);
 <#+
 		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 #>
-		if (!<#=Constants.MemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"])){
-			this.<#=prop.FieldName#> = obj["<#=prop.Name#>"];
-		}
-
+    if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+        self.<#=prop.PythonFieldName#> = obj.get("<#=prop.Name#>")
 <#+
 		}
 
 		List<string> navPropNames = new List<string>();
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
-			navPropNames.Add("\"" + Utility.ToCamelLowerCase(prop.Name) + "\"");
-			navPropNames.Add("\"" + prop.Name + "\"");
-		}
-
-		if (navPropNames.Count > 0)
-		{
 #>
-		<#=Constants.MemberFullNames.HandleNavigationPropertyResults#>(this, obj, [<#=String.Join(", ", navPropNames.ToArray())#>]);
-<#+	
+    if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+        self.<#=Utility.ToCamelLowerCase(prop.Name)#>._handleResult(obj.get("<#=prop.Name#>"))
+<#+
 		}
 
 		if (type.ClientType.ChildItemClientType != null && type.ClientType.ChildItemClientType.IsClientObject)
 		{
 			bool hasIndexerMethod = (type.Methods.FirstOrDefault(m => m.IsIndexerMethod) != null);
 #>
-		if (!<#=Constants.MemberFullNames.IsNullOrUndefined#>(obj[OfficeExtension.Constants.items])){
-			this.m__items = [];
-			var _data: Array<any> = <Array<any>> obj[OfficeExtension.Constants.items];
-			for (var i = 0; i < _data.length; i++)
-			{
-				var _item: <#=type.ClientType.ChildItemClientType.TypeScriptTypeName#> = new <#=type.ClientType.ChildItemClientType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=Utility.GetBooleanLiteral(hasIndexerMethod)#>, this.context, this, _data[i], i));
-				_item._handleResult(_data[i]);
-				this.m__items.push(_item);
-			}
-		}
+    if not <#=Constants.MemberFullNames.IsNullOrUndefined#>(obj.get(OfficeExtension.Constants.items)):
+        self.__items = []
+        data = obj.get(OfficeExtension.Constants.items)
+        for i, itemData in enumerate(data):
+            item = <#=type.ClientType.ChildItemClientType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=Utility.GetPythonBooleanLiteral(hasIndexerMethod)#>, self.context, self, itemData, i))
+            item._handleResult(itemData)
+            self.__items.append(item)
 <#+
 		}
-#>
-	}
-<#+
 	}
 
 	private void WriteInitReferenceIdMethod(ClientCallableTypeInfo type)
@@ -462,9 +470,8 @@ def newObject(context: -> <#=Constants.TypeFullNames.ClientRequestContext#>): <#
 		if (!type.IsValueObject && prop != null)
 		{
 #>
-	_initReferenceId(value: string): void {
-		this.<#=prop.FieldName#> = value;
-	}
+def _initReferenceId(self, value: str) -> None:
+    self.<#=prop.PythonFieldName#> = value;
 <#+
 		}
 	}
@@ -480,13 +487,8 @@ def newObject(context: -> <#=Constants.TypeFullNames.ClientRequestContext#>): <#
 				var clientTypeOrCustomTypescriptName = string.IsNullOrEmpty(type.CustomTypeScriptTypeName) ? type.ClientType.TypeScriptTypeName : type.CustomTypeScriptTypeName;
 #>
 
-	/**
-	 * Queues up a command to load the specified properties of the object. You must call "context.sync()" before reading the properties.
-	 */
-	load(option?: string|string[]|OfficeExtension.LoadOption): <#= clientTypeOrCustomTypescriptName #> {
-		<#=Constants.MemberFullNames.Load#>(this, option);
-		return this;
-	}
+def load(self, option) -> '<#=type.ClientType.PythonTypeName#>':
+    <#=Constants.MemberFullNames.Load#>(self, option);
 <#+
 			}
 		}
@@ -495,44 +497,18 @@ def newObject(context: -> <#=Constants.TypeFullNames.ClientRequestContext#>): <#
 	private void WriteClientValueObjectType(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-export interface <#=type.Name#> {
+class <#=type.Name#>:
+    def __init__(self):
 <#+
-		WriteClientValueObjectTypeFields(type, xdoc);
-		this.WriteLine(string.Empty);
-		this.PushIndent(Constants.IndentString);
-		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
-		this.PopIndent();
-#>
-}
-<#+
-	}
-
-	private void WriteClientValueObjectTypeFields(ClientCallableTypeInfo type, XDocument xdoc)
-	{
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary))
 		{
-			this.PushIndent(Constants.IndentString);
-			this.WriteComments(Utility.BuildJsDocForProperty(type, prop, xdoc));
-			this.PopIndent();
-			string optional = "";
-			if (prop.IsOptional)
-			{
-				optional = "?";
-			}
 #>
-	<#=Utility.ToCamelLowerCase(prop.Name)#><#=optional#> : <#=prop.PropertyType.TypeScriptTypeName#>;
+    self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 <#+
 		}
-	}
-
-	private void WriteComments(IEnumerable<string> comments)
-	{
-		if (comments != null)
-		{
-			foreach (string line in comments)
-			{
-				this.WriteLine(line);
-			}
-		}
+		this.WriteLine(string.Empty);
+		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
+		this.PopIndent();
+		this.WriteLine(string.Empty);
 	}
 #>

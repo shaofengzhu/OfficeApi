@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Runtime", "Runtime\Runtime.pyproj", "{86EB8113-897D-41F6-9994-00735E8025F2}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Learn", "Learn\Learn.pyproj", "{BCB0CBA8-323D-4733-91BC-B6CB3747B030}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen.T4", "CodeGen\CodeGen.T4.csproj", "{0090A10B-23DE-44CC-B4CD-35F2812E19AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeXlapiMetadata", "FakeXlapiMetadata\FakeXlapiMetadata.csproj", "{84C3133E-5267-496B-81CA-0F341EC04C29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0090A10B-23DE-44CC-B4CD-35F2812E19AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84C3133E-5267-496B-81CA-0F341EC04C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C3133E-5267-496B-81CA-0F341EC04C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C3133E-5267-496B-81CA-0F341EC04C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C3133E-5267-496B-81CA-0F341EC04C29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
