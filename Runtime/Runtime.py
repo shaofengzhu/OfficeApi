@@ -158,7 +158,7 @@ class ClientRequestContext:
             self.__pendingRequest = ClientRequest(self)
         return self.__pendingRequest
 
-    def load(self, clientObject: 'ClientObject', option):
+    def load(self, clientObject: 'ClientObject', option = None):
         Utility.validateContext(self, clientObject)
         queryOption = QueryInfo()
         if isinstance(option, str):
@@ -608,7 +608,7 @@ class ObjectPathFactory:
         objectPathInfo.ArgumentInfo.Arguments = [id]
         isCollection = False
         isInvalidAfterRequest = False
-        return ObjectPath(objectPathInfo, parent._objectPath, isCollection, isInvalidAfterRequest)
+        return ObjectPath(objectPathInfo, parentObject._objectPath, isCollection, isInvalidAfterRequest)
     
     @staticmethod
     def createChildItemObjectPathUsingGetItemAt(context: ClientRequestContext, parentObject: ClientObject, childItem, index):
