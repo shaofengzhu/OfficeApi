@@ -4,7 +4,7 @@ import random
 import excel
 
 class ExcelTest:
-    serverUrl = "http://shaozhu-ttvm8.redmond.corp.microsoft.com/th/WacRest.ashx/transport_wopi/Application_Excel/wachost_/Fi_anonymous~AgaveTest.xlsx/ak_1%7CGN=R3Vlc3Q=&SN=OTYwMjY3MTM0&IT=NTI0NzU4MjM3MjMzNzY2MTg3Mg==&PU=OTYwMjY3MTM0&SR=YW5vbnltb3Vz&TZ=MTExOQ==&SA=RmFsc2U=&LE=RmFsc2U=&AG=VHJ1ZQ==&RH=nNbTL6fvW2u38x1-jhY2YJ2RiYya97tuj6UnTFEfsD8=/_api"
+    serverUrl = "http://shaozhu-ttvm8.redmond.corp.microsoft.com/th/WacRest.ashx/transport_wopi/Application_Excel/wachost_/Fi_anonymous~AgaveTest.xlsx/ak_1%7CGN=R3Vlc3Q=&SN=Nzk2NzQ5NTk4&IT=NTI0NzU4Mjg1OTA0MzY3MjYxMA==&PU=Nzk2NzQ5NTk4&SR=YW5vbnltb3Vz&TZ=MTExOQ==&SA=RmFsc2U=&LE=RmFsc2U=&AG=VHJ1ZQ==&RH=tcFPR0obGkLwYJoRrzbWPXcQeSWEPdXeZt4RccCYWWQ=/_api"
 
     @staticmethod
     def setupRequestContext(ctx: excel.RequestContext):
@@ -18,6 +18,15 @@ class ExcelTest:
         for table in sheet.tables.items:
             table.delete()
         sheet.getRange(None).clear(excel.ClearApplyTo.all)
+        ctx.sync()
+
+    @staticmethod
+    def removeAllCharts(ctx: excel.RequestContext, sheetName: str):
+        charts = ctx.workbook.worksheets.getItem(sheetName).charts
+        ctx.load(charts, "id")
+        ctx.sync()
+        for chart in charts.items:
+            chart.delete()
         ctx.sync()
 
     @staticmethod
@@ -97,6 +106,35 @@ class ExcelTest:
         ctx.sync()
         print("Deleted table")
 
+    @staticmethod
+    def test_Chart_CreateChart():
+        sheetName = "Charts"
+        ctx = excel.RequestContext(ExcelTest.serverUrl)
+        ExcelTest.setupRequestContext(ctx)
+        ExcelTest.removeAllCharts(ctx, sheetName)
+        sheet = ctx.workbook.worksheets.getItem(sheetName)
+        sourceData = sheet.getRange(sheetName + "!" + "A1:B4")
+        chart = sheet.charts.add(excel.ChartType.pie, sourceData, excel.ChartSeriesBy.auto)
+        ctx.load(chart)
+        ctx.sync()
+        print("Created sheet " + chart.name)
+
+    @staticmethod
+    def test_Chart_CreateDeleteChart():
+        sheetName = "Charts"
+        ctx = excel.RequestContext(ExcelTest.serverUrl)
+        ExcelTest.setupRequestContext(ctx)
+        ExcelTest.removeAllCharts(ctx, sheetName)
+        sheet = ctx.workbook.worksheets.getItem(sheetName)
+        sourceData = sheet.getRange(sheetName + "!" + "A1:B4")
+        chart = sheet.charts.add(excel.ChartType.pie, sourceData, excel.ChartSeriesBy.auto)
+        ctx.load(chart)
+        ctx.sync()
+        print("Created sheet " + chart.name)
+        chart.delete()
+        ctx.sync()
+        print("Deleted chart")
+
 if __name__ == "__main__":
     methods = dir(ExcelTest)
     for method in methods:
@@ -104,4 +142,3 @@ if __name__ == "__main__":
             print("invoke " + method)
             func = getattr(ExcelTest, method)
             func()
-

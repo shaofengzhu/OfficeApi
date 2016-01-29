@@ -210,6 +210,8 @@ class ClientRequestContext:
 
     def sync(self):
         req = self.__pendingRequest
+        if req is None:
+            return
         if not req.hasActions:
             return
 
@@ -373,7 +375,7 @@ class ClientRequest:
     def addReferencedObjectPaths(self, objectPaths: list):
         if objectPaths:
             for objectPath in objectPaths:
-                self.addReferencedObjectPath(objectPaths[i])
+                self.addReferencedObjectPath(objectPath)
 
     def addActionResultHandler(self, action: Action, resultHandler: IResultHandler):
         self._actionResultHandler[action.actionInfo.Id] = resultHandler
