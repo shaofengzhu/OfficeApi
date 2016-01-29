@@ -145,7 +145,11 @@ class ClientRequestContext:
         self._requestExecutor = HttpRequestExecutor()
         self._rootObject = None
         self.__pendingRequest = None
+        self._requestHeaders = {}
 
+    @property
+    def requestHeaders(self):
+        return self._requestHeaders
 
     def _nextId(self):
         ret = self.__nextId
@@ -221,6 +225,7 @@ class ClientRequestContext:
         requestInfo.url = Utility.combineUrl(self._url, "ProcessQuery")
         requestInfo.body = json.dumps(msgBody, default = lambda o: o.__dict__)
         requestInfo.method = "POST"
+        requestInfo.headers = self._requestHeaders
         responseInfo = self._requestExecutor.execute(requestInfo)
         if responseInfo.statusCode != 200:
             raise Utility.createRuntimeError("NetworkError")

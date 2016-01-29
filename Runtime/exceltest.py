@@ -1,14 +1,23 @@
 import sys
 import json
 import random
+import oauthhelper
 import excel
 
 class ExcelTest:
     serverUrl = "http://shaozhu-ttvm8.redmond.corp.microsoft.com/th/WacRest.ashx/transport_wopi/Application_Excel/wachost_/Fi_anonymous~AgaveTest.xlsx/ak_1%7CGN=R3Vlc3Q=&SN=Nzk2NzQ5NTk4&IT=NTI0NzU4Mjg1OTA0MzY3MjYxMA==&PU=Nzk2NzQ5NTk4&SR=YW5vbnltb3Vz&TZ=MTExOQ==&SA=RmFsc2U=&LE=RmFsc2U=&AG=VHJ1ZQ==&RH=tcFPR0obGkLwYJoRrzbWPXcQeSWEPdXeZt4RccCYWWQ=/_api"
+    accessToken = ""
+
+    @staticmethod
+    def initGraphSettings():
+        fileInfo = oauthhelper.OAuthUtility.getFileAccessInfo(True, "AgaveTest.xlsx")
+        ExcelTest.serverUrl = fileInfo.fileWorkbookUrl
+        ExcelTest.accessToken = fileInfo.accessToken
 
     @staticmethod
     def setupRequestContext(ctx: excel.RequestContext):
-        pass
+        if len(ExcelTest.accessToken) > 0:
+            ctx.requestHeaders["Authorization"] = "Bearer " + ExcelTest.accessToken
 
     @staticmethod
     def clearWorksheet(ctx: excel.RequestContext, sheetName: str):
@@ -136,9 +145,13 @@ class ExcelTest:
         print("Deleted chart")
 
 if __name__ == "__main__":
+    ExcelTest.initGraphSettings()
+    ExcelTest.test_Range_SetValueReadValue()
+    
     methods = dir(ExcelTest)
     for method in methods:
         if method.startswith("test_"):
             print("invoke " + method)
             func = getattr(ExcelTest, method)
             func()
+    

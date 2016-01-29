@@ -6,15 +6,17 @@ import urllib.request
 
 
 class RequestInfo:
-    method = None
-    url = None
-    headers = {}
-    body = None
+    def __init__(self):
+        self.method = "GET"
+        self.url = None
+        self.headers = {}
+        self.body = ""
 
 class ResponseInfo:
-    statusCode = None
-    headers = {}
-    body = None
+    def __init__(self):
+        self.statusCode = 200
+        self.headers = {}
+        self.body = ""
 
 class HttpUtility:
     @staticmethod

@@ -29,6 +29,7 @@
     <Compile Include="httphelper.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="oauthhelper.py" />
     <Compile Include="runtime.py" />
   </ItemGroup>
   <PropertyGroup>
