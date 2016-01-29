@@ -22,16 +22,18 @@ class ExcelTest:
 
     @staticmethod
     def test_Range_SetValueReadValue():
+        rangeValue = 12345;
+        rangeValuesToSet = [[str(rangeValue), "=A1"], ["=B1", "=A1+B1"]];
+
         ctx = excel.RequestContext(ExcelTest.serverUrl)
         ExcelTest.setupRequestContext(ctx)
         r = ctx.workbook.worksheets.getItem("Sheet1").getRange("A1:B2")
-        r.values = [["Hello", "World"], [100, 200]]
+        r.values = rangeValuesToSet
         r.load()
         ctx.sync()
         print(r.values)
         print(r.address)
-        print(r)
-        
+
     @staticmethod
     def test_Worksheet_GetWorksheetCollection():
         ctx = excel.RequestContext(ExcelTest.serverUrl)
