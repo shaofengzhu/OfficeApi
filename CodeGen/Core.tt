@@ -3705,6 +3705,7 @@
 			public const string ClientResult = "OfficeExtension.ClientResult";
 			public const string ClientObject = "OfficeExtension.ClientObject";
 			public const string ClientRequestContext = "OfficeExtension.ClientRequestContext";
+			public const string ObjectPath = "OfficeExtension.ObjectPath";
 			public const string OperationType = "OfficeExtension.OperationType";
 		}
 

@@ -2,6 +2,7 @@ import sys
 import json
 import enum
 import logging
+import httphelper
 class Constants:
     getItemAt = "GetItemAt"
     id = "Id"
@@ -55,70 +56,100 @@ class ArgumentInfo:
     ReferencedObjectPathIds = None
 
 class QueryInfo:
-	Select = None
-	Expand = None
-	Skip = None
-	Top = None
+    def __init__(self):
+        self.Select = None
+        self.Expand = None
+        self.Skip = None
+        self.Top = None
 
 
 class ActionInfo:
-	Id = 0
-	ActionType = None
-	Name = None
-	ObjectPathId = 0
-	ArgumentInfo = None
-	QueryInfo = None
+    def __init__(self):
+        self.Id = 0
+        self.ActionType = None
+        self.Name = None
+        self.ObjectPathId = 0
+        self.ArgumentInfo = None
+        self.QueryInfo = None
 
 
 class ActionResultInfo:
-	ActionId = 0
-	Value = None
+    def __init__(self):
+        self.ActionId = 0
+        self.Value = None
 
 class ObjectPathInfo:
-	Id = 0
-	ObjectPathType = None
-	Name = None
-	ParentObjectPathId = 0
-	ArgumentInfo = None
+    def __init__(self):
+        self.Id = 0
+        self.ObjectPathType = None
+        self.Name = None
+        self.ParentObjectPathId = 0
+        self.ArgumentInfo = None
 
 class RequestMessageBodyInfo:
-    Actions = None
-    ObjectPaths = None
+    def __init__(self):
+        self.Actions = None
+        self.ObjectPaths = None
 
 class ErrorInfo:
-	Code = None
-	Message = None
-	Location = None
+    def __init__(self):
+        self.Code = None
+        self.Message = None
+        self.Location = None
 
 
 class ResponseMessageBodyInfo:
-	Error = None
-	Results = None
-	TraceIds = None
+    def __init__(self):
+        self.Error = None
+        self.Results = None
+        self.TraceIds = None
 
+class LoadOption:
+    def __init__(self):
+        self.select = None
+        self.expand = None
 
 class IResultHandler:
-    def _handleResult(value):
+    def _handleResult(self, value) -> None:
         pass
+
+class IRequestExecutor:
+    def execute(self, requestInfo: httphelper.RequestInfo) -> httphelper.ResponseInfo:
+        pass
+
+class HttpRequestExecutor(IRequestExecutor):
+    def execute(self, requestInfo: httphelper.RequestInfo) -> httphelper.ResponseInfo:
+        return httphelper.HttpUtility.invoke(requestInfo)
+
+class ClientResult(IResultHandler):
+    def __init__(self):
+        self._value = None
+
+    @property
+    def value(self):
+        return self._value
+
+    def _handleResult(self, value: any) -> None:
+        self._value = value
 
 
 class ClientRequestContext:
-    def __init__(self, url: str == None):
-        self._nextId = 1
+    def __init__(self, url: str):
+        self.__nextId = 1
         self._url = url
         if Utility.isNullOrEmptyString(self._url):
             self._url = Constants.localDocument
 
         self._processingResult = False
         self._customData = Constants.iterativeExecutor
-        #self._requestExecutor = OfficeJsRequestExecutor()
+        self._requestExecutor = HttpRequestExecutor()
         self._rootObject = None
         self.__pendingRequest = None
 
 
     def _nextId(self):
-        ret = self._nextId
-        self._nextId = self._nextId + 1
+        ret = self.__nextId
+        self.__nextId = self.__nextId + 1
         return ret
 
     @property
@@ -169,7 +200,7 @@ class ClientRequestContext:
     def trace(self, message: str):
         ActionFactory.createTraceAction(self, message)
 
-    def _parseSelectExpand(select: str) -> list:
+    def _parseSelectExpand(self, select: str) -> list:
         args = []
         if not Utility.isNullOrEmptyString(select):
             propertyNames = select.split(",")
@@ -178,13 +209,22 @@ class ClientRequestContext:
         return args
 
     def sync(self):
-        req = self._pendingRequest
+        req = self.__pendingRequest
         if not req.hasActions:
             return
 
         self.__pendingRequest = None
         msgBody = req.buildRequestMessageBody()
-        return msgBody
+        requestInfo = httphelper.RequestInfo();
+        requestInfo.url = Utility.combineUrl(self._url, "ProcessQuery")
+        requestInfo.body = json.dumps(msgBody, default = lambda o: o.__dict__)
+        requestInfo.method = "POST"
+        responseInfo = self._requestExecutor.execute(requestInfo)
+        if responseInfo.statusCode != 200:
+            raise Utility.createRuntimeError("NetworkError")
+        response = json.loads(responseInfo.body)
+        req.processResponse(response)
+        return
 
 class Action:
     def __init__(self, actionInfo, isWriteOperation):
@@ -200,7 +240,7 @@ class Action:
         return self._isWriteOperation
 
 class ObjectPath:
-    def __init(self, objectPathInfo: ObjectPathInfo, parentObjectPath: 'ObjectPath', isCollection: bool, isInvalidAfterRequest: bool):
+    def __init__(self, objectPathInfo: ObjectPathInfo, parentObjectPath: 'ObjectPath', isCollection: bool, isInvalidAfterRequest: bool):
         self._objectPathInfo = objectPathInfo
         self._parentObjectPath = parentObjectPath
         self._isWriteOperation = False
@@ -272,7 +312,7 @@ class ObjectPath:
                 self._isValid = True
                 self._objectPathInfo.ObjectPathType = ObjectPathType.Indexer
                 self._objectPathInfo.Name = ""
-                self._objectPathInfo.ArgumentInfo = {}
+                self._objectPathInfo.ArgumentInfo = ArgumentInfo()
                 self._objectPathInfo.ArgumentInfo.Arguments = [id]
                 self._argumentObjectPaths = None
                 return
@@ -312,7 +352,7 @@ class ClientRequest:
     def addTrace(self, actionId: int, message: str):
         self._traceInfos[actionId] = message
 
-    def addReferencedObjectPath(objectPath: ObjectPath):
+    def addReferencedObjectPath(self, objectPath: ObjectPath):
         if self._referencedObjectPaths.get(objectPath.objectPathInfo.Id):
             return
 
@@ -330,17 +370,17 @@ class ClientRequest:
 
             objectPath = objectPath.parentObjectPath
 
-    def addReferencedObjectPaths(objectPaths: list):
+    def addReferencedObjectPaths(self, objectPaths: list):
         if objectPaths:
             for objectPath in objectPaths:
                 self.addReferencedObjectPath(objectPaths[i])
 
-    def addActionResultHandler(action: Action, resultHandler: IResultHandler):
+    def addActionResultHandler(self, action: Action, resultHandler: IResultHandler):
         self._actionResultHandler[action.actionInfo.Id] = resultHandler
 
     def buildRequestMessageBody(self) -> RequestMessageBodyInfo:
         objectPaths = {}
-        for k, v in self._referencedObjectPaths.iteritems():
+        for k, v in self._referencedObjectPaths.items():
             objectPaths[k] = v.objectPathInfo
 
         actions = []
@@ -353,12 +393,14 @@ class ClientRequest:
 
         return ret
 
-    def processResponse(self, msg: ResponseMessageBodyInfo):
-        if msg and msg.Results:
-            for actionResult in msg.Results:
-                handler = self._actionResultHandler.get(actionResult.ActionId)
+    def processResponse(self, msg: dict) -> None:
+        if msg and msg.get("Results"):
+            for actionResult in msg.get("Results"):
+                actionId = actionResult.get("ActionId")
+                handler = self._actionResultHandler.get(actionId)
                 if (handler):
-                    handler._handleResult(actionResult.Value)
+                    actionValue = actionResult.get("Value")
+                    handler._handleResult(actionValue)
 
     def invalidatePendingInvalidObjectPaths(self):
         for i in self._referencedObjectPaths:
@@ -396,9 +438,9 @@ class ActionFactory:
         actionInfo = ActionInfo()
         actionInfo.Id = context._nextId()
         actionInfo.ActionType = ActionType.SetProperty
-        actionInfo.Name = propertyName,
-        actionInfo.ObjectPathId = parent._objectPath.objectPathInfo.Id,
-        actionInfo.ArgumentInfo = {}		
+        actionInfo.Name = propertyName
+        actionInfo.ObjectPathId = parent._objectPath.objectPathInfo.Id
+        actionInfo.ArgumentInfo = ArgumentInfo()
         args = [value]
         referencedArgumentObjectPaths = Utility.setMethodArguments(context, actionInfo.ArgumentInfo, args)
         Utility.validateReferencedObjectPaths(referencedArgumentObjectPaths)
@@ -416,7 +458,7 @@ class ActionFactory:
         actionInfo.ActionType = ActionType.Method
         actionInfo.Name = methodName
         actionInfo.ObjectPathId = parent._objectPath.objectPathInfo.Id
-        actionInfo.ArgumentInfo = {}
+        actionInfo.ArgumentInfo = ArgumentInfo()
         referencedArgumentObjectPaths = Utility.setMethodArguments(context, actionInfo.ArgumentInfo, args)
         Utility.validateReferencedObjectPaths(referencedArgumentObjectPaths)
         isWriteOperation = operationType != OperationType.Read
@@ -430,10 +472,10 @@ class ActionFactory:
     def createQueryAction(context: ClientRequestContext, parent: ClientObject, queryInfo): 
         Utility.validateObjectPath(parent)
         actionInfo = ActionInfo()
-        actionInfo.Id = context._nextId(),
-        actionInfo.ActionType = ActionType.Query,
+        actionInfo.Id = context._nextId()
+        actionInfo.ActionType = ActionType.Query
         actionInfo.Name = ""
-        actionInfo.ObjectPathId = parent._objectPath.objectPathInfo.Id,
+        actionInfo.ObjectPathId = parent._objectPath.objectPathInfo.Id
         actionInfo.QueryInfo = queryInfo
         ret = Action(actionInfo, False)
         context._pendingRequest.addAction(ret)
@@ -475,11 +517,9 @@ class ObjectPathFactory:
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.GlobalObject
         objectPathInfo.Name = ""
-        return ObjectPath(objectPathInfo,
-                          None, 
-                          False,    # isCollection
-                          False     # isInvalidAfterRequest
-                          )
+        isCollection = False
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, None, isCollection, isInvalidAfterRequest)
 
     @staticmethod
     def createNewObjectObjectPath(context: ClientRequestContext, typeName: str, isCollection: bool):
@@ -487,11 +527,8 @@ class ObjectPathFactory:
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.NewObject
         objectPathInfo.Name = typeName
-        return ObjectPath(objectPathInfo, 
-                          None, 
-                          isCollection, 
-                          False     # isInvalidAfterRequest
-                          )
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, None, isCollection, isInvalidAfterRequest)
 
     @staticmethod
     def createPropertyObjectPath(context: ClientRequestContext, parent: ClientObject, propertyName: str, isCollection: bool, isInvalidAfterRequest: bool) -> ObjectPath:
@@ -510,13 +547,11 @@ class ObjectPathFactory:
         objectPathInfo.ObjectPathType = ObjectPathType.Indexer
         objectPathInfo.Name = ""
         objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id
-        objectPathInfo.ArgumentInfo = {}
+        objectPathInfo.ArgumentInfo = ArgumentInfo()
         objectPathInfo.ArgumentInfo.Arguments = args
-        return ObjectPath(objectPathInfo, 
-                          parentObject._objectPath, 
-                          False,    # isCollection
-                          False     # isInvalidAfterRequest
-                          )
+        isCollection = False
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, parentObject._objectPath, isCollection, isInvalidAfterRequest)
     
 
     @staticmethod
@@ -525,14 +560,12 @@ class ObjectPathFactory:
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Indexer
         objectPathInfo.Name = ""
-        objectPathInfo.ParentObjectPathId = parentObjectPath.objectPathInfo.Id,
-        objectPathInfo.ArgumentInfo = {}
+        objectPathInfo.ParentObjectPathId = parentObjectPath.objectPathInfo.Id
+        objectPathInfo.ArgumentInfo = ArgumentInfo()
         objectPathInfo.ArgumentInfo.Arguments = args
-        return ObjectPath(objectPathInfo, 
-                          parentObjectPath, 
-                          False,    # isCollection
-                          False     # isInvalidAfterRequest
-                          )
+        isCollection = False
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, parentObjectPath, isCollection, isInvalidAfterRequest)
     
     @staticmethod
     def createMethodObjectPath(context: ClientRequestContext, parentObject: ClientObject, methodName: str, operationType, args, isCollection: bool, isInvalidAfterRequest: bool):
@@ -540,11 +573,11 @@ class ObjectPathFactory:
         objectPathInfo.Id = context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Method
         objectPathInfo.Name = methodName
-        objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id,
-        objectPathInfo.ArgumentInfo = {}
+        objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id
+        objectPathInfo.ArgumentInfo = ArgumentInfo()
 
         argumentObjectPaths = Utility.setMethodArguments(context, objectPathInfo.ArgumentInfo, args)
-        ret = ObjectPath(objectPathInfo, parent._objectPath, isCollection, isInvalidAfterRequest)
+        ret = ObjectPath(objectPathInfo, parentObject._objectPath, isCollection, isInvalidAfterRequest)
         ret.argumentObjectPaths = argumentObjectPaths
         ret.isWriteOperation = (operationType != OperationType.Read)
         return ret
@@ -570,13 +603,12 @@ class ObjectPathFactory:
         objectPathInfo.Id =context._nextId()
         objectPathInfo.ObjectPathType = ObjectPathType.Indexer
         objectPathInfo.Name = ""
-        objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id,
-        objectPathInfo.ArgumentInfo = {}
+        objectPathInfo.ParentObjectPathId = parentObject._objectPath.objectPathInfo.Id
+        objectPathInfo.ArgumentInfo = ArgumentInfo()
         objectPathInfo.ArgumentInfo.Arguments = [id]
-        return ObjectPath(objectPathInfo, parent._objectPath, 
-                          False, # isCollection
-                          False # isInvalidAfterRequest
-                          )
+        isCollection = False
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, parent._objectPath, isCollection, isInvalidAfterRequest)
     
     @staticmethod
     def createChildItemObjectPathUsingGetItemAt(context: ClientRequestContext, parentObject: ClientObject, childItem, index):
@@ -589,12 +621,11 @@ class ObjectPathFactory:
         objectPathInfo.ObjectPathType = ObjectPathType.Method
         objectPathInfo.Name = Constants.getItemAt
         objectPathInfo.ParentObjectPathId = parent._objectPath.objectPathInfo.Id
-        objectPathInfo.ArgumentInfo = {}
+        objectPathInfo.ArgumentInfo = ArgumentInfo()
         objectPathInfo.ArgumentInfo.Arguments = [index]
-        return ObjectPath(objectPathInfo, parent._objectPath, 
-                          False, # isCollection
-                          False # isInvalidAfterRequest
-                          )
+        isCollection = False
+        isInvalidAfterRequest = False
+        return ObjectPath(objectPathInfo, parent._objectPath, isCollection, isInvalidAfterRequest)
 
 class InstantiateActionResultHandler(IResultHandler):
     def __init__(self, clientObject: ClientObject):
@@ -622,6 +653,12 @@ class Utility:
             Utility.throwError(ResourceStrings.invalidArgument, name)
 
     @staticmethod
+    def isUndefined(value) -> bool:
+        if (value is None):
+            return True
+        return False
+
+    @staticmethod
     def isNullOrUndefined(value) -> bool:
         if (value is None):
             return True
@@ -640,6 +677,18 @@ class Utility:
     @staticmethod
     def trim(value: str) -> str:
         return value.strip()
+
+    @staticmethod
+    def combineUrl(url1: str, url2: str) -> str:
+        if url1 is None:
+            return url2
+        if url2 is None:
+            return url1
+        if not url1.endswith("/"):
+            url1 = url1 + "/"
+        if url2.startswith("/"):
+            url2 = url2[1:]
+        return url1 + url2
 
     @staticmethod
     def caseInsensitiveCompareString(str1: str, str2: str) -> bool:
@@ -679,19 +728,19 @@ class Utility:
                 clientObject = arg
                 Utility.validateContext(context, clientObject)
                 args[i] = clientObject._objectPath.objectPathInfo.Id
-                referencedObjectPathIds.push(clientObject._objectPath.objectPathInfo.Id)
-                referencedObjectPaths.push(clientObject._objectPath)
+                referencedObjectPathIds.append(clientObject._objectPath.objectPathInfo.Id)
+                referencedObjectPaths.append(clientObject._objectPath)
                 hasOne = True
             elif isinstance(arg, list):
                 childArrayObjectPathIds = []
                 childArrayHasOne = Utility.collectObjectPathInfos(context, arg, referencedObjectPaths, childArrayObjectPathIds)
                 if childArrayHasOne:
-                    referencedObjectPathIds.push(childArrayObjectPathIds)
+                    referencedObjectPathIds.append(childArrayObjectPathIds)
                     hasOne = True
                 else:
-                    referencedObjectPathIds.push(0)
+                    referencedObjectPathIds.append(0)
             else:
-                referencedObjectPathIds.push(0)
+                referencedObjectPathIds.append(0)
         return hasOne
 
     @staticmethod
@@ -744,7 +793,7 @@ class Utility:
         #throw new _Internal.RuntimeError(resourceId, Utility._getResourceString(resourceId, arg), new Array<string>(), {})
     
     @staticmethod
-    def createRuntimeError(code: str, message: str, location: str) -> Exception:
+    def createRuntimeError(code: str, message: str = None, location: str = None) -> Exception:
         return RuntimeError(code, message, [], { errorLocation: location })
     
     @staticmethod
@@ -804,16 +853,6 @@ class Utility:
     @staticmethod
     def _addActionResultHandler(clientObj: ClientObject, action: Action, resultHandler: IResultHandler):
         clientObj.context._pendingRequest.addActionResultHandler(action, resultHandler)
-
-    """
-    def _handleNavigationPropertyResults(clientObj: ClientObject, objectValue: dict, propertyNames: list):
-        for (var i = 0; i < propertyNames.length - 1; i += 2) {
-            if (!Utility.isUndefined(objectValue[propertyNames[i + 1]])) {
-                (<any>clientObj)[propertyNames[i]]._handleResult(objectValue[propertyNames[i + 1]]);
-            }
-        }
-    }
-    """
 
     @staticmethod
     def normalizeName(name: str) -> str:

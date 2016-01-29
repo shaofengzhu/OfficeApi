@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>86eb8113-897d-41f6-9994-00735e8025f2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Runtime.py</StartupFile>
+    <StartupFile>excel.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Runtime.py" />
+    <Compile Include="excel.py" />
+    <Compile Include="exceltest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="httphelper.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="runtime.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

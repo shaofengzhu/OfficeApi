@@ -9,7 +9,8 @@
 <#@ output extension=".txt" #>
 
 <#
-	this.SetParameter(ParameterName_Input, @"d:\shaozhu\learn\PythonJsCom\FakeXlapiMetadata\bin\Debug\FakeXlapi.dll");
-	this.SetParameter(ParameterName_OutputDirectory, @"d:\shaozhu\learn\PythonJsCom");
+	this.SetParameter(ParameterName_Input, @"d:\shaozhu\learn\PythonJsCom\ExcelApiMetadata\bin\Debug\Excel.dll");
+	this.SetParameter(ParameterName_Refs, @"d:\shaozhu\learn\PythonJsCom\CodeGen\Microsoft.OfficeExtension.CodeGen.Attributes.dll");
+	this.SetParameter(ParameterName_OutputDirectory, @"d:\shaozhu\learn\PythonJsCom\Runtime");
 	this.WritePython();
 #>

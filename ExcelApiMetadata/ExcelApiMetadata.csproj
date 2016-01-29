@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{84C3133E-5267-496B-81CA-0F341EC04C29}</ProjectGuid>
+    <ProjectGuid>{3BF42E95-56AD-443B-97AE-05B78B66C5C1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FakeXlapiMetadata</RootNamespace>
-    <AssemblyName>FakeXlapi</AssemblyName>
+    <RootNamespace>ExcelApiMetadata</RootNamespace>
+    <AssemblyName>Excel</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeExcelApi.cs" />
+    <Compile Include="ExcelApi.cs" />
+    <Compile Include="FunctionsCodegen.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -31,7 +31,7 @@
 <#+
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + ".py");
+			templateFileManager.StartNewFile(this.FileBaseName.ToLowerInvariant() + ".py");
 			this.WritePythonBody(System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + ".py"));
 			templateFileManager.EndBlock();
 			
@@ -46,7 +46,12 @@
 		{
 			existingFileContent = File.ReadAllLines(existingFilePath);
 		}
-
+#>
+import sys
+import json
+import enum
+import logging
+<#+
 		this.WriteLine(string.Empty);
 		this.WritePlaceHolderContent("GlobalHeader", existingFileContent);
 		this.WriteLine(string.Empty);
@@ -135,6 +140,26 @@ class ErrorCodes:
 		}
 	}
 
+	private string NormalizeMemberName(string name)
+	{
+		string[] keywords = new string[] 
+			{
+				"and",
+				"or",
+				"lambda",
+				"if",
+				"not",
+				"yield",
+			};
+
+		if (keywords.Contains(name))
+		{
+			return  name + "_";
+		}
+
+		return name;
+	}
+
 	private void WriteEnumType(ClientCallableTypeInfo type, XDocument xdoc)
 	{
 #>
@@ -144,7 +169,7 @@ class <#=type.Name#>:
 		foreach (KeyValuePair<string, int> field in type.EnumFields)
 		{
 #>
-<#=Utility.ToCamelLowerCase(field.Key)#> = "<#=Utility.TrimUnderscore(field.Key)#>"
+<#=NormalizeMemberName(Utility.ToCamelLowerCase(field.Key))#> = "<#=Utility.TrimUnderscore(field.Key)#>"
 <#+
 		}
 		this.PopIndent();
@@ -178,11 +203,11 @@ class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 	private void WriteConstructor(ClientCallableTypeInfo type)
 	{
 #>
-def __init__(self, objectPath: ObjectPath):
+def __init__(self, context: <#=Constants.TypeFullNames.ClientRequestContext#>, objectPath: <#= Constants.TypeFullNames.ObjectPath #>):
 <#+
 		this.PushIndent(Constants.IndentSpaceString);
 #>
-super(self.__class__, self).__init__(self, objectPath)
+super(self.__class__, self).__init__(context, objectPath)
 <#+
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
@@ -207,7 +232,7 @@ self.__items = None
 		{
 #>
 @property
-def <#=Utility.ToCamelLowerCase(prop.Name)#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
     if self.<#=prop.PythonFieldName#> is None:
         self.<#=prop.PythonFieldName#> = <#=prop.PropertyType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=Utility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, False))
     return self.<#=prop.PythonFieldName#>
@@ -217,7 +242,7 @@ def <#=Utility.ToCamelLowerCase(prop.Name)#>(self) -> '<#=prop.PropertyType.Pyth
 #>
 
 @<#=Utility.ToCamelLowerCase(prop.Name)#>.setter
-def <#=Utility.ToCamelLowerCase(prop.Name)#>(self, value: '<#=prop.PropertyType.PythonTypeName#>') -> None:
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '<#=prop.PropertyType.PythonTypeName#>') -> None:
     self.<#=prop.PythonFieldName#> = value
     <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value);
 <#+	
@@ -265,7 +290,7 @@ def items(self) -> 'list of <#=type.ClientType.ChildItemClientType.PythonTypeNam
 			this.WriteLine(string.Empty);
 #>
 @property
-def <#=Utility.ToCamelLowerCase(prop.Name)#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
     <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=prop.PythonFieldName#>)
     return self.<#=prop.PythonFieldName#>
 
@@ -277,8 +302,8 @@ def <#=Utility.ToCamelLowerCase(prop.Name)#>(self) -> '<#=prop.PropertyType.Pyth
 				// Just writing the JSDOC comment on the getter is perfectly sufficient (and our underlying assumption is that there are
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
-@<#=Utility.ToCamelLowerCase(prop.Name)#>.setter
-def <#=Utility.ToCamelLowerCase(prop.Name)#>(self, value -> '<#=prop.PropertyType.PythonTypeName#>'):
+@<#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>.setter
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : '<#=prop.PropertyType.PythonTypeName#>'):
     self.<#=prop.PythonFieldName#> = value
     <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
 
@@ -320,21 +345,20 @@ def <#=Utility.ToCamelLowerCase(prop.Name)#>(self, value -> '<#=prop.PropertyTyp
 	private void WriteScalarMethodReturnVoid(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(method)#>) -> None:
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> None:
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
     <#=Constants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
-	}
 <#+
 	}
 
 	private void WriteScalarMethodReturnValue(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(method)#>) -> <#=Constants.TypeFullNames.ClientResult#>:
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> <#=Constants.TypeFullNames.ClientResult#>:
 <#+
 		this.PushIndent(Constants.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
@@ -350,7 +374,7 @@ def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(metho
 	private void WriteObjectMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
@@ -364,7 +388,7 @@ def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(metho
 	private void WriteIndexerMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=Utility.ToCamelLowerCase(method.Name)#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
@@ -394,8 +418,8 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 			ClientCallableParameterInfo param = method.Parameters[i];
 			sb.Append(", ");
 
-			sb.Append(param.Name);
-			sb.Append(" -> ");
+			sb.Append(NormalizeMemberName(param.Name));
+			sb.Append(" : ");
 			sb.Append("'");
 			sb.Append(param.ParameterType.PythonTypeName);
 			sb.Append("'");
@@ -415,7 +439,7 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 				sb.Append(", ");
 			}
 
-			sb.Append(method.Parameters[i].Name);
+			sb.Append(NormalizeMemberName(method.Parameters[i].Name));
 		}
 
 		sb.Append("]");
@@ -427,7 +451,7 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 #>
 # Handle results returned from the document
 def _handleResult(self, value: dict) -> None:
-    if <#=Constants.MemberFullNames.IsNullOrUndefined#>(value)):
+    if <#=Constants.MemberFullNames.IsNullOrUndefined#>(value):
         return
     obj = value;
     <#=Constants.MemberFullNames.FixObjectPathIfNecessary#>(self, obj);
@@ -487,7 +511,7 @@ def _initReferenceId(self, value: str) -> None:
 				var clientTypeOrCustomTypescriptName = string.IsNullOrEmpty(type.CustomTypeScriptTypeName) ? type.ClientType.TypeScriptTypeName : type.CustomTypeScriptTypeName;
 #>
 
-def load(self, option) -> '<#=type.ClientType.PythonTypeName#>':
+def load(self, option = None) -> '<#=type.ClientType.PythonTypeName#>':
     <#=Constants.MemberFullNames.Load#>(self, option);
 <#+
 			}
@@ -498,14 +522,19 @@ def load(self, option) -> '<#=type.ClientType.PythonTypeName#>':
 	{
 #>
 class <#=type.Name#>:
-    def __init__(self):
 <#+
+		this.PushIndent(Constants.IndentSpaceString);
+#>
+def __init__(self):
+<#+
+		this.PushIndent(Constants.IndentSpaceString);
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 #>
-    self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
+self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 <#+
 		}
+		this.PopIndent();
 		this.WriteLine(string.Empty);
 		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
 		this.PopIndent();
