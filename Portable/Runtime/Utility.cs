@@ -18,11 +18,22 @@ namespace OfficeExtension
                 throw new ArgumentNullException(name);
 			}
 		}
+        public static bool _IsUndefined(JToken value)
+        {
+            if (value == null ||
+                value.Type == JTokenType.Undefined)
+            {
+                return true;
+            }
 
-        public static bool IsNullOrUndefined(JToken value)
+            return false;
+        }
+
+        public static bool _IsNullOrUndefined(JToken value)
         {
             if (value == null ||
                 value.Type == JTokenType.None ||
+                value.Type == JTokenType.Undefined ||
                 value.Type == JTokenType.Null)
             {
                 return true;
@@ -91,7 +102,7 @@ namespace OfficeExtension
 			return hasOne;
 		}
 
-		public static void FixObjectPathIfNecessary(ClientObject clientObject, JToken value)
+		public static void _FixObjectPathIfNecessary(ClientObject clientObject, JToken value)
         {
 			if (clientObject != null && 
                 clientObject._ObjectPath != null && 
@@ -102,7 +113,7 @@ namespace OfficeExtension
 			}
 		}
 
-		public static void ValidateObjectPath(ClientObject clientObject)
+		internal static void ValidateObjectPath(ClientObject clientObject)
         {
 			ObjectPath objectPath  = clientObject._ObjectPath;
 			while (objectPath != null)
@@ -116,7 +127,7 @@ namespace OfficeExtension
 			}
 		}
 
-		public static void ValidateReferencedObjectPaths(IEnumerable<ObjectPath> objectPaths)
+		internal static void ValidateReferencedObjectPaths(IEnumerable<ObjectPath> objectPaths)
         {
 			if (objectPaths != null)
             {
@@ -136,7 +147,7 @@ namespace OfficeExtension
 			}
 		}
 
-		public static void ValidateContext(ClientRequestContext context, ClientObject obj)
+		internal static void ValidateContext(ClientRequestContext context, ClientObject obj)
         {
 			if (obj != null && obj.Context != context)
             {
@@ -170,7 +181,7 @@ namespace OfficeExtension
             return resourceId;
         }
 
-		public static void ThrowIfNotLoaded(string propertyName, object fieldValue)
+		public static void _ThrowIfNotLoaded(string propertyName, object fieldValue)
         {
             throw CreateRuntimeError(
                 ErrorCodes.GeneralException,
@@ -213,6 +224,11 @@ namespace OfficeExtension
 			clientObj.Context._PendingRequest.AddActionResultHandler(action, resultHandler);
 		}
 
+        public static void _Load(ClientObject clientObject, LoadOption loadOption)
+        {
+            clientObject.Context.Load(clientObject, loadOption);
+        }
+
 		private static string NormalizeName(string name)
         {
 			return name.Substring(0, 1).ToLowerInvariant() + name.Substring(1);
@@ -220,7 +236,9 @@ namespace OfficeExtension
 
         internal static string ToJsonString(object obj)
         {
-            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            Newtonsoft.Json.JsonSerializerSettings settings = new Newtonsoft.Json.JsonSerializerSettings();
+            settings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj, settings);
         }
 
         internal static JToken ToJsonObject(string value)

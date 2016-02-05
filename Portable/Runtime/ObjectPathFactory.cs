@@ -8,7 +8,7 @@ namespace OfficeExtension
 {
     public static class ObjectPathFactory
     {
-        public static ObjectPath CreateGlobalObjectObjectPath(ClientRequestContext context)
+        public static ObjectPath _CreateGlobalObjectObjectPath(ClientRequestContext context)
         {
             ObjectPathInfo objectPathInfo = new ObjectPathInfo()
             {
@@ -20,7 +20,7 @@ namespace OfficeExtension
 			return new ObjectPath(objectPathInfo, null, false /*isCollection*/, false /*isInvalidAfterRequest*/);
         }
 
-        public static ObjectPath CreateNewObjectObjectPath(ClientRequestContext context, string typeName, bool isCollection)
+        public static ObjectPath _CreateNewObjectObjectPath(ClientRequestContext context, string typeName, bool isCollection)
         {
             ObjectPathInfo objectPathInfo = new ObjectPathInfo()
             {
@@ -32,7 +32,7 @@ namespace OfficeExtension
 			return new ObjectPath(objectPathInfo, null, isCollection, false /*isInvalidAfterRequest*/);
 		}
 
-		public static ObjectPath CreatePropertyObjectPath(ClientRequestContext context, ClientObject parent, string propertyName, bool isCollection, bool isInvalidAfterRequest)
+		public static ObjectPath _CreatePropertyObjectPath(ClientRequestContext context, ClientObject parent, string propertyName, bool isCollection, bool isInvalidAfterRequest)
         {
             ObjectPathInfo objectPathInfo = new ObjectPathInfo()
 				{
@@ -45,7 +45,7 @@ namespace OfficeExtension
             return new ObjectPath(objectPathInfo, parent._ObjectPath, isCollection, isInvalidAfterRequest);
 		}
 
-		public static ObjectPath CreateIndexerObjectPath(ClientRequestContext context, ClientObject parent, object[] args)
+		public static ObjectPath _CreateIndexerObjectPath(ClientRequestContext context, ClientObject parent, object[] args)
         { 
 			ObjectPathInfo objectPathInfo = new ObjectPathInfo()
 				{
@@ -60,7 +60,7 @@ namespace OfficeExtension
 			return new ObjectPath(objectPathInfo, parent._ObjectPath, false /*isCollection*/, false /*isInvalidAfterRequest*/);
 		}
 
-		public static ObjectPath CreateIndexerObjectPathUsingParentPath(ClientRequestContext context, ObjectPath parentObjectPath, object[] args)
+		public static ObjectPath _CreateIndexerObjectPathUsingParentPath(ClientRequestContext context, ObjectPath parentObjectPath, object[] args)
         {
             ObjectPathInfo objectPathInfo = new ObjectPathInfo()
 				{
@@ -74,7 +74,7 @@ namespace OfficeExtension
 			return new ObjectPath(objectPathInfo, parentObjectPath, false /*isCollection*/, false /*isInvalidAfterRequest*/);
 		}
 
-		public static ObjectPath CreateMethodObjectPath(ClientRequestContext context, ClientObject parent, string methodName, OperationType operationType, object[] args, bool isCollection, bool isInvalidAfterRequest)
+		public static ObjectPath _CreateMethodObjectPath(ClientRequestContext context, ClientObject parent, string methodName, OperationType operationType, object[] args, bool isCollection, bool isInvalidAfterRequest)
         {
 			ObjectPathInfo objectPathInfo = new ObjectPathInfo()
 				{
@@ -91,28 +91,28 @@ namespace OfficeExtension
 			return ret;
 		}
 
-		public static ObjectPath CreateChildItemObjectPathUsingIndexerOrGetItemAt(bool hasIndexerMethod, ClientRequestContext context, ClientObject parent,  JObject childItem, int index)
+		public static ObjectPath _CreateChildItemObjectPathUsingIndexerOrGetItemAt(bool hasIndexerMethod, ClientRequestContext context, ClientObject parent,  JToken childItem, int index)
         {
 			var id = childItem[Constants.Id];
-			if (Utility.IsNullOrUndefined(id))
+			if (Utility._IsNullOrUndefined(id))
             {
 				id = childItem[Constants.IdPrivate];
 			}
 
-			if (hasIndexerMethod && !Utility.IsNullOrUndefined(id))
+			if (hasIndexerMethod && !Utility._IsNullOrUndefined(id))
             {
-				return ObjectPathFactory.CreateChildItemObjectPathUsingIndexer(context, parent, childItem);
+				return ObjectPathFactory._CreateChildItemObjectPathUsingIndexer(context, parent, childItem);
 			}
 			else
             {
-				return ObjectPathFactory.CreateChildItemObjectPathUsingGetItemAt(context, parent, childItem, index);
+				return ObjectPathFactory._CreateChildItemObjectPathUsingGetItemAt(context, parent, childItem, index);
 			}
 		}
 
-		public static ObjectPath CreateChildItemObjectPathUsingIndexer(ClientRequestContext context, ClientObject parent, JObject childItem)
+		public static ObjectPath _CreateChildItemObjectPathUsingIndexer(ClientRequestContext context, ClientObject parent, JToken childItem)
         {
 			var id = childItem[Constants.Id];
-			if (Utility.IsNullOrUndefined(id)) {
+			if (Utility._IsNullOrUndefined(id)) {
 				id = childItem[Constants.IdPrivate];
 			}
 
@@ -128,10 +128,10 @@ namespace OfficeExtension
 			return new ObjectPath(objectPathInfo, parent._ObjectPath, false /*isCollection*/, false /*isInvalidAfterRequest*/);
 		}
 
-		public static ObjectPath CreateChildItemObjectPathUsingGetItemAt(ClientRequestContext context, ClientObject parent, JObject childItem, int index)
+		public static ObjectPath _CreateChildItemObjectPathUsingGetItemAt(ClientRequestContext context, ClientObject parent, JToken childItem, int index)
         {
 			JToken indexFromServer = childItem[Constants.Index];
-			if (!Utility.IsNullOrUndefined(indexFromServer))
+			if (!Utility._IsNullOrUndefined(indexFromServer))
             {
                 index = indexFromServer.Value<int>();
 			}

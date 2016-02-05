@@ -118,6 +118,24 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CosmosDataMappingsV1.txt</LastGenOutput>
     </Content>
+    <Content Include="CSharpCore.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CSharpCore.txt</LastGenOutput>
+    </Content>
+    <Content Include="CSharpCore.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CSharpCore.tt</DependentUpon>
+    </Content>
+    <Content Include="CSharpMain.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CSharpMain.txt</LastGenOutput>
+    </Content>
+    <Content Include="CSharpMain.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CSharpMain.tt</DependentUpon>
+    </Content>
     <Content Include="Helper.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

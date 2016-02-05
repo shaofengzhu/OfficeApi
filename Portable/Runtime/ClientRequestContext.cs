@@ -75,7 +75,7 @@ namespace OfficeExtension
             }
         }
 
-        public void load(ClientObject clientObj, LoadOption loadOption)
+        public void Load(ClientObject clientObj, LoadOption loadOption)
         {
 			Utility.ValidateContext(this, clientObj);
 

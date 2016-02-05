@@ -8,7 +8,7 @@ namespace OfficeExtension
 {
     public static class ActionFactory
     {
-        public static Action CreateSetPropertyAction(ClientRequestContext context, ClientObject parent, string propertyName, object value)
+        public static Action _CreateSetPropertyAction(ClientRequestContext context, ClientObject parent, string propertyName, object value)
         {
 			Utility.ValidateObjectPath(parent);
 			ActionInfo actionInfo = new ActionInfo()
@@ -30,7 +30,7 @@ namespace OfficeExtension
 			return ret;
 		}
 
-        public static Action CreateMethodAction(ClientRequestContext context, ClientObject parent, string methodName, OperationType operationType, object[] args)
+        public static Action _CreateMethodAction(ClientRequestContext context, ClientObject parent, string methodName, OperationType operationType, object[] args)
         {
 			Utility.ValidateObjectPath(parent);
 			ActionInfo actionInfo = new ActionInfo()
@@ -51,7 +51,7 @@ namespace OfficeExtension
 			return ret;
 		}
 
-		public static Action CreateQueryAction(ClientRequestContext context, ClientObject parent, QueryInfo queryOption)
+		internal static Action CreateQueryAction(ClientRequestContext context, ClientObject parent, QueryInfo queryOption)
         {
 			Utility.ValidateObjectPath(parent);
             ActionInfo actionInfo = new ActionInfo()
@@ -68,7 +68,7 @@ namespace OfficeExtension
 			return ret;
 		}
 
-		public static Action CreateInstantiateAction(ClientRequestContext context, ClientObject obj)
+		internal static Action CreateInstantiateAction(ClientRequestContext context, ClientObject obj)
         {
 			Utility.ValidateObjectPath(obj);
 			ActionInfo actionInfo = new ActionInfo()
@@ -85,7 +85,7 @@ namespace OfficeExtension
 			return ret;
 		}
 
-		public static Action CreateTraceAction(ClientRequestContext context, string message)
+		internal static Action CreateTraceAction(ClientRequestContext context, string message)
         {
 			ActionInfo actionInfo = new ActionInfo()
 				{

@@ -63,7 +63,7 @@ namespace OfficeExtension
                 return;
             }
 
-            ActionFactory.CreateMethodAction(this.m_context, this.m_context._RootObject, "_RemoveReference", OperationType.Read, new object[] { referenceId });
+            ActionFactory._CreateMethodAction(this.m_context, this.m_context._RootObject, "_RemoveReference", OperationType.Read, new object[] { referenceId });
         }
 
         public void Remove(IEnumerable<ClientObject> clientObjects)

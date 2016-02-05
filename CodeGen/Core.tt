@@ -292,6 +292,14 @@
 			}
 		}
 
+		public string CSharpTypeName
+		{
+			get
+			{
+				return Utility.GetCSharpTypeName(this);
+			}
+		}
+
 		public string WacScriptSharpTypeName
 		{
 			get
@@ -2630,6 +2638,53 @@
 			}
 		}
 
+		public static string GetCSharpTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsEnum)
+			{
+				return "string";
+			}
+			else if (type.IsStream)
+			{
+				return "string";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.FullName;
+			}
+			else if (type.ChildItemClientType != null)
+			{
+				return GetCSharpTypeName(type.ChildItemClientType) + "[]";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Object":
+						return "object";
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "int";
+					case "System.Single":
+					case "System.Double":
+						return "double";
+					case "System.Boolean":
+						return "bool";
+					case "System.String":
+						return "string";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
 		public static string GetTypeNameForCom(ClientType type)
 		{
 			return GetTypeNameForCom(type, forIdl: false);
@@ -3764,6 +3819,28 @@
 			public const string FixObjectPathIfNecessary = "_fixObjectPathIfNecessary";
 			public const string AddActionResultHandler = "_addActionResultHandler";
 			public const string HandleNavigationPropertyResults = "_handleNavigationPropertyResults";
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+		public static class CSharpMemberFullNames
+		{
+			public const string CreatePropertyObjectPath = "OfficeExtension.ObjectPathFactory._CreatePropertyObjectPath";
+			public const string CreateMethodObjectPath = "OfficeExtension.ObjectPathFactory._CreateMethodObjectPath";
+			public const string CreateIndexerObjectPath = "OfficeExtension.ObjectPathFactory._CreateIndexerObjectPath";
+			public const string CreateNewObjectObjectPath = "OfficeExtension.ObjectPathFactory._CreateNewObjectObjectPath";
+			public const string CreateChildItemObjectPathUsingIndexer = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexer";
+			public const string CreateChildItemObjectPathUsingGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingGetItemAt";
+			public const string CreateChildItemObjectPathUsingIndexerOrGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexerOrGetItemAt";
+
+			public const string CreateSetPropertyAction = "OfficeExtension.ActionFactory._CreateSetPropertyAction";
+			public const string CreateMethodAction = "OfficeExtension.ActionFactory._CreateMethodAction";
+
+			public const string IsNullOrUndefined = "OfficeExtension.Utility._IsNullOrUndefined";
+			public const string IsUndefined = "OfficeExtension.Utility._IsUndefined";
+			public const string ThrowIfNotLoaded = "OfficeExtension.Utility._ThrowIfNotLoaded";
+			public const string Load = "OfficeExtension.Utility._Load";
+			public const string FixObjectPathIfNecessary = "OfficeExtension.Utility._FixObjectPathIfNecessary";
+			public const string AddActionResultHandler = "OfficeExtension.Utility._AddActionResultHandler";
         }
 	}
 #>
