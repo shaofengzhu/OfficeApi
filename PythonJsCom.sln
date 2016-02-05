@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeXlapiMetadata", "FakeXl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelApiMetadata", "ExcelApiMetadata\ExcelApiMetadata.csproj", "{3BF42E95-56AD-443B-97AE-05B78B66C5C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portable.Runtime", "Portable\Runtime\Portable.Runtime.csproj", "{DBD50B81-142C-4196-9FF0-9376868E615D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{3BF42E95-56AD-443B-97AE-05B78B66C5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BF42E95-56AD-443B-97AE-05B78B66C5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BF42E95-56AD-443B-97AE-05B78B66C5C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD50B81-142C-4196-9FF0-9376868E615D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD50B81-142C-4196-9FF0-9376868E615D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD50B81-142C-4196-9FF0-9376868E615D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD50B81-142C-4196-9FF0-9376868E615D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
