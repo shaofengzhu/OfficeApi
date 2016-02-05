@@ -50,7 +50,7 @@ class OAuthUtility:
         if useProductionEnvironment:
             tokenServiceUrl = "https://login.windows.net/common/oauth2/token"
             clientId = "8563463e-ea18-4355-9297-41ff32200164"
-            refreshToken = "AAABAAAAiL9Kn2Z27UubvWFPbm0gLU0qFuikw83pJJ0Sgc6bB3Ig84oewbKe7dQphka-MgTIB3w0Jxo05mYAttApqkVxRzcP1j1o0fWAp6CC0xAl1n28SuHV9CttQjR9p1i4lQYuRxT9ynGFkuTPXyxLKCMY1K5VFee_X2UvE4y1KEhTm9szkmBcreEgvoG73Fl2YhlSBnVpv-_PQqFjwPV54qCxxchYTaqduJwi7tNcD5N-pynx70HAS6DREkGy6bS_9xQNsu2FAci-CUBdSZUewuOlYKSOpHV06tr-6zikPlvAc4W69jUY6Bi-G1Ukad9B5shZx_izeuIUpGLv1T6AMR38gqRdmhNIKkchgVGEJnFoVB_jOdM7diDWN3CXjYq5MOK4BaANA8C20z4sXitAmreLpes4e8sFzcMS18KQwbmzxfvE69FzcCZtPdA_1qUq0lG2jolLlGVuEm2YOZR-FK6-arWka_Fs6OLqv0UINV1D5gT5zlBxyMMpXA-4fJDLSX5dfpXO8g_sUexCTZY2zdcAIBnH4gH9lVcaNR8Bs9AhRArXEZJCL6VOvBrkpYYK5bn6IAA"
+            refreshToken = "AAABAAAAiL9Kn2Z27UubvWFPbm0gLWSspDaTSw3dAMdGhO78bjGes_o8sT6CskrovtlzZIVTase__ycSI80Mu7kvIO29l04ntox8t3xBkw0rFrECYnQL2rRBGgtMkaSWcAwO2DStSe-Zk7lqsidPEN8pgB9TdJsHMbtbrvaeEntstcXoOEZcOKnyWY1V7csuMp1fbcJSltPbUNqCUBuktpCCNTAiBASs0xHcIR1raa4zql8qs60pN3emkTSguUhQRZfw9Bi5iBbszHCbdNImceIb-z_AB6GJ7bTt7nEP8JTOaGxveIaSaKuku7Di3w0jnuYG455ANTAhJk1WwJofLvDG2S2qOnPA_j0aR2KTCXmjxZn40G6DPPurrYUWOJgtvQfN-TXuxZBNx8mup3BrAoPQoNTrgLz4fHrLin9DqeOSFTqK568NnGGvraHMDlnTxHFsokjtht9v6p13gYWVuUUj0nRQ__40VZpAL5akflmSNoM2XvbRCI_VlpWbH7nVteOMo4xxE8jlkb99Kqb30SEQ_yfETdXnCuHMzI3n8XJwGOzCnYdHn6QzD-73BgI2fyeLirotIAA"
         else:
             tokenServiceUrl = "https://login.windows-ppe.net/common/oauth2/token"
             clientId = "09d9cc54-6048-4c79-b468-99aa29c6e98d"
