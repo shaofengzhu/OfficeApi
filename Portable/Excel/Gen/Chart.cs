@@ -129,7 +129,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("height", this.m_height);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "height", this.m_height);
 				return this.m_height;
 			}
 
@@ -144,7 +144,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("left", this.m_left);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "left", this.m_left);
 				return this.m_left;
 			}
 
@@ -159,7 +159,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("name", this.m_name);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "name", this.m_name);
 				return this.m_name;
 			}
 
@@ -174,7 +174,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("top", this.m_top);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "top", this.m_top);
 				return this.m_top;
 			}
 
@@ -189,7 +189,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("width", this.m_width);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "width", this.m_width);
 				return this.m_width;
 			}
 
@@ -248,26 +248,31 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Height"]))
 			{
+				this.LoadedPropertyNames.Add("Height");
 				this.m_height = obj["Height"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Left"]))
 			{
+				this.LoadedPropertyNames.Add("Left");
 				this.m_left = obj["Left"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Name"]))
 			{
+				this.LoadedPropertyNames.Add("Name");
 				this.m_name = obj["Name"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Top"]))
 			{
+				this.LoadedPropertyNames.Add("Top");
 				this.m_top = obj["Top"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Width"]))
 			{
+				this.LoadedPropertyNames.Add("Width");
 				this.m_width = obj["Width"].ToObject<double>();
 			}
 		

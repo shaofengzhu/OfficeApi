@@ -72,7 +72,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("id", this.m_id);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "id", this.m_id);
 				return this.m_id;
 			}
 		}
@@ -81,7 +81,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("name", this.m_name);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "name", this.m_name);
 				return this.m_name;
 			}
 
@@ -96,7 +96,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("position", this.m_position);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "position", this.m_position);
 				return this.m_position;
 			}
 
@@ -111,7 +111,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("visibility", this.m_visibility);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "visibility", this.m_visibility);
 				return this.m_visibility;
 			}
 
@@ -174,21 +174,25 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Id"]))
 			{
+				this.LoadedPropertyNames.Add("Id");
 				this.m_id = obj["Id"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Name"]))
 			{
+				this.LoadedPropertyNames.Add("Name");
 				this.m_name = obj["Name"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Position"]))
 			{
+				this.LoadedPropertyNames.Add("Position");
 				this.m_position = obj["Position"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Visibility"]))
 			{
+				this.LoadedPropertyNames.Add("Visibility");
 				this.m_visibility = obj["Visibility"].ToObject<string>();
 			}
 		

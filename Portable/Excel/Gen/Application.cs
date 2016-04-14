@@ -27,7 +27,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("calculationMode", this.m_calculationMode);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "calculationMode", this.m_calculationMode);
 				return this.m_calculationMode;
 			}
 		}
@@ -56,6 +56,7 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["CalculationMode"]))
 			{
+				this.LoadedPropertyNames.Add("CalculationMode");
 				this.m_calculationMode = obj["CalculationMode"].ToObject<string>();
 			}
 		

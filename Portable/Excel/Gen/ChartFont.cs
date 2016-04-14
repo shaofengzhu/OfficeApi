@@ -32,7 +32,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("bold", this.m_bold);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "bold", this.m_bold);
 				return this.m_bold;
 			}
 
@@ -47,7 +47,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("color", this.m_color);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "color", this.m_color);
 				return this.m_color;
 			}
 
@@ -62,7 +62,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("italic", this.m_italic);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "italic", this.m_italic);
 				return this.m_italic;
 			}
 
@@ -77,7 +77,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("name", this.m_name);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "name", this.m_name);
 				return this.m_name;
 			}
 
@@ -92,7 +92,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("size", this.m_size);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "size", this.m_size);
 				return this.m_size;
 			}
 
@@ -107,7 +107,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("underline", this.m_underline);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "underline", this.m_underline);
 				return this.m_underline;
 			}
 
@@ -135,31 +135,37 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Bold"]))
 			{
+				this.LoadedPropertyNames.Add("Bold");
 				this.m_bold = obj["Bold"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Color"]))
 			{
+				this.LoadedPropertyNames.Add("Color");
 				this.m_color = obj["Color"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Italic"]))
 			{
+				this.LoadedPropertyNames.Add("Italic");
 				this.m_italic = obj["Italic"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Name"]))
 			{
+				this.LoadedPropertyNames.Add("Name");
 				this.m_name = obj["Name"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Size"]))
 			{
+				this.LoadedPropertyNames.Add("Size");
 				this.m_size = obj["Size"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Underline"]))
 			{
+				this.LoadedPropertyNames.Add("Underline");
 				this.m_underline = obj["Underline"].ToObject<string>();
 			}
 		

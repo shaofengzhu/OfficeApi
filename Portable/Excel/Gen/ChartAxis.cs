@@ -86,7 +86,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("majorUnit", this.m_majorUnit);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "majorUnit", this.m_majorUnit);
 				return this.m_majorUnit;
 			}
 
@@ -101,7 +101,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("maximum", this.m_maximum);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "maximum", this.m_maximum);
 				return this.m_maximum;
 			}
 
@@ -116,7 +116,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("minimum", this.m_minimum);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "minimum", this.m_minimum);
 				return this.m_minimum;
 			}
 
@@ -131,7 +131,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("minorUnit", this.m_minorUnit);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "minorUnit", this.m_minorUnit);
 				return this.m_minorUnit;
 			}
 
@@ -159,21 +159,25 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["MajorUnit"]))
 			{
+				this.LoadedPropertyNames.Add("MajorUnit");
 				this.m_majorUnit = obj["MajorUnit"].ToObject<object>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Maximum"]))
 			{
+				this.LoadedPropertyNames.Add("Maximum");
 				this.m_maximum = obj["Maximum"].ToObject<object>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Minimum"]))
 			{
+				this.LoadedPropertyNames.Add("Minimum");
 				this.m_minimum = obj["Minimum"].ToObject<object>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["MinorUnit"]))
 			{
+				this.LoadedPropertyNames.Add("MinorUnit");
 				this.m_minorUnit = obj["MinorUnit"].ToObject<object>();
 			}
 		

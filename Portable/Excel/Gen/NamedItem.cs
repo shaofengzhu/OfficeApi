@@ -31,7 +31,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("name", this.m_name);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "name", this.m_name);
 				return this.m_name;
 			}
 		}
@@ -40,7 +40,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("type", this.m_type);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "type", this.m_type);
 				return this.m_type;
 			}
 		}
@@ -49,7 +49,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("value", this.m_value);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "value", this.m_value);
 				return this.m_value;
 			}
 		}
@@ -58,7 +58,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("visible", this.m_visible);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "visible", this.m_visible);
 				return this.m_visible;
 			}
 
@@ -73,7 +73,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("_Id", this.m__Id);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "_Id", this.m__Id);
 				return this.m__Id;
 			}
 		}
@@ -102,26 +102,31 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Name"]))
 			{
+				this.LoadedPropertyNames.Add("Name");
 				this.m_name = obj["Name"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Type"]))
 			{
+				this.LoadedPropertyNames.Add("Type");
 				this.m_type = obj["Type"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Value"]))
 			{
+				this.LoadedPropertyNames.Add("Value");
 				this.m_value = obj["Value"].ToObject<object>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Visible"]))
 			{
+				this.LoadedPropertyNames.Add("Visible");
 				this.m_visible = obj["Visible"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["_Id"]))
 			{
+				this.LoadedPropertyNames.Add("_Id");
 				this.m__Id = obj["_Id"].ToObject<string>();
 			}
 		

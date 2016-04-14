@@ -42,6 +42,21 @@ namespace OfficeExtension
             return false;
         }
 
+		internal static string CombineUrl(string baseUrl, string relativeUrl)
+		{
+			if (!baseUrl.EndsWith("/", StringComparison.Ordinal))
+			{
+				baseUrl += "/";
+			}
+
+			if (relativeUrl.StartsWith("/", StringComparison.Ordinal))
+			{
+				relativeUrl = relativeUrl.Substring(1);
+			}
+
+			return baseUrl + relativeUrl;
+		}
+
 		internal static List<ObjectPath> SetMethodArguments(ClientRequestContext context, ArgumentInfo argumentInfo, object[] args)
         {
 			if (args == null)
@@ -181,11 +196,14 @@ namespace OfficeExtension
             return resourceId;
         }
 
-		public static void _ThrowIfNotLoaded(string propertyName, object fieldValue)
+		public static void _ThrowIfNotLoaded(ClientObject clientObject, string propertyName, object fieldValue)
         {
-            throw CreateRuntimeError(
-                ErrorCodes.GeneralException,
-                _GetResourceString(ResourceStrings.PropertyNotLoaded, propertyName));
+			if (!clientObject.LoadedPropertyNames.Contains(propertyName))
+			{
+				throw CreateRuntimeError(
+					ErrorCodes.GeneralException,
+					_GetResourceString(ResourceStrings.PropertyNotLoaded, propertyName));
+			}
 		}
 
 		internal static string GetObjectPathExpression(ObjectPath objectPath)
@@ -247,5 +265,45 @@ namespace OfficeExtension
             return ret;
         }
 
+		internal static Exception ConvertJsComErrorToException(JToken jsonError)
+		{
+			string code = jsonError[Constants.Code].ToObject<string>();
+			string location = string.Empty;
+			if (jsonError[Constants.Location] != null)
+			{
+				location = jsonError[Constants.Location].ToObject<string>();
+			}
+
+			string message = string.Empty;
+			if (jsonError[Constants.Message] != null)
+			{
+				message = jsonError[Constants.Message].ToObject<string>();
+			}
+
+			if (string.IsNullOrEmpty(message))
+			{
+				message = code;
+			}
+
+			return new Exception(message);
+		}
+
+		internal static Exception ConvertODataErrorToException(JToken jsonError)
+		{
+			string code = jsonError[Constants.ODataCode].ToObject<string>();
+
+			string message = string.Empty;
+			if (jsonError[Constants.ODataMessage] != null)
+			{
+				message = jsonError[Constants.ODataMessage].ToObject<string>();
+			}
+
+			if (string.IsNullOrEmpty(message))
+			{
+				message = code;
+			}
+
+			return new Exception(message);
+		}
 	}
 }

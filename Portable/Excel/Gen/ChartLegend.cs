@@ -43,7 +43,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("overlay", this.m_overlay);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "overlay", this.m_overlay);
 				return this.m_overlay;
 			}
 
@@ -58,7 +58,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("position", this.m_position);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "position", this.m_position);
 				return this.m_position;
 			}
 
@@ -73,7 +73,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("visible", this.m_visible);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "visible", this.m_visible);
 				return this.m_visible;
 			}
 
@@ -101,16 +101,19 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Overlay"]))
 			{
+				this.LoadedPropertyNames.Add("Overlay");
 				this.m_overlay = obj["Overlay"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Position"]))
 			{
+				this.LoadedPropertyNames.Add("Position");
 				this.m_position = obj["Position"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Visible"]))
 			{
+				this.LoadedPropertyNames.Add("Visible");
 				this.m_visible = obj["Visible"].ToObject<bool>();
 			}
 		

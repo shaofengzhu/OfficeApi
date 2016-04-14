@@ -41,7 +41,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("value", this.m_value);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "value", this.m_value);
 				return this.m_value;
 			}
 		}
@@ -63,6 +63,7 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Value"]))
 			{
+				this.LoadedPropertyNames.Add("Value");
 				this.m_value = obj["Value"].ToObject<object>();
 			}
 		

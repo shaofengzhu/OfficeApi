@@ -29,7 +29,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("items", this.m__items);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "items", this.m__items);
 				return this.m__items;
 			}
 		}
@@ -38,7 +38,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("count", this.m_count);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "count", this.m_count);
 				return this.m_count;
 			}
 		}
@@ -81,12 +81,14 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Count"]))
 			{
+				this.LoadedPropertyNames.Add("Count");
 				this.m_count = obj["Count"].ToObject<int>();
 			}
 		
 			Newtonsoft.Json.Linq.JArray itemsData = obj[OfficeExtension.Constants.Items] as Newtonsoft.Json.Linq.JArray;
 			if (itemsData != null)
 			{
+				this.LoadedPropertyNames.Add("items");
 				this.m__items = new Microsoft.ExcelServices.Table[itemsData.Count];
 				for (var i = 0; i < itemsData.Count; i++)
 				{

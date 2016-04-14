@@ -27,7 +27,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("criteria", this.m_criteria);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "criteria", this.m_criteria);
 				return this.m_criteria;
 			}
 		}
@@ -133,6 +133,7 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Criteria"]))
 			{
+				this.LoadedPropertyNames.Add("Criteria");
 				this.m_criteria = obj["Criteria"].ToObject<Microsoft.ExcelServices.FilterCriteria>();
 			}
 		

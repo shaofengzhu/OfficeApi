@@ -139,19 +139,35 @@ namespace OfficeExtension
 
         internal void ProcessResponse(JToken json)
         {
-            if (json != null && 
-                json.Type == JTokenType.Object && 
-                json["Results"] != null)
+            if (json == null || json.Type != JTokenType.Object)
+			{
+				throw new Exception("Unexpected response");
+			}
+
+			if (json[Constants.ODataError] != null)
+			{
+				JToken jsonError = json[Constants.ODataError];
+				throw Utility.ConvertODataErrorToException(jsonError);
+			}
+
+			if (json[Constants.Error] != null)
+			{
+				// it's error response
+				JToken jsonError = json[Constants.Error];
+				throw Utility.ConvertJsComErrorToException(jsonError);
+			}
+
+            if (json[Constants.Results] != null)
             {
-                JArray results = json["Results"] as JArray;
+                JArray results = json[Constants.Results] as JArray;
                 for (var i = 0; i < results.Count; i++)
                 {
                     JToken actionResult = results[i];
-                    int actionId = actionResult.Value<int>("ActionId");
-                    var handler = this.m_actionResultHandler[actionId];
-                    if (handler != null)
+                    int actionId = actionResult.Value<int>(Constants.ActionId);
+					IResultHandler handler = null;
+					if (this.m_actionResultHandler.TryGetValue(actionId, out handler))
                     {
-                        JToken actionValue = actionResult["Value"];
+                        JToken actionValue = actionResult[Constants.Value];
                         handler._HandleResult(actionValue);
                     }
                 }

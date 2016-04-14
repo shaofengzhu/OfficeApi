@@ -11,6 +11,7 @@ namespace OfficeExtension
     {
         private ClientRequestContext m_context;
         private ObjectPath m_objectPath;
+		private HashSet<string> m_loadedPropertyNames;
 
         public ClientObject(ClientRequestContext context, ObjectPath objectPath)
         {
@@ -26,6 +27,8 @@ namespace OfficeExtension
                     ActionFactory.CreateInstantiateAction(context, this);
                 }
             }
+
+			this.m_loadedPropertyNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
         public ClientRequestContext Context
@@ -47,6 +50,14 @@ namespace OfficeExtension
                 this.m_objectPath = value;
             }
         }
+
+		internal protected ISet<string> LoadedPropertyNames
+		{
+			get
+			{
+				return m_loadedPropertyNames;
+			}
+		}
 
 
         public virtual void _HandleResult(JToken value)

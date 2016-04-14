@@ -29,7 +29,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("fields", this.m_fields);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "fields", this.m_fields);
 				return this.m_fields;
 			}
 		}
@@ -38,7 +38,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("matchCase", this.m_matchCase);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "matchCase", this.m_matchCase);
 				return this.m_matchCase;
 			}
 		}
@@ -47,7 +47,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("method", this.m_method);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "method", this.m_method);
 				return this.m_method;
 			}
 		}
@@ -90,16 +90,19 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Fields"]))
 			{
+				this.LoadedPropertyNames.Add("Fields");
 				this.m_fields = obj["Fields"].ToObject<Microsoft.ExcelServices.SortField[]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["MatchCase"]))
 			{
+				this.LoadedPropertyNames.Add("MatchCase");
 				this.m_matchCase = obj["MatchCase"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Method"]))
 			{
+				this.LoadedPropertyNames.Add("Method");
 				this.m_method = obj["Method"].ToObject<string>();
 			}
 		

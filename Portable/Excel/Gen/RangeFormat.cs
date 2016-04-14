@@ -87,7 +87,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("columnWidth", this.m_columnWidth);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "columnWidth", this.m_columnWidth);
 				return this.m_columnWidth;
 			}
 
@@ -102,7 +102,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("horizontalAlignment", this.m_horizontalAlignment);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "horizontalAlignment", this.m_horizontalAlignment);
 				return this.m_horizontalAlignment;
 			}
 
@@ -117,7 +117,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("rowHeight", this.m_rowHeight);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "rowHeight", this.m_rowHeight);
 				return this.m_rowHeight;
 			}
 
@@ -132,7 +132,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("verticalAlignment", this.m_verticalAlignment);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "verticalAlignment", this.m_verticalAlignment);
 				return this.m_verticalAlignment;
 			}
 
@@ -147,7 +147,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("wrapText", this.m_wrapText);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "wrapText", this.m_wrapText);
 				return this.m_wrapText;
 			}
 
@@ -189,26 +189,31 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["ColumnWidth"]))
 			{
+				this.LoadedPropertyNames.Add("ColumnWidth");
 				this.m_columnWidth = obj["ColumnWidth"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["HorizontalAlignment"]))
 			{
+				this.LoadedPropertyNames.Add("HorizontalAlignment");
 				this.m_horizontalAlignment = obj["HorizontalAlignment"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["RowHeight"]))
 			{
+				this.LoadedPropertyNames.Add("RowHeight");
 				this.m_rowHeight = obj["RowHeight"].ToObject<double>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["VerticalAlignment"]))
 			{
+				this.LoadedPropertyNames.Add("VerticalAlignment");
 				this.m_verticalAlignment = obj["VerticalAlignment"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["WrapText"]))
 			{
+				this.LoadedPropertyNames.Add("WrapText");
 				this.m_wrapText = obj["WrapText"].ToObject<bool>();
 			}
 		

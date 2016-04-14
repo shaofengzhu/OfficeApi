@@ -271,7 +271,7 @@ public <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[] Items
 {
 	get
 	{
-		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>("items", this.m__items);
+		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "items", this.m__items);
 		return this.m__items;
 	}
 }
@@ -289,7 +289,7 @@ public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
 {
 	get
 	{
-		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>);
+		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>);
 		return this.<#=prop.FieldName#>;
 	}
 <#+
@@ -483,6 +483,7 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 #>
 	if (!<#=Constants.CSharpMemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"]))
 	{
+		this.LoadedPropertyNames.Add("<#=prop.Name#>");
 		this.<#=prop.FieldName#> = obj["<#=prop.Name#>"].ToObject<<#=prop.PropertyType.CSharpTypeName#>>();
 	}
 
@@ -506,6 +507,7 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 	Newtonsoft.Json.Linq.JArray itemsData = obj[OfficeExtension.Constants.Items] as Newtonsoft.Json.Linq.JArray;
 	if (itemsData != null)
 	{
+		this.LoadedPropertyNames.Add("items");
 		this.m__items = new <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[itemsData.Count];
 		for (var i = 0; i < itemsData.Count; i++)
 		{

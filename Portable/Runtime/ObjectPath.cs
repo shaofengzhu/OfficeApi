@@ -98,36 +98,40 @@ namespace OfficeExtension
 
         public void UpdateUsingObjectData(JObject value)
         {
-			string referenceId = value.Property(Constants.ReferenceId).Value<string>();
-			if (!string.IsNullOrEmpty(referenceId))
-            {
+			JToken jsonReferenceId = value[Constants.ReferenceId];
+			if (!Utility._IsNullOrUndefined(jsonReferenceId))
+			{
+				string referenceId = jsonReferenceId.Value<string>();
+				if (!string.IsNullOrEmpty(referenceId))
+				{
 
-                this.m_isInvalidAfterRequest = false;
-				this.m_isValid = true;
-				this.m_objectPathInfo.ObjectPathType = ObjectPathType.ReferenceId;
-				this.m_objectPathInfo.Name = referenceId;
-                this.m_objectPathInfo.ArgumentInfo = new ArgumentInfo();
-                this.m_parentObjectPath = null;
-				this.m_argumentObjectPaths = null;
-				return;
-            }
+					this.m_isInvalidAfterRequest = false;
+					this.m_isValid = true;
+					this.m_objectPathInfo.ObjectPathType = ObjectPathType.ReferenceId;
+					this.m_objectPathInfo.Name = referenceId;
+					this.m_objectPathInfo.ArgumentInfo = new ArgumentInfo();
+					this.m_parentObjectPath = null;
+					this.m_argumentObjectPaths = null;
+					return;
+				}
+			}
 
 			if (this.ParentObjectPath != null && this.ParentObjectPath.IsCollection)
             {
-                JProperty id = value.Property(Constants.Id);
-                if (id == null || id.Type == JTokenType.Null)
+                JToken jsonId = value[Constants.Id];
+                if (Utility._IsNullOrUndefined(jsonId))
                 {
-                    id = value.Property(Constants.IdPrivate);
+					jsonId = value[Constants.IdPrivate];
                 }
 
-                if (id != null)
+                if (!Utility._IsNullOrUndefined(jsonId))
                 {
                     this.m_isInvalidAfterRequest = false;
                     this.m_isValid = true;
                     this.m_objectPathInfo.ObjectPathType = ObjectPathType.Indexer;
                     this.m_objectPathInfo.Name = "";
                     this.m_objectPathInfo.ArgumentInfo = new ArgumentInfo();
-                    this.m_objectPathInfo.ArgumentInfo.Arguments = new object[] { id };
+                    this.m_objectPathInfo.ArgumentInfo.Arguments = new object[] { jsonId.ToObject<object>() };
                     this.m_argumentObjectPaths = null;
                     return;
                 }

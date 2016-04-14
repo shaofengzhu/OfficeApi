@@ -86,7 +86,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("address", this.m_address);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "address", this.m_address);
 				return this.m_address;
 			}
 		}
@@ -95,7 +95,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("addressLocal", this.m_addressLocal);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "addressLocal", this.m_addressLocal);
 				return this.m_addressLocal;
 			}
 		}
@@ -104,7 +104,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("cellCount", this.m_cellCount);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "cellCount", this.m_cellCount);
 				return this.m_cellCount;
 			}
 		}
@@ -113,7 +113,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("columnCount", this.m_columnCount);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "columnCount", this.m_columnCount);
 				return this.m_columnCount;
 			}
 		}
@@ -122,7 +122,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("columnHidden", this.m_columnHidden);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "columnHidden", this.m_columnHidden);
 				return this.m_columnHidden;
 			}
 
@@ -137,7 +137,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("columnIndex", this.m_columnIndex);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "columnIndex", this.m_columnIndex);
 				return this.m_columnIndex;
 			}
 		}
@@ -146,7 +146,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("formulas", this.m_formulas);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "formulas", this.m_formulas);
 				return this.m_formulas;
 			}
 
@@ -161,7 +161,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("formulasLocal", this.m_formulasLocal);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "formulasLocal", this.m_formulasLocal);
 				return this.m_formulasLocal;
 			}
 
@@ -176,7 +176,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("formulasR1C1", this.m_formulasR1C1);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "formulasR1C1", this.m_formulasR1C1);
 				return this.m_formulasR1C1;
 			}
 
@@ -191,7 +191,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("hidden", this.m_hidden);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "hidden", this.m_hidden);
 				return this.m_hidden;
 			}
 		}
@@ -200,7 +200,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("numberFormat", this.m_numberFormat);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "numberFormat", this.m_numberFormat);
 				return this.m_numberFormat;
 			}
 
@@ -215,7 +215,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("rowCount", this.m_rowCount);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "rowCount", this.m_rowCount);
 				return this.m_rowCount;
 			}
 		}
@@ -224,7 +224,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("rowHidden", this.m_rowHidden);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "rowHidden", this.m_rowHidden);
 				return this.m_rowHidden;
 			}
 
@@ -239,7 +239,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("rowIndex", this.m_rowIndex);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "rowIndex", this.m_rowIndex);
 				return this.m_rowIndex;
 			}
 		}
@@ -248,7 +248,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("text", this.m_text);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "text", this.m_text);
 				return this.m_text;
 			}
 		}
@@ -257,7 +257,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("valueTypes", this.m_valueTypes);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "valueTypes", this.m_valueTypes);
 				return this.m_valueTypes;
 			}
 		}
@@ -266,7 +266,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("values", this.m_values);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "values", this.m_values);
 				return this.m_values;
 			}
 
@@ -281,7 +281,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("_ReferenceId", this.m__ReferenceId);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "_ReferenceId", this.m__ReferenceId);
 				return this.m__ReferenceId;
 			}
 		}
@@ -436,91 +436,109 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Address"]))
 			{
+				this.LoadedPropertyNames.Add("Address");
 				this.m_address = obj["Address"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["AddressLocal"]))
 			{
+				this.LoadedPropertyNames.Add("AddressLocal");
 				this.m_addressLocal = obj["AddressLocal"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["CellCount"]))
 			{
+				this.LoadedPropertyNames.Add("CellCount");
 				this.m_cellCount = obj["CellCount"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ColumnCount"]))
 			{
+				this.LoadedPropertyNames.Add("ColumnCount");
 				this.m_columnCount = obj["ColumnCount"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ColumnHidden"]))
 			{
+				this.LoadedPropertyNames.Add("ColumnHidden");
 				this.m_columnHidden = obj["ColumnHidden"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ColumnIndex"]))
 			{
+				this.LoadedPropertyNames.Add("ColumnIndex");
 				this.m_columnIndex = obj["ColumnIndex"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Formulas"]))
 			{
+				this.LoadedPropertyNames.Add("Formulas");
 				this.m_formulas = obj["Formulas"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["FormulasLocal"]))
 			{
+				this.LoadedPropertyNames.Add("FormulasLocal");
 				this.m_formulasLocal = obj["FormulasLocal"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["FormulasR1C1"]))
 			{
+				this.LoadedPropertyNames.Add("FormulasR1C1");
 				this.m_formulasR1C1 = obj["FormulasR1C1"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Hidden"]))
 			{
+				this.LoadedPropertyNames.Add("Hidden");
 				this.m_hidden = obj["Hidden"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["NumberFormat"]))
 			{
+				this.LoadedPropertyNames.Add("NumberFormat");
 				this.m_numberFormat = obj["NumberFormat"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["RowCount"]))
 			{
+				this.LoadedPropertyNames.Add("RowCount");
 				this.m_rowCount = obj["RowCount"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["RowHidden"]))
 			{
+				this.LoadedPropertyNames.Add("RowHidden");
 				this.m_rowHidden = obj["RowHidden"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["RowIndex"]))
 			{
+				this.LoadedPropertyNames.Add("RowIndex");
 				this.m_rowIndex = obj["RowIndex"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Text"]))
 			{
+				this.LoadedPropertyNames.Add("Text");
 				this.m_text = obj["Text"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ValueTypes"]))
 			{
+				this.LoadedPropertyNames.Add("ValueTypes");
 				this.m_valueTypes = obj["ValueTypes"].ToObject<string[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Values"]))
 			{
+				this.LoadedPropertyNames.Add("Values");
 				this.m_values = obj["Values"].ToObject<object[][]>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["_ReferenceId"]))
 			{
+				this.LoadedPropertyNames.Add("_ReferenceId");
 				this.m__ReferenceId = obj["_ReferenceId"].ToObject<string>();
 			}
 		

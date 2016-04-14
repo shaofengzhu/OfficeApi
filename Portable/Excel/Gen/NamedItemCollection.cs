@@ -28,7 +28,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("items", this.m__items);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "items", this.m__items);
 				return this.m__items;
 			}
 		}
@@ -58,6 +58,7 @@ namespace Microsoft.ExcelServices
 			Newtonsoft.Json.Linq.JArray itemsData = obj[OfficeExtension.Constants.Items] as Newtonsoft.Json.Linq.JArray;
 			if (itemsData != null)
 			{
+				this.LoadedPropertyNames.Add("items");
 				this.m__items = new Microsoft.ExcelServices.NamedItem[itemsData.Count];
 				for (var i = 0; i < itemsData.Count; i++)
 				{

@@ -27,7 +27,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("color", this.m_color);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "color", this.m_color);
 				return this.m_color;
 			}
 
@@ -62,6 +62,7 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Color"]))
 			{
+				this.LoadedPropertyNames.Add("Color");
 				this.m_color = obj["Color"].ToObject<string>();
 			}
 		

@@ -42,7 +42,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("text", this.m_text);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "text", this.m_text);
 				return this.m_text;
 			}
 
@@ -57,7 +57,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("visible", this.m_visible);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "visible", this.m_visible);
 				return this.m_visible;
 			}
 
@@ -85,11 +85,13 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Text"]))
 			{
+				this.LoadedPropertyNames.Add("Text");
 				this.m_text = obj["Text"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Visible"]))
 			{
+				this.LoadedPropertyNames.Add("Visible");
 				this.m_visible = obj["Visible"].ToObject<bool>();
 			}
 		

@@ -48,7 +48,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("position", this.m_position);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "position", this.m_position);
 				return this.m_position;
 			}
 
@@ -63,7 +63,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("separator", this.m_separator);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "separator", this.m_separator);
 				return this.m_separator;
 			}
 
@@ -78,7 +78,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showBubbleSize", this.m_showBubbleSize);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showBubbleSize", this.m_showBubbleSize);
 				return this.m_showBubbleSize;
 			}
 
@@ -93,7 +93,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showCategoryName", this.m_showCategoryName);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showCategoryName", this.m_showCategoryName);
 				return this.m_showCategoryName;
 			}
 
@@ -108,7 +108,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showLegendKey", this.m_showLegendKey);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showLegendKey", this.m_showLegendKey);
 				return this.m_showLegendKey;
 			}
 
@@ -123,7 +123,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showPercentage", this.m_showPercentage);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showPercentage", this.m_showPercentage);
 				return this.m_showPercentage;
 			}
 
@@ -138,7 +138,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showSeriesName", this.m_showSeriesName);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showSeriesName", this.m_showSeriesName);
 				return this.m_showSeriesName;
 			}
 
@@ -153,7 +153,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showValue", this.m_showValue);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showValue", this.m_showValue);
 				return this.m_showValue;
 			}
 
@@ -181,41 +181,49 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Position"]))
 			{
+				this.LoadedPropertyNames.Add("Position");
 				this.m_position = obj["Position"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Separator"]))
 			{
+				this.LoadedPropertyNames.Add("Separator");
 				this.m_separator = obj["Separator"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowBubbleSize"]))
 			{
+				this.LoadedPropertyNames.Add("ShowBubbleSize");
 				this.m_showBubbleSize = obj["ShowBubbleSize"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowCategoryName"]))
 			{
+				this.LoadedPropertyNames.Add("ShowCategoryName");
 				this.m_showCategoryName = obj["ShowCategoryName"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowLegendKey"]))
 			{
+				this.LoadedPropertyNames.Add("ShowLegendKey");
 				this.m_showLegendKey = obj["ShowLegendKey"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowPercentage"]))
 			{
+				this.LoadedPropertyNames.Add("ShowPercentage");
 				this.m_showPercentage = obj["ShowPercentage"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowSeriesName"]))
 			{
+				this.LoadedPropertyNames.Add("ShowSeriesName");
 				this.m_showSeriesName = obj["ShowSeriesName"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowValue"]))
 			{
+				this.LoadedPropertyNames.Add("ShowValue");
 				this.m_showValue = obj["ShowValue"].ToObject<bool>();
 			}
 		

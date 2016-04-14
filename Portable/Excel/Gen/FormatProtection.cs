@@ -28,7 +28,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("formulaHidden", this.m_formulaHidden);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "formulaHidden", this.m_formulaHidden);
 				return this.m_formulaHidden;
 			}
 
@@ -43,7 +43,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("locked", this.m_locked);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "locked", this.m_locked);
 				return this.m_locked;
 			}
 
@@ -71,11 +71,13 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["FormulaHidden"]))
 			{
+				this.LoadedPropertyNames.Add("FormulaHidden");
 				this.m_formulaHidden = obj["FormulaHidden"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Locked"]))
 			{
+				this.LoadedPropertyNames.Add("Locked");
 				this.m_locked = obj["Locked"].ToObject<bool>();
 			}
 		

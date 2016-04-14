@@ -49,6 +49,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ErrorCodes.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="GraphApiFileInfo.cs" />
     <Compile Include="HttpRequestExecutor.cs" />
     <Compile Include="InstantiateActionResultHandler.cs" />
     <Compile Include="IRequestExecutor.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="ITrackedObject.cs" />
     <Compile Include="LoadOption.cs" />
     <Compile Include="MessageConstracts.cs" />
+    <Compile Include="GraphApiUtility.cs" />
     <Compile Include="ObjectPath.cs" />
     <Compile Include="ObjectPathFactory.cs" />
     <Compile Include="OperationType.cs" />

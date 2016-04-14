@@ -16,6 +16,7 @@ namespace OfficeExtension
 		private IRequestExecutor m_requestExecutor;
 		private ClientObject m_rootObject;
 		private bool m_processingResult;
+		private IDictionary<string, string> m_requestHeaders;
 
 
         public ClientRequestContext(string url)
@@ -28,7 +29,16 @@ namespace OfficeExtension
 
             this.m_processingResult = false;
             this.m_requestExecutor = new HttpRequestExecutor();
+			this.m_requestHeaders = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
+
+		public IDictionary<string, string> RequestHeaders
+		{
+			get
+			{
+				return m_requestHeaders;
+			}
+		}
 
         public ClientRequest _PendingRequest
         {
@@ -75,9 +85,19 @@ namespace OfficeExtension
             }
         }
 
-        public void Load(ClientObject clientObj, LoadOption loadOption)
+		public void Load(ClientObject clientObject)
+		{
+			this.Load(clientObject, null);
+		}
+
+        public void Load(ClientObject clientObject, LoadOption loadOption)
         {
-			Utility.ValidateContext(this, clientObj);
+			Utility.ValidateContext(this, clientObject);
+
+			if (loadOption == null)
+			{
+				loadOption = new LoadOption();
+			}
 
             QueryInfo queryOption = new QueryInfo();
 
@@ -94,12 +114,12 @@ namespace OfficeExtension
             queryOption.Skip = loadOption.Skip;
             queryOption.Top = loadOption.Top;
 
-            var action = ActionFactory.CreateQueryAction(this, clientObj, queryOption);
-			this._PendingRequest.AddActionResultHandler(action, clientObj);
+            var action = ActionFactory.CreateQueryAction(this, clientObject, queryOption);
+			this._PendingRequest.AddActionResultHandler(action, clientObject);
         }
 
 
-        public void trace(string message)
+        public void Trace(string message)
         {
 			ActionFactory.CreateTraceAction(this, message);
         }
@@ -119,7 +139,7 @@ namespace OfficeExtension
             return ret.ToArray();
 		}
 
-		public async void Sync()
+		public async Task Sync()
         { 
 			ClientRequest req = this.m_pendingRequest;
             if (req == null)
@@ -138,8 +158,12 @@ namespace OfficeExtension
             ClientRequestFlags requestFlags = req.Flags;
 
             RequestExecutorRequestMessage requestExecutorRequestMessage = new RequestExecutorRequestMessage();
-            requestExecutorRequestMessage.Url = this.m_url;
+			requestExecutorRequestMessage.Url = Utility.CombineUrl(this.m_url, Constants.ProcessQuery);
             requestExecutorRequestMessage.Body = Utility.ToJsonString(msgBody);
+			foreach (var pair in this.RequestHeaders)
+			{
+				requestExecutorRequestMessage.Headers[pair.Key] = pair.Value;
+			}
 
             req.InvalidatePendingInvalidObjectPaths();
 

@@ -30,7 +30,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("color", this.m_color);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "color", this.m_color);
 				return this.m_color;
 			}
 
@@ -45,7 +45,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("sideIndex", this.m_sideIndex);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "sideIndex", this.m_sideIndex);
 				return this.m_sideIndex;
 			}
 		}
@@ -54,7 +54,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("style", this.m_style);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "style", this.m_style);
 				return this.m_style;
 			}
 
@@ -69,7 +69,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("weight", this.m_weight);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "weight", this.m_weight);
 				return this.m_weight;
 			}
 
@@ -97,21 +97,25 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Color"]))
 			{
+				this.LoadedPropertyNames.Add("Color");
 				this.m_color = obj["Color"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["SideIndex"]))
 			{
+				this.LoadedPropertyNames.Add("SideIndex");
 				this.m_sideIndex = obj["SideIndex"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Style"]))
 			{
+				this.LoadedPropertyNames.Add("Style");
 				this.m_style = obj["Style"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Weight"]))
 			{
+				this.LoadedPropertyNames.Add("Weight");
 				this.m_weight = obj["Weight"].ToObject<string>();
 			}
 		

@@ -41,7 +41,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("visible", this.m_visible);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "visible", this.m_visible);
 				return this.m_visible;
 			}
 
@@ -69,6 +69,7 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Visible"]))
 			{
+				this.LoadedPropertyNames.Add("Visible");
 				this.m_visible = obj["Visible"].ToObject<bool>();
 			}
 		

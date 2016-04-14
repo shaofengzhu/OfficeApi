@@ -87,7 +87,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("id", this.m_id);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "id", this.m_id);
 				return this.m_id;
 			}
 		}
@@ -96,7 +96,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("name", this.m_name);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "name", this.m_name);
 				return this.m_name;
 			}
 
@@ -111,7 +111,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showHeaders", this.m_showHeaders);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showHeaders", this.m_showHeaders);
 				return this.m_showHeaders;
 			}
 
@@ -126,7 +126,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("showTotals", this.m_showTotals);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "showTotals", this.m_showTotals);
 				return this.m_showTotals;
 			}
 
@@ -141,7 +141,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("style", this.m_style);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "style", this.m_style);
 				return this.m_style;
 			}
 
@@ -225,26 +225,31 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Id"]))
 			{
+				this.LoadedPropertyNames.Add("Id");
 				this.m_id = obj["Id"].ToObject<int>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Name"]))
 			{
+				this.LoadedPropertyNames.Add("Name");
 				this.m_name = obj["Name"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowHeaders"]))
 			{
+				this.LoadedPropertyNames.Add("ShowHeaders");
 				this.m_showHeaders = obj["ShowHeaders"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["ShowTotals"]))
 			{
+				this.LoadedPropertyNames.Add("ShowTotals");
 				this.m_showTotals = obj["ShowTotals"].ToObject<bool>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Style"]))
 			{
+				this.LoadedPropertyNames.Add("Style");
 				this.m_style = obj["Style"].ToObject<string>();
 			}
 		

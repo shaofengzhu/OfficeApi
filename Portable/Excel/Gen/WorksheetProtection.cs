@@ -28,7 +28,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("options", this.m_options);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "options", this.m_options);
 				return this.m_options;
 			}
 		}
@@ -37,7 +37,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("protected", this.m_protected);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "protected", this.m_protected);
 				return this.m_protected;
 			}
 		}
@@ -73,11 +73,13 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Options"]))
 			{
+				this.LoadedPropertyNames.Add("Options");
 				this.m_options = obj["Options"].ToObject<Microsoft.ExcelServices.WorksheetProtectionOptions>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Protected"]))
 			{
+				this.LoadedPropertyNames.Add("Protected");
 				this.m_protected = obj["Protected"].ToObject<bool>();
 			}
 		

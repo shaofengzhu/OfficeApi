@@ -28,7 +28,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("id", this.m_id);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "id", this.m_id);
 				return this.m_id;
 			}
 		}
@@ -37,7 +37,7 @@ namespace Microsoft.ExcelServices
 		{
 			get
 			{
-				OfficeExtension.Utility._ThrowIfNotLoaded("type", this.m_type);
+				OfficeExtension.Utility._ThrowIfNotLoaded(this, "type", this.m_type);
 				return this.m_type;
 			}
 		}
@@ -83,11 +83,13 @@ namespace Microsoft.ExcelServices
 			OfficeExtension.Utility._FixObjectPathIfNecessary(this, obj);
 			if (!OfficeExtension.Utility._IsUndefined(obj["Id"]))
 			{
+				this.LoadedPropertyNames.Add("Id");
 				this.m_id = obj["Id"].ToObject<string>();
 			}
 		
 			if (!OfficeExtension.Utility._IsUndefined(obj["Type"]))
 			{
+				this.LoadedPropertyNames.Add("Type");
 				this.m_type = obj["Type"].ToObject<string>();
 			}
 		
