@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta http-equiv="Expires" content="0" />
+	<title>OAuth Implicit Flow App</title>
+	<script src="Office.Runtime.js" type="text/javascript"></script>
+	<script src="Excel.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		function initOAuthImplicitFlow() {
+			var currentPageUrl = document.URL;
+			var index = currentPageUrl.indexOf("#");
+			if (index > 0) {
+				currentPageUrl = currentPageUrl.substr(0, index);
+			}
+
+			var appId = "28801ad4-0f14-4c6b-a5aa-d77121b03ff4";
+			var url = "https://login.windows.net/common/oauth2/authorize?response_type=token&client_id="
+				+ appId
+				+ "&resource=https://graph.microsoft.com&redirect_uri="
+				+ encodeURIComponent(currentPageUrl);
+			window.location.assign(url);
+		}
+
+		function onBodyLoaded() {
+			var hash = window.location.hash.substr(1); // remove #
+			if (hash) {
+				var pairs = hash.split('&');
+				var keyValues = {};
+				// If there are parameters in URL, extract key/value pairs. 
+				for (var i = 0; i < pairs.length; ++i) {
+					var p = pairs[i].split('=', 2);
+					if (p.length == 1)
+						keyValues[p[0]] = "";
+					else
+						keyValues[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+				}
+				accessToken = keyValues["access_token"];
+				if (accessToken) {
+					document.getElementById("TxtAccessToken").value = accessToken;
+				}
+			}
+		}
+
+		function sendHttpRequest(request){
+			return new OfficeExtension.Promise(function(resolve, reject) {
+				var xhr = new XMLHttpRequest();
+				xhr.open(request.method, request.url);
+				xhr.onload = function () {
+					var resp = {
+						statusCode: xhr.status,
+						body: xhr.responseText
+					};
+
+					resolve(resp);
+				};
+
+				xhr.onerror = function () {
+					reject("Error " + xhr.statusText);
+				};
+
+				if (request.headers) {
+					for (var key in request.headers) {
+						xhr.setRequestHeader(key, request.headers[key]);
+					}
+				}
+
+				xhr.send(request.body);
+			});
+		}
+
+		function getWorkbookUrl() {
+			var agsUrlPrefix = "https://graph.microsoft.com/v1.0";
+			var agsFileName = document.getElementById("TxtExcelFileName").value;
+			var workbookUrl = agsUrlPrefix + "/me/drive/root:/" + agsFileName + ":/workbook";
+			return workbookUrl;
+		}
+
+		function initWorkbookSession() {
+
+			var accessToken = document.getElementById("TxtAccessToken").value;
+			var requestHeaders = { Authorization: "Bearer " + accessToken };
+			// create a session
+			sendHttpRequest(
+				{
+					url: getWorkbookUrl() + "/createSession",
+					method: "POST",
+					body: JSON.stringify({ persistChanges: true }),
+					headers: requestHeaders
+				})
+				.then(function (resp) {
+					if (resp.statusCode !== 201) {
+						throw "Invalid response:" + JSON.stringify(resp);
+					}
+
+					var session = JSON.parse(resp.body);
+					document.getElementById("TxtWorkbookSessionId").value = session.id;
+
+					OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders =
+						{
+							url: getWorkbookUrl(),
+							headers: {
+								"Authorization": "Bearer " + document.getElementById("TxtAccessToken").value,
+								"Workbook-Session-Id": session.id
+							}
+						};
+				})
+				.catch(function (ex) {
+					alert(JSON.stringify(ex));
+				});
+		}
+
+		function excelHelloWorld() {
+			var ctx = new Excel.RequestContext();
+			var range = ctx.workbook.worksheets.getItem("Sheet1").getRange("A1:B2");
+			range.values = [["Hello", "World"], ["12345", "=A2 + 100"]];
+			ctx.load(range);
+			ctx.sync()
+				.then(function () {
+					var elem = document.createElement("div");
+					elem.innerText = JSON.stringify(range.values);
+					document.body.appendChild(elem);
+				})
+				.catch(function (err) {
+					console.error(JSON.stringify(err));
+				});
+		}
+	</script>
+</head>
+<body onload="onBodyLoaded()">
+	<div>
+		Step 1: <button onclick="initOAuthImplicitFlow()">Init OAuth flow and request access token</button>
+	</div>
+	<div>
+		Access Token: <input type="text" id="TxtAccessToken" size="128" />
+	</div>
+	<div>
+		Step 2: <button onclick="initWorkbookSession()">Init Workbook Session</button> for Excel file <input type="text" id="TxtExcelFileName" value="AgaveTest.xlsx" />.
+	</div>
+	<div>
+		Workbook Session Id: <input type="text" id="TxtWorkbookSessionId" size="128" />
+	</div>
+	<div>
+		Step 3: <button onclick="excelHelloWorld()">Hello, World</button>
+	</div>
+</body>
+</html>
