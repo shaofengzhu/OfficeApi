@@ -1080,8 +1080,9 @@ var OfficeExtension;
                 }
                 else {
                     var errorObj = null;
+                    OfficeExtension.Utility.log(OfficeExtension.Utility.trim(responseInfo.body));
                     try {
-                        errorObj = JSON.parse(responseInfo.body);
+                        errorObj = JSON.parse(OfficeExtension.Utility.trim(responseInfo.body));
                     }
                     catch (e) {
                         OfficeExtension.Utility.log("Error when parse " + responseInfo.body);
@@ -2467,8 +2468,8 @@ var OfficeExtension;
             }
         };
         Utility.log = function (message) {
-            if (Utility._logEnabled && window.console && window.console.log) {
-                window.console.log(message);
+            if (Utility._logEnabled && typeof(console) != "undefined" && console.log) {
+                console.log(message);
             }
         };
         Utility.load = function (clientObj, option) {
@@ -2510,9 +2511,9 @@ var OfficeExtension;
         };
         Utility._getResourceString = function (resourceId, arg) {
             var ret = resourceId;
-            if (window.Strings && window.Strings.OfficeOM) {
+            if (typeof(Strings) != "undefined" && Strings.OfficeOM) {
                 var stringName = "L_" + resourceId;
-                var stringValue = window.Strings.OfficeOM[stringName];
+                var stringValue = Strings.OfficeOM[stringName];
                 if (stringValue) {
                     ret = stringValue;
                 }
@@ -2579,7 +2580,7 @@ var OfficeExtension;
         };
         Utility._createTimeoutPromise = function (timeout) {
             return new OfficeExtension.Promise(function (resolve, reject) {
-                window.setTimeout(function () {
+                setTimeout(function () {
                     resolve(null);
                 }, timeout);
             });
@@ -2641,7 +2642,7 @@ var OfficeExtension;
             }
             return responseHeaders;
         };
-        Utility._logEnabled = false;
+        Utility._logEnabled = true;
         Utility.s_underscoreCharCode = "_".charCodeAt(0);
         return Utility;
     })();
@@ -2692,7 +2693,10 @@ var Excel;
         return false;
     }
     function isExcel1_3OrAbove() {
-        return window.Office.context.requirements.isSetSupported("ExcelApi", 1.3);
+        if (typeof Office != "undefined" && Office.context && Office.context.requirements){
+            return Office.context.requirements.isSetSupported("ExcelApi", 1.3);
+        }
+        return true;
     }
     var _createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath;
     var _createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath;
