@@ -1,7 +1,8 @@
 var excel = require('./excel.js');
 var excelSetup = require('./excelSetup.js');
 var Excel = excel.Excel;
-
+var OfficeExtension = excel.OfficeExtension;
+OfficeExtension.Utility._logEnabled = true;
 excelSetup.initDefaultRequestUrlAndHeaders(true)
     .then(function(){
         return dataPopulateSetup();
