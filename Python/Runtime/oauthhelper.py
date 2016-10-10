@@ -50,7 +50,7 @@ class OAuthUtility:
         if useProductionEnvironment:
             tokenServiceUrl = "https://login.windows.net/common/oauth2/token"
             clientId = "8563463e-ea18-4355-9297-41ff32200164"
-            refreshToken = "AAABAAAAiL9Kn2Z27UubvWFPbm0gLWSspDaTSw3dAMdGhO78bjGes_o8sT6CskrovtlzZIVTase__ycSI80Mu7kvIO29l04ntox8t3xBkw0rFrECYnQL2rRBGgtMkaSWcAwO2DStSe-Zk7lqsidPEN8pgB9TdJsHMbtbrvaeEntstcXoOEZcOKnyWY1V7csuMp1fbcJSltPbUNqCUBuktpCCNTAiBASs0xHcIR1raa4zql8qs60pN3emkTSguUhQRZfw9Bi5iBbszHCbdNImceIb-z_AB6GJ7bTt7nEP8JTOaGxveIaSaKuku7Di3w0jnuYG455ANTAhJk1WwJofLvDG2S2qOnPA_j0aR2KTCXmjxZn40G6DPPurrYUWOJgtvQfN-TXuxZBNx8mup3BrAoPQoNTrgLz4fHrLin9DqeOSFTqK568NnGGvraHMDlnTxHFsokjtht9v6p13gYWVuUUj0nRQ__40VZpAL5akflmSNoM2XvbRCI_VlpWbH7nVteOMo4xxE8jlkb99Kqb30SEQ_yfETdXnCuHMzI3n8XJwGOzCnYdHn6QzD-73BgI2fyeLirotIAA"
+            refreshToken = "AQABAAAAAADRNYRQ3dhRSrm-4K-adpCJctMeWB1L1ZgevqQJAC4g5NCaOPNLn69ikpBeH1MjD7vE2ummRnokWTw3IN_YCFT1A4MGMdZN5d24hT4luOoLhb4Q93nw4XHOo6Xbvlr--u1wT9eJcK-fZ3xNmVnL6ywC8-j5icOXBul3ngw6fXbNbOLCEWrMnJYemDHchqzCbO0ldVmP0OgJdeFiQGg1VP3rJxrtX5tBOjH4nXRv8ZxPs_myBX6-sF2s9fsJyuPWv04NoJ2IJi9fzLYj7CLHAKfmFzWdlG_CorBu0NuIKiG7gLpo-2Md-UWXJzdV2OZ3bwdipbJgz0vKNmW4clHJ0P5h_7i3bax6Ql4E84klo2nyaqHAP_qOIvrBnRNmiBMHUJEG9USaXu_KXF3GrN3s5XpHEI2xGeqa6lu0M3G0-LuJBWblTNgOSna6LrhH-BFKAN7j28RELHNGRGCeIyHSQp5yVAj11ncHz63I8DoRixGnDCThJK0xXj4k4VY2WbBTrAfVBm4tLPS5lAbrAT7AzcOjes_Dt2EtSACUgxwtJjVPIkiJwPAOAMiT9VLJ5f6MiZNJgPIWmSVKqVJotZ-rhUvgORx_THvBETZcRCxgfXlDMjID8e69Ms2HlqpVKsMxA9_YnPpdL221-bphGfsw-L24sIwrbuRAQcn_JhAc-3zL_iAA"
         else:
             tokenServiceUrl = "https://login.windows-ppe.net/common/oauth2/token"
             clientId = "09d9cc54-6048-4c79-b468-99aa29c6e98d"
