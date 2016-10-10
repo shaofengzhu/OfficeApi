@@ -41,7 +41,11 @@ var Excel;
         return false;
     }
     function isExcel1_3OrAbove() {
-        return window.Office.context.requirements.isSetSupported("ExcelApi", 1.3);
+        if (typeof(window) === "undefined") {
+            return true;
+        }
+
+        return window.Office && window.Office.context && window.Office.context.requirements.isSetSupported("ExcelApi", 1.3);
     }
     var _createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath;
     var _createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath;
