@@ -43,33 +43,6 @@
 			}
 		}
 
-		function sendHttpRequest(request){
-			return new OfficeExtension.Promise(function(resolve, reject) {
-				var xhr = new XMLHttpRequest();
-				xhr.open(request.method, request.url);
-				xhr.onload = function () {
-					var resp = {
-						statusCode: xhr.status,
-						body: xhr.responseText
-					};
-
-					resolve(resp);
-				};
-
-				xhr.onerror = function () {
-					reject("Error " + xhr.statusText);
-				};
-
-				if (request.headers) {
-					for (var key in request.headers) {
-						xhr.setRequestHeader(key, request.headers[key]);
-					}
-				}
-
-				xhr.send(request.body);
-			});
-		}
-
 		function getWorkbookUrl() {
 			var agsUrlPrefix = "https://graph.microsoft.com/v1.0";
 			var agsFileName = document.getElementById("TxtExcelFileName").value;
@@ -82,7 +55,7 @@
 			var accessToken = document.getElementById("TxtAccessToken").value;
 			var requestHeaders = { Authorization: "Bearer " + accessToken };
 			// create a session
-			sendHttpRequest(
+			OfficeExtension.HttpUtility.sendRequest(
 				{
 					url: getWorkbookUrl() + "/createSession",
 					method: "POST",
@@ -172,7 +145,7 @@
 				byteArray[i] = stringBinary.charCodeAt(i);
 			}
 
-			return sendHttpRequest({
+			return OfficeExtension.HttpUtility.sendRequest({
 				url: url,
 				method: "PUT",
 				body: arrayBuffer,
@@ -189,7 +162,7 @@
 		}
 
 		function createSessionAndBuildUrlAndHeaders(url, accessToken){
-			return sendHttpRequest(
+			return OfficeExtension.HttpUtility.sendRequest(
 				{
 					url: url + "/createSession",
 					method: "POST",
