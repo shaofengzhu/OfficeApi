@@ -61,5 +61,16 @@ function createBlankExcelFile(parentItemUrl, filename, requestHeaders){
     });
 }
 
+function closeSession(requestUrlAndHeaders){
+    var url = requestUrlAndHeaders.url + "/closeSession";
+    return OfficeExtension.HttpUtility.sendRequest(
+        {
+            url: url,
+            method: "POST",
+            headers: requestUrlAndHeaders.headers
+        });    
+}
+
 exports.createSessionAndBuildUrlAndHeaders = createSessionAndBuildUrlAndHeaders;
 exports.createBlankExcelFile = createBlankExcelFile;
+exports.closeSession = closeSession;
