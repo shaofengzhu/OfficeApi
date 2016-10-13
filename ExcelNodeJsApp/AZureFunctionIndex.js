@@ -1,3 +1,5 @@
+// This file is for Azure Function's index.js
+
 var excel = require('./excel.js');
 var excelhelper = require('./excelhelper.js');
 var oauthhelper = require('./oauthhelper.js');
