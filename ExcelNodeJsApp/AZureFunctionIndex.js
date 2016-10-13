@@ -1,57 +1,10 @@
-var oauthhelper = require('./oauthhelper.js');
-var excelhelper = require('./excelhelper.js');
-var request = require('request');
 var excel = require('./excel.js');
+var excelhelper = require('./excelhelper.js');
+var oauthhelper = require('./oauthhelper.js');
+var request = require('request');
+
 var Excel = excel.Excel;
 var OfficeExtension = excel.OfficeExtension;
-
-OfficeExtension.Utility._logEnabled = true;
-
-OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-    return new OfficeExtension.Promise(function(resolve, reject){
-        request(req, 
-            function(err, resp){
-                if (err){
-                    reject(err);
-                }
-                else{
-                    resolve(resp);
-                }            
-        });
-    });
-});
-
-
-var requestHeaders;
-
-oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
-    .then(function(accessToken){
-        requestHeaders = {Authorization: "Bearer " + accessToken};
-        var date = new Date();
-        var filename = "ShaoZhu" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-"
-            + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds() + ".xlsx";
-        return excelhelper.createBlankExcelFile(
-            "https://graph.microsoft.com/v1.0/me/drive/root",
-            filename,
-            requestHeaders);
-    })
-    .then(function(workbookUrl){
-        return excelhelper.createSessionAndBuildUrlAndHeaders(workbookUrl, requestHeaders);
-    })
-    .then(function(requestUrlAndHeaders){
-        OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders;
-    })
-    .then(function(){
-        return dataPopulateSetup();
-    })
-    .then(function(){
-        return dataPopulateRun();
-    })
-    .catch(function(ex){
-        console.error(JSON.stringify(ex));
-    });
-
-
 
 function dataPopulateRun() {
     return Excel.run(function (context) {    
@@ -225,19 +178,67 @@ function dataPopulateSetup() {
     });
 }
 
-function simpleTest(){
-        var ctx = new Excel.RequestContext();
-        var range = ctx.workbook.worksheets.getItem('Sheet1').getRange('A1:B2');
-        range.values = [["Oregon", "Washington"], [1234, "=A2 + 100"]];
-        ctx.load(range);
-        ctx.load(ctx.workbook.worksheets);
-        return ctx.sync()
-            .then(function(){
-                console.log(JSON.stringify(range.values));
-                console.log(JSON.stringify(range.formulas));
-                console.log("Worksheets");
-                for (var i = 0; i < ctx.workbook.worksheets.items.length; i++){
-                    console.log(ctx.workbook.worksheets.items[i].name);
-                }
+module.exports = function(context, req) {
+    context.log('Node.js HTTP trigger function processed a request. RequestUri=%s', req.originalUrl);
+    context.log('Request headers = ' + JSON.stringify(req.headers));
+
+    OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
+        return new OfficeExtension.Promise(function(resolve, reject){
+            request(req, 
+                function(err, resp){
+                    if (err){
+                        reject(err);
+                    }
+                    else{
+                        resolve(resp);
+                    }            
             });
-}
+        });
+    });
+
+
+    var requestHeaders;
+
+    oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
+        .then(function(accessToken){
+            requestHeaders = {Authorization: "Bearer " + accessToken};
+            var date = new Date();
+            var filename = "ShaoZhu" + date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "-"
+                + date.getHours() + "-" + date.getMinutes() + "-" + date.getSeconds() + ".xlsx";
+            return excelhelper.createBlankExcelFile(
+                "https://graph.microsoft.com/v1.0/me/drive/root",
+                filename,
+                requestHeaders);
+        })
+        .then(function(workbookUrl){
+            return excelhelper.createSessionAndBuildUrlAndHeaders(workbookUrl, requestHeaders);
+        })
+        .then(function(requestUrlAndHeaders){
+            OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders;
+        })
+        .then(function(){
+            context.log("populating data");
+            return dataPopulateSetup();
+        })
+        .then(function(){
+            context.log("analysis data");
+            return dataPopulateRun();
+        })
+        .then(function(){
+             context.res = {
+                        status: 200,
+                        body: "File created"
+                    };
+             context.done();            
+        })
+        .catch(function(ex){
+            context.error(JSON.stringify(ex));
+            context.res = {
+                status: 200,
+                body: "Error:" + JSON.stringify(ex)
+            };
+            context.done();
+        });
+
+};
+
