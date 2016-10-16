@@ -134,6 +134,8 @@ class ClientResult(IResultHandler):
 
 
 class ClientRequestContext:
+    customRequestExecutor = None
+
     def __init__(self, url: str):
         self.__nextId = 1
         self._url = url
@@ -142,7 +144,10 @@ class ClientRequestContext:
 
         self._processingResult = False
         self._customData = Constants.iterativeExecutor
-        self._requestExecutor = HttpRequestExecutor()
+        if (ClientRequestContext.customRequestExecutor is not None):
+            self._requestExecutor = ClientRequestContext.customRequestExecutor
+        else:
+            self._requestExecutor = HttpRequestExecutor()
         self._rootObject = None
         self.__pendingRequest = None
         self._requestHeaders = {}
