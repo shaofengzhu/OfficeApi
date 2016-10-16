@@ -26,12 +26,12 @@
 
 <#+
 			templateFileManager.EndBlock();
-			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg.h");
+			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg" + this.FileNamePostfix + ".h");
 			this.WriteTypeRegistrationHeader();
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg.cpp");
-			this.WriteTypeRegistrationClass(System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "TypeReg.cpp"));
+			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg" + this.FileNamePostfix + ".cpp");
+			this.WriteTypeRegistrationClass(System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "TypeReg" + this.FileNamePostfix + ".cpp"));
 			templateFileManager.EndBlock();
 
 			templateFileManager.WriteTo(this.OutputDirectory, this.CheckoutCommandPrefix);
@@ -81,7 +81,7 @@ private:
 #include "<#=include#>"
 <#+
 		}
-		string headerFileName = this.FileBaseName + "TypeReg.h";
+		string headerFileName = this.FileBaseName + "TypeReg" + this.FileNamePostfix + ".h";
 #>
 #include "<#=headerFileName#>"
 <#+
@@ -106,17 +106,154 @@ using namespace <#=usingNs#>;
 
 		List<string> namespaceStack = new List<string>();
 		this.EnsureNamespace(namespaceStack, this.ImplNamespace, forTypeScript: false, indentString: Constants.IndentString);
+
+		AssemblyReader reader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
+		reader.Process();
+
+		string defaultNamespace = reader.Types.First().Namespace;
+
+		foreach (ClientCallableTypeInfo typeInfo in reader.Types.Where(t => !t.IsEnum && t.ComType != null))
+		{
+			foreach (ClientCallablePropertyInfo prop in typeInfo.Properties)
+			{
+				WriteErrorCodeData("s_" + typeInfo.Name + "_" + prop.Name + "_ErrorCodes", prop.HResultErrors);
+			}
+
+			foreach (ClientCallableMethodInfo method in typeInfo.Methods)
+			{
+				WriteErrorCodeData("s_" + typeInfo.Name + "_" + method.Name + "_ErrorCodes", method.HResultErrors);
+			}
+		}
+
+		foreach (ClientCallableTypeInfo typeInfo in reader.Types.Where(t => !t.IsEnum && t.ComType != null))
+		{
+			this.WriteTypePropertyData(typeInfo, defaultNamespace);
+			this.WriteTypeMethodData(typeInfo, defaultNamespace);
+		}
+
+		foreach (ClientCallableTypeInfo typeInfo in reader.Types.Where(t => t.IsEnum))
+		{
+			this.WriteEnumTypeFiledData(typeInfo);
+		}
+
 #>
+static const OfficeExtension::ServerRuntime::ApiTypeData s_typeRegTypes[] = 
+{
+<#+
+		foreach (ClientCallableTypeInfo typeInfo in reader.Types.Where(t => !t.IsEnum && t.ComType != null))
+		{
+			string classId = string.Empty;
+			if (typeInfo.CoClassId != Guid.Empty)
+			{
+				classId = typeInfo.CoClassId.ToString("B");
+			}
+
+			string createItemOperationName = string.Empty;
+			string deleteOperationName = string.Empty;
+			string childItemClientType = string.Empty;
+			string supportEnumeration = "false";
+			if (typeInfo.IsClientObject)
+			{
+				createItemOperationName = typeInfo.CreateItemOperationName ?? string.Empty;
+				deleteOperationName = typeInfo.DeleteOperationName ?? string.Empty;
+
+				if (typeInfo.ClientType.ChildItemClientType != null)
+				{
+					childItemClientType = GetTypeRegistrationName(typeInfo.ClientType.ChildItemClientType, defaultNamespace);
+					supportEnumeration = Utility.GetBooleanLiteral(typeInfo.ComType.SupportEnumeration);
+				}
+			}
+
+			string propertyCount = "0";
+			string properties = "nullptr";
+			if (typeInfo.Properties.Count > 0)
+			{
+				properties = "s_" + typeInfo.Name + "_Properties";
+				propertyCount = "_countof(" + properties + ")";
+			}
+
+			string methodCount = "0";
+			string methods = "nullptr";
+			if (typeInfo.Methods.Count > 0)
+			{
+				methods = "s_" + typeInfo.Name + "_Methods";
+				methodCount = "_countof(" + methods + ")";
+			}
+
+			string typeFlags;
+			if (typeInfo.UseItemAsIndexerNameInODataId)
+			{
+				typeFlags = "OfficeExtension::ServerRuntime::TypeFlags::UseItemAsIndexerNameInODataId";
+			}
+			else
+			{
+				typeFlags = "OfficeExtension::ServerRuntime::TypeFlags::None";
+			}
+
+#>
+	{ "<#=GetTypeRegistrationName(typeInfo.ClientType, defaultNamespace)#>", "<#=typeInfo.InterfaceId.ToString("B")#>", /*ClassId*/ "<#=classId#>", /*CreateItemOperatioName*/ "<#=createItemOperationName#>", /*DeleteOperationName*/ "<#=deleteOperationName#>", /*ChildItemTypeName*/ "<#=childItemClientType#>", /*Properties*/ <#=properties#>, /*Methods*/ <#=methods#>, /*PropertyCount*/ <#=propertyCount#>, /*MethodCount*/ <#=methodCount#>, OfficeExtension::ServerRuntime::TypeCategory::<#=typeInfo.IsValueObject ? "ValueObject" : "ClassObject"#>, /*ShouldConvertIntKeyValueToString*/ <#=Utility.GetBooleanLiteral(typeInfo.ConvertIntegerKeyValueToString)#>, /*SupportEnumeration*/ <#=supportEnumeration#>, /*Flags*/ <#=typeFlags#> },
+<#+		
+		}
+#>
+};
+
+<#+
+		bool useTemplate = true;
+		string enumTypeCount = "0";
+		string enumTypes = "nullptr";
+		if (reader.Types.Where(t => t.IsEnum).Count() > 0)
+		{
+			enumTypeCount = "_countof(s_typeRegEnumTypes)";
+			enumTypes = "s_typeRegEnumTypes";
+#>
+static const OfficeExtension::ServerRuntime::ApiEnumTypeData s_typeRegEnumTypes[] = 
+{
+<#+
+			foreach (ClientCallableTypeInfo typeInfo in reader.Types.Where(t => t.IsEnum))
+			{
+#>
+	{ "<#=GetTypeRegistrationName(typeInfo.ClientType, defaultNamespace)#>", /*Fields*/ s_<#=typeInfo.Name#>_Fields, /*FieldsCount*/ _countof(s_<#=typeInfo.Name#>_Fields) },
+<#+			
+			}
+#>
+};
+<#+	
+		}
+		else
+		{
+			useTemplate = false;
+		}
+
+		WriteErrorCodeData("s_typeRegGlobalErrorCodes", reader.HResultErrors);
+		string errorCount = "0";
+		string errors = "nullptr";
+		if (reader.HResultErrors.Count > 0)
+		{
+			errors = "s_typeRegGlobalErrorCodes";
+			errorCount = "_countof(s_typeRegGlobalErrorCodes)";
+		}
+		else
+		{
+			useTemplate = false;
+		}
+
+#>
+
 /*static*/
 void TypeReg::RegisterTypes(OfficeExtension::ServerRuntime::ITypeRegistration& typeReg)
 {
 <#+
-		AssemblyReader reader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
-		reader.Process();
-		WriteAddErrorCodeInformation("typeReg", reader.HResultErrors);
-		foreach (ClientCallableTypeInfo typeInfo in reader.Types)
+		if (useTemplate)
 		{
-			WriteType(typeInfo);
+#>
+	OfficeExtension::ServerRuntime::ITypeRegistration::AddApiDataHelper(typeReg, "<#=defaultNamespace#>", s_typeRegTypes, <#=enumTypes#>, <#=errors#>, 7422);
+<#+
+		}
+		else
+		{
+#>
+	typeReg.AddApiData("<#=defaultNamespace#>", s_typeRegTypes, _countof(s_typeRegTypes), <#=enumTypes#>, <#=enumTypeCount#>, <#=errors#>, <#=errorCount#>, 7422);
+<#+
 		}
 #>
 }
@@ -128,129 +265,168 @@ void TypeReg::RegisterTypes(OfficeExtension::ServerRuntime::ITypeRegistration& t
 		this.WriteLine(string.Empty);
 	}
 
-	private void WriteType(ClientCallableTypeInfo typeInfo)
-	{
-		if (typeInfo.IsEnum)
-		{
-			WriteEnumType(typeInfo);
-		}
-		else
-		{
-			WriteClientObjectAndClientValueObjectType(typeInfo);
-		}
-	}
 
-	private void WriteEnumType(ClientCallableTypeInfo typeInfo)
+	private void WriteEnumTypeFiledData(ClientCallableTypeInfo typeInfo)
 	{
-		string typeVarName = "type" + typeInfo.Name;
 #>
-	OfficeExtension::ServerRuntime::ITypeInformation& <#=typeVarName#> = typeReg.AddEnumType(L"<#=typeInfo.FullName#>");
+
+// enum fields for <#=typeInfo.Name#>
+static const OfficeExtension::ServerRuntime::ApiEnumTypeFieldData s_<#=typeInfo.Name#>_Fields[] =
+{
 <#+
 		foreach (KeyValuePair<string, int> field in typeInfo.EnumFields)
 		{
 #>
-	<#=typeVarName#>.AddEnumField(L"<#=Utility.TrimUnderscore(field.Key)#>", <#=field.Value#>);
+	{ "<#=Utility.TrimUnderscore(field.Key)#>", /*Value*/ <#=field.Value#> },
 <#+
 		}
+#>
+};
+<#+
 	}
 
-	private void WriteClientObjectAndClientValueObjectType(ClientCallableTypeInfo typeInfo)
+
+	private void WriteTypePropertyData(ClientCallableTypeInfo typeInfo, string defaultNamespace)
 	{
-		string typeVarName = "type" + typeInfo.Name;
-		string classId = string.Empty;
-		if (typeInfo.CoClassId != Guid.Empty)
+		if (typeInfo.Properties.Count == 0)
 		{
-			classId = typeInfo.CoClassId.ToString("B");
+			return;
 		}
+
 #>
 
-	OfficeExtension::ServerRuntime::ITypeInformation& <#=typeVarName#> = typeReg.AddType(L"<#=typeInfo.FullName#>", L"<#=typeInfo.InterfaceId.ToString("B")#>", L"<#=classId#>", OfficeExtension::ServerRuntime::TypeCategory::<#=typeInfo.IsValueObject ? "ValueObject" : "ClassObject"#>, <#=Utility.GetBooleanLiteral(typeInfo.ConvertIntegerKeyValueToString)#>);
-<#+	
+// properties for <#=typeInfo.Name#>
+static const OfficeExtension::ServerRuntime::ApiPropertyData s_<#=typeInfo.Name#>_Properties[] =
+{
+<#+
 		foreach (ClientCallablePropertyInfo propInfo in typeInfo.Properties)
 		{
-			string propertyVarName = "prop" + typeInfo.Name + propInfo.Name;
-			string propertyVarDeclPrefix = string.Empty;
-			if (propInfo.HResultErrors.Count > 0)
-			{
-				propertyVarDeclPrefix = "OfficeExtension::ServerRuntime::IPropertyInformation& " + propertyVarName + " = ";
-			}
-
 			string knownTypeName = "nullptr";
 			if (propInfo.KnownType != null)
 			{
-				knownTypeName = "L\"" + propInfo.KnownType.TypeRegistrationTypeName + "\"";
+				knownTypeName = "\"" + GetTypeRegistrationName(propInfo.KnownType, defaultNamespace) + "\"";
 			}
 
+			string apiErrorCodeCount = "0";
+			string apiErrorCodes = "nullptr";
+			if (propInfo.HResultErrors.Count > 0)
+			{
+				apiErrorCodes = "s_" + typeInfo.Name + "_" + propInfo.Name + "_ErrorCodes";
+				apiErrorCodeCount = "_countof(" + apiErrorCodes + ")";
+			}
 #>
-	<#=propertyVarDeclPrefix#><#=typeVarName#>.AddProperty(L"<#=propInfo.Name#>", <#=propInfo.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, L"<#=propInfo.PropertyType.TypeRegistrationTypeName#>", OfficeExtension::ServerRuntime::TypeCategory::<#=propInfo.PropertyType.TypeRegistrationTypeCategory#>, <#=propInfo.IsReadonly? "true" :"false"#>, <#=propInfo.ExcludedFromRest? "true" :"false"#>, <#=knownTypeName#>);
+	{"<#=propInfo.Name#>", "<#=GetTypeRegistrationName(propInfo.PropertyType, defaultNamespace)#>", /*KnownTypeName*/ <#=knownTypeName#>, /*ErrorCodes*/ <#=apiErrorCodes#>, /*DispatchId*/ <#=propInfo.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, /*ErrorCodeCount*/ <#=apiErrorCodeCount#>, OfficeExtension::ServerRuntime::TypeCategory::<#=propInfo.PropertyType.TypeRegistrationTypeCategory#>, /*IsReadonly*/ <#=Utility.GetBooleanLiteral(propInfo.IsReadonly)#>, /*ExcludedFromRest*/ <#=Utility.GetBooleanLiteral(propInfo.ExcludedFromRest)#> },
 <#+
-			WriteAddErrorCodeInformation(propertyVarName, propInfo.HResultErrors);
 		}
-
-		foreach (ClientCallableMethodInfo methodInfo in typeInfo.Methods)
-		{
-			string methodVarName = "method" + typeInfo.Name + methodInfo.Name;
-			string methodVarDeclPrefix = string.Empty;
-			if (methodInfo.Parameters.Count > 0 || methodInfo.HResultErrors.Count > 0)
-			{
-				methodVarDeclPrefix = "OfficeExtension::ServerRuntime::IMethodInformation& " + methodVarName + " = ";
-			}
-
-			if (methodInfo.IsIndexerMethod)
-			{
 #>
-	<#=methodVarDeclPrefix#><#=typeVarName#>.AddIndexerMethod(<#=methodInfo.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, L"<#=methodInfo.ReturnType.TypeRegistrationTypeName#>", OfficeExtension::ServerRuntime::TypeCategory::<#=methodInfo.ReturnType.TypeRegistrationTypeCategory#>, <#=this.GetDispatchFlagExpression(methodInfo.ComMember.DispatchFlag)#>);
+};
 <#+
-			}
-			else
-			{
-#>
-	<#=methodVarDeclPrefix#><#=typeVarName#>.AddMethod(L"<#=methodInfo.Name#>", <#=methodInfo.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, L"<#=methodInfo.ReturnType.TypeRegistrationTypeName#>", OfficeExtension::ServerRuntime::TypeCategory::<#=methodInfo.ReturnType.TypeRegistrationTypeCategory#>, <#=this.GetDispatchFlagExpression(methodInfo.ComMember.DispatchFlag)#>, OfficeExtension::ServerRuntime::OperationType::<#=methodInfo.OperationType#>, L"<#=methodInfo.RESTfulName#>");
-<#+
-			}
-
-			foreach(ClientCallableParameterInfo par in methodInfo.Parameters)
-			{
-				string knownTypeName = "nullptr";
-				if (par.KnownType != null)
-				{
-					knownTypeName = "L\"" + par.KnownType.TypeRegistrationTypeName + "\"";
-				}
-#>
-	<#=methodVarName#>.AddParameter(L"<#=par.Name#>", L"<#=par.ParameterType.TypeRegistrationTypeName#>", OfficeExtension::ServerRuntime::TypeCategory::<#=par.ParameterType.TypeRegistrationTypeCategory#>, <#=knownTypeName#>);
-<#+
-			}
-
-			WriteAddErrorCodeInformation(methodVarName, methodInfo.HResultErrors);
-		}
-
-		if (typeInfo.IsClientObject)
-		{
-			if (!string.IsNullOrEmpty(typeInfo.CreateItemOperationName) ||
-				!string.IsNullOrEmpty(typeInfo.DeleteOperationName))
-			{
-#>
-	<#=typeVarName#>.SetRESTfulOperationMethodNames(L"<#=typeInfo.CreateItemOperationName ?? string.Empty#>", L"<#=typeInfo.DeleteOperationName ?? string.Empty#>");
-<#+
-			}
-
-			if (typeInfo.ClientType.ChildItemClientType != null)
-			{
-#>
-	<#=typeVarName#>.SetCollectionInfo(L"<#=typeInfo.ClientType.ChildItemClientType.TypeRegistrationTypeName#>", <#=Utility.GetBooleanLiteral(typeInfo.ComType.SupportEnumeration)#>);
-<#+
-			}
-		}
 	}
 
-	private void WriteAddErrorCodeInformation(string prefix, List<HResultErrorInfo> errorInfos)
+	private void WriteTypeMethodData(ClientCallableTypeInfo typeInfo, string defaultNamespace)
 	{
+		if (typeInfo.Methods.Count == 0)
+		{
+			return;
+		}
+
+		foreach (ClientCallableMethodInfo methodInfo in typeInfo.Methods.Where(m => m.Parameters.Count > 0))
+		{
+#>
+
+// parameters for <#=typeInfo.Name#>.<#=methodInfo.Name#>
+static const OfficeExtension::ServerRuntime::ApiParameterData s_<#=typeInfo.Name#>_<#=methodInfo.Name#>_Parameters[] = 
+{
+<#+
+			foreach (ClientCallableParameterInfo paraInfo in methodInfo.Parameters)
+			{
+				string knownTypeName = "nullptr";
+				if (paraInfo.KnownType != null)
+				{
+					knownTypeName = "\"" + GetTypeRegistrationName(paraInfo.KnownType, defaultNamespace) + "\"";
+				}
+#>
+	{ "<#=paraInfo.Name#>", "<#=GetTypeRegistrationName(paraInfo.ParameterType, defaultNamespace)#>", /*KnownTypeName*/ <#=knownTypeName#>, OfficeExtension::ServerRuntime::TypeCategory::<#=paraInfo.ParameterType.TypeRegistrationTypeCategory#> },
+<#+
+			}
+#>
+};
+<#+
+		}
+		
+
+#>
+
+// methods for <#=typeInfo.Name#>
+static const OfficeExtension::ServerRuntime::ApiMethodData s_<#=typeInfo.Name#>_Methods[] =
+{
+<#+
+		foreach (ClientCallableMethodInfo methodInfo in typeInfo.Methods)
+		{
+			string methodParameterCount = "0";
+			string methodParameters = "nullptr";
+			if (methodInfo.Parameters.Count > 0)
+			{
+				methodParameters = "s_" + typeInfo.Name + "_" + methodInfo.Name + "_Parameters";
+				methodParameterCount = "_countof(" + methodParameters + ")";
+			}
+
+			string apiErrorCodeCount = "0";
+			string apiErrorCodes = "nullptr";
+			if (methodInfo.HResultErrors.Count > 0)
+			{
+				apiErrorCodes = "s_" + typeInfo.Name + "_" + methodInfo.Name + "_ErrorCodes";
+				apiErrorCodeCount = "_countof(" + apiErrorCodes + ")";
+			}
+
+			string methodName = methodInfo.Name;
+			if (methodInfo.IsIndexerMethod)
+			{
+				methodName = ".indexer";
+			}
+#>
+	{ "<#=methodName#>", "<#=GetTypeRegistrationName(methodInfo.ReturnType, defaultNamespace)#>", "<#=methodInfo.RESTfulName#>", /*Parameters*/ <#=methodParameters#>, /*ErrorCodes*/ <#=apiErrorCodes#>, /*DispatchId*/ <#=methodInfo.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, <#=this.GetDispatchFlagExpression(methodInfo.ComMember.DispatchFlag)#>, /*ParameterCount*/ <#=methodParameterCount#>, /*ErrorCodeCount*/ <#=apiErrorCodeCount#>, OfficeExtension::ServerRuntime::OperationType::<#=methodInfo.OperationType#>, OfficeExtension::ServerRuntime::TypeCategory::<#=methodInfo.ReturnType.TypeRegistrationTypeCategory#> },
+<#+
+		}
+#>
+};
+<#+
+	}
+
+	private void WriteErrorCodeData(string varName, List<HResultErrorInfo> errorInfos)
+	{
+		if (errorInfos.Count == 0)
+		{
+			return;
+		}
+#>
+
+// error codes for <#=varName#>
+static const OfficeExtension::ServerRuntime::ApiErrorCodeData <#=varName#>[] = 
+{
+<#+		
 		foreach (HResultErrorInfo errorInfo in errorInfos)
 		{
 #>
-	<#=prefix#>.AddErrorCodeInformation(<#=errorInfo.HResultExpression#>, <#=errorInfo.StatusCode#>, L"<#=errorInfo.ErrorCode#>", <#=errorInfo.ErrorMessageId#>);
+	{ "<#=errorInfo.ErrorCode#>", <#=errorInfo.HResultExpression#>, <#=errorInfo.StatusCode#>, <#=errorInfo.ErrorMessageId#> },
 <#+
 		}
+#>
+};
+<#+
+	}
+
+	private string GetTypeRegistrationName(ClientType type, string defaultNamesapce)
+	{
+		string ret = type.TypeRegistrationTypeName;
+		if (ret.Length > defaultNamesapce.Length &&
+			ret.StartsWith(defaultNamesapce, StringComparison.Ordinal) &&
+			ret[defaultNamesapce.Length] == '.')
+		{
+			ret = ret.Substring(defaultNamesapce.Length);
+		}
+
+		return ret;
 	}
 
 	private string GetDispatchFlagExpression(int dispatchFlag)

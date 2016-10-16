@@ -15,7 +15,7 @@
 		LaunchDebuggerIfNecessary();
 		if (this.CheckInputParameters())
 		{
-			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 			assemblyReader.Process();
 
 			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
@@ -29,34 +29,34 @@
  <#+
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + "_i.cpp");
+			templateFileManager.StartNewFile(this.FileBaseName + "_i" + this.FileNamePostfix + ".cpp");
 			this.WriteComConstants(assemblyReader);
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + "_i.h");
-			this.WriteComInterfaces(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "_i.h"));
+			templateFileManager.StartNewFile(this.FileBaseName + "_i" + this.FileNamePostfix + ".h");
+			this.WriteComInterfaces(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "_i" + this.FileNamePostfix + ".h"));
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + ".h");
-			this.WriteCoClassHeader(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + ".h"));
+			templateFileManager.StartNewFile(this.FileBaseName + this.FileNamePostfix + ".h");
+			this.WriteCoClassHeader(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + this.FileNamePostfix + ".h"));
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + ".idl");
+			templateFileManager.StartNewFile(this.FileBaseName + this.FileNamePostfix + ".idl");
 			this.WriteComIdl(assemblyReader);
 			templateFileManager.EndBlock();
 
 			foreach(ClientCallableTypeInfo type in assemblyReader.Types.Where(t => !t.IsEnum && t.ComType != null && !string.IsNullOrEmpty(t.ComType.CoClassName)))
 			{
-				templateFileManager.StartNewFile(type.ComType.CoClassName + ".disp.cpp");
-				WriteTypeDispatch(type, System.IO.Path.Combine(this.OutputDirectory, type.ComType.CoClassName + ".disp.cpp"));
+				templateFileManager.StartNewFile(type.ComType.CoClassName + ".disp" + this.FileNamePostfix + ".cpp");
+				WriteTypeDispatch(type, System.IO.Path.Combine(this.OutputDirectory, type.ComType.CoClassName + ".disp" + this.FileNamePostfix + ".cpp"));
 				templateFileManager.EndBlock();
 			}
 
-			templateFileManager.StartNewFile("Utility.cpp");
-			this.WriteUtilityClass(System.IO.Path.Combine(this.OutputDirectory, "Utility.cpp"));
+			templateFileManager.StartNewFile("Utility" + this.FileNamePostfix + ".cpp");
+			this.WriteUtilityClass(System.IO.Path.Combine(this.OutputDirectory, "Utility" + this.FileNamePostfix + ".cpp"));
 			templateFileManager.EndBlock();
 
-			string richApiHostFileName = this.RichApiHostClassName + ".CreateInstance.cpp";
+			string richApiHostFileName = this.RichApiHostClassName + ".CreateInstance" + this.FileNamePostfix + ".cpp";
 			templateFileManager.StartNewFile(richApiHostFileName);
 			this.WriteHostCreateInstance(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, richApiHostFileName));
 			templateFileManager.EndBlock();
@@ -218,7 +218,7 @@ STDMETHOD(<#=method.ComMember.Name#>)(<#=Utility.BuildMethodArgumentListForCom(m
 #>
 #pragma once
 #include <objbase.h>
-#include "<#=this.FileBaseName#>_i.h"
+#include "<#=this.FileBaseName#>_i<#=this.FileNamePostfix#>.h"
 #include <RichApi.h>
 #include <RichApiIDispatchMacro.h>
 <#+
@@ -296,6 +296,12 @@ class <#=type.ComType.CoClassName#>: public <#=type.ComType.InterfaceNamespace#>
 		{
 #>
 	, public IEnumVARIANT
+<#+
+		}
+		if (!string.IsNullOrEmpty(this.BaseClass))
+		{
+#>
+	, public <#=this.BaseClass#>
 <#+
 		}
 		if (!string.IsNullOrEmpty(this.MsoDebugMethodMacroStart))
@@ -617,8 +623,8 @@ library <#=this.FileBaseName#>Library
 <#+
 		this.WriteIncludes();
 #>
-#include "<#=this.FileBaseName#>_i.h"
-#include "<#=this.FileBaseName#>.h"
+#include "<#=this.FileBaseName#>_i<#=this.FileNamePostfix#>.h"
+#include "<#=this.FileBaseName#><#=this.FileNamePostfix#>.h"
 <#+
 		this.WriteLine(string.Empty);
 		this.WritePlaceHolderContent("GlobalHeader", existingFileContent);
@@ -1113,7 +1119,7 @@ HRESULT <#=type.ComType.CoClassName#>::<#=method.ComMember.Name#>Invoke(const ::
 		this.WriteIncludes();
 #>
 #include "RichApi.h"
-#include "<#=this.FileBaseName#>.h"
+#include "<#=this.FileBaseName#><#=this.FileNamePostfix#>.h"
 
 <#+
 		List<string> namespaceStack = new List<string>();
@@ -1139,17 +1145,18 @@ HRESULT Utility::GetArgument(const ::DISPPARAMS* pDispParams, UINT index, VARTYP
 		this.WriteIncludes();
 #>
 #include <RichApi.h>
-#include "<#=this.FileBaseName#>.h"
+#include "<#=this.FileBaseName#><#=this.FileNamePostfix#>.h"
 <#+
 		this.WritePlaceHolderContent("AdditionalHeader", existingFileContent);
 		List<string> namespaceStack = new List<string>();
 		this.EnsureNamespace(namespaceStack, this.ImplNamespace, forTypeScript: false, indentString: Constants.IndentString);
 		string tagMarker, tagMethodSuffixIfTagged, tagValueIfTagged;
+		this.GetTagMarker(existingFileContent, "Assert", out tagMarker, out tagMethodSuffixIfTagged, out tagValueIfTagged);
 #>
 
 HRESULT <#=this.RichApiHostClassName#>::CreateInstance(CLSID clsid, IID iid, void** ppv) const MSONOTHROW
 {
-	Assert(ppv != nullptr);
+	Assert<#=tagMethodSuffixIfTagged#>(ppv != nullptr<#=tagValueIfTagged#>);<#=tagMarker#>
 	*ppv = nullptr;
 
 <#+

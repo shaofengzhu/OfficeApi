@@ -273,6 +273,7 @@
 	const string ParameterName_SetHrRet = "sethrret";
 	const string ParameterName_CustomDeleter = "customdeleter";
 	const string ParameterName_FileNameBase = "filenamebase";
+    const string ParameterName_FileNamePostfix = "filenamepostfix";
 	const string ParameterName_ImplNamespace = "implnamespace";
 	const string ParameterName_MsoDebugMethodMacroStart = "msodebugmethodmacrostart";
 	const string ParameterName_DocXmlFilePath = "docxml";
@@ -280,6 +281,8 @@
 	const string ParameterName_NewObjMacro = "newobj";
 	const string ParameterName_NewObjArg = "newobjarg";
 	const string ParameterName_MemFailRet = "memfailret";
+	const string ParameterName_BaseClass = "baseclass";
+	const string ParameterName_MaxVersion = "maxversion";
 
 	private string InteropInputFilePath
 	{
@@ -503,6 +506,24 @@
 		}
 	}
 
+	string FileNamePostfix
+	{
+		get
+		{
+			if (m_fileNamePostfix == null)
+			{
+				m_fileNamePostfix = GetParameterValue(ParameterName_FileNamePostfix);
+				if (string.IsNullOrWhiteSpace(m_fileNamePostfix))
+				{
+					m_fileNamePostfix = string.Empty;
+				}
+			}
+
+			return m_fileNamePostfix;
+		}
+	}
+
+
 	string ImplNamespace
 	{
 		get
@@ -614,6 +635,45 @@
 		}
 	}
 
+	string BaseClass
+	{
+		get
+		{
+			if(m_baseClass == null)
+			{
+				m_baseClass = GetParameterValue(ParameterName_BaseClass);
+				if (m_baseClass == null)
+				{
+					m_baseClass = string.Empty;
+				}
+			}
+
+			return m_baseClass;
+		}
+	}
+
+	double? MaxVersion
+	{
+		get
+		{
+			if (m_maxVersion == null)
+			{
+				m_maxVersion = GetParameterValue(ParameterName_MaxVersion);
+				if (m_maxVersion == null)
+				{
+					m_maxVersion = string.Empty;
+				}
+			}
+
+			if (string.IsNullOrEmpty(m_maxVersion))
+			{
+				return null;
+			}
+
+			return double.Parse(m_maxVersion, System.Globalization.CultureInfo.InvariantCulture);
+		}
+	}
+
 	private string m_inputFilePath;
 	private string m_interopFilePath;
 	private string[] m_referencedAssemblyPaths;
@@ -629,6 +689,7 @@
 	private string m_setHrRet;
 	private string m_customDeleter;
 	private string m_fileNameBase;
+	private string m_fileNamePostfix;
 	private string m_implNamespace;
 	private string m_msoDebugMethodMacroStart;
 	private string m_docxmlFilePath;
@@ -637,7 +698,8 @@
 	private string m_newObjMacro;
 	private string m_newObjArg;
 	private string m_memFailRet;
-
+	private string m_baseClass;
+	private string m_maxVersion;
 #endregion
 
 #>

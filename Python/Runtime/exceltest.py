@@ -3,21 +3,22 @@ import json
 import random
 import oauthhelper
 import excel
+import runtime
 
 class ExcelTest:
-    serverUrl = "http://shaozhu-ttvm8.redmond.corp.microsoft.com/th/WacRest.ashx/transport_wopi/Application_Excel/wachost_/Fi_anonymous~AgaveTest.xlsx/ak_1%7CGN=R3Vlc3Q=&SN=Nzk2NzQ5NTk4&IT=NTI0NzU4Mjg1OTA0MzY3MjYxMA==&PU=Nzk2NzQ5NTk4&SR=YW5vbnltb3Vz&TZ=MTExOQ==&SA=RmFsc2U=&LE=RmFsc2U=&AG=VHJ1ZQ==&RH=tcFPR0obGkLwYJoRrzbWPXcQeSWEPdXeZt4RccCYWWQ=/_api"
-    accessToken = ""
-
     @staticmethod
     def initGraphSettings():
         fileInfo = oauthhelper.OAuthUtility.getFileAccessInfo(True, "AgaveTest.xlsx")
-        ExcelTest.serverUrl = fileInfo.fileWorkbookUrl
-        ExcelTest.accessToken = fileInfo.accessToken
+        requestUrlAndHeaders = runtime.RequestUrlAndHeaderInfo()
+        requestUrlAndHeaders.url = fileInfo.fileWorkbookUrl
+        requestUrlAndHeaders.headers["Authorization"] = "Bearer " + fileInfo.accessToken
+        runtime.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders
 
     @staticmethod
-    def setupRequestContext(ctx: excel.RequestContext):
-        if len(ExcelTest.accessToken) > 0:
-            ctx.requestHeaders["Authorization"] = "Bearer " + ExcelTest.accessToken
+    def initDevMachine():
+        requestUrlAndHeaders = runtime.RequestUrlAndHeaderInfo()
+        requestUrlAndHeaders.url = "http://shaozhu-ttvm8.redmond.corp.microsoft.com/th/WacRest.ashx/transport_wopi/Application_Excel/wachost_/Fi_anonymous~AgaveTest.xlsx/ak_1%7CGN=R3Vlc3Q=&SN=Nzk2NzQ5NTk4&IT=NTI0NzU4Mjg1OTA0MzY3MjYxMA==&PU=Nzk2NzQ5NTk4&SR=YW5vbnltb3Vz&TZ=MTExOQ==&SA=RmFsc2U=&LE=RmFsc2U=&AG=VHJ1ZQ==&RH=tcFPR0obGkLwYJoRrzbWPXcQeSWEPdXeZt4RccCYWWQ=/_api"
+        runtime.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders
 
     @staticmethod
     def clearWorksheet(ctx: excel.RequestContext, sheetName: str):
@@ -43,8 +44,7 @@ class ExcelTest:
         rangeValue = 12345;
         rangeValuesToSet = [[str(rangeValue), "=A1"], ["=B1", "=A1+B1"]];
 
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         r = ctx.workbook.worksheets.getItem("Sheet1").getRange("A1:B2")
         r.values = rangeValuesToSet
         r.load()
@@ -54,8 +54,7 @@ class ExcelTest:
 
     @staticmethod
     def test_Worksheet_GetWorksheetCollection():
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ctx.workbook.worksheets.load()
         ctx.sync()
         print("Worksheets")
@@ -64,8 +63,7 @@ class ExcelTest:
 
     @staticmethod
     def test_Worksheet_AddDeleteWorksheet():
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         random.seed()
         name = "PythonTest" + str(random.randint(1, 3000))
         sheet = ctx.workbook.worksheets.add(name)
@@ -79,8 +77,7 @@ class ExcelTest:
 
     @staticmethod
     def test_Table_GetCollection():
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ctx.load(ctx.workbook.tables)
         ctx.sync()
         for table in ctx.workbook.tables.items:
@@ -90,8 +87,7 @@ class ExcelTest:
     def test_Table_CreateTable():
         sheetName = "Tables"
         tableAddress = sheetName + "!A23:B25"
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ExcelTest.clearWorksheet(ctx, sheetName)
         t = ctx.workbook.tables.add(tableAddress, True)
         ctx.load(t)
@@ -103,8 +99,7 @@ class ExcelTest:
     def test_Table_CreateDeleteTable():
         sheetName = "Tables"
         tableAddress = sheetName + "!A23:B25"
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ExcelTest.clearWorksheet(ctx, sheetName)
         t = ctx.workbook.tables.add(tableAddress, True)
         ctx.load(t)
@@ -118,8 +113,7 @@ class ExcelTest:
     @staticmethod
     def test_Chart_CreateChart():
         sheetName = "Charts"
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ExcelTest.removeAllCharts(ctx, sheetName)
         sheet = ctx.workbook.worksheets.getItem(sheetName)
         sourceData = sheet.getRange(sheetName + "!" + "A1:B4")
@@ -131,8 +125,7 @@ class ExcelTest:
     @staticmethod
     def test_Chart_CreateDeleteChart():
         sheetName = "Charts"
-        ctx = excel.RequestContext(ExcelTest.serverUrl)
-        ExcelTest.setupRequestContext(ctx)
+        ctx = excel.RequestContext()
         ExcelTest.removeAllCharts(ctx, sheetName)
         sheet = ctx.workbook.worksheets.getItem(sheetName)
         sourceData = sheet.getRange(sheetName + "!" + "A1:B4")

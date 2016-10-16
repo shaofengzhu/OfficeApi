@@ -183,14 +183,14 @@ public class <#=type.Name#>: <#=Constants.TypeFullNames.ClientObject#>
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
 #>
-private <#=prop.PropertyType.CSharpTypeName#> <#=prop.FieldName#>;
+private <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> <#=prop.FieldName#>;
 <#+
 		}
 
 		if (type.ClientType.ChildItemClientType != null && type.ClientType.ChildItemClientType.IsClientObject)
 		{
 #>
-private <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[] m__items;
+private <#=CSharpUtility.GetCSharpTypeName(type.ClientType.ChildItemClientType)#>[] m__items;
 <#+
 		}
 	}
@@ -212,13 +212,13 @@ public <#=type.Name#>(<#=Constants.TypeFullNames.ClientRequestContext#> context,
 		{
 #>
 
-public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
+public <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> <#=prop.Name#>
 {
 	get
 	{
 		if (this.<#=prop.FieldName#> == null)
 		{
-			this.<#=prop.FieldName#> = new <#=prop.PropertyType.CSharpTypeName#>(this.Context, <#=Constants.CSharpMemberFullNames.CreatePropertyObjectPath#>(this.Context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, false /*isInvalidAfterRequest*/));	
+			this.<#=prop.FieldName#> = new <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#>(this.Context, <#=CSharpMemberFullNames.CreatePropertyObjectPath#>(this.Context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, false /*isInvalidAfterRequest*/));	
 		}
 
 		return this.<#=prop.FieldName#>;
@@ -231,7 +231,7 @@ public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
 	set
 	{
 		this.<#=prop.FieldName#> = value;
-		<#=Constants.CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
+		<#=CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
 	}
 <#+	
 			}
@@ -244,18 +244,18 @@ public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
 		{
 			this.WriteLine(string.Empty);
 #>
-public <#=prop.PropertyType.CSharpTypeName#> Get<#=prop.Name#>()
+public <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> Get<#=prop.Name#>()
 {
-	return new <#=prop.PropertyType.CSharpTypeName#>(this.Context, <#=Constants.CSharpMemberFullNames.CreatePropertyObjectPath#>(this.Context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
+	return new <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#>(this.Context, <#=CSharpMemberFullNames.CreatePropertyObjectPath#>(this.Context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
 }
 <#+
 			if (!prop.IsReadonly)
 			{
 				this.WriteLine(string.Empty);
 #>
-public void Set<#=prop.Name#>(<#=prop.PropertyType.CSharpTypeName#> value)
+public void Set<#=prop.Name#>(<#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> value)
 {
-	<#=Constants.CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
+	<#=CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
 }
 <#+
 			}
@@ -267,11 +267,11 @@ public void Set<#=prop.Name#>(<#=prop.PropertyType.CSharpTypeName#> value)
 #>
 
 /* Gets the loaded child items in this collection. */
-public <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[] Items
+public <#=CSharpUtility.GetCSharpTypeName(type.ClientType.ChildItemClientType)#>[] Items
 {
 	get
 	{
-		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "items", this.m__items);
+		<#=CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "items", this.m__items);
 		return this.m__items;
 	}
 }
@@ -285,11 +285,11 @@ public <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[] Items
 		{
 			this.WriteLine(string.Empty);
 #>
-public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
+public <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> <#=prop.Name#>
 {
 	get
 	{
-		<#=Constants.CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>);
+		<#=CSharpMemberFullNames.ThrowIfNotLoaded#>(this, "<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>);
 		return this.<#=prop.FieldName#>;
 	}
 <#+
@@ -300,7 +300,7 @@ public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#>
 	set
 	{
 		this.<#=prop.FieldName#> = value;
-		<#=Constants.CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
+		<#=CSharpMemberFullNames.CreateSetPropertyAction#>(this.Context, this, "<#=prop.Name#>", value);
 	}
 <#+	
 			}
@@ -350,7 +350,7 @@ public void <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-	<#=Constants.CSharpMemberFullNames.CreateMethodAction#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>);
+	<#=CSharpMemberFullNames.CreateMethodAction#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>);
 }
 <#+
 	}
@@ -358,16 +358,16 @@ public void <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
 	private void WriteScalarMethodReturnValue(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-public <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=method.ReturnType.CSharpTypeName#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
+public <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
 {
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-	var action = <#=Constants.CSharpMemberFullNames.CreateMethodAction#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>);
-	var ret = new <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=method.ReturnType.CSharpTypeName#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#>();
-	<#=Constants.CSharpMemberFullNames.AddActionResultHandler#>(this, action, ret);
+	var action = <#=CSharpMemberFullNames.CreateMethodAction#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>);
+	var ret = new <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#>();
+	<#=CSharpMemberFullNames.AddActionResultHandler#>(this, action, ret);
 	return ret;
 }
 <#+
@@ -376,14 +376,14 @@ public <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=method.ReturnTy
 	private void WriteObjectMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-public <#=method.ReturnType.CSharpTypeName#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
+public <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
 {
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-	return new <#=method.ReturnType.CSharpTypeName#>(this.Context, <#=Constants.CSharpMemberFullNames.CreateMethodObjectPath#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=Utility.GetBooleanLiteral(method.ReturnType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
+	return new <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#>(this.Context, <#=CSharpMemberFullNames.CreateMethodObjectPath#>(this.Context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=Utility.GetBooleanLiteral(method.ReturnType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
 }
 <#+
 	}
@@ -391,14 +391,14 @@ public <#=method.ReturnType.CSharpTypeName#> <#=method.Name#>(<#=BuildMethodPara
 	private void WriteIndexerMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-public <#=method.ReturnType.CSharpTypeName#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
+public <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#> <#=method.Name#>(<#=BuildMethodParameterList(method)#>)
 {
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-	return new <#=method.ReturnType.CSharpTypeName#>(this.Context, <#=Constants.CSharpMemberFullNames.CreateIndexerObjectPath#>(this.Context, this, <#=BuildMethodParameterValueArray(method)#>));
+	return new <#=CSharpUtility.GetCSharpTypeName(method.ReturnType)#>(this.Context, <#=CSharpMemberFullNames.CreateIndexerObjectPath#>(this.Context, this, <#=BuildMethodParameterValueArray(method)#>));
 }
 <#+
 	}
@@ -407,11 +407,11 @@ public <#=method.ReturnType.CSharpTypeName#> <#=method.Name#>(<#=BuildMethodPara
 	{
 #>
 	/*
-	 * Create a new instance of <#=type.ClientType.CSharpTypeName#> object
+	 * Create a new instance of <#=CSharpUtility.GetCSharpTypeName(type.ClientType)#> object
 	 */
-public static static <#=type.ClientType.CSharpTypeName#> NewObject(<#=Constants.TypeFullNames.ClientRequestContext#> context) 
+public static static <#=CSharpUtility.GetCSharpTypeName(type.ClientType)#> NewObject(<#=Constants.TypeFullNames.ClientRequestContext#> context) 
 {
-	var ret = new <#=type.ClientType.CSharpTypeName#>(context, <#=Constants.CSharpMemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=Utility.GetBooleanLiteral(type.ClientType.IsClientObjectCollection)#> /*isCollection*/));
+	var ret = new <#=CSharpUtility.GetCSharpTypeName(type.ClientType)#>(context, <#=CSharpMemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=Utility.GetBooleanLiteral(type.ClientType.IsClientObjectCollection)#> /*isCollection*/));
 	return ret;
 } 
 <#+
@@ -433,7 +433,7 @@ public static static <#=type.ClientType.CSharpTypeName#> NewObject(<#=Constants.
 				sb.Append("params ");
 			}
 
-			sb.Append(param.ParameterType.CSharpTypeName);
+			sb.Append(CSharpUtility.GetCSharpTypeName(param.ParameterType));
 			sb.Append(" ");
 			sb.Append(NormalizeMemberName(param.Name));
 		}
@@ -466,7 +466,7 @@ public static static <#=type.ClientType.CSharpTypeName#> NewObject(<#=Constants.
 	 */
 public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 {
-	if (<#=Constants.CSharpMemberFullNames.IsNullOrUndefined#>(value))
+	if (<#=CSharpMemberFullNames.IsNullOrUndefined#>(value))
 	{
 		return;
 	}
@@ -476,15 +476,15 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 		return;
 	}
 
-	<#=Constants.CSharpMemberFullNames.FixObjectPathIfNecessary#>(this, obj);
+	<#=CSharpMemberFullNames.FixObjectPathIfNecessary#>(this, obj);
 <#+
 		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 #>
-	if (!<#=Constants.CSharpMemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"]))
+	if (!<#=CSharpMemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"]))
 	{
 		this.LoadedPropertyNames.Add("<#=prop.Name#>");
-		this.<#=prop.FieldName#> = obj["<#=prop.Name#>"].ToObject<<#=prop.PropertyType.CSharpTypeName#>>();
+		this.<#=prop.FieldName#> = obj["<#=prop.Name#>"].ToObject<<#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#>>();
 	}
 
 <#+
@@ -493,7 +493,7 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
 #>
-    if (!<#=Constants.CSharpMemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"]))
+    if (!<#=CSharpMemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"]))
 	{
         this.<#=prop.Name#>._HandleResult(obj["<#=prop.Name#>"]);
 	}
@@ -508,10 +508,10 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 	if (itemsData != null)
 	{
 		this.LoadedPropertyNames.Add("items");
-		this.m__items = new <#=type.ClientType.ChildItemClientType.CSharpTypeName#>[itemsData.Count];
+		this.m__items = new <#=CSharpUtility.GetCSharpTypeName(type.ClientType.ChildItemClientType)#>[itemsData.Count];
 		for (var i = 0; i < itemsData.Count; i++)
 		{
-			var _item = new <#=type.ClientType.ChildItemClientType.CSharpTypeName#>(this.Context, <#=Constants.CSharpMemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=Utility.GetBooleanLiteral(hasIndexerMethod)#>, this.Context, this, itemsData[i], i));
+			var _item = new <#=CSharpUtility.GetCSharpTypeName(type.ClientType.ChildItemClientType)#>(this.Context, <#=CSharpMemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=Utility.GetBooleanLiteral(hasIndexerMethod)#>, this.Context, this, itemsData[i], i));
 			_item._HandleResult(itemsData[i]);
 			this.m__items[i] = _item;
 		}
@@ -532,9 +532,9 @@ public override void _HandleResult(Newtonsoft.Json.Linq.JToken value)
 /*
  * Queues up a command to load the specified properties of the object. You must call "context.sync()" before reading the properties.
  */
-public <#=type.ClientType.CSharpTypeName#> Load(OfficeExtension.LoadOption option) 
+public <#=CSharpUtility.GetCSharpTypeName(type.ClientType)#> Load(OfficeExtension.LoadOption option) 
 {
-	<#=Constants.CSharpMemberFullNames.Load#>(this, option);
+	<#=CSharpMemberFullNames.Load#>(this, option);
 	return this;
 }
 <#+
@@ -572,7 +572,7 @@ public class <#=type.Name#>
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 #>
-public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#> { get; set; }
+public <#=CSharpUtility.GetCSharpTypeName(prop.PropertyType)#> <#=prop.Name#> { get; set; }
 <#+
 		}
 	}
@@ -605,4 +605,76 @@ public <#=prop.PropertyType.CSharpTypeName#> <#=prop.Name#> { get; set; }
 			}
 		}
 	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+	public static class CSharpMemberFullNames
+	{
+		public const string CreatePropertyObjectPath = "OfficeExtension.ObjectPathFactory._CreatePropertyObjectPath";
+		public const string CreateMethodObjectPath = "OfficeExtension.ObjectPathFactory._CreateMethodObjectPath";
+		public const string CreateIndexerObjectPath = "OfficeExtension.ObjectPathFactory._CreateIndexerObjectPath";
+		public const string CreateNewObjectObjectPath = "OfficeExtension.ObjectPathFactory._CreateNewObjectObjectPath";
+		public const string CreateChildItemObjectPathUsingIndexer = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexer";
+		public const string CreateChildItemObjectPathUsingGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingGetItemAt";
+		public const string CreateChildItemObjectPathUsingIndexerOrGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexerOrGetItemAt";
+
+		public const string CreateSetPropertyAction = "OfficeExtension.ActionFactory._CreateSetPropertyAction";
+		public const string CreateMethodAction = "OfficeExtension.ActionFactory._CreateMethodAction";
+
+		public const string IsNullOrUndefined = "OfficeExtension.Utility._IsNullOrUndefined";
+		public const string IsUndefined = "OfficeExtension.Utility._IsUndefined";
+		public const string ThrowIfNotLoaded = "OfficeExtension.Utility._ThrowIfNotLoaded";
+		public const string Load = "OfficeExtension.Utility._Load";
+		public const string FixObjectPathIfNecessary = "OfficeExtension.Utility._FixObjectPathIfNecessary";
+		public const string AddActionResultHandler = "OfficeExtension.Utility._AddActionResultHandler";
+	}
+
+	public static class CSharpUtility
+	{
+		public static string GetCSharpTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsEnum)
+			{
+				return "string";
+			}
+			else if (type.IsStream)
+			{
+				return "string";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.FullName;
+			}
+			else if (type.ChildItemClientType != null)
+			{
+				return GetCSharpTypeName(type.ChildItemClientType) + "[]";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Object":
+						return "object";
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "int";
+					case "System.Single":
+					case "System.Double":
+						return "double";
+					case "System.Boolean":
+						return "bool";
+					case "System.String":
+						return "string";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+    }
 #>

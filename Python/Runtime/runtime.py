@@ -132,13 +132,28 @@ class ClientResult(IResultHandler):
     def _handleResult(self, value: any) -> None:
         self._value = value
 
+class RequestUrlAndHeaderInfo:
+    def __init__(self):
+        self.url = None
+        self.headers = {}
+
 
 class ClientRequestContext:
     customRequestExecutor = None
+    defaultRequestUrlAndHeaders = None
 
     def __init__(self, url: str):
         self.__nextId = 1
+        self._requestHeaders = {}
         self._url = url
+        if Utility.isNullOrEmptyString(self._url):
+           if (ClientRequestContext.defaultRequestUrlAndHeaders is not None 
+               and not Utility.isNullOrEmptyString(ClientRequestContext.defaultRequestUrlAndHeaders.url)):
+               self._url = ClientRequestContext.defaultRequestUrlAndHeaders.url
+               if (ClientRequestContext.defaultRequestUrlAndHeaders.headers):
+                   for key, value in ClientRequestContext.defaultRequestUrlAndHeaders.headers.items():
+                       self._requestHeaders[key] = value
+
         if Utility.isNullOrEmptyString(self._url):
             self._url = Constants.localDocument
 
@@ -150,7 +165,6 @@ class ClientRequestContext:
             self._requestExecutor = HttpRequestExecutor()
         self._rootObject = None
         self.__pendingRequest = None
-        self._requestHeaders = {}
 
     @property
     def requestHeaders(self):
@@ -230,8 +244,13 @@ class ClientRequestContext:
         requestInfo.url = Utility.combineUrl(self._url, "ProcessQuery")
         requestInfo.body = json.dumps(msgBody, default = lambda o: o.__dict__)
         requestInfo.method = "POST"
-        requestInfo.headers = self._requestHeaders
-        responseInfo = self._requestExecutor.execute(requestInfo)
+        for key, value in self._requestHeaders.items():
+            requestInfo.headers[key] = value
+        requestInfo.headers["CONTENT-TYPE"] = "application/json"
+        requestExecutor = self.customRequestExecutor
+        if (requestExecutor is None):
+            requestExecutor = self._requestExecutor
+        responseInfo = requestExecutor.execute(requestInfo)
         if responseInfo.statusCode != 200:
             raise Utility.createRuntimeError("NetworkError")
         response = json.loads(responseInfo.body)

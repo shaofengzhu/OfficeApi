@@ -17,11 +17,13 @@
 <#+
     // DO NOT EDIT DIRECTLY -- this is a generated file
     //
-    // Last generated on 12/13/2015 9:31:24 PM
+    // Last generated on 10/15/2016 10:12:24 PM
     //
     // Its content is copied from CodeGen.cs
-    // Please go to CodeGen directory and run
-    //     TextTransform.exe -out Core.tt Core.Gen.tt
+    // To update it, please run:
+    //      cd %SRCROOT%\otools\inc\osfclient\RichApi\CodeGen\
+    //      sd edit Core.tt
+    //      TextTransform.exe -out Core.tt Core.Gen.tt
     // to generate this file.
 	[Serializable]
 	public class ClientCallableComType
@@ -111,7 +113,7 @@
 			Type nullableUnderlyingType = Nullable.GetUnderlyingType(type);
 			if (nullableUnderlyingType != null)
 			{
-				if (nullableUnderlyingType.IsPrimitive || nullableUnderlyingType.IsEnum)
+				if (nullableUnderlyingType.IsPrimitive || nullableUnderlyingType.IsEnum || nullableUnderlyingType.FullName == typeof(DateTime).FullName)
 				{
 					this.IsNullable = true;
 					type = nullableUnderlyingType;
@@ -235,6 +237,32 @@
 			}
 		}
 
+		public bool IsDateTime
+		{
+			get
+			{
+				return this.FullName == typeof(DateTime).FullName;
+			}
+		}
+
+		public bool IsDateTimeOrDateTimeArray
+		{
+			get
+			{
+				if (this.IsDateTime)
+				{
+					return true;
+				}
+
+				if (this.ChildItemClientType != null)
+				{
+					return this.ChildItemClientType.IsDateTimeOrDateTimeArray;
+				}
+
+				return false;
+			}
+		}
+
 		public bool IsComVariantType
 		{
 			get
@@ -261,6 +289,11 @@
 					return true;
 				}
 
+				if (this.IsDateTime)
+				{
+					return true;
+				}
+
 				return false;
 			}
 		}
@@ -281,22 +314,6 @@
 				}
 
 				return Utility.GetTypeScriptTypeName(this);
-			}
-		}
-
-		public string PythonTypeName
-		{
-			get
-			{
-				return Utility.GetPythonTypeName(this);
-			}
-		}
-
-		public string CSharpTypeName
-		{
-			get
-			{
-				return Utility.GetCSharpTypeName(this);
 			}
 		}
 
@@ -421,19 +438,49 @@
 			internal set;
 		}
 
+		private bool? m_IncludeInJsonStringify;
+		public bool IncludeInJsonStringify
+		{
+			get
+			{
+				if (this.m_IncludeInJsonStringify.HasValue)
+				{
+					return this.m_IncludeInJsonStringify.Value;
+				}
+
+				// Without an explicit value set, do simple filtering out of non-stringifiables:
+				if (this.ExcludedFromClientLibrary || this.Name.StartsWith("_", StringComparison.Ordinal) || this.PropertyType.IsClientObjectCollection)
+				{
+					return false;
+				}
+
+				// ... and then assume "true" for primitive properties, and false for navigation ones.
+				var isPrimitive = !this.PropertyType.IsClientObject;
+				return isPrimitive;
+			}
+			set
+			{
+				this.m_IncludeInJsonStringify = value;
+			}
+		}
+		
+		public string ApiSet
+		{
+			get;
+			internal set;
+		}
+
+		public double? ApiVersion
+		{
+			get;
+			internal set;
+		}
+
 		public string FieldName
 		{
 			get
 			{
 				return "m_" + Utility.ToCamelLowerCase(this.Name);
-			}
-		}
-
-		public string PythonFieldName
-		{
-			get
-			{
-				return "_" + Utility.ToCamelLowerCase(this.Name);
 			}
 		}
 
@@ -496,6 +543,8 @@
 	[Serializable]
 	public class ClientCallableParameterInfo
 	{
+		private ClientType m_parameterRESTfulType;
+
 		public string Name
 		{
 			get;
@@ -508,6 +557,23 @@
 			set;
 		}
 
+		public ClientType ParameterRESTfulType
+		{
+			get
+			{
+				if (m_parameterRESTfulType == null)
+				{
+					return this.ParameterType;
+				}
+
+				return m_parameterRESTfulType;
+			}
+			set
+			{
+				m_parameterRESTfulType = value;
+			}
+		}
+
 		public bool IsOptional
 		{
 			get;
@@ -515,6 +581,18 @@
 		}
 
 		public bool IsParams
+		{
+			get;
+			set;
+		}
+
+		public string ApiSetIfAny
+		{
+			get;
+			set;
+		}
+
+		public double? ApiVersion
 		{
 			get;
 			set;
@@ -561,6 +639,18 @@
 		}
 
 		public bool IsIndexerMethod
+		{
+			get;
+			set;
+		}
+
+		public string ApiSet
+		{
+			get;
+			set;
+		}
+
+		public double? ApiVersion
 		{
 			get;
 			set;
@@ -631,6 +721,12 @@
 			set;
 		}
 
+		public string ReturnObjectGetByIdMethodName
+		{
+			get;
+			set;
+		}
+
 		public bool ShouldGenerateScriptMethod
 		{
 			get
@@ -680,7 +776,25 @@
 			}
 		}
 	}
-	
+
+	[Serializable]
+	public class ClientCallableEventInfo
+	{
+		public string Name { get; set; }
+		public ClientType EventArgsType { get; set; }
+		public string ApiSet
+		{
+			get;
+			internal set;
+		}
+
+		public double? ApiVersion
+		{
+			get;
+			internal set;
+		}
+	}
+
 	[Serializable]
 	public class ClientCallableTypeInfo
 	{
@@ -693,6 +807,10 @@
 		private List<ClientCallableMethodInfo> m_methods = new List<ClientCallableMethodInfo>();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
 		private List<KeyValuePair<string, int>> m_enumFields = new List<KeyValuePair<string, int>>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
+		private List<ClientCallableEventInfo> m_events = new List<ClientCallableEventInfo>();
+
+		private Dictionary<string, string> m_obsoleteMemberNames = new Dictionary<string, string>();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.MSInternal", "CA908:AvoidTypesThatRequireJitCompilationInPrecompiledAssemblies")]
 		public ClientCallableTypeInfo(Type type)
@@ -716,8 +834,13 @@
 				foreach (FieldInfo fi in type.GetFields(BindingFlags.Public | BindingFlags.Static))
 				{
 					object objEnumFieldValue = fi.GetRawConstantValue();
-					int fieldValue = (int) Convert.ChangeType(objEnumFieldValue, typeof(int), CultureInfo.InvariantCulture);
+					int fieldValue = (int)Convert.ChangeType(objEnumFieldValue, typeof(int), CultureInfo.InvariantCulture);
 					this.m_enumFields.Add(new KeyValuePair<string, int>(fi.Name, fieldValue));
+					string obsoleteMessage;
+					if (Utility.IsObsolete(fi, out obsoleteMessage))
+					{
+						this.m_obsoleteMemberNames[fi.Name] = obsoleteMessage;
+					}
 				}
 			}
 			else
@@ -736,14 +859,16 @@
 					if (this.ComType != null && !string.IsNullOrEmpty(this.ComType.CoClassId))
 					{
 						this.AllowCreation = true;
-					}					
+					}
 				}
 			}
 
 			Utility.SetClientCallableTypeInfoFromAttribute(this, type);
 
+			this.ApiSet = Utility.GetApiSetAttribute(type.GetCustomAttributesData(), true, false /*isParam*/, "Type" + this.FullName);
+			this.ApiVersion = Utility.GetApiVersion(type.GetCustomAttributesData());
+			
 			this.Type = type;
-
 		}
 
 		internal Type Type
@@ -756,6 +881,18 @@
 			{
 				m_type = value;
 			}
+		}
+
+		internal string ApiSet
+		{
+			get;
+			private set;
+		}
+
+		internal double? ApiVersion
+		{
+			get;
+			private set;
 		}
 
 		public bool IsEnum
@@ -866,6 +1003,24 @@
 			internal set;
 		}
 
+		public bool ExposeIsNullProperty
+		{
+			get;
+			internal set;
+		}
+
+		public bool ExcludedFromRest
+		{
+			get;
+			internal set;
+		}
+
+		public bool UseItemAsIndexerNameInODataId
+		{
+			get;
+			internal set;
+		}
+
 		public List<ClientCallableMethodInfo> Methods
 		{
 			get
@@ -879,6 +1034,14 @@
 			get
 			{
 				return m_properties;
+			}
+		}
+
+		public List<ClientCallableEventInfo> Events
+		{
+			get
+			{
+				return m_events;
 			}
 		}
 
@@ -905,6 +1068,14 @@
 			get
 			{
 				return m_enumFields;
+			}
+		}
+
+		public IDictionary<string, string> ObsoleteMemberNames
+		{
+			get
+			{
+				return m_obsoleteMemberNames;
 			}
 		}
 
@@ -971,6 +1142,14 @@
 				}
 
 				return new Guid(this.ComType.CoClassId);
+			}
+		}
+
+		public bool IsEventArgs
+		{
+			get
+			{
+				return this.Name.EndsWith(Constants.MemberNames.EventArgs, StringComparison.Ordinal);
 			}
 		}
 	}
@@ -1078,8 +1257,14 @@
 		private string m_comInteropAssemblyPath;
 		private List<string> m_referencedAssemblyPaths;
 		private AssemblyReaderResult m_result;
+		private double? m_maxApiVersion;
 
 		public AssemblyReader(string inputAssemblyPath, string comInteropAssemblyPath, IEnumerable<string> referencedAssemblyPaths)
+			: this(inputAssemblyPath, comInteropAssemblyPath, referencedAssemblyPaths, null)
+		{
+		}
+
+		public AssemblyReader(string inputAssemblyPath, string comInteropAssemblyPath, IEnumerable<string> referencedAssemblyPaths, double? maxApiVersion)
 		{
 			if (string.IsNullOrEmpty(inputAssemblyPath))
 			{
@@ -1095,6 +1280,7 @@
 			m_comInteropAssemblyPath = comInteropAssemblyPath;
 			m_referencedAssemblyPaths = new List<string>();
 			m_referencedAssemblyPaths.AddRange(referencedAssemblyPaths);
+			m_maxApiVersion = maxApiVersion;
 
 			m_result = new AssemblyReaderResult();
 		}
@@ -1129,6 +1315,77 @@
 					AppDomain.Unload(workerDomain);
 				}
 			}
+
+			ApplyApiVersionFilter();
+		}
+
+		private void ApplyApiVersionFilter()
+		{
+			for (int t = m_result.Types.Count - 1; t >= 0; t--)
+			{
+				if (ShouldRemoveApiWithApiVersion(m_result.Types[t].ApiVersion))
+				{
+					m_result.Types.RemoveAt(t);
+				}
+				else
+				{
+					ClientCallableTypeInfo type = m_result.Types[t];
+					for (int p = type.Properties.Count -1; p >= 0; p--)
+					{
+						if (ShouldRemoveApiWithApiVersion(type.Properties[p].ApiVersion))
+						{
+							type.Properties.RemoveAt(p);
+						}
+					}
+
+					for (int m = type.Methods.Count -1; m >= 0; m--)
+					{
+						if (ShouldRemoveApiWithApiVersion(type.Methods[m].ApiVersion))
+						{
+							type.Methods.RemoveAt(m);
+						}
+						else
+						{
+							ClientCallableMethodInfo method = type.Methods[m];
+							for (int p = method.Parameters.Count -1; p >= 0; p--)
+							{
+								if (ShouldRemoveApiWithApiVersion(method.Parameters[p].ApiVersion))
+								{
+									method.Parameters.RemoveAt(p);
+								}
+							}
+						}
+					}
+
+					for (int e = type.Events.Count -1; e >= 0; e--)
+					{
+						if (ShouldRemoveApiWithApiVersion(type.Events[e].ApiVersion))
+						{
+							type.Events.RemoveAt(e);
+						}
+					}
+				}
+			}
+		}
+
+		private bool ShouldRemoveApiWithApiVersion(double? apiVersion)
+		{
+			if (m_maxApiVersion == null)
+			{
+				return false;
+			}
+
+			if (apiVersion == null || apiVersion.Value == 0)
+			{
+				return false;
+			}
+
+			if (apiVersion.Value > m_maxApiVersion.Value)
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		public List<ClientCallableTypeInfo> Types
@@ -1376,10 +1633,16 @@
 						ProcessOneMethod(clientTypeInfo, method);
 					}
 				}
+
+				foreach(EventInfo evt in clientTypeInfo.Type.GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+				{
+					ProcessOneEvent(clientTypeInfo, evt);
+				}
 			}
 
 			clientTypeInfo.Properties.Sort((p1, p2) => string.CompareOrdinal(p1.Name, p2.Name));
 			clientTypeInfo.Methods.Sort((m1, m2) => string.CompareOrdinal(m1.Name, m2.Name));
+			clientTypeInfo.Events.Sort((e1, e2) => string.CompareOrdinal(e1.Name, e2.Name));
 		}
 
 		private void ProcessOneProperty(
@@ -1401,11 +1664,17 @@
 				clientPropInfo.KnownType = new ClientType(knownType, m_types);
 			}
 
+			if (clientTypeInfo.IsValueObject && clientPropInfo.PropertyType.IsDateTimeOrDateTimeArray)
+			{
+				// for complex type, we do not have code to change "string" to Date when we convert JSON to our object.
+				throw CodeGenException.CreateCodeGenException("Do not support DateTime property {0} for complex type {1}", clientPropInfo.Name, clientTypeInfo.Name);
+			}
+
 			clientTypeInfo.Properties.Add(clientPropInfo);
 
 			if (metadataPropInfo.GetMethod != null)
 			{
-				clientPropInfo.Getter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.GetMethod);
+				clientPropInfo.Getter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.GetMethod, true);
 				clientPropInfo.Getter.OperationType = ClientCallableOperationType.Read;
 				if (clientPropInfo.ComMember != null)
 				{
@@ -1421,7 +1690,7 @@
 
 			if (metadataPropInfo.SetMethod != null)
 			{
-				clientPropInfo.Setter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.SetMethod);
+				clientPropInfo.Setter = CreateClientCallableMethodInfoFromMetadata(metadataPropInfo.SetMethod, true);
 				clientPropInfo.Setter.OperationType = ClientCallableOperationType.Default;
 				if (clientPropInfo.ComMember != null)
 				{
@@ -1477,9 +1746,12 @@
 			{
 				throw CodeGenException.CreateCodeGenException("The indexer method in type {0} does not return client object type", clientTypeInfo.Type.FullName);
 			}
+
+			clientMethod.ApiSet = Utility.GetApiSetAttribute(metadataPropInfo.CustomAttributes, true, false /*isParam*/, "Indexer " + clientMethod.Name);
+			clientMethod.ApiVersion = Utility.GetApiVersion(metadataPropInfo.GetCustomAttributesData());
 		}
 
-		private ClientCallableMethodInfo CreateClientCallableMethodInfoFromMetadata(MethodInfo metadataMethodInfo)
+		private ClientCallableMethodInfo CreateClientCallableMethodInfoFromMetadata(MethodInfo metadataMethodInfo, bool isPropertyGetterSetter)
 		{
 			ClientCallableMethodInfo clientMethodInfo = new ClientCallableMethodInfo();
 			clientMethodInfo.HResultErrors.AddRange(Utility.GetHResultErrors(metadataMethodInfo));
@@ -1501,6 +1773,15 @@
 				clientMethodInfo.InvalidateReturnObjectPathAfterRequest = true;
 			}
 
+			if (!isPropertyGetterSetter)
+			{
+				if (!clientMethodInfo.Name.StartsWith("_", StringComparison.Ordinal) && clientMethodInfo.Name != "get_Item")
+				{
+					clientMethodInfo.ApiSet = Utility.GetApiSetAttribute(metadataMethodInfo.GetCustomAttributesData(), true, false /*isParam*/, "Method " + clientMethodInfo.Name);
+					clientMethodInfo.ApiVersion = Utility.GetApiVersion(metadataMethodInfo.GetCustomAttributesData());
+				}
+			}
+
 			foreach (ParameterInfo par in metadataMethodInfo.GetParameters())
 			{
 				ClientCallableParameterInfo clientPar = new ClientCallableParameterInfo();
@@ -1508,6 +1789,14 @@
 				clientPar.ParameterType = new ClientType(par.ParameterType, m_types);
 				clientPar.ParameterType.CustomTypeScriptTypeName = Utility.GetCustomTypeScriptTypeName(par);
 				clientPar.IsOptional = Utility.GetIsOptional(par);
+				clientPar.ApiSetIfAny = Utility.GetApiSetAttribute(par.GetCustomAttributesData(), false /*isRequired*/, true /*isParam*/);
+				clientPar.ApiVersion = Utility.GetApiVersion(par.GetCustomAttributesData());
+				Type restfulType = Utility.GetRESTfulType(par);
+				if (restfulType != null)
+				{
+					clientPar.ParameterRESTfulType = new ClientType(restfulType, m_types);
+				}
+
 				Type knownType = Utility.GetKnownType(par);
 				if (knownType != null)
 				{
@@ -1532,7 +1821,7 @@
 			ClientCallableTypeInfo clientTypeInfo,
 			MethodInfo metadataMethodInfo)
 		{
-			ClientCallableMethodInfo clientMethodInfo = CreateClientCallableMethodInfoFromMetadata(metadataMethodInfo);
+			ClientCallableMethodInfo clientMethodInfo = CreateClientCallableMethodInfoFromMetadata(metadataMethodInfo, false);
 			if (clientMethodInfo.ComMember != null)
 			{
 				if (clientMethodInfo.ComMember.DispatchFlag == 0)
@@ -1543,6 +1832,30 @@
 
 			clientTypeInfo.Methods.Add(clientMethodInfo);
 			return clientMethodInfo;
+		}
+
+		private ClientCallableEventInfo ProcessOneEvent(
+			ClientCallableTypeInfo clientTypeInfo,
+			EventInfo metadataEventInfo)
+		{
+			if (!metadataEventInfo.EventHandlerType.IsGenericType ||
+				!metadataEventInfo.EventHandlerType.IsConstructedGenericType ||
+				metadataEventInfo.EventHandlerType.GetGenericTypeDefinition().FullName != "System.EventHandler`1")
+			{
+				throw CodeGenException.CreateCodeGenException("Unsupported event {0} on type {1}", metadataEventInfo.Name, clientTypeInfo.Name);
+			}
+
+			ClientCallableEventInfo clientEventInfo = new ClientCallableEventInfo();
+			clientEventInfo.Name = metadataEventInfo.Name;
+			Type eventArgsType = metadataEventInfo.EventHandlerType.GetGenericArguments()[0];
+			clientEventInfo.EventArgsType = new ClientType(eventArgsType, this.m_types);
+			clientEventInfo.ApiSet = Utility.GetApiSetAttribute(metadataEventInfo.GetCustomAttributesData(),
+				true,
+				false /*isParam*/,
+				"Event " + clientEventInfo.Name);
+			clientEventInfo.ApiVersion = Utility.GetApiVersion(metadataEventInfo.GetCustomAttributesData());
+			clientTypeInfo.Events.Add(clientEventInfo);
+			return clientEventInfo;
 		}
 
 		private static void VerifyComInteropInfo(TextWriter output, ClientCallableTypeInfo type, Assembly comInteropAssembly)
@@ -1802,6 +2115,18 @@
 
 	public static class Utility
 	{
+		public static string ApiSetDefaultName
+		{
+			get;
+			set;
+		}
+
+		public static bool ValidateApiSetAnnotations
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Whether a type is service root
 		/// </summary>
@@ -2040,6 +2365,10 @@
 						{
 							clientMethod.WacAsync = (bool)arg.TypedValue.Value;
 						}
+						else if (arg.MemberName == Constants.MemberNames.ReturnObjectGetByIdMethodName)
+						{
+							clientMethod.ReturnObjectGetByIdMethodName = (string)arg.TypedValue.Value;
+						}
 					}
 				}
 			}
@@ -2080,6 +2409,18 @@
 						else if (arg.MemberName == Constants.MemberNames.ConvertIntegerKeyValueToString)
 						{
 							clientType.ConvertIntegerKeyValueToString = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.ExposeIsNullProperty)
+						{
+							clientType.ExposeIsNullProperty = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.ExcludedFromRest)
+						{
+							clientType.ExcludedFromRest = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.UseItemAsIndexerNameInODataId)
+						{
+							clientType.UseItemAsIndexerNameInODataId = (bool)arg.TypedValue.Value;
 						}
 					}
 				}
@@ -2132,6 +2473,38 @@
 				{
 					clientProperty.IsOptional = true;
 				}
+				else if (attr.AttributeType.FullName == Constants.TypeFullNames.JsonStringifyAttribute)
+				{
+					var include = true;
+					var suppressCodeGenErrorCheck = false;
+
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == Constants.MemberNames.Include)
+						{
+							include = (bool)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == Constants.MemberNames.SuppressCodeGenErrorCheck)
+						{
+							suppressCodeGenErrorCheck = (bool)arg.TypedValue.Value;
+						}
+					}
+
+					// Don't include things that are explicitly excluded from the client library, or that start with an underscore, or collections
+					if (clientProperty.ExcludedFromClientLibrary || clientProperty.Name.StartsWith("_", StringComparison.Ordinal) || clientProperty.PropertyType.IsClientObjectCollection)
+					{
+						if (!suppressCodeGenErrorCheck)
+						{
+							throw CodeGenException.CreateCodeGenException(
+								"Invalid use of the \"JsonStringify\" attribute on property \"" + clientProperty.Name + "\". " +
+								"The attribute cannot be applied to a property that is a collection, a client result, " +
+								"is excluded from the client library, or starts with an underscore -- " +
+								"unless an explicit SuppressCodeGenErrorCheck member property is set to true.");
+						}
+					}
+
+					clientProperty.IncludeInJsonStringify = include;
+				}
 			}
 
 			if (!clientProperty.PropertyType.IsClientObject)
@@ -2144,8 +2517,128 @@
 			{
 				clientProperty.IsVolatile = true;
 			}
+
+			bool isApiSetRequired = !clientProperty.Name.StartsWith("_", StringComparison.Ordinal);
+			clientProperty.ApiSet = GetApiSetAttribute(propInfo.GetCustomAttributesData(),
+				isApiSetRequired,
+				false /*isParam*/,
+				"Property " + clientProperty.Name);
+			clientProperty.ApiVersion = GetApiVersion(propInfo.GetCustomAttributesData());
 		}
 
+		internal static string GetApiSetAttribute(IEnumerable<CustomAttributeData> customAttributeData, bool isRequired, bool isParam, string diagnosticsInfoIfRequired = null)
+		{
+			if (customAttributeData == null)
+			{
+				throw new ArgumentNullException("customAttributeData");
+			}
+
+			string versionString = null;
+			string customText = null;
+			string customBase = null;
+			foreach (CustomAttributeData attr in customAttributeData)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ApiSetAttribute)
+				{
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == "Version")
+						{
+							versionString = arg.TypedValue.Value.ToString();
+						}
+						else if (arg.MemberName == "CustomText")
+						{
+							customText = arg.TypedValue.Value.ToString();
+						}
+						else if (arg.MemberName == "CustomBase")
+						{
+							customBase = arg.TypedValue.Value.ToString();
+						}
+					}
+				}
+			}
+
+			if (string.IsNullOrEmpty(customText))
+			{
+				customText = null;
+			}
+
+			if (!string.IsNullOrEmpty(versionString) || (customText != null))
+			{
+				return "[Api set: " + (customBase ?? Utility.ApiSetDefaultName) + " " +
+					(customText ?? versionString) + "]";
+			}
+			else
+			{
+				// If was required to be present, but haven't exited yet
+				if (isRequired && Utility.ValidateApiSetAnnotations)
+				{
+					throw CodeGenException.CreateCodeGenException("Missing ApiSet attribute; " + diagnosticsInfoIfRequired);
+				}
+
+				return isParam ? String.Empty : "[Api set: " + Utility.ApiSetDefaultName + "]";
+			}
+		}
+
+		internal static double? GetApiVersion(IEnumerable<CustomAttributeData> customAttributeData)
+		{
+			if (customAttributeData == null)
+			{
+				throw new ArgumentNullException("customAttributeData");
+			}
+
+			double? version = null;
+			double? introducedVersion = null;
+			foreach (CustomAttributeData attr in customAttributeData)
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.ApiSetAttribute)
+				{
+					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
+					{
+						if (arg.MemberName == "Version")
+						{
+							version = (double)arg.TypedValue.Value;
+						}
+						else if (arg.MemberName == "IntroducedInVersion")
+						{
+							introducedVersion = (double)arg.TypedValue.Value;
+						}
+					}
+				}
+			}
+
+			if (introducedVersion != null && introducedVersion.Value != 0)
+			{
+				return introducedVersion;
+			}
+
+			return version;
+		}
+
+		internal static bool IsObsolete(MemberInfo member, out string message)
+		{
+			message = null;
+			foreach (CustomAttributeData attr in member.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == typeof(System.ObsoleteAttribute).FullName)
+				{
+					if (attr.ConstructorArguments.Count > 0)
+					{
+						message = attr.ConstructorArguments[0].Value as string;
+					}
+
+					if (message == null)
+					{
+						message = string.Empty;
+					}
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+		
 		public static IEnumerable<HResultErrorInfo> GetHResultErrors(Assembly assembly)
 		{
 			if (assembly == null)
@@ -2271,6 +2764,24 @@
 			foreach (CustomAttributeData attr in attrs)
 			{
 				if (attr.AttributeType.FullName == Constants.TypeFullNames.KnownTypeAttribute)
+				{
+					return attr.ConstructorArguments[0].Value as Type;
+				}
+			}
+
+			return null;
+		}
+
+		public static Type GetRESTfulType(ParameterInfo par)
+		{
+			if (par == null)
+			{
+				throw new ArgumentNullException("par");
+			}
+
+			foreach (CustomAttributeData attr in par.GetCustomAttributesData())
+			{
+				if (attr.AttributeType.FullName == Constants.TypeFullNames.RESTfulTypeAttribute)
 				{
 					return attr.ConstructorArguments[0].Value as Type;
 				}
@@ -2440,6 +2951,26 @@
 			return Guid.Empty;
 		}
 
+		public static bool ShouldSkipWritingTypeInterface(ClientCallableTypeInfo type)
+		{
+			if (type.IsEnum || type.IsValueObject)
+			{
+				// For purposes of TypeScript-generation, can skip over certain structs (those are just TS interfaces,
+				// so bear no runtime/comilation value, and we'll just mark them as "any" in references),
+				// and certain enums (since they're not referenced by anything other than developer code... 
+				// and that's precisely the point, that we don't want to expose them).
+
+				// Skip over any intentionaly-hidden or "V1" helper structs and enums that are internal and that,
+				// in the case of V1 APIs, are only meant to transfer data to/from V1.0 APIs
+				if (type.Name.StartsWith("_", StringComparison.Ordinal) || type.Name.StartsWith("V1", StringComparison.Ordinal))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public static string GetTypeScriptTypeName(ClientType type)
 		{
 			if (type == null)
@@ -2455,8 +2986,27 @@
 			{
 				return "string";
 			}
+			else if (type.ClientCallableType != null && ShouldSkipWritingTypeInterface(type.ClientCallableType))
+			{
+				// Note: this if statement is intentionally above type.IsClientValueObject check,
+				// since want this check to trump the regualr IsClientValueObject behavior.
+				return "any";
+			}
 			else if (type.IsClientObject || type.IsClientValueObject)
 			{
+				// Client objects are instantiatable, and so need to remain named as is.  But structs are for TS interfaces only
+				// and are never "new"-ed.
+				if (type.IsClientValueObject)
+				{
+					// Mark any "V1" helper structs as "any":  they are internal and are only meant to transfer data to/from V1.0 APIs,
+					// and as such are hidden from the TypeScript output (and, as such, will cause a compiler error if not marked as "any").
+					// Same goes for any type that starts with an underscore.
+					if (type.Name.StartsWith("_", StringComparison.Ordinal) || type.Name.StartsWith("V1", StringComparison.Ordinal))
+					{
+						return "any";
+					}
+				}
+
 				return type.ClientCallableType.TypescriptNamespace + "." + type.ClientCallableType.Name;
 			}
 			else if (type.ChildItemClientType != null)
@@ -2482,6 +3032,8 @@
 						return "string";
 					case "System.Void":
 						return "void";
+					case "System.DateTime":
+						return "Date";
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 				}
@@ -2511,9 +3063,13 @@
 			{
 				return tagPrefix + "String" + closingQuoteSuffix;
 			}
-			else if (type.IsClientObject || type.IsClientValueObject)
+			else if (type.IsClientObject)
 			{
 				return tagPrefix + type.ClientCallableType.TypescriptNamespace + "." + type.ClientCallableType.Name + closingQuoteSuffix;
+			}
+			else if (type.IsClientValueObject)
+			{
+				return tagPrefix + type.ClientCallableType.TypescriptNamespace + ".Interfaces." + type.ClientCallableType.Name + closingQuoteSuffix;
 			}
 			else if (type.ChildItemClientType != null)
 			{
@@ -2539,6 +3095,8 @@
 						return tagPrefix + "String" + closingQuoteSuffix;
 					case "System.Void":
 						return "";
+					case "System.DateTime":
+						return tagPrefix + "Date" + closingQuoteSuffix;
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 				}
@@ -2584,104 +3142,10 @@
 					return "null";
 				case "System.Void":
 					return "null";
+				case "System.DateTime":
+					return "(new Date())";
 				default:
 					throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
-			}
-		}
-
-		public static string GetPythonTypeName(ClientType type)
-		{
-			if (type == null)
-			{
-				throw new ArgumentNullException("type");
-			}
-
-			if (type.IsEnum)
-			{
-				return "str";
-			}
-			else if (type.IsStream)
-			{
-				return "str";
-			}
-			else if (type.IsClientObject || type.IsClientValueObject)
-			{
-				return type.ClientCallableType.Name;
-			}
-			else if (type.ChildItemClientType != null)
-			{
-				return "list";
-			}
-			else
-			{
-				switch (type.FullName)
-				{
-					case "System.Object":
-						return "any";
-					case "System.Int16":
-					case "System.UInt16":
-					case "System.Int32":
-					case "System.UInt32":
-						return "int";
-					case "System.Single":
-					case "System.Double":
-						return "float";
-					case "System.Boolean":
-						return "bool";
-					case "System.String":
-						return "str";
-					case "System.Void":
-						return "None";
-					default:
-						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
-				}
-			}
-		}
-
-		public static string GetCSharpTypeName(ClientType type)
-		{
-			if (type == null)
-			{
-				throw new ArgumentNullException("type");
-			}
-
-			if (type.IsEnum)
-			{
-				return "string";
-			}
-			else if (type.IsStream)
-			{
-				return "string";
-			}
-			else if (type.IsClientObject || type.IsClientValueObject)
-			{
-				return type.FullName;
-			}
-			else if (type.ChildItemClientType != null)
-			{
-				return GetCSharpTypeName(type.ChildItemClientType) + "[]";
-			}
-			else
-			{
-				switch (type.FullName)
-				{
-					case "System.Object":
-						return "object";
-					case "System.Int16":
-					case "System.UInt16":
-					case "System.Int32":
-					case "System.UInt32":
-						return "int";
-					case "System.Single":
-					case "System.Double":
-						return "double";
-					case "System.Boolean":
-						return "bool";
-					case "System.String":
-						return "string";
-					default:
-						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
-				}
 			}
 		}
 
@@ -2851,8 +3315,20 @@
 			// keep the supported VT in sync with method 
 			// HRESULT RichApi::ValidateArgumentAndChangeType(VARIANT& var, VARTYPE vt) MSONOTHROW
 			// in %osfclient%\RichApi\RichApiExecutorLib\RichApi.cpp
-
-			if (type.IsComVariantType)
+			if (type.FullName == typeof(DateTime).FullName)
+			{
+				// For DateTime, the IsComVariantType is true. We need to handle it before the
+				// switch of type.IsComVariantType
+				if (type.IsNullable)
+				{
+					return "VT_VARIANT";
+				}
+				else
+				{
+					return "VT_DATE";
+				}
+			}
+			else if (type.IsComVariantType)
 			{
 				return "VT_VARIANT";
 			}
@@ -3010,13 +3486,18 @@
 			{
 				ret = "string";
 			}
+			else if (type.FullName == typeof(DateTime).FullName)
+			{
+				ret = "System.EcmaDate";
+			}
 			else
 			{
 				ret = type.Name;
 			}
 
-			if (type.IsNullable)
+			if (type.IsNullable && type.FullName != typeof(DateTime).FullName)
 			{
+				// for System.EcmaDate, it's not defined as struct
 				ret = ret + "?";
 			}
 
@@ -3075,6 +3556,8 @@
 					return "false";
 				case "System.String":
 					return "null";
+				case "System.DateTime":
+					return "null";
 				default:
 					throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 			}
@@ -3125,6 +3608,9 @@
 						break;
 					case "System.Object":
 						ret = "any";
+						break;
+					case "System.DateTime":
+						ret = "date";
 						break;
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
@@ -3235,16 +3721,6 @@
 			return "false";
 		}
 
-		public static string GetPythonBooleanLiteral(bool value)
-		{
-			if (value)
-			{
-				return "True";
-			}
-
-			return "False";
-		}
-
 		public static string BuildDefineGuid(Guid value, string name, bool isInterfaceId)
 		{
 			if (isInterfaceId)
@@ -3314,19 +3790,6 @@
 			return false;
 		}
 
-		private static class DocConstants
-		{
-			public const string XmlDocElementName_Member = "member";
-			public const string XmlDocElementName_Summary = "summary";
-			public const string XmlDocElementName_Param = "param";
-			public const string XmlDocElementName_Returns = "returns";
-			public const string XmlDocAttributeName_Name = "name";
-			public const string XmlDocTypePrefix = "T:";
-			public const string XmlDocPropertyPrefix = "P:";
-			public const string XmlDocMethodPrefix = "M:";
-			public const string XmlDocFieldPrefix = "F:";
-		}
-
 		public static IEnumerable<string> BuildJsDocForType(ClientCallableTypeInfo type, XDocument xdoc)
 		{
 			if (type == null)
@@ -3344,13 +3807,16 @@
 				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
 				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
 				.FirstOrDefault();
+
+			yield return "/**";
 			if (member != null)
 			{
-				yield return "/**";
 				yield return " * ";
 				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
-				yield return " */";
+				yield return " * ";
 			}
+			yield return " * " + type.ApiSet;
+			yield return " */";
 		}
 
 		public static IEnumerable<string> BuildJsDocForProperty(ClientCallableTypeInfo type, ClientCallablePropertyInfo prop, XDocument xdoc)
@@ -3380,6 +3846,8 @@
 				yield return "/**";
 				yield return " * ";
 				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " * ";
+				yield return " * " + prop.ApiSet;
 				yield return " */";
 			}
 		}
@@ -3406,11 +3874,24 @@
 				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
 				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
 				.FirstOrDefault();
+			string obsoleteMessage;
 			if (member != null)
 			{
 				yield return "/**";
 				yield return " * ";
 				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " * ";
+				if (type.ObsoleteMemberNames.TryGetValue(fieldName, out obsoleteMessage))
+				{
+					yield return " * @deprecated " + obsoleteMessage;
+				}
+				yield return " */";
+			}
+			else if (type.ObsoleteMemberNames.TryGetValue(fieldName, out obsoleteMessage))
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * @deprecated " + obsoleteMessage;
 				yield return " */";
 			}
 		}
@@ -3444,7 +3925,7 @@
 				methodNameNoArg = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name;
 			}
 
-			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName)).FirstOrDefault();
+			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName, StringComparison.Ordinal)).FirstOrDefault();
 			if (member == null && methodNameNoArg != null)
 			{
 				member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == methodNameNoArg).FirstOrDefault();
@@ -3457,9 +3938,13 @@
 				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
 				yield return " *";
 
+				var iParam = 0;
 				foreach (XElement xePara in member.Elements(DocConstants.XmlDocElementName_Param))
 				{
-					yield return " * @param " + xePara.Attribute(DocConstants.XmlDocAttributeName_Name).Value + " " + xePara.Value.Trim();
+					var apiSetIfAny = method.Parameters[iParam].ApiSetIfAny;
+					iParam++;
+					yield return " * @param " + xePara.Attribute(DocConstants.XmlDocAttributeName_Name).Value + " " + xePara.Value.Trim() +
+						(String.IsNullOrWhiteSpace(apiSetIfAny) ? "" : " " + apiSetIfAny);
 				}
 
 				if (member.Element("returns") != null)
@@ -3467,6 +3952,44 @@
 					yield return " * @returns " + member.Element(DocConstants.XmlDocElementName_Returns).Value.Trim();
 				}
 
+				if (iParam > 0)
+				{
+					yield return " *";
+				}
+				yield return " * " + method.ApiSet;
+				yield return " */";
+			}
+		}
+
+		public static IEnumerable<string> BuildJsDocForEvent(ClientCallableTypeInfo type, ClientCallableEventInfo evt, XDocument xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (evt == null)
+			{
+				throw new ArgumentNullException("evt");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string memberName = DocConstants.XmlDocEventPrefix + type.FullName + "." + evt.Name;
+
+			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName, StringComparison.Ordinal)).FirstOrDefault();
+
+			if (member != null)
+			{
+				yield return "/**";
+				yield return " * ";
+				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+				yield return " *";
+
+				yield return " * " + evt.ApiSet;
 				yield return " */";
 			}
 		}
@@ -3488,13 +4011,12 @@
 				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
 				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
 				.FirstOrDefault();
-			if (member != null)
-			{
-				return "/// <summary> " + PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim()) + " </summary>";
-			} else
-			{
-				return "";
-			}
+
+			return
+				"/// <summary> " +
+				((member == null) ? "" : (PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim()) + " ")) +
+				type.ApiSet +
+				" </summary>";
 		}
 
 		public static string BuildVsDocForProperty(ClientCallableTypeInfo type, ClientCallablePropertyInfo prop, XContainer xdoc)
@@ -3515,19 +4037,54 @@
 			}
 
 			string description = "";
-			string memberName = Utility.DocConstants.XmlDocPropertyPrefix + type.FullName + "." + prop.Name;
+			string memberName = DocConstants.XmlDocPropertyPrefix + type.FullName + "." + prop.Name;
 			XElement member = xdoc
-				.Descendants(XName.Get(Utility.DocConstants.XmlDocElementName_Member))
-				.Where(elem => elem.Attribute(Utility.DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
 				.FirstOrDefault();
 			if (member != null)
 			{
-				description = member.Element(Utility.DocConstants.XmlDocElementName_Summary).Value.Trim();
+				description = member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
 			}
 
 			return "/// <field name=\"" + Utility.ToCamelLowerCase(prop.Name) + "\" " +
 				Utility.GetVSDocTypeOrValue(prop.PropertyType, false /*isArrayElementType*/) + ">" +
 				PrepVsDocDescription(description) +
+				" " + prop.ApiSet +
+				"</field>";
+		}
+
+		public static string BuildVsDocForEvent(ClientCallableTypeInfo type, ClientCallableEventInfo evt, XContainer xdoc)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (evt == null)
+			{
+				throw new ArgumentNullException("evt");
+			}
+
+			if (xdoc == null)
+			{
+				throw new ArgumentNullException("xdoc");
+			}
+
+			string description = "";
+			string memberName = DocConstants.XmlDocEventPrefix + type.FullName + "." + evt.Name;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+			if (member != null)
+			{
+				description = member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
+			}
+
+			return "/// <field name=\"on" + evt.Name + "\" type=\"OfficeExtension.EventHandlers\"" + ">" +
+				PrepVsDocDescription(description) +
+				" " + evt.ApiSet +
 				"</field>";
 		}
 
@@ -3560,7 +4117,7 @@
 				methodNameNoArg = DocConstants.XmlDocMethodPrefix + type.FullName + "." + method.Name;
 			}
 
-			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName)).FirstOrDefault();
+			XElement member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value.StartsWith(memberName, StringComparison.Ordinal)).FirstOrDefault();
 			if (member == null && methodNameNoArg != null)
 			{
 				member = xdoc.Descendants(XName.Get(DocConstants.XmlDocElementName_Member)).Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == methodNameNoArg).FirstOrDefault();
@@ -3569,7 +4126,7 @@
 			if (member != null)
 			{
 				yield return "/// <summary>";
-				yield return "/// " + PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value);
+				yield return "/// " + PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value) + " " + method.ApiSet;
 				yield return "/// </summary>";
 
 				foreach (XElement xePara in member.Elements(DocConstants.XmlDocElementName_Param))
@@ -3589,6 +4146,7 @@
 						Utility.GetVSDocTypeOrValue(paramInfo.ParameterType, false /*isArrayElementType*/) +
 						(paramInfo.IsOptional ? " optional=\"true\"" : "") + ">" +
 						PrepVsDocDescription(xePara.Value) +
+						(String.IsNullOrWhiteSpace(paramInfo.ApiSetIfAny) ? "" : (" " + paramInfo.ApiSetIfAny)) +
 						"</param>";
 				}
 			}
@@ -3611,7 +4169,7 @@
 			}
 		}
 
-		static string PrepVsDocDescription(string input)
+		public static string PrepVsDocDescription(string input)
 		{
 			if (String.IsNullOrWhiteSpace(input))
 			{
@@ -3718,7 +4276,6 @@
 		public const int DISPATCH_PROPERTYPUT = 4;
 
 		public const string IndentString = "\t";
-		public const string IndentSpaceString = "    ";
 
 		public const string LastUpdatedBeginMarker = "<LastUpdated>";
 		public const string LastUpdatedEndMarker = "</LastUpdated>";
@@ -3748,20 +4305,25 @@
 			public const string OpitionalAttribute = "Microsoft.OfficeExtension.CodeGen.OpitionalAttribute";
 			public const string OptionalAttribute = "Microsoft.OfficeExtension.CodeGen.OptionalAttribute";
 			public const string KnownTypeAttribute = "Microsoft.OfficeExtension.CodeGen.KnownTypeAttribute";
+			public const string RESTfulTypeAttribute = "Microsoft.OfficeExtension.CodeGen.RESTfulTypeAttribute";
+			public const string ApiSetAttribute = "Microsoft.OfficeExtension.CodeGen.ApiSetAttribute";
+			public const string JsonStringifyAttribute = "Microsoft.OfficeExtension.CodeGen.JsonStringifyAttribute";
 
 			public const string DispIdAttribute = "System.Runtime.InteropServices.DispIdAttribute";
 			public const string GuidAttribute = "System.Runtime.InteropServices.GuidAttribute";
 			public const string ParamArrayAttribute = "System.ParamArrayAttribute";
-            public const string ObjectPathFactory = "OfficeExtension.ObjectPathFactory";
+			public const string ObjectPathFactory = "OfficeExtension.ObjectPathFactory";
 			public const string ActionFactory = "OfficeExtension.ActionFactory";
 			public const string Utility = "OfficeExtension.Utility";
 			public const string ClientResultGenericPrefix = "OfficeExtension.ClientResult<";
 			public const string ClientResultGenericSuffix = ">";
-			public const string ClientResult = "OfficeExtension.ClientResult";
 			public const string ClientObject = "OfficeExtension.ClientObject";
 			public const string ClientRequestContext = "OfficeExtension.ClientRequestContext";
-			public const string ObjectPath = "OfficeExtension.ObjectPath";
 			public const string OperationType = "OfficeExtension.OperationType";
+			public const string ObjectPath = "OfficeExtension.ObjectPath";
+			public const string ClientResult = "OfficeExtension.ClientResult";
+
+			public const string EventHandlers = "OfficeExtension.EventHandlers";
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
@@ -3796,7 +4358,14 @@
 			public const string ExcludedFromRest = "ExcludedFromRest";
 			public const string ExcludedFromClientLibrary = "ExcludedFromClientLibrary";
 			public const string ConvertIntegerKeyValueToString = "ConvertIntegerKeyValueToString";
-        }
+			public const string ExposeIsNullProperty = "ExposeIsNullProperty";
+			public const string ReturnObjectGetByIdMethodName = "ReturnObjectGetByIdMethodName";
+			public const string EventArgs = "EventArgs";
+			public const string EventHandlers = "EventHandlers";
+			public const string Include = "Include";
+			public const string SuppressCodeGenErrorCheck = "SuppressCodeGenErrorCheck";
+			public const string UseItemAsIndexerNameInODataId = "UseItemAsIndexerNameInODataId";
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
 		public static class MemberFullNames
@@ -3819,28 +4388,21 @@
 			public const string FixObjectPathIfNecessary = "_fixObjectPathIfNecessary";
 			public const string AddActionResultHandler = "_addActionResultHandler";
 			public const string HandleNavigationPropertyResults = "_handleNavigationPropertyResults";
-        }
+			public const string AdjustToDateTime = "_adjustToDateTime";
+		}
+	}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
-		public static class CSharpMemberFullNames
-		{
-			public const string CreatePropertyObjectPath = "OfficeExtension.ObjectPathFactory._CreatePropertyObjectPath";
-			public const string CreateMethodObjectPath = "OfficeExtension.ObjectPathFactory._CreateMethodObjectPath";
-			public const string CreateIndexerObjectPath = "OfficeExtension.ObjectPathFactory._CreateIndexerObjectPath";
-			public const string CreateNewObjectObjectPath = "OfficeExtension.ObjectPathFactory._CreateNewObjectObjectPath";
-			public const string CreateChildItemObjectPathUsingIndexer = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexer";
-			public const string CreateChildItemObjectPathUsingGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingGetItemAt";
-			public const string CreateChildItemObjectPathUsingIndexerOrGetItemAt = "OfficeExtension.ObjectPathFactory._CreateChildItemObjectPathUsingIndexerOrGetItemAt";
-
-			public const string CreateSetPropertyAction = "OfficeExtension.ActionFactory._CreateSetPropertyAction";
-			public const string CreateMethodAction = "OfficeExtension.ActionFactory._CreateMethodAction";
-
-			public const string IsNullOrUndefined = "OfficeExtension.Utility._IsNullOrUndefined";
-			public const string IsUndefined = "OfficeExtension.Utility._IsUndefined";
-			public const string ThrowIfNotLoaded = "OfficeExtension.Utility._ThrowIfNotLoaded";
-			public const string Load = "OfficeExtension.Utility._Load";
-			public const string FixObjectPathIfNecessary = "OfficeExtension.Utility._FixObjectPathIfNecessary";
-			public const string AddActionResultHandler = "OfficeExtension.Utility._AddActionResultHandler";
-        }
+	public static class DocConstants
+	{
+		public const string XmlDocElementName_Member = "member";
+		public const string XmlDocElementName_Summary = "summary";
+		public const string XmlDocElementName_Param = "param";
+		public const string XmlDocElementName_Returns = "returns";
+		public const string XmlDocAttributeName_Name = "name";
+		public const string XmlDocTypePrefix = "T:";
+		public const string XmlDocPropertyPrefix = "P:";
+		public const string XmlDocMethodPrefix = "M:";
+		public const string XmlDocFieldPrefix = "F:";
+		public const string XmlDocEventPrefix = "E:";
 	}
 #>

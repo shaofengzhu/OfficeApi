@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>86eb8113-897d-41f6-9994-00735e8025f2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>exceltest.py</StartupFile>
+    <StartupFile>exceldemo.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,6 +23,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="excel.py" />
+    <Compile Include="exceldemo.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="excelhelper.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="exceltest.py">
       <SubType>Code</SubType>
     </Compile>

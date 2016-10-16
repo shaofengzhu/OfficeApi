@@ -30,8 +30,8 @@
 <#+
 			templateFileManager.EndBlock();
 
-			templateFileManager.StartNewFile(this.FileBaseName + ".ts");
-			this.WriteTypeScriptBody(System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + ".ts"));
+			templateFileManager.StartNewFile(this.FileBaseName + this.FileNamePostfix + ".ts");
+			this.WriteTypeScriptBody(System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + this.FileNamePostfix + ".ts"));
 			templateFileManager.EndBlock();
 			
 			templateFileManager.WriteTo(this.OutputDirectory, this.CheckoutCommandPrefix);
@@ -60,7 +60,14 @@
 			xdoc = XDocument.Load(this.DocXmlFilePath);
 		}
 
-		AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+		string validateApiSetsParamValue = this.GetParameterValue("ValidateApiSetAnnotations");
+		if (!string.IsNullOrWhiteSpace(validateApiSetsParamValue))
+		{
+			Utility.ValidateApiSetAnnotations = Boolean.Parse(validateApiSetsParamValue);
+		}
+
+		Utility.ApiSetDefaultName = this.GetParameterValue("ApiSetDefaultName");
+		AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 		assemblyReader.Process();
 		List<string> namespaceStack = new List<string>();
 		bool first = true;
@@ -73,7 +80,6 @@
 				this.WriteMethodAlias();
 				first = false;
 			}
-			this.WriteLine(string.Empty);
 			WriteType(type, xdoc, existingFileContent);
 		}
 
@@ -101,11 +107,12 @@ var _createMethodAction = OfficeExtension.ActionFactory.createMethodAction;
 var _createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction;
 var _isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined;
 var _isUndefined = OfficeExtension.Utility.isUndefined;
-var _throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded;
+var _throwIfNotLoaded = <any>OfficeExtension.Utility.throwIfNotLoaded; // Cast to "any" so that can accept either 2 OR 3 arguments in older (in-branch) Utility.ts code. Can remove this eventually when code has FI-ed, though no harm in leaving it as is, either.
 var _load = OfficeExtension.Utility.load;
 var _fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary;
 var _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler;
 var _handleNavigationPropertyResults = OfficeExtension.Utility._handleNavigationPropertyResults;
+var _adjustToDateTime = OfficeExtension.Utility.adjustToDateTime;
 <#+
 	}
 
@@ -157,7 +164,14 @@ export module ErrorCodes
 
 	private void WriteType(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
+		if (Utility.ShouldSkipWritingTypeInterface(type))
+		{
+			return;
+		}
+
+		this.WriteLine(string.Empty);
 		this.WriteComments(Utility.BuildJsDocForType(type, xdoc));
+
 		if (type.IsEnum)
 		{
 			WriteEnumType(type, xdoc);
@@ -204,29 +218,74 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
 		this.PopIndent();
-		WriteObjectProperties(type, xdoc);
-		WriteScalarProperties(type, xdoc);
+		WriteObjectProperties(type, xdoc, existingFileContent);
+		WriteScalarProperties(type, xdoc, existingFileContent);
 		WriteMethods(type, xdoc, existingFileContent);
 		this.WriteLine(string.Empty);
 		WriteHandleResult(type);
 		WriteLoadMethod(type);
-		WriteInitReferenceIdMethod(type);
+		WriteHandleIdResultMethod(type);
 		if (type.AllowCreation)
 		{
 			this.WriteLine(string.Empty);
 			WriteNewObject(type);
 		}
+
+		WriteEvents(type, xdoc, existingFileContent);
+		this.WriteTrackUntrack(type);
+		this.WriteLine(string.Empty);
+		WriteToJson(type);
 #>
 }
-<#+ 
+<#+
+	}
+
+	private void WriteToJson(ClientCallableTypeInfo type)
+	{
+		var stringifiableProperties = type.Properties
+		.Where(
+			p => p.IncludeInJsonStringify
+				/* NOTE: the property access above will check (throw) for incorrect usage (i.e., is a collection type
+					is simulatneously marked for exclusion from client library, has a name that starts with an underscore, etc.) */
+		)
+		.OrderBy(item => item.Name)
+		.ToList();
+#>
+	toJSON() {
+		return {
+<#+
+			for (var i = 0; i < stringifiableProperties.Count; i++) {
+				var commaOrNothing = (i + 1 < stringifiableProperties.Count) ? ",": String.Empty;
+#>
+			"<#= Utility.ToCamelLowerCase(stringifiableProperties[i].Name) #>": this.<#= stringifiableProperties[i].FieldName #><#= commaOrNothing #>
+<#+
+			}
+#>
+		};
+	}
+<#+
 	}
 
 	private void WriteTypeFields(ClientCallableTypeInfo type)
 	{
 		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
+			var comments = new List<string>();
+			if (!prop.IncludeInJsonStringify)
+			{
+				comments.Add("NOT JSON-stringifiable");
+			}
+
+			var commentStringIfAny = comments.Any() ? (" /* { " + String.Join(", ", comments) + " } */") : string.Empty;
 #>
-	private m_<#=Utility.ToCamelLowerCase(prop.Name)#> : <#=prop.PropertyType.TypeScriptTypeName#>;
+	private m_<#=Utility.ToCamelLowerCase(prop.Name)#> : <#=prop.PropertyType.TypeScriptTypeName#>;<#= commentStringIfAny #>
+<#+
+		}
+
+		foreach (ClientCallableEventInfo evt in type.Events)
+		{
+#>
+	private m_<#=Utility.ToCamelLowerCase(evt.Name)#>: <#=Constants.TypeFullNames.EventHandlers#>< <#=Utility.GetTypeScriptTypeName(evt.EventArgsType)#> >;
 <#+
 		}
 
@@ -238,7 +297,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		}
 	}
 
-	private void WriteObjectProperties(ClientCallableTypeInfo type, XDocument xdoc)
+	private void WriteObjectProperties(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
 		{
@@ -248,6 +307,13 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 #>
 
 	get <#=Utility.ToCamelLowerCase(prop.Name)#>(): <#=prop.PropertyType.TypeScriptTypeName#>{
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_get", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
 		if (!this.<#=prop.FieldName#>){
 			this.<#=prop.FieldName#> = new <#=prop.PropertyType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(this.context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, false /*isInvalidAfterRequest*/));
 		}
@@ -262,6 +328,13 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 #>
 
 	set <#=Utility.ToCamelLowerCase(prop.Name)#>(value: <#=prop.PropertyType.TypeScriptTypeName#>){
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_set", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
 		this.<#=prop.FieldName#> = value;
 		<#=Constants.MemberFullNames.CreateSetPropertyAction#>(this.context, this, "<#=prop.Name#>", value);
 	}
@@ -277,6 +350,13 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 			this.PopIndent();
 #>
 	get<#=Utility.ToCamelUpperCase(prop.Name)#>(): <#=prop.PropertyType.TypeScriptTypeName#>{
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_get", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
 		return new <#=prop.PropertyType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(this.context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
 	}
 <#+
@@ -288,6 +368,13 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
 	set<#=Utility.ToCamelUpperCase(prop.Name)#>(value: <#=prop.PropertyType.TypeScriptTypeName#>){
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_set", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
 		<#=Constants.MemberFullNames.CreateSetPropertyAction#>(this.context, this, "<#=prop.Name#>", value);
 	}
 <#+
@@ -301,14 +388,22 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 
 	/** Gets the loaded child items in this collection. */
 	get items(): Array< <#=type.ClientType.ChildItemClientType.TypeScriptTypeName#> > {
-		<#=Constants.MemberFullNames.ThrowIfNotLoaded#>("items", this.m__items);
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_items", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
+
+		<#=Constants.MemberFullNames.ThrowIfNotLoaded#>("items", this.m__items, "<#= type.Name #>", this._isNull);
 		return this.m__items;
 	}
 <#+
 		}
 	}
 
-	private void WriteScalarProperties(ClientCallableTypeInfo type, XDocument xdoc)
+	private void WriteScalarProperties(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
 		foreach (ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary))
 		{
@@ -318,7 +413,14 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 			this.PopIndent();
 #>
 	get <#=Utility.ToCamelLowerCase(prop.Name)#>(): <#=prop.PropertyType.TypeScriptTypeName#>{
-		<#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>);
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_get", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
+		<#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", this.<#=prop.FieldName#>, "<#= type.Name #>", this._isNull);
 		return this.<#=prop.FieldName#>;
 	}
 <#+
@@ -330,6 +432,13 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
 	set <#=Utility.ToCamelLowerCase(prop.Name)#>(value: <#=prop.PropertyType.TypeScriptTypeName#>){
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_set", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
 		this.<#=prop.FieldName#> = value;
 		<#=Constants.MemberFullNames.CreateSetPropertyAction#>(this.context, this, "<#=prop.Name#>", value);
 	}
@@ -397,9 +506,14 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 		this.PopIndent();
+		string clientResultType = "";
+		if (method.ReturnType.IsDateTimeOrDateTimeArray)
+		{
+			clientResultType = "OfficeExtension.ClientResultProcessingType.date";
+		}
 #>
 		var action = <#=Constants.MemberFullNames.CreateMethodAction#>(this.context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>);
-		var ret = new <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=method.ReturnType.TypeScriptTypeName#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#>();
+		var ret = new <#=Constants.TypeFullNames.ClientResultGenericPrefix#> <#=method.ReturnType.TypeScriptTypeName#> <#=Constants.TypeFullNames.ClientResultGenericSuffix#>(<#=clientResultType#>);
 		<#=Constants.MemberFullNames.AddActionResultHandler#>(this, action, ret);
 		return ret;
 	}
@@ -419,7 +533,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 
 		var customCastIfAny = string.IsNullOrWhiteSpace(method.ReturnType.CustomTypeScriptTypeName) ? "" : "<" + method.ReturnType.CustomTypeScriptTypeName + "> ";
 #>
-		return <#= customCastIfAny #>new <#=method.ReturnType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreateMethodObjectPath#>(this.context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=Utility.GetBooleanLiteral(method.ReturnType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
+		return <#= customCastIfAny #>new <#=method.ReturnType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreateMethodObjectPath#>(this.context, this, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=Utility.GetBooleanLiteral(method.ReturnType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/, <#=method.ReturnObjectGetByIdMethodName == null ? "null" : "\"" + method.ReturnObjectGetByIdMethodName + "\""#> /*getByIdMethodName*/));
 	}
 <#+
 	}
@@ -439,6 +553,67 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 	}
 <#+
 	}
+
+	private void WriteEvents(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
+	{
+		foreach (ClientCallableEventInfo evt in type.Events)
+		{
+			this.WriteLine(string.Empty);
+			this.PushIndent(Constants.IndentString);
+			this.WriteComments(Utility.BuildJsDocForEvent(type, evt, xdoc));
+			this.PopIndent();
+#>
+	get on<#=evt.Name#>(): <#=Constants.TypeFullNames.EventHandlers#>< <#=Utility.GetTypeScriptTypeName(evt.EventArgsType)#> >{
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + evt.Name + "_get", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+#>
+		if (!this.m_<#=Utility.ToCamelLowerCase(evt.Name)#>){
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + evt.Name + "_get_PreInit", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+			this.PopIndent();
+#>
+			this.m_<#=Utility.ToCamelLowerCase(evt.Name)#> = new <#=Constants.TypeFullNames.EventHandlers#>< <#=Utility.GetTypeScriptTypeName(evt.EventArgsType)#> >(
+				this.context,
+				this,
+				"<#=evt.Name#>",
+				// Please add eventInfo between the placeholders
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + evt.Name + "_Constructor_Parameters", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+			this.PopIndent();
+			this.PopIndent();
+#>
+				);
+<#+
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.PushIndent(Constants.IndentString);
+			this.WritePlaceHolderContent(type.Name + "_" + evt.Name + "_get_AfterInit", existingFileContent);
+			this.PopIndent();
+			this.PopIndent();
+			this.PopIndent();
+#>
+		}
+		return this.m_<#=Utility.ToCamelLowerCase(evt.Name)#>;
+	}
+<#+
+		}
+	}
+
 
 	private void WriteNewObject(ClientCallableTypeInfo type)
 	{
@@ -507,6 +682,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 	 * @private
 	 */
 	_handleResult(value: any): void {
+		super._handleResult(value);
 		if (<#=Constants.MemberFullNames.IsNullOrUndefined#>(value))
 			return;
 		var obj: Object = value;
@@ -516,7 +692,20 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		{
 #>
 		if (!<#=Constants.MemberFullNames.IsUndefined#>(obj["<#=prop.Name#>"])){
+<#+
+			if (prop.PropertyType.IsDateTimeOrDateTimeArray)
+			{
+#>
+			this.<#=prop.FieldName#> = <#=Constants.MemberFullNames.AdjustToDateTime#>(obj["<#=prop.Name#>"]);
+<#+
+			}
+			else
+			{
+#>
 			this.<#=prop.FieldName#> = obj["<#=prop.Name#>"];
+<#+
+			}
+#>
 		}
 
 <#+
@@ -557,16 +746,47 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 <#+
 	}
 
-	private void WriteInitReferenceIdMethod(ClientCallableTypeInfo type)
+	private void WriteHandleIdResultMethod(ClientCallableTypeInfo type)
 	{
-		ClientCallablePropertyInfo prop = type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.ReferenceId);
-		if (!type.IsValueObject && prop != null)
+		if (!type.IsValueObject)
 		{
+			List<ClientCallablePropertyInfo> props = new List<ClientCallablePropertyInfo>();
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.ReferenceId));
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.Id));
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.IdPrivate));
+			
+
+			if (props.Any((prop) => prop != null && !prop.ExcludedFromClientLibrary))
+			{
 #>
-	_initReferenceId(value: string): void {
-		this.<#=prop.FieldName#> = value;
+
+	/** Handle identity results returned from the document
+	 * @private
+	 */
+	_handleIdResult(value: any): void {
+		super._handleIdResult(value);
+		if (<#=Constants.MemberFullNames.IsNullOrUndefined#>(value)){
+			return;
+		}
+
+<#+
+				foreach(ClientCallablePropertyInfo prop in props)
+				{
+					if (prop != null && !prop.ExcludedFromClientLibrary)
+					{
+#>
+		if (!<#=Constants.MemberFullNames.IsUndefined#>(value["<#=prop.Name#>"])){
+			this.<#=prop.FieldName#> = value["<#=prop.Name#>"];
+		}
+
+<#+
+					}
+				}
+#>
+
 	}
 <#+
+			}
 		}
 	}
 
@@ -578,13 +798,12 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 			// Otherwise, for something like the Excel "Functions" object, since it's just a namespace placeholder object
 			// with no actual properties on it, having "load" is only confusing.
 			if (type.Properties.Any() || (type.ClientType.ChildItemClientType != null)) {
-				var clientTypeOrCustomTypescriptName = string.IsNullOrEmpty(type.CustomTypeScriptTypeName) ? type.ClientType.TypeScriptTypeName : type.CustomTypeScriptTypeName;
 #>
 
 	/**
 	 * Queues up a command to load the specified properties of the object. You must call "context.sync()" before reading the properties.
 	 */
-	load(option?: string|string[]|OfficeExtension.LoadOption): <#= clientTypeOrCustomTypescriptName #> {
+	load(option?: string|string[]|OfficeExtension.LoadOption): <#= GetClientTypeOrCustomTypescriptName(type) #> {
 		<#=Constants.MemberFullNames.Load#>(this, option);
 		return this;
 	}
@@ -595,6 +814,11 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 
 	private void WriteClientValueObjectType(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
+		// Skip over any intentionally-hidden or "V1" helper structs that are internal and are only meant to transfer data to/from V1.0 APIs
+		if (type.Name.StartsWith("_", StringComparison.Ordinal) || type.Name.StartsWith("V1", StringComparison.Ordinal))
+		{
+			return;
+		}
 #>
 export interface <#=type.Name#> {
 <#+
@@ -624,6 +848,38 @@ export interface <#=type.Name#> {
 	<#=Utility.ToCamelLowerCase(prop.Name)#><#=optional#> : <#=prop.PropertyType.TypeScriptTypeName#>;
 <#+
 		}
+	}
+
+	private void WriteTrackUntrack(ClientCallableTypeInfo type)
+	{
+		if (!type.Methods.Where((method) => method.Name == "_KeepReference").Any())
+		{
+			return;
+		}
+
+#>
+
+	/**
+	 * Track the object for automatic adjustment based on surrounding changes in the document. This call is a shorthand for context.trackedObjects.add(thisObject). If you are using this object across ".sync" calls and outside the sequential execution of a ".run" batch, and get an "InvalidObjectPath" error when setting a property or invoking a method on the object, you needed to have added the object to the tracked object collection when the object was first created.
+	 */
+	track(): <#= GetClientTypeOrCustomTypescriptName(type) #> {
+		this.context.trackedObjects.add(this);
+		return this;
+	}
+
+	/**
+	 * Release the memory associated with this object, if has previous been tracked. This call is shorthand for context.trackedObjects.remove(thisObject). Having many tracked objects slows down the host application, so please remember to free any objects you add, once you're done using them. You will need to call "context.sync()" before the memory release takes effect.
+	 */
+	untrack(): <#= GetClientTypeOrCustomTypescriptName(type) #> {
+		this.context.trackedObjects.remove(this);
+		return this;
+	}
+<#+
+	}
+
+	private string GetClientTypeOrCustomTypescriptName(ClientCallableTypeInfo type)
+	{
+		return string.IsNullOrEmpty(type.CustomTypeScriptTypeName) ? type.ClientType.TypeScriptTypeName : type.CustomTypeScriptTypeName;
 	}
 
 	private void WriteComments(IEnumerable<string> comments)

@@ -68,10 +68,10 @@ import logging
 			xdoc = XDocument.Load(this.DocXmlFilePath);
 		}
 
-		AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+		AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 		assemblyReader.Process();
 		List<string> namespaceStack = new List<string>();
-		foreach (ClientCallableTypeInfo type in assemblyReader.Types)
+		foreach (ClientCallableTypeInfo type in assemblyReader.Types.Where(t => !PythonUtility.ShouldSkipType(t)))
 		{
 			this.WriteLine(string.Empty);
 			WriteType(type, xdoc, existingFileContent);
@@ -110,7 +110,7 @@ _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler;
 class ErrorCodes:
 {
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		foreach(string errorCode in errorCodes.OrderBy(s => s))
 		{
 #>
@@ -165,7 +165,7 @@ class ErrorCodes:
 #>
 class <#=type.Name#>:
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		foreach (KeyValuePair<string, int> field in type.EnumFields)
 		{
 #>
@@ -181,7 +181,7 @@ class <#=type.Name#>:
 #>
 class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
 		WriteConstructor(type);
 		this.WriteLine(string.Empty);
@@ -205,11 +205,11 @@ class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 #>
 def __init__(self, context: <#=Constants.TypeFullNames.ClientRequestContext#>, objectPath: <#= Constants.TypeFullNames.ObjectPath #>):
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 #>
 super(self.__class__, self).__init__(context, objectPath)
 <#+
-		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
 self._<#=Utility.ToCamelLowerCase(prop.Name)#> = None
@@ -228,33 +228,33 @@ self.__items = None
 
 	private void WriteObjectProperties(ClientCallableTypeInfo type, XDocument xdoc)
 	{
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
 @property
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
-    if self.<#=prop.PythonFieldName#> is None:
-        self.<#=prop.PythonFieldName#> = <#=prop.PropertyType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=Utility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, False))
-    return self.<#=prop.PythonFieldName#>
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
+    if self.<#=PythonUtility.GetPythonFieldName(prop)#> is None:
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, False))
+    return self.<#=PythonUtility.GetPythonFieldName(prop)#>
 <#+
 			if (!prop.IsReadonly)
 			{
 #>
 
 @<#=Utility.ToCamelLowerCase(prop.Name)#>.setter
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '<#=prop.PropertyType.PythonTypeName#>') -> None:
-    self.<#=prop.PythonFieldName#> = value
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>') -> None:
+    self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
     <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value);
 <#+	
 			}
 		}
 
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 			this.WriteLine(string.Empty);
 #>
-def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
-    return <#=prop.PropertyType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=Utility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, <#=Utility.GetPythonBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#>))
+def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
+    return <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#>))
 <#+
 			if (!prop.IsReadonly)
 			{
@@ -263,7 +263,7 @@ def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=prop.PropertyType.P
 				// Just writing the JSDOC comment on the getter is perfectly sufficient (and our underlying assumption is that there are
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
-def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=prop.PropertyType.PythonTypeName#>') -> None:
+def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>') -> None:
     <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
 <#+
 			}
@@ -275,7 +275,7 @@ def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=prop.Property
 #>
 
 @property
-def items(self) -> 'list of <#=type.ClientType.ChildItemClientType.PythonTypeName#>':
+def items(self) -> 'list of <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>':
     <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("items", self.__items)
     return self.__items
 
@@ -285,14 +285,14 @@ def items(self) -> 'list of <#=type.ClientType.ChildItemClientType.PythonTypeNam
 
 	private void WriteScalarProperties(ClientCallableTypeInfo type, XDocument xdoc)
 	{
-		foreach (ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 			this.WriteLine(string.Empty);
 #>
 @property
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=prop.PropertyType.PythonTypeName#>':
-    <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=prop.PythonFieldName#>)
-    return self.<#=prop.PythonFieldName#>
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
+    <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+    return self.<#=PythonUtility.GetPythonFieldName(prop)#>
 
 <#+
 			if (!prop.IsReadonly)
@@ -303,8 +303,8 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=p
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
 @<#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>.setter
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : '<#=prop.PropertyType.PythonTypeName#>'):
-    self.<#=prop.PythonFieldName#> = value
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>'):
+    self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
     <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
 
 <#+	
@@ -360,7 +360,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> <#=Constants.TypeFullNames.ClientResult#>:
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
@@ -374,27 +374,27 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 	private void WriteObjectMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 
 #>
-    return <#=method.ReturnType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=Utility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=Utility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
+    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=Constants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
 <#+
 	}
 	
 	private void WriteIndexerMethod(ClientCallableTypeInfo type, ClientCallableMethodInfo method, XDocument xdoc, string[] existingFileContent)
 	{
 #>
-def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=method.ReturnType.PythonTypeName#>':
+def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
 		this.PushIndent(Constants.IndentString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-    return <#=method.ReturnType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreateIndexerObjectPath#>(self.context, self, <#=BuildMethodParameterValueArray(method)#>))
+    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=Constants.MemberFullNames.CreateIndexerObjectPath#>(self.context, self, <#=BuildMethodParameterValueArray(method)#>))
 <#+
 	}
 
@@ -402,8 +402,8 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 	{
 #>
 @staticmethod
-def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#=type.ClientType.PythonTypeName#>':
-    var ret = <#=type.ClientType.PythonTypeName#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=Utility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
+def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
+    var ret = <#=PythonUtility.GetPythonTypeName(type.ClientType)#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=PythonUtility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
     return ret
 	}
 <#+
@@ -421,8 +421,12 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 			sb.Append(NormalizeMemberName(param.Name));
 			sb.Append(" : ");
 			sb.Append("'");
-			sb.Append(param.ParameterType.PythonTypeName);
+			sb.Append(PythonUtility.GetPythonTypeName(param.ParameterType));
 			sb.Append("'");
+			if (param.IsOptional)
+			{
+				sb.Append(" = None");
+			}
 		}
 
 		return sb.ToString();
@@ -456,16 +460,16 @@ def _handleResult(self, value: dict) -> None:
     obj = value;
     <#=Constants.MemberFullNames.FixObjectPathIfNecessary#>(self, obj);
 <#+
-		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary))
+		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
     if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
-        self.<#=prop.PythonFieldName#> = obj.get("<#=prop.Name#>")
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = obj.get("<#=prop.Name#>")
 <#+
 		}
 
 		List<string> navPropNames = new List<string>();
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
     if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
@@ -481,7 +485,7 @@ def _handleResult(self, value: dict) -> None:
         self.__items = []
         data = obj.get(OfficeExtension.Constants.items)
         for i, itemData in enumerate(data):
-            item = <#=type.ClientType.ChildItemClientType.PythonTypeName#>(self.context, <#=Constants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=Utility.GetPythonBooleanLiteral(hasIndexerMethod)#>, self.context, self, itemData, i))
+            item = <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>(self.context, <#=Constants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=PythonUtility.GetPythonBooleanLiteral(hasIndexerMethod)#>, self.context, self, itemData, i))
             item._handleResult(itemData)
             self.__items.append(item)
 <#+
@@ -495,7 +499,7 @@ def _handleResult(self, value: dict) -> None:
 		{
 #>
 def _initReferenceId(self, value: str) -> None:
-    self.<#=prop.PythonFieldName#> = value;
+    self.<#=PythonUtility.GetPythonFieldName(prop)#> = value;
 <#+
 		}
 	}
@@ -511,7 +515,7 @@ def _initReferenceId(self, value: str) -> None:
 				var clientTypeOrCustomTypescriptName = string.IsNullOrEmpty(type.CustomTypeScriptTypeName) ? type.ClientType.TypeScriptTypeName : type.CustomTypeScriptTypeName;
 #>
 
-def load(self, option = None) -> '<#=type.ClientType.PythonTypeName#>':
+def load(self, option = None) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
     <#=Constants.MemberFullNames.Load#>(self, option);
 <#+
 			}
@@ -523,12 +527,12 @@ def load(self, option = None) -> '<#=type.ClientType.PythonTypeName#>':
 #>
 class <#=type.Name#>:
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 #>
 def __init__(self):
 <#+
-		this.PushIndent(Constants.IndentSpaceString);
-		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary))
+		this.PushIndent(PythonUtility.IndentSpaceString);
+		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
 self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
@@ -540,4 +544,113 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 		this.PopIndent();
 		this.WriteLine(string.Empty);
 	}
+
+	static class PythonUtility
+	{
+		public const string IndentSpaceString = "    ";
+		public static string GetPythonBooleanLiteral(bool value)
+		{
+			if (value)
+			{
+				return "True";
+			}
+
+			return "False";
+		}
+
+		public static bool ShouldSkipType(ClientCallableTypeInfo type)
+		{
+			if (type.IsEventArgs)
+			{
+				return true;
+			}
+
+			if (type.Name.StartsWith("_", StringComparison.Ordinal) ||
+				type.Name.StartsWith("V1", StringComparison.Ordinal))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		public static bool ShouldSkipType(ClientType type)
+		{
+			if (type.ClientCallableType != null)
+			{
+				return ShouldSkipType(type.ClientCallableType);
+			}
+
+			return false;
+		}
+
+		public static bool ShouldSkipProperty(ClientCallablePropertyInfo prop)
+		{
+			if (prop.Name.StartsWith("_V1", StringComparison.Ordinal) ||
+				prop.Name.StartsWith("V1", StringComparison.Ordinal))
+			{
+				return true;
+			}
+
+			if (ShouldSkipType(prop.PropertyType))
+				return true;
+
+			return false;
+		}
+
+		public static string GetPythonFieldName(ClientCallablePropertyInfo prop)
+		{
+			return "_" + Utility.ToCamelLowerCase(prop.Name);
+		}
+
+		public static string GetPythonTypeName(ClientType type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsEnum)
+			{
+				return "str";
+			}
+			else if (type.IsStream)
+			{
+				return "str";
+			}
+			else if (type.IsClientObject || type.IsClientValueObject)
+			{
+				return type.ClientCallableType.Name;
+			}
+			else if (type.ChildItemClientType != null)
+			{
+				return "list";
+			}
+			else
+			{
+				switch (type.FullName)
+				{
+					case "System.Object":
+						return "any";
+					case "System.Int16":
+					case "System.UInt16":
+					case "System.Int32":
+					case "System.UInt32":
+						return "int";
+					case "System.Single":
+					case "System.Double":
+						return "float";
+					case "System.Boolean":
+						return "bool";
+					case "System.String":
+						return "str";
+					case "System.Void":
+						return "None";
+					default:
+						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
+				}
+			}
+		}
+
+    }
 #>
