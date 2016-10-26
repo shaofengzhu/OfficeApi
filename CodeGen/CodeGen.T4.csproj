@@ -159,6 +159,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PythonMain.tt</DependentUpon>
     </Content>
+    <Content Include="PythonMainWord.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PythonMainWord.txt</LastGenOutput>
+    </Content>
+    <Content Include="PythonMainWord.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PythonMainWord.tt</DependentUpon>
+    </Content>
     <Content Include="TypeRegCppCore.txt">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

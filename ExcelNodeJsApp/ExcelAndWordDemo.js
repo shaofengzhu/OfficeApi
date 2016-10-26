@@ -55,7 +55,7 @@ var p = new OfficeExtension.Promise(function(resolve, reject){
     //     return new OfficeExtension.Promise(function(resolve, reject){
     //         setTimeout(function(){
     //             resolve(null);
-    //         }, 30 * 1000);
+    //         }, 60 * 1000);
     //     });
     // })
     .then(function(){
@@ -85,7 +85,7 @@ var p = new OfficeExtension.Promise(function(resolve, reject){
     })
     .then(function(){
         // set context to Word
-        console.log("Set context to Excel");        
+        console.log("Set context to Word");
         OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders = {url: "http://localhost:8054"};
     })
     .then(function(){

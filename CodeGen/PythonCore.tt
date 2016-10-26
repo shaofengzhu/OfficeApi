@@ -403,9 +403,9 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 @staticmethod
 def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
-    var ret = <#=PythonUtility.GetPythonTypeName(type.ClientType)#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=PythonUtility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
+    ret = <#=PythonUtility.GetPythonTypeName(type.ClientType)#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=PythonUtility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
     return ret
-	}
+
 <#+
 	}
 
@@ -646,6 +646,8 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 						return "str";
 					case "System.Void":
 						return "None";
+					case "System.DateTime":
+						return "str";
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 				}

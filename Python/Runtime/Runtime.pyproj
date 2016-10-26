@@ -37,6 +37,7 @@
     </Compile>
     <Compile Include="oauthhelper.py" />
     <Compile Include="runtime.py" />
+    <Compile Include="word.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
