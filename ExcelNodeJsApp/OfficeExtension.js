@@ -365,8 +365,7 @@ var OfficeExtension;
             this.m_requestHeaders = {};
             this._onRunFinishedNotifiers = [];
             this.m_nextId = 0;
-            this.m_url = url;
-            if (OfficeExtension.Utility.isNullOrEmptyString(this.m_url)) {
+            if (OfficeExtension.Utility.isNullOrUndefined(url) || typeof (url) === "string" && url.length === 0) {
                 var defaultUrlAndHeaders = ClientRequestContext.defaultRequestUrlAndHeaders;
                 if (defaultUrlAndHeaders && !OfficeExtension.Utility.isNullOrEmptyString(defaultUrlAndHeaders.url)) {
                     this.m_url = defaultUrlAndHeaders.url;
@@ -378,6 +377,21 @@ var OfficeExtension;
                 }
                 else {
                     this.m_url = OfficeExtension.Constants.localDocument;
+                }
+            }
+            else if (typeof (url) === "string") {
+                this.m_url = url;
+            }
+            else {
+                var requestInfo = url;
+                if (OfficeExtension.Utility.isNullOrEmptyString(requestInfo.url)) {
+                    throw OfficeExtension.Utility.createInvalidArgumentException("url");
+                }
+                this.m_url = requestInfo.url;
+                if (requestInfo.headers) {
+                    for (var key in requestInfo.headers) {
+                        this.m_requestHeaders[key] = requestInfo.headers[key];
+                    }
                 }
             }
             this._processingResult = false;
@@ -395,6 +409,13 @@ var OfficeExtension;
             }
             this.sync = this.sync.bind(this);
         }
+        Object.defineProperty(ClientRequestContext.prototype, "_url", {
+            get: function () {
+                return this.m_url;
+            },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(ClientRequestContext.prototype, "_pendingRequest", {
             get: function () {
                 if (this.m_pendingRequest == null) {
@@ -783,7 +804,7 @@ var OfficeExtension;
         Constants.referenceId = "_ReferenceId";
         Constants.isTracked = "_IsTracked";
         Constants.sourceLibHeader = "SdkVersion";
-        Constants.requestInfoHeader = "OfficeExtension-RequestInfo";
+        Constants.requestInfoHeader = "Office-RequestInfo";
         return Constants;
     })();
     OfficeExtension.Constants = Constants;
@@ -1127,9 +1148,49 @@ var OfficeExtension;
             });
         };
         HttpUtility.sendRequest = function (request) {
+            HttpUtility.validateAndNormalizeRequest(request);
             var func;
             func = HttpUtility.s_customSendRequestFunc || HttpUtility.xhrSendRequestFunc;
             return func(request);
+        };
+        HttpUtility.setCustomSendLocalDocumentRequestFunc = function (func) {
+            HttpUtility.s_customSendLocalDocumentRequestFunc = func;
+        };
+        HttpUtility.sendLocalDocumentRequest = function (request) {
+            HttpUtility.validateAndNormalizeRequest(request);
+            var func;
+            func = HttpUtility.s_customSendLocalDocumentRequestFunc || HttpUtility.officeJsSendLocalDocumentRequestFunc;
+            return func(request);
+        };
+        HttpUtility.officeJsSendLocalDocumentRequestFunc = function (request) {
+            request = OfficeExtension.Utility._validateLocalDocumentRequest(request);
+            var requestSafeArray = OfficeExtension.Utility._buildRequestMessageSafeArray(request);
+            return new OfficeExtension.Promise(function (resolve, reject) {
+                OSF.DDA.RichApi.executeRichApiRequestAsync(requestSafeArray, function (asyncResult) {
+                    var response;
+                    if (asyncResult.status == "succeeded") {
+                        response = {
+                            statusCode: OfficeExtension.RichApiMessageUtility.getResponseStatusCode(asyncResult),
+                            headers: OfficeExtension.RichApiMessageUtility.getResponseHeaders(asyncResult),
+                            body: OfficeExtension.RichApiMessageUtility.getResponseBody(asyncResult)
+                        };
+                    }
+                    else {
+                        response = OfficeExtension.RichApiMessageUtility.buildHttpResponseFromOfficeJsError(asyncResult.error.code, asyncResult.error.message);
+                    }
+                    OfficeExtension.Utility.log(JSON.stringify(response));
+                    resolve(response);
+                });
+            });
+        };
+        HttpUtility.validateAndNormalizeRequest = function (request) {
+            if (OfficeExtension.Utility.isNullOrUndefined(request)) {
+                throw OfficeExtension.Utility.createInvalidArgumentException("request");
+            }
+            if (OfficeExtension.Utility.isNullOrEmptyString(request.method)) {
+                request.method = "GET";
+            }
+            request.method = request.method.toUpperCase();
         };
         return HttpUtility;
     })();
@@ -1452,134 +1513,6 @@ var OfficeExtension;
         return OfficeJsRequestExecutor;
     })();
     OfficeExtension.OfficeJsRequestExecutor = OfficeJsRequestExecutor;
-})(OfficeExtension || (OfficeExtension = {}));
-var OfficeExtension;
-(function (OfficeExtension) {
-    var OfficeXHRSettings = (function () {
-        function OfficeXHRSettings() {
-        }
-        return OfficeXHRSettings;
-    })();
-    OfficeExtension.OfficeXHRSettings = OfficeXHRSettings;
-    function resetXHRFactory(oldFactory) {
-        OfficeXHR.settings.oldxhr = oldFactory;
-        return officeXHRFactory;
-    }
-    OfficeExtension.resetXHRFactory = resetXHRFactory;
-    function officeXHRFactory() {
-        return new OfficeXHR;
-    }
-    OfficeExtension.officeXHRFactory = officeXHRFactory;
-    var OfficeXHR = (function () {
-        function OfficeXHR() {
-        }
-        OfficeXHR.prototype.open = function (method, url) {
-            this.m_method = method;
-            this.m_url = url;
-            if (this.m_url.toLowerCase().indexOf(OfficeExtension.Constants.localDocumentApiPrefix) == 0) {
-                this.m_url = this.m_url.substr(OfficeExtension.Constants.localDocumentApiPrefix.length);
-            }
-            else {
-                this.m_innerXhr = OfficeXHR.settings.oldxhr();
-                var thisObj = this;
-                this.m_innerXhr.onreadystatechange = function () {
-                    thisObj.innerXhrOnreadystatechage();
-                };
-                this.m_innerXhr.open(method, this.m_url);
-            }
-        };
-        OfficeXHR.prototype.abort = function () {
-            if (this.m_innerXhr) {
-                this.m_innerXhr.abort();
-            }
-        };
-        OfficeXHR.prototype.send = function (body) {
-            if (this.m_innerXhr) {
-                this.m_innerXhr.send(body);
-            }
-            else {
-                var thisObj = this;
-                var requestFlags = 0 /* None */;
-                if (!OfficeExtension.Utility.isReadonlyRestRequest(this.m_method)) {
-                    requestFlags = 1 /* WriteOperation */;
-                }
-                var execFunction = OfficeXHR.settings.executeRichApiRequestAsync;
-                if (!execFunction) {
-                    execFunction = OSF.DDA.RichApi.executeRichApiRequestAsync;
-                }
-                execFunction(OfficeExtension.RichApiMessageUtility.buildRequestMessageSafeArray('', requestFlags, this.m_method, this.m_url, this.m_requestHeaders, body), function (asyncResult) {
-                    thisObj.officeContextRequestCallback(asyncResult);
-                });
-            }
-        };
-        OfficeXHR.prototype.setRequestHeader = function (header, value) {
-            if (this.m_innerXhr) {
-                this.m_innerXhr.setRequestHeader(header, value);
-            }
-            else {
-                if (!this.m_requestHeaders) {
-                    this.m_requestHeaders = {};
-                }
-                this.m_requestHeaders[header] = value;
-            }
-        };
-        OfficeXHR.prototype.getResponseHeader = function (header) {
-            if (this.m_responseHeaders) {
-                return this.m_responseHeaders[header.toUpperCase()];
-            }
-            return null;
-        };
-        OfficeXHR.prototype.getAllResponseHeaders = function () {
-            return this.m_allResponseHeaders;
-        };
-        OfficeXHR.prototype.overrideMimeType = function (mimeType) {
-            if (this.m_innerXhr) {
-                this.m_innerXhr.overrideMimeType(mimeType);
-            }
-        };
-        OfficeXHR.prototype.innerXhrOnreadystatechage = function () {
-            this.readyState = this.m_innerXhr.readyState;
-            if (this.readyState == OfficeXHR.DONE) {
-                this.status = this.m_innerXhr.status;
-                this.statusText = this.m_innerXhr.statusText;
-                this.responseText = this.m_innerXhr.responseText;
-                this.response = this.m_innerXhr.response;
-                this.responseType = this.m_innerXhr.responseType;
-                this.setAllResponseHeaders(this.m_innerXhr.getAllResponseHeaders());
-            }
-            if (this.onreadystatechange) {
-                this.onreadystatechange();
-            }
-        };
-        OfficeXHR.prototype.officeContextRequestCallback = function (result) {
-            this.readyState = OfficeXHR.DONE;
-            if (result.status == "succeeded") {
-                this.status = OfficeExtension.RichApiMessageUtility.getResponseStatusCode(result);
-                this.m_responseHeaders = OfficeExtension.RichApiMessageUtility.getResponseHeaders(result);
-                OfficeExtension.Utility.log("ResponseHeaders=" + JSON.stringify(this.m_responseHeaders));
-                this.responseText = OfficeExtension.RichApiMessageUtility.getResponseBody(result);
-                OfficeExtension.Utility.log("ResponseText=" + this.responseText);
-                this.response = this.responseText;
-            }
-            else {
-                this.status = 500;
-                this.statusText = "Internal Error";
-            }
-            if (this.onreadystatechange) {
-                this.onreadystatechange();
-            }
-        };
-        OfficeXHR.prototype.setAllResponseHeaders = function (allResponseHeaders) {
-            this.m_allResponseHeaders = allResponseHeaders;
-            this.m_responseHeaders = OfficeExtension.Utility._parseHttpResponseHeaders(allResponseHeaders);
-        };
-        OfficeXHR.UNSENT = 0;
-        OfficeXHR.OPENED = 1;
-        OfficeXHR.DONE = 4;
-        OfficeXHR.settings = new OfficeXHRSettings();
-        return OfficeXHR;
-    })();
-    OfficeExtension.OfficeXHR = OfficeXHR;
 })(OfficeExtension || (OfficeExtension = {}));
 var OfficeExtension;
 (function (OfficeExtension) {
@@ -2263,6 +2196,22 @@ var OfficeExtension;
             response.ErrorMessage = message;
             return response;
         };
+        RichApiMessageUtility.buildHttpResponseFromOfficeJsError = function (errorCode, message) {
+            var statusCode = 500;
+            var errorBody = {};
+            errorBody["error"] = {};
+            errorBody["error"]["code"] = OfficeExtension.ErrorCodes.generalException;
+            errorBody["error"]["message"] = message;
+            if (errorCode === RichApiMessageUtility.OfficeJsErrorCode_ooeNoCapability) {
+                statusCode = 403;
+                errorBody["error"]["code"] = OfficeExtension.ErrorCodes.accessDenied;
+            }
+            else if (errorCode === RichApiMessageUtility.OfficeJsErrorCode_ooeActivityLimitReached) {
+                statusCode = 429;
+                errorBody["error"]["code"] = OfficeExtension.ErrorCodes.activityLimitReached;
+            }
+            return { statusCode: statusCode, headers: {}, body: JSON.stringify(errorBody) };
+        };
         RichApiMessageUtility.buildRequestMessageSafeArray = function (customData, requestFlags, method, path, headers, body) {
             var headerArray = [];
             if (headers) {
@@ -2627,14 +2576,62 @@ var OfficeExtension;
             return name.substr(0, 1).toLowerCase() + name.substr(1);
         };
         Utility._isLocalDocumentUrl = function (url) {
+            return Utility._getLocalDocumentUrlPrefixLength(url) > 0;
+        };
+        Utility._getLocalDocumentUrlPrefixLength = function (url) {
             var localDocumentPrefixes = ["http://document.localhost", "https://document.localhost", "//document.localhost"];
             var urlLower = url.toLowerCase().trim();
             for (var i = 0; i < localDocumentPrefixes.length; i++) {
-                if (urlLower == localDocumentPrefixes[i] || urlLower.substr(0, localDocumentPrefixes[i].length + 1) == localDocumentPrefixes[i] + "/") {
-                    return true;
+                if (urlLower === localDocumentPrefixes[i]) {
+                    return localDocumentPrefixes[i].length;
+                }
+                else if (urlLower.substr(0, localDocumentPrefixes[i].length + 1) === localDocumentPrefixes[i] + "/") {
+                    return localDocumentPrefixes[i].length + 1;
                 }
             }
-            return false;
+            return 0;
+        };
+        Utility._validateLocalDocumentRequest = function (request) {
+            var index = Utility._getLocalDocumentUrlPrefixLength(request.url);
+            if (index <= 0) {
+                throw Utility.createInvalidArgumentException("request");
+            }
+            var path = request.url.substr(index);
+            var pathLower = path.toLowerCase();
+            if (pathLower === "_api") {
+                path = "";
+            }
+            else if (pathLower.substr(0, "_api/".length) === "_api/") {
+                path = path.substr("_api/".length);
+            }
+            return {
+                method: request.method,
+                url: path,
+                headers: request.headers,
+                body: request.body
+            };
+        };
+        Utility._buildRequestMessageSafeArray = function (request) {
+            var requestFlags = 0 /* None */;
+            if (!Utility.isReadonlyRestRequest(request.method)) {
+                requestFlags = 1 /* WriteOperation */;
+            }
+            var requestInfo = "";
+            if (request.headers) {
+                requestInfo = request.headers[OfficeExtension.Constants.requestInfoHeader];
+                if (!Utility.isNullOrEmptyString(requestInfo)) {
+                    var parts = requestInfo.split("&");
+                    for (var i = 0; i < parts.length; i++) {
+                        var keyvalue = parts[i].split("=");
+                        if (keyvalue[0] == "flags") {
+                            var flags = parseInt(keyvalue[1]);
+                            requestFlags = flags;
+                            break;
+                        }
+                    }
+                }
+            }
+            return OfficeExtension.RichApiMessageUtility.buildRequestMessageSafeArray("", requestFlags, request.method, request.url, request.headers, request.body);
         };
         Utility._parseHttpResponseHeaders = function (allResponseHeaders) {
             var responseHeaders = {};

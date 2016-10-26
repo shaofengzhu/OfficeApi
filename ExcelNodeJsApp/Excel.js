@@ -46,7 +46,9 @@ var Excel;
         if (typeof (window) !== "undefined" && window.Office && window.Office.context && window.Office.context.requirements) {
             return window.Office.context.requirements.isSetSupported("ExcelApi", 1.3);
         }
-        return true;
+        else {
+            return true;
+        }
     }
     var _createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath;
     var _createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath;
@@ -64,7 +66,6 @@ var Excel;
     var _fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary;
     var _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler;
     var _handleNavigationPropertyResults = OfficeExtension.Utility._handleNavigationPropertyResults;
-    var _adjustToDateTime = OfficeExtension.Utility.adjustToDateTime;
     var Application = (function (_super) {
         __extends(Application, _super);
         function Application() {

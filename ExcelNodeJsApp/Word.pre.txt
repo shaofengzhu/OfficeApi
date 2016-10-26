@@ -1,0 +1,2 @@
+var oe = require('./OfficeExtension.js')
+var OfficeExtension = oe.OfficeExtension;
