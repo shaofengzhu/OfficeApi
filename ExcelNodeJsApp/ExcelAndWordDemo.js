@@ -79,7 +79,7 @@ var p = new OfficeExtension.Promise(function(resolve, reject){
     })
     .then(function(imageData){
         console.log("---ImageData start---");
-        console.log(imageData);
+        console.log("imageData.length=" + imageData.length);
         console.log("---ImageData end---");
         chartImageBase64 = imageData;
     })
