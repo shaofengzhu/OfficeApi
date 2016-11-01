@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import json
 import enum
 import logging
@@ -137,12 +137,15 @@ class RequestUrlAndHeaderInfo:
         self.url = None
         self.headers = {}
 
+class RequestExecutionMode(enum.IntEnum):
+    batch = 0
+    immediateAndSlow = 1
 
 class ClientRequestContext:
     customRequestExecutor = None
     defaultRequestUrlAndHeaders = None
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, executionMode: RequestExecutionMode):
         self.__nextId = 1
         self._requestHeaders = {}
         self._url = url
@@ -157,6 +160,9 @@ class ClientRequestContext:
         if Utility.isNullOrEmptyString(self._url):
             self._url = Constants.localDocument
 
+        self._executionMode = executionMode
+        if self._executionMode is None:
+            self._executionMode = RequestExecutionMode.batch
         self._processingResult = False
         self._customData = Constants.iterativeExecutor
         if (ClientRequestContext.customRequestExecutor is not None):
@@ -170,10 +176,14 @@ class ClientRequestContext:
     def requestHeaders(self):
         return self._requestHeaders
 
-    def _nextId(self):
+    def _nextId(self) -> int:
         ret = self.__nextId
         self.__nextId = self.__nextId + 1
         return ret
+
+    @property
+    def executionMode(self) -> RequestExecutionMode:
+        return self._executionMode
 
     @property
     def _pendingRequest(self) -> 'ClientRequest':
@@ -219,6 +229,8 @@ class ClientRequestContext:
 
         action = ActionFactory.createQueryAction(self, clientObject, queryOption)
         self._pendingRequest.addActionResultHandler(action, clientObject)
+        if self._executionMode == RequestExecutionMode.immediateAndSlow :
+            self.sync()
 
     def trace(self, message: str):
         ActionFactory.createTraceAction(self, message)
@@ -443,6 +455,7 @@ class ClientObject(IResultHandler):
         Utility.checkArgumentNull(context, "context")
         self._context = context
         self.__objectPath = objectPath
+        self.__isLoaded = False
         if self.__objectPath:
             if not context._processingResult:
                 ActionFactory.createInstantiateAction(context, self)
@@ -459,8 +472,16 @@ class ClientObject(IResultHandler):
     def _objectPath(self, value: ObjectPath):
         self.__objectPath = value
 
+    @property
+    def _isLoaded(self) -> bool:
+        return self.__isLoaded
+
     def _handleResult(self, value):
-        pass
+        Utility.fixObjectPathIfNecessary(self, value)
+
+    def _handleIdResult(self, value):
+        Utility.fixObjectPathIfNecessary(self, value)
+
 
 class ActionFactory:
     @staticmethod
@@ -663,12 +684,7 @@ class InstantiateActionResultHandler(IResultHandler):
         self._clientObject = clientObject
 
     def _handleResult(self, value):
-        Utility.fixObjectPathIfNecessary(self._clientObject, value)
-        if value and \
-            not Utility.isNullOrUndefined(value.get(Constants.referenceId)) and \
-            hasattr(self._clientObject.__class__, "_initReferenceId") and \
-            callable(self._clientObject.__class__, "_initReferenceId"):
-            self._clientObject._initReferenceId(value.get(Constants.referenceId))
+        self._clientObject._handleIdResult(value)
 
 class ResourceStrings:
     invalidObjectPath = "InvalidObjectPath"
@@ -849,6 +865,16 @@ class Utility:
     def throwIfNotLoaded(propertyName: str, fieldValue):
         if (fieldValue is None and propertyName[0] != "_"):
             Utility.throwError(ResourceStrings.propertyNotLoaded, propertyName)
+
+    @staticmethod
+    def loadIfImmediateExecution(clientObject: ClientObject, propertyName: str, fieldValue):
+        if clientObject.context.executionMode == RequestExecutionMode.immediateAndSlow and clientObject._isLoaded == False:
+            clientObject.load();
+
+    @staticmethod
+    def syncIfImmediateExecution(clientObject: ClientObject):
+        if clientObject.context.executionMode == RequestExecutionMode.immediateAndSlow:
+            clientObject.context.sync()
 
     @staticmethod
     def getObjectPathExpression(objectPath: ObjectPath) -> str:

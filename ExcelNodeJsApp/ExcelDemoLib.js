@@ -216,9 +216,38 @@ function simpleTest(){
             });
 }
 
+function perfTest(){
+    var rowCount = 100;
+    var colCount = 20;
+    var p = OfficeExtension.Utility._createPromiseFromResult(null);
+    for (var row = 0; row < rowCount; row++) {
+        for (var col = 0; col < colCount; col++) {
+            p = p.then(perfTestOneLoop(row, col));
+        }
+    }
+
+    return p;
+}
+
+function perfTestOneLoop(row, col){
+    return function(){
+        var ctx = new Excel.RequestContext();
+        var range = ctx.workbook.worksheets.getItem("Sheet1").getCell(row, col);
+        range.values = (row + 1) * (col + 1);
+        return ctx.sync()
+        .then(function(){
+            console.log("Done: row" + row + ", col=" + col);
+        })
+        .catch(function(ex){
+            console.log("Error:" + JSON.stringify(ex));
+        })
+    }
+}
+
 exports.dataPopulateRun = dataPopulateRun
 exports.dataPopulateSetup = dataPopulateSetup
 exports.simpleTest = simpleTest
 exports.getChartImage = getChartImage;
 exports.clearWorkbook = clearWorkbook;
+exports.perfTest = perfTest
 
