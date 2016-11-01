@@ -6,6 +6,7 @@
 import sys
 import json
 import enum
+import datetime
 import logging
 
 # Begin_PlaceHolder_GlobalHeader
@@ -121,7 +122,8 @@ class Workbook(OfficeExtension.ClientObject):
     def getSelectedRange(self) -> 'Range':
     	# Begin_PlaceHolder_Workbook_GetSelectedRange
     	# End_PlaceHolder_Workbook_GetSelectedRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetSelectedRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetSelectedRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def _GetObjectByReferenceId(self, bstrReferenceId : 'str') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Workbook__GetObjectByReferenceId
@@ -284,17 +286,20 @@ class Worksheet(OfficeExtension.ClientObject):
     def getCell(self, row : 'int', column : 'int') -> 'Range':
     	# Begin_PlaceHolder_Worksheet_GetCell
     	# End_PlaceHolder_Worksheet_GetCell
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
+        return ret
 
     def getRange(self, address : 'str' = None) -> 'Range':
     	# Begin_PlaceHolder_Worksheet_GetRange
     	# End_PlaceHolder_Worksheet_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [address], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [address], False, True))
+        return ret
 
     def getUsedRange(self, valuesOnly : 'bool' = None) -> 'Range':
     	# Begin_PlaceHolder_Worksheet_GetUsedRange
     	# End_PlaceHolder_Worksheet_GetUsedRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -346,12 +351,15 @@ class WorksheetCollection(OfficeExtension.ClientObject):
     def add(self, name : 'str' = None) -> 'Worksheet':
     	# Begin_PlaceHolder_WorksheetCollection_Add
     	# End_PlaceHolder_WorksheetCollection_Add
-        return Worksheet(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [name], False, True))
+        ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [name], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def getActiveWorksheet(self) -> 'Worksheet':
     	# Begin_PlaceHolder_WorksheetCollection_GetActiveWorksheet
     	# End_PlaceHolder_WorksheetCollection_GetActiveWorksheet
-        return Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetActiveWorksheet", OfficeExtension.OperationType.Read, [], False, False))
+        ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetActiveWorksheet", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
 
     def getItem(self, key : 'str') -> 'Worksheet':
     	# Begin_PlaceHolder_WorksheetCollection_GetItem
@@ -361,7 +369,8 @@ class WorksheetCollection(OfficeExtension.ClientObject):
     def getItemOrNull(self, key : 'str') -> 'Worksheet':
     	# Begin_PlaceHolder_WorksheetCollection_GetItemOrNull
     	# End_PlaceHolder_WorksheetCollection_GetItemOrNull
-        return Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -673,102 +682,122 @@ class Range(OfficeExtension.ClientObject):
     def getBoundingRect(self, anotherRange : 'any') -> 'Range':
     	# Begin_PlaceHolder_Range_GetBoundingRect
     	# End_PlaceHolder_Range_GetBoundingRect
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetBoundingRect", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetBoundingRect", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        return ret
 
     def getCell(self, row : 'int', column : 'int') -> 'Range':
     	# Begin_PlaceHolder_Range_GetCell
     	# End_PlaceHolder_Range_GetCell
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
+        return ret
 
     def getColumn(self, column : 'int') -> 'Range':
     	# Begin_PlaceHolder_Range_GetColumn
     	# End_PlaceHolder_Range_GetColumn
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetColumn", OfficeExtension.OperationType.Read, [column], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumn", OfficeExtension.OperationType.Read, [column], False, True))
+        return ret
 
     def getColumnsAfter(self, count : 'int' = None) -> 'Range':
     	# Begin_PlaceHolder_Range_GetColumnsAfter
     	# End_PlaceHolder_Range_GetColumnsAfter
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsAfter", OfficeExtension.OperationType.Read, [count], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsAfter", OfficeExtension.OperationType.Read, [count], False, True))
+        return ret
 
     def getColumnsBefore(self, count : 'int' = None) -> 'Range':
     	# Begin_PlaceHolder_Range_GetColumnsBefore
     	# End_PlaceHolder_Range_GetColumnsBefore
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsBefore", OfficeExtension.OperationType.Read, [count], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsBefore", OfficeExtension.OperationType.Read, [count], False, True))
+        return ret
 
     def getEntireColumn(self) -> 'Range':
     	# Begin_PlaceHolder_Range_GetEntireColumn
     	# End_PlaceHolder_Range_GetEntireColumn
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireColumn", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireColumn", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getEntireRow(self) -> 'Range':
     	# Begin_PlaceHolder_Range_GetEntireRow
     	# End_PlaceHolder_Range_GetEntireRow
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireRow", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireRow", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getIntersection(self, anotherRange : 'any') -> 'Range':
     	# Begin_PlaceHolder_Range_GetIntersection
     	# End_PlaceHolder_Range_GetIntersection
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersection", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersection", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        return ret
 
     def getIntersectionOrNull(self, anotherRange : 'any') -> 'Range':
     	# Begin_PlaceHolder_Range_GetIntersectionOrNull
     	# End_PlaceHolder_Range_GetIntersectionOrNull
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersectionOrNull", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersectionOrNull", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+        return ret
 
     def getLastCell(self) -> 'Range':
     	# Begin_PlaceHolder_Range_GetLastCell
     	# End_PlaceHolder_Range_GetLastCell
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetLastCell", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastCell", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getLastColumn(self) -> 'Range':
     	# Begin_PlaceHolder_Range_GetLastColumn
     	# End_PlaceHolder_Range_GetLastColumn
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetLastColumn", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastColumn", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getLastRow(self) -> 'Range':
     	# Begin_PlaceHolder_Range_GetLastRow
     	# End_PlaceHolder_Range_GetLastRow
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetLastRow", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastRow", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getOffsetRange(self, rowOffset : 'int', columnOffset : 'int') -> 'Range':
     	# Begin_PlaceHolder_Range_GetOffsetRange
     	# End_PlaceHolder_Range_GetOffsetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetOffsetRange", OfficeExtension.OperationType.Read, [rowOffset, columnOffset], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetOffsetRange", OfficeExtension.OperationType.Read, [rowOffset, columnOffset], False, True))
+        return ret
 
     def getResizedRange(self, deltaRows : 'int', deltaColumns : 'int') -> 'Range':
     	# Begin_PlaceHolder_Range_GetResizedRange
     	# End_PlaceHolder_Range_GetResizedRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetResizedRange", OfficeExtension.OperationType.Read, [deltaRows, deltaColumns], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetResizedRange", OfficeExtension.OperationType.Read, [deltaRows, deltaColumns], False, True))
+        return ret
 
     def getRow(self, row : 'int') -> 'Range':
     	# Begin_PlaceHolder_Range_GetRow
     	# End_PlaceHolder_Range_GetRow
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRow", OfficeExtension.OperationType.Read, [row], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRow", OfficeExtension.OperationType.Read, [row], False, True))
+        return ret
 
     def getRowsAbove(self, count : 'int' = None) -> 'Range':
     	# Begin_PlaceHolder_Range_GetRowsAbove
     	# End_PlaceHolder_Range_GetRowsAbove
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsAbove", OfficeExtension.OperationType.Read, [count], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsAbove", OfficeExtension.OperationType.Read, [count], False, True))
+        return ret
 
     def getRowsBelow(self, count : 'int' = None) -> 'Range':
     	# Begin_PlaceHolder_Range_GetRowsBelow
     	# End_PlaceHolder_Range_GetRowsBelow
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsBelow", OfficeExtension.OperationType.Read, [count], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsBelow", OfficeExtension.OperationType.Read, [count], False, True))
+        return ret
 
     def getUsedRange(self, valuesOnly : 'bool' = None) -> 'Range':
     	# Begin_PlaceHolder_Range_GetUsedRange
     	# End_PlaceHolder_Range_GetUsedRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
+        return ret
 
     def getVisibleView(self) -> 'RangeView':
     	# Begin_PlaceHolder_Range_GetVisibleView
     	# End_PlaceHolder_Range_GetVisibleView
-        return RangeView(self.context, _createMethodObjectPath(self.context, self, "GetVisibleView", OfficeExtension.OperationType.Read, [], False, False))
+        ret = RangeView(self.context, _createMethodObjectPath(self.context, self, "GetVisibleView", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
 
     def insert(self, shift : 'str') -> 'Range':
     	# Begin_PlaceHolder_Range_Insert
     	# End_PlaceHolder_Range_Insert
-        return Range(self.context, _createMethodObjectPath(self.context, self, "Insert", OfficeExtension.OperationType.Default, [shift], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "Insert", OfficeExtension.OperationType.Default, [shift], False, True))
+        return ret
 
     def merge(self, across : 'bool' = None) -> None:
     	# Begin_PlaceHolder_Range_Merge
@@ -1000,7 +1029,8 @@ class RangeView(OfficeExtension.ClientObject):
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_RangeView_GetRange
     	# End_PlaceHolder_RangeView_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1054,7 +1084,8 @@ class RangeViewCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'RangeView':
     	# Begin_PlaceHolder_RangeViewCollection_GetItemAt
     	# End_PlaceHolder_RangeViewCollection_GetItemAt
-        return RangeView(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = RangeView(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1096,12 +1127,14 @@ class SettingCollection(OfficeExtension.ClientObject):
     def getItemOrNull(self, key : 'str') -> 'Setting':
     	# Begin_PlaceHolder_SettingCollection_GetItemOrNull
     	# End_PlaceHolder_SettingCollection_GetItemOrNull
-        return Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
 
     def _Add(self, key : 'str', value : 'str') -> 'Setting':
     	# Begin_PlaceHolder_SettingCollection__Add
     	# End_PlaceHolder_SettingCollection__Add
-        return Setting(self.context, _createMethodObjectPath(self.context, self, "_Add", OfficeExtension.OperationType.Default, [key, value], False, False))
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "_Add", OfficeExtension.OperationType.Default, [key, value], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1192,7 +1225,8 @@ class NamedItemCollection(OfficeExtension.ClientObject):
     def getItemOrNull(self, name : 'str') -> 'NamedItem':
     	# Begin_PlaceHolder_NamedItemCollection_GetItemOrNull
     	# End_PlaceHolder_NamedItemCollection_GetItemOrNull
-        return NamedItem(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1267,7 +1301,8 @@ class NamedItem(OfficeExtension.ClientObject):
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_NamedItem_GetRange
     	# End_PlaceHolder_NamedItem_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1327,12 +1362,14 @@ class Binding(OfficeExtension.ClientObject):
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_Binding_GetRange
     	# End_PlaceHolder_Binding_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, False))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
 
     def getTable(self) -> 'Table':
     	# Begin_PlaceHolder_Binding_GetTable
     	# End_PlaceHolder_Binding_GetTable
-        return Table(self.context, _createMethodObjectPath(self.context, self, "GetTable", OfficeExtension.OperationType.Read, [], False, False))
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetTable", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
 
     def getText(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Binding_GetText
@@ -1389,17 +1426,21 @@ class BindingCollection(OfficeExtension.ClientObject):
     def add(self, range : 'any', bindingType : 'str', id : 'str') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_Add
     	# End_PlaceHolder_BindingCollection_Add
-        return Binding(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [range, bindingType, id], False, True))
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [range, bindingType, id], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def addFromNamedItem(self, name : 'str', bindingType : 'str', id : 'str') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_AddFromNamedItem
     	# End_PlaceHolder_BindingCollection_AddFromNamedItem
-        return Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromNamedItem", OfficeExtension.OperationType.Default, [name, bindingType, id], False, False))
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromNamedItem", OfficeExtension.OperationType.Default, [name, bindingType, id], False, False))
+        return ret
 
     def addFromSelection(self, bindingType : 'str', id : 'str') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_AddFromSelection
     	# End_PlaceHolder_BindingCollection_AddFromSelection
-        return Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromSelection", OfficeExtension.OperationType.Default, [bindingType, id], False, False))
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromSelection", OfficeExtension.OperationType.Default, [bindingType, id], False, False))
+        return ret
 
     def getItem(self, id : 'str') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_GetItem
@@ -1409,12 +1450,14 @@ class BindingCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_GetItemAt
     	# End_PlaceHolder_BindingCollection_GetItemAt
-        return Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     def getItemOrNull(self, id : 'str') -> 'Binding':
     	# Begin_PlaceHolder_BindingCollection_GetItemOrNull
     	# End_PlaceHolder_BindingCollection_GetItemOrNull
-        return Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [id], False, False))
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [id], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1461,7 +1504,9 @@ class TableCollection(OfficeExtension.ClientObject):
     def add(self, address : 'any', hasHeaders : 'bool') -> 'Table':
     	# Begin_PlaceHolder_TableCollection_Add
     	# End_PlaceHolder_TableCollection_Add
-        return Table(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [address, hasHeaders], False, True))
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [address, hasHeaders], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def getItem(self, key : 'any') -> 'Table':
     	# Begin_PlaceHolder_TableCollection_GetItem
@@ -1471,12 +1516,14 @@ class TableCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'Table':
     	# Begin_PlaceHolder_TableCollection_GetItemAt
     	# End_PlaceHolder_TableCollection_GetItemAt
-        return Table(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     def getItemOrNull(self, key : 'any') -> 'Table':
     	# Begin_PlaceHolder_TableCollection_GetItemOrNull
     	# End_PlaceHolder_TableCollection_GetItemOrNull
-        return Table(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1671,7 +1718,8 @@ class Table(OfficeExtension.ClientObject):
     def convertToRange(self) -> 'Range':
     	# Begin_PlaceHolder_Table_ConvertToRange
     	# End_PlaceHolder_Table_ConvertToRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "ConvertToRange", OfficeExtension.OperationType.Default, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "ConvertToRange", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def delete(self) -> None:
     	# Begin_PlaceHolder_Table_Delete
@@ -1682,22 +1730,26 @@ class Table(OfficeExtension.ClientObject):
     def getDataBodyRange(self) -> 'Range':
     	# Begin_PlaceHolder_Table_GetDataBodyRange
     	# End_PlaceHolder_Table_GetDataBodyRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getHeaderRowRange(self) -> 'Range':
     	# Begin_PlaceHolder_Table_GetHeaderRowRange
     	# End_PlaceHolder_Table_GetHeaderRowRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_Table_GetRange
     	# End_PlaceHolder_Table_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getTotalRowRange(self) -> 'Range':
     	# Begin_PlaceHolder_Table_GetTotalRowRange
     	# End_PlaceHolder_Table_GetTotalRowRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def reapplyFilters(self) -> None:
     	# Begin_PlaceHolder_Table_ReapplyFilters
@@ -1775,7 +1827,9 @@ class TableColumnCollection(OfficeExtension.ClientObject):
     def add(self, index : 'int' = None, values : 'any' = None) -> 'TableColumn':
     	# Begin_PlaceHolder_TableColumnCollection_Add
     	# End_PlaceHolder_TableColumnCollection_Add
-        return TableColumn(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
+        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def getItem(self, key : 'any') -> 'TableColumn':
     	# Begin_PlaceHolder_TableColumnCollection_GetItem
@@ -1785,12 +1839,14 @@ class TableColumnCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'TableColumn':
     	# Begin_PlaceHolder_TableColumnCollection_GetItemAt
     	# End_PlaceHolder_TableColumnCollection_GetItemAt
-        return TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     def getItemOrNull(self, key : 'any') -> 'TableColumn':
     	# Begin_PlaceHolder_TableColumnCollection_GetItemOrNull
     	# End_PlaceHolder_TableColumnCollection_GetItemOrNull
-        return TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1871,22 +1927,26 @@ class TableColumn(OfficeExtension.ClientObject):
     def getDataBodyRange(self) -> 'Range':
     	# Begin_PlaceHolder_TableColumn_GetDataBodyRange
     	# End_PlaceHolder_TableColumn_GetDataBodyRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getHeaderRowRange(self) -> 'Range':
     	# Begin_PlaceHolder_TableColumn_GetHeaderRowRange
     	# End_PlaceHolder_TableColumn_GetHeaderRowRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_TableColumn_GetRange
     	# End_PlaceHolder_TableColumn_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     def getTotalRowRange(self) -> 'Range':
     	# Begin_PlaceHolder_TableColumn_GetTotalRowRange
     	# End_PlaceHolder_TableColumn_GetTotalRowRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1940,12 +2000,15 @@ class TableRowCollection(OfficeExtension.ClientObject):
     def add(self, index : 'int' = None, values : 'any' = None) -> 'TableRow':
     	# Begin_PlaceHolder_TableRowCollection_Add
     	# End_PlaceHolder_TableRowCollection_Add
-        return TableRow(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
+        ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def getItemAt(self, index : 'int') -> 'TableRow':
     	# Begin_PlaceHolder_TableRowCollection_GetItemAt
     	# End_PlaceHolder_TableRowCollection_GetItemAt
-        return TableRow(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2004,7 +2067,8 @@ class TableRow(OfficeExtension.ClientObject):
     def getRange(self) -> 'Range':
     	# Begin_PlaceHolder_TableRow_GetRange
     	# End_PlaceHolder_TableRow_GetRange
-        return Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2355,7 +2419,8 @@ class RangeBorderCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'RangeBorder':
     	# Begin_PlaceHolder_RangeBorderCollection_GetItemAt
     	# End_PlaceHolder_RangeBorderCollection_GetItemAt
-        return RangeBorder(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = RangeBorder(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2515,22 +2580,27 @@ class ChartCollection(OfficeExtension.ClientObject):
     def add(self, type : 'str', sourceData : 'any', seriesBy : 'str' = None) -> 'Chart':
     	# Begin_PlaceHolder_ChartCollection_Add
     	# End_PlaceHolder_ChartCollection_Add
-        return Chart(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [type, sourceData, seriesBy], False, True))
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [type, sourceData, seriesBy], False, True))
+        _syncIfImmediateExecution(self)
+        return ret
 
     def getItem(self, name : 'str') -> 'Chart':
     	# Begin_PlaceHolder_ChartCollection_GetItem
     	# End_PlaceHolder_ChartCollection_GetItem
-        return Chart(self.context, _createMethodObjectPath(self.context, self, "GetItem", OfficeExtension.OperationType.Read, [name], False, False))
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItem", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
 
     def getItemAt(self, index : 'int') -> 'Chart':
     	# Begin_PlaceHolder_ChartCollection_GetItemAt
     	# End_PlaceHolder_ChartCollection_GetItemAt
-        return Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     def getItemOrNull(self, name : 'str') -> 'Chart':
     	# Begin_PlaceHolder_ChartCollection_GetItemOrNull
     	# End_PlaceHolder_ChartCollection_GetItemOrNull
-        return Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
 
     def _GetItem(self, key : 'str') -> 'Chart':
     	# Begin_PlaceHolder_ChartCollection__GetItem
@@ -2795,7 +2865,8 @@ class ChartSeriesCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'ChartSeries':
     	# Begin_PlaceHolder_ChartSeriesCollection_GetItemAt
     	# End_PlaceHolder_ChartSeriesCollection_GetItemAt
-        return ChartSeries(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = ChartSeries(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2924,7 +2995,8 @@ class ChartPointsCollection(OfficeExtension.ClientObject):
     def getItemAt(self, index : 'int') -> 'ChartPoint':
     	# Begin_PlaceHolder_ChartPointsCollection_GetItemAt
     	# End_PlaceHolder_ChartPointsCollection_GetItemAt
-        return ChartPoint(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        ret = ChartPoint(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4169,7 +4241,8 @@ class PivotTableCollection(OfficeExtension.ClientObject):
     def getItemOrNull(self, name : 'str') -> 'PivotTable':
     	# Begin_PlaceHolder_PivotTableCollection_GetItemOrNull
     	# End_PlaceHolder_PivotTableCollection_GetItemOrNull
-        return PivotTable(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        ret = PivotTable(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
 
     def refreshAll(self) -> None:
     	# Begin_PlaceHolder_PivotTableCollection_RefreshAll
@@ -4602,1832 +4675,2198 @@ class Functions(OfficeExtension.ClientObject):
     def abs(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Abs
     	# End_PlaceHolder_Functions_Abs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Abs", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Abs", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def accrInt(self, issue : 'any', firstInterest : 'any', settlement : 'any', rate : 'any', par : 'any', frequency : 'any', basis : 'any' = None, calcMethod : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AccrInt
     	# End_PlaceHolder_Functions_AccrInt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrInt", OfficeExtension.OperationType.Default, [issue, firstInterest, settlement, rate, par, frequency, basis, calcMethod], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrInt", OfficeExtension.OperationType.Default, [issue, firstInterest, settlement, rate, par, frequency, basis, calcMethod], False, True))
+        return ret
 
     def accrIntM(self, issue : 'any', settlement : 'any', rate : 'any', par : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AccrIntM
     	# End_PlaceHolder_Functions_AccrIntM
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrIntM", OfficeExtension.OperationType.Default, [issue, settlement, rate, par, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrIntM", OfficeExtension.OperationType.Default, [issue, settlement, rate, par, basis], False, True))
+        return ret
 
     def acos(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Acos
     	# End_PlaceHolder_Functions_Acos
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acos", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acos", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def acosh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Acosh
     	# End_PlaceHolder_Functions_Acosh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acosh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acosh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def acot(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Acot
     	# End_PlaceHolder_Functions_Acot
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acot", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acot", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def acoth(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Acoth
     	# End_PlaceHolder_Functions_Acoth
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acoth", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acoth", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def amorDegrc(self, cost : 'any', datePurchased : 'any', firstPeriod : 'any', salvage : 'any', period : 'any', rate : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AmorDegrc
     	# End_PlaceHolder_Functions_AmorDegrc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorDegrc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorDegrc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
+        return ret
 
     def amorLinc(self, cost : 'any', datePurchased : 'any', firstPeriod : 'any', salvage : 'any', period : 'any', rate : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AmorLinc
     	# End_PlaceHolder_Functions_AmorLinc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorLinc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorLinc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
+        return ret
 
     def and_(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_And
     	# End_PlaceHolder_Functions_And
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "And", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "And", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def arabic(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Arabic
     	# End_PlaceHolder_Functions_Arabic
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Arabic", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Arabic", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def areas(self, reference : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Areas
     	# End_PlaceHolder_Functions_Areas
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Areas", OfficeExtension.OperationType.Default, [reference], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Areas", OfficeExtension.OperationType.Default, [reference], False, True))
+        return ret
 
     def asc(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Asc
     	# End_PlaceHolder_Functions_Asc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asc", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asc", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def asin(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Asin
     	# End_PlaceHolder_Functions_Asin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asin", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asin", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def asinh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Asinh
     	# End_PlaceHolder_Functions_Asinh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asinh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asinh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def atan(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Atan
     	# End_PlaceHolder_Functions_Atan
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def atan2(self, xNum : 'any', yNum : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Atan2
     	# End_PlaceHolder_Functions_Atan2
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan2", OfficeExtension.OperationType.Default, [xNum, yNum], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan2", OfficeExtension.OperationType.Default, [xNum, yNum], False, True))
+        return ret
 
     def atanh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Atanh
     	# End_PlaceHolder_Functions_Atanh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atanh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atanh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def aveDev(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AveDev
     	# End_PlaceHolder_Functions_AveDev
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AveDev", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AveDev", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def average(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Average
     	# End_PlaceHolder_Functions_Average
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Average", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Average", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def averageA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AverageA
     	# End_PlaceHolder_Functions_AverageA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def averageIf(self, range : 'any', criteria : 'any', averageRange : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AverageIf
     	# End_PlaceHolder_Functions_AverageIf
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIf", OfficeExtension.OperationType.Default, [range, criteria, averageRange], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIf", OfficeExtension.OperationType.Default, [range, criteria, averageRange], False, True))
+        return ret
 
     def averageIfs(self, averageRange : 'any', values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_AverageIfs
     	# End_PlaceHolder_Functions_AverageIfs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIfs", OfficeExtension.OperationType.Default, [averageRange, values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIfs", OfficeExtension.OperationType.Default, [averageRange, values], False, True))
+        return ret
 
     def bahtText(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_BahtText
     	# End_PlaceHolder_Functions_BahtText
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BahtText", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BahtText", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def base(self, number : 'any', radix : 'any', minLength : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Base
     	# End_PlaceHolder_Functions_Base
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Base", OfficeExtension.OperationType.Default, [number, radix, minLength], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Base", OfficeExtension.OperationType.Default, [number, radix, minLength], False, True))
+        return ret
 
     def besselI(self, x : 'any', n : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_BesselI
     	# End_PlaceHolder_Functions_BesselI
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselI", OfficeExtension.OperationType.Default, [x, n], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselI", OfficeExtension.OperationType.Default, [x, n], False, True))
+        return ret
 
     def besselJ(self, x : 'any', n : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_BesselJ
     	# End_PlaceHolder_Functions_BesselJ
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselJ", OfficeExtension.OperationType.Default, [x, n], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselJ", OfficeExtension.OperationType.Default, [x, n], False, True))
+        return ret
 
     def besselK(self, x : 'any', n : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_BesselK
     	# End_PlaceHolder_Functions_BesselK
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselK", OfficeExtension.OperationType.Default, [x, n], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselK", OfficeExtension.OperationType.Default, [x, n], False, True))
+        return ret
 
     def besselY(self, x : 'any', n : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_BesselY
     	# End_PlaceHolder_Functions_BesselY
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselY", OfficeExtension.OperationType.Default, [x, n], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselY", OfficeExtension.OperationType.Default, [x, n], False, True))
+        return ret
 
     def beta_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any', A : 'any' = None, B : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Beta_Dist
     	# End_PlaceHolder_Functions_Beta_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative, A, B], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative, A, B], False, True))
+        return ret
 
     def beta_Inv(self, probability : 'any', alpha : 'any', beta : 'any', A : 'any' = None, B : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Beta_Inv
     	# End_PlaceHolder_Functions_Beta_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta, A, B], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta, A, B], False, True))
+        return ret
 
     def bin2Dec(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bin2Dec
     	# End_PlaceHolder_Functions_Bin2Dec
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def bin2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bin2Hex
     	# End_PlaceHolder_Functions_Bin2Hex
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def bin2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bin2Oct
     	# End_PlaceHolder_Functions_Bin2Oct
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def binom_Dist(self, numberS : 'any', trials : 'any', probabilityS : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Binom_Dist
     	# End_PlaceHolder_Functions_Binom_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist", OfficeExtension.OperationType.Default, [numberS, trials, probabilityS, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist", OfficeExtension.OperationType.Default, [numberS, trials, probabilityS, cumulative], False, True))
+        return ret
 
     def binom_Dist_Range(self, trials : 'any', probabilityS : 'any', numberS : 'any', numberS2 : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Binom_Dist_Range
     	# End_PlaceHolder_Functions_Binom_Dist_Range
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist_Range", OfficeExtension.OperationType.Default, [trials, probabilityS, numberS, numberS2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist_Range", OfficeExtension.OperationType.Default, [trials, probabilityS, numberS, numberS2], False, True))
+        return ret
 
     def binom_Inv(self, trials : 'any', probabilityS : 'any', alpha : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Binom_Inv
     	# End_PlaceHolder_Functions_Binom_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Inv", OfficeExtension.OperationType.Default, [trials, probabilityS, alpha], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Inv", OfficeExtension.OperationType.Default, [trials, probabilityS, alpha], False, True))
+        return ret
 
     def bitand(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bitand
     	# End_PlaceHolder_Functions_Bitand
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitand", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitand", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        return ret
 
     def bitlshift(self, number : 'any', shiftAmount : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bitlshift
     	# End_PlaceHolder_Functions_Bitlshift
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitlshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitlshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
+        return ret
 
     def bitor(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bitor
     	# End_PlaceHolder_Functions_Bitor
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        return ret
 
     def bitrshift(self, number : 'any', shiftAmount : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bitrshift
     	# End_PlaceHolder_Functions_Bitrshift
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitrshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitrshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
+        return ret
 
     def bitxor(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Bitxor
     	# End_PlaceHolder_Functions_Bitxor
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitxor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitxor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        return ret
 
     def ceiling_Math(self, number : 'any', significance : 'any' = None, mode : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ceiling_Math
     	# End_PlaceHolder_Functions_Ceiling_Math
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
+        return ret
 
     def ceiling_Precise(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ceiling_Precise
     	# End_PlaceHolder_Functions_Ceiling_Precise
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        return ret
 
     def char(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Char
     	# End_PlaceHolder_Functions_Char
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Char", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Char", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def chiSq_Dist(self, x : 'any', degFreedom : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ChiSq_Dist
     	# End_PlaceHolder_Functions_ChiSq_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
+        return ret
 
     def chiSq_Dist_RT(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ChiSq_Dist_RT
     	# End_PlaceHolder_Functions_ChiSq_Dist_RT
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        return ret
 
     def chiSq_Inv(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ChiSq_Inv
     	# End_PlaceHolder_Functions_ChiSq_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        return ret
 
     def chiSq_Inv_RT(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ChiSq_Inv_RT
     	# End_PlaceHolder_Functions_ChiSq_Inv_RT
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        return ret
 
     def choose(self, indexNum : 'any', values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Choose
     	# End_PlaceHolder_Functions_Choose
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Choose", OfficeExtension.OperationType.Default, [indexNum, values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Choose", OfficeExtension.OperationType.Default, [indexNum, values], False, True))
+        return ret
 
     def clean(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Clean
     	# End_PlaceHolder_Functions_Clean
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Clean", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Clean", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def code(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Code
     	# End_PlaceHolder_Functions_Code
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Code", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Code", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def columns(self, array : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Columns
     	# End_PlaceHolder_Functions_Columns
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Columns", OfficeExtension.OperationType.Default, [array], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Columns", OfficeExtension.OperationType.Default, [array], False, True))
+        return ret
 
     def combin(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Combin
     	# End_PlaceHolder_Functions_Combin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combin", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combin", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        return ret
 
     def combina(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Combina
     	# End_PlaceHolder_Functions_Combina
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combina", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combina", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        return ret
 
     def complex(self, realNum : 'any', iNum : 'any', suffix : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Complex
     	# End_PlaceHolder_Functions_Complex
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Complex", OfficeExtension.OperationType.Default, [realNum, iNum, suffix], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Complex", OfficeExtension.OperationType.Default, [realNum, iNum, suffix], False, True))
+        return ret
 
     def concatenate(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Concatenate
     	# End_PlaceHolder_Functions_Concatenate
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Concatenate", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Concatenate", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def confidence_Norm(self, alpha : 'any', standardDev : 'any', size : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Confidence_Norm
     	# End_PlaceHolder_Functions_Confidence_Norm
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_Norm", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_Norm", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
+        return ret
 
     def confidence_T(self, alpha : 'any', standardDev : 'any', size : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Confidence_T
     	# End_PlaceHolder_Functions_Confidence_T
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_T", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_T", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
+        return ret
 
     def convert(self, number : 'any', fromUnit : 'any', toUnit : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Convert
     	# End_PlaceHolder_Functions_Convert
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Convert", OfficeExtension.OperationType.Default, [number, fromUnit, toUnit], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Convert", OfficeExtension.OperationType.Default, [number, fromUnit, toUnit], False, True))
+        return ret
 
     def cos(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Cos
     	# End_PlaceHolder_Functions_Cos
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cos", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cos", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def cosh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Cosh
     	# End_PlaceHolder_Functions_Cosh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cosh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cosh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def cot(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Cot
     	# End_PlaceHolder_Functions_Cot
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cot", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cot", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def coth(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Coth
     	# End_PlaceHolder_Functions_Coth
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Coth", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Coth", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def count(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Count
     	# End_PlaceHolder_Functions_Count
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Count", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Count", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def countA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CountA
     	# End_PlaceHolder_Functions_CountA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def countBlank(self, range : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CountBlank
     	# End_PlaceHolder_Functions_CountBlank
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountBlank", OfficeExtension.OperationType.Default, [range], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountBlank", OfficeExtension.OperationType.Default, [range], False, True))
+        return ret
 
     def countIf(self, range : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CountIf
     	# End_PlaceHolder_Functions_CountIf
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIf", OfficeExtension.OperationType.Default, [range, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIf", OfficeExtension.OperationType.Default, [range, criteria], False, True))
+        return ret
 
     def countIfs(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CountIfs
     	# End_PlaceHolder_Functions_CountIfs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIfs", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIfs", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def coupDayBs(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupDayBs
     	# End_PlaceHolder_Functions_CoupDayBs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDayBs", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDayBs", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def coupDays(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupDays
     	# End_PlaceHolder_Functions_CoupDays
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDays", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDays", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def coupDaysNc(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupDaysNc
     	# End_PlaceHolder_Functions_CoupDaysNc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDaysNc", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDaysNc", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def coupNcd(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupNcd
     	# End_PlaceHolder_Functions_CoupNcd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def coupNum(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupNum
     	# End_PlaceHolder_Functions_CoupNum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNum", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNum", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def coupPcd(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CoupPcd
     	# End_PlaceHolder_Functions_CoupPcd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupPcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupPcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
+        return ret
 
     def csc(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Csc
     	# End_PlaceHolder_Functions_Csc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csc", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csc", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def csch(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Csch
     	# End_PlaceHolder_Functions_Csch
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csch", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csch", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def cumIPmt(self, rate : 'any', nper : 'any', pv : 'any', startPeriod : 'any', endPeriod : 'any', type : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CumIPmt
     	# End_PlaceHolder_Functions_CumIPmt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumIPmt", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumIPmt", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
+        return ret
 
     def cumPrinc(self, rate : 'any', nper : 'any', pv : 'any', startPeriod : 'any', endPeriod : 'any', type : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_CumPrinc
     	# End_PlaceHolder_Functions_CumPrinc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumPrinc", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumPrinc", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
+        return ret
 
     def daverage(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DAverage
     	# End_PlaceHolder_Functions_DAverage
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DAverage", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DAverage", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dcount(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DCount
     	# End_PlaceHolder_Functions_DCount
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCount", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCount", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dcountA(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DCountA
     	# End_PlaceHolder_Functions_DCountA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCountA", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCountA", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dget(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DGet
     	# End_PlaceHolder_Functions_DGet
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DGet", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DGet", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dmax(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DMax
     	# End_PlaceHolder_Functions_DMax
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMax", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMax", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dmin(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DMin
     	# End_PlaceHolder_Functions_DMin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMin", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMin", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dproduct(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DProduct
     	# End_PlaceHolder_Functions_DProduct
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DProduct", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DProduct", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dstDev(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DStDev
     	# End_PlaceHolder_Functions_DStDev
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDev", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDev", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dstDevP(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DStDevP
     	# End_PlaceHolder_Functions_DStDevP
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDevP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDevP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dsum(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DSum
     	# End_PlaceHolder_Functions_DSum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DSum", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DSum", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dvar(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DVar
     	# End_PlaceHolder_Functions_DVar
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVar", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVar", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def dvarP(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DVarP
     	# End_PlaceHolder_Functions_DVarP
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVarP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVarP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
+        return ret
 
     def date(self, year : 'any', month : 'any', day : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Date
     	# End_PlaceHolder_Functions_Date
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Date", OfficeExtension.OperationType.Default, [year, month, day], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Date", OfficeExtension.OperationType.Default, [year, month, day], False, True))
+        return ret
 
     def datevalue(self, dateText : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Datevalue
     	# End_PlaceHolder_Functions_Datevalue
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Datevalue", OfficeExtension.OperationType.Default, [dateText], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Datevalue", OfficeExtension.OperationType.Default, [dateText], False, True))
+        return ret
 
     def day(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Day
     	# End_PlaceHolder_Functions_Day
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Day", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Day", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def days(self, endDate : 'any', startDate : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Days
     	# End_PlaceHolder_Functions_Days
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days", OfficeExtension.OperationType.Default, [endDate, startDate], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days", OfficeExtension.OperationType.Default, [endDate, startDate], False, True))
+        return ret
 
     def days360(self, startDate : 'any', endDate : 'any', method : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Days360
     	# End_PlaceHolder_Functions_Days360
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days360", OfficeExtension.OperationType.Default, [startDate, endDate, method], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days360", OfficeExtension.OperationType.Default, [startDate, endDate, method], False, True))
+        return ret
 
     def db(self, cost : 'any', salvage : 'any', life : 'any', period : 'any', month : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Db
     	# End_PlaceHolder_Functions_Db
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Db", OfficeExtension.OperationType.Default, [cost, salvage, life, period, month], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Db", OfficeExtension.OperationType.Default, [cost, salvage, life, period, month], False, True))
+        return ret
 
     def dbcs(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Dbcs
     	# End_PlaceHolder_Functions_Dbcs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dbcs", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dbcs", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def ddb(self, cost : 'any', salvage : 'any', life : 'any', period : 'any', factor : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ddb
     	# End_PlaceHolder_Functions_Ddb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ddb", OfficeExtension.OperationType.Default, [cost, salvage, life, period, factor], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ddb", OfficeExtension.OperationType.Default, [cost, salvage, life, period, factor], False, True))
+        return ret
 
     def dec2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Dec2Bin
     	# End_PlaceHolder_Functions_Dec2Bin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def dec2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Dec2Hex
     	# End_PlaceHolder_Functions_Dec2Hex
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def dec2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Dec2Oct
     	# End_PlaceHolder_Functions_Dec2Oct
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def decimal(self, number : 'any', radix : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Decimal
     	# End_PlaceHolder_Functions_Decimal
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Decimal", OfficeExtension.OperationType.Default, [number, radix], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Decimal", OfficeExtension.OperationType.Default, [number, radix], False, True))
+        return ret
 
     def degrees(self, angle : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Degrees
     	# End_PlaceHolder_Functions_Degrees
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Degrees", OfficeExtension.OperationType.Default, [angle], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Degrees", OfficeExtension.OperationType.Default, [angle], False, True))
+        return ret
 
     def delta(self, number1 : 'any', number2 : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Delta
     	# End_PlaceHolder_Functions_Delta
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Delta", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Delta", OfficeExtension.OperationType.Default, [number1, number2], False, True))
+        return ret
 
     def devSq(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DevSq
     	# End_PlaceHolder_Functions_DevSq
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DevSq", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DevSq", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def disc(self, settlement : 'any', maturity : 'any', pr : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Disc
     	# End_PlaceHolder_Functions_Disc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Disc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Disc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
+        return ret
 
     def dollar(self, number : 'any', decimals : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Dollar
     	# End_PlaceHolder_Functions_Dollar
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
+        return ret
 
     def dollarDe(self, fractionalDollar : 'any', fraction : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DollarDe
     	# End_PlaceHolder_Functions_DollarDe
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarDe", OfficeExtension.OperationType.Default, [fractionalDollar, fraction], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarDe", OfficeExtension.OperationType.Default, [fractionalDollar, fraction], False, True))
+        return ret
 
     def dollarFr(self, decimalDollar : 'any', fraction : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_DollarFr
     	# End_PlaceHolder_Functions_DollarFr
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarFr", OfficeExtension.OperationType.Default, [decimalDollar, fraction], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarFr", OfficeExtension.OperationType.Default, [decimalDollar, fraction], False, True))
+        return ret
 
     def duration(self, settlement : 'any', maturity : 'any', coupon : 'any', yld : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Duration
     	# End_PlaceHolder_Functions_Duration
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Duration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Duration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
+        return ret
 
     def ecma_Ceiling(self, number : 'any', significance : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ECMA_Ceiling
     	# End_PlaceHolder_Functions_ECMA_Ceiling
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ECMA_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ECMA_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        return ret
 
     def edate(self, startDate : 'any', months : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_EDate
     	# End_PlaceHolder_Functions_EDate
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EDate", OfficeExtension.OperationType.Default, [startDate, months], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EDate", OfficeExtension.OperationType.Default, [startDate, months], False, True))
+        return ret
 
     def effect(self, nominalRate : 'any', npery : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Effect
     	# End_PlaceHolder_Functions_Effect
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Effect", OfficeExtension.OperationType.Default, [nominalRate, npery], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Effect", OfficeExtension.OperationType.Default, [nominalRate, npery], False, True))
+        return ret
 
     def eoMonth(self, startDate : 'any', months : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_EoMonth
     	# End_PlaceHolder_Functions_EoMonth
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EoMonth", OfficeExtension.OperationType.Default, [startDate, months], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EoMonth", OfficeExtension.OperationType.Default, [startDate, months], False, True))
+        return ret
 
     def erf(self, lowerLimit : 'any', upperLimit : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Erf
     	# End_PlaceHolder_Functions_Erf
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf", OfficeExtension.OperationType.Default, [lowerLimit, upperLimit], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf", OfficeExtension.OperationType.Default, [lowerLimit, upperLimit], False, True))
+        return ret
 
     def erfC(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ErfC
     	# End_PlaceHolder_Functions_ErfC
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def erfC_Precise(self, X : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ErfC_Precise
     	# End_PlaceHolder_Functions_ErfC_Precise
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC_Precise", OfficeExtension.OperationType.Default, [X], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC_Precise", OfficeExtension.OperationType.Default, [X], False, True))
+        return ret
 
     def erf_Precise(self, X : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Erf_Precise
     	# End_PlaceHolder_Functions_Erf_Precise
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf_Precise", OfficeExtension.OperationType.Default, [X], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf_Precise", OfficeExtension.OperationType.Default, [X], False, True))
+        return ret
 
     def error_Type(self, errorVal : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Error_Type
     	# End_PlaceHolder_Functions_Error_Type
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Error_Type", OfficeExtension.OperationType.Default, [errorVal], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Error_Type", OfficeExtension.OperationType.Default, [errorVal], False, True))
+        return ret
 
     def even(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Even
     	# End_PlaceHolder_Functions_Even
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Even", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Even", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def exact(self, text1 : 'any', text2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Exact
     	# End_PlaceHolder_Functions_Exact
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exact", OfficeExtension.OperationType.Default, [text1, text2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exact", OfficeExtension.OperationType.Default, [text1, text2], False, True))
+        return ret
 
     def exp(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Exp
     	# End_PlaceHolder_Functions_Exp
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exp", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exp", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def expon_Dist(self, x : 'any', lambda_ : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Expon_Dist
     	# End_PlaceHolder_Functions_Expon_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Expon_Dist", OfficeExtension.OperationType.Default, [x, lambda_, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Expon_Dist", OfficeExtension.OperationType.Default, [x, lambda_, cumulative], False, True))
+        return ret
 
     def fvschedule(self, principal : 'any', schedule : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_FVSchedule
     	# End_PlaceHolder_Functions_FVSchedule
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FVSchedule", OfficeExtension.OperationType.Default, [principal, schedule], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FVSchedule", OfficeExtension.OperationType.Default, [principal, schedule], False, True))
+        return ret
 
     def f_Dist(self, x : 'any', degFreedom1 : 'any', degFreedom2 : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_F_Dist
     	# End_PlaceHolder_Functions_F_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2, cumulative], False, True))
+        return ret
 
     def f_Dist_RT(self, x : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_F_Dist_RT
     	# End_PlaceHolder_Functions_F_Dist_RT
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2], False, True))
+        return ret
 
     def f_Inv(self, probability : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_F_Inv
     	# End_PlaceHolder_Functions_F_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
+        return ret
 
     def f_Inv_RT(self, probability : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_F_Inv_RT
     	# End_PlaceHolder_Functions_F_Inv_RT
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
+        return ret
 
     def fact(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Fact
     	# End_PlaceHolder_Functions_Fact
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fact", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fact", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def factDouble(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_FactDouble
     	# End_PlaceHolder_Functions_FactDouble
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FactDouble", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FactDouble", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def false(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_False
     	# End_PlaceHolder_Functions_False
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "False", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "False", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def find(self, findText : 'any', withinText : 'any', startNum : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Find
     	# End_PlaceHolder_Functions_Find
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Find", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Find", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
+        return ret
 
     def findB(self, findText : 'any', withinText : 'any', startNum : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_FindB
     	# End_PlaceHolder_Functions_FindB
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FindB", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FindB", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
+        return ret
 
     def fisher(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Fisher
     	# End_PlaceHolder_Functions_Fisher
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fisher", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fisher", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def fisherInv(self, y : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_FisherInv
     	# End_PlaceHolder_Functions_FisherInv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FisherInv", OfficeExtension.OperationType.Default, [y], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FisherInv", OfficeExtension.OperationType.Default, [y], False, True))
+        return ret
 
     def fixed(self, number : 'any', decimals : 'any' = None, noCommas : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Fixed
     	# End_PlaceHolder_Functions_Fixed
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fixed", OfficeExtension.OperationType.Default, [number, decimals, noCommas], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fixed", OfficeExtension.OperationType.Default, [number, decimals, noCommas], False, True))
+        return ret
 
     def floor_Math(self, number : 'any', significance : 'any' = None, mode : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Floor_Math
     	# End_PlaceHolder_Functions_Floor_Math
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
+        return ret
 
     def floor_Precise(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Floor_Precise
     	# End_PlaceHolder_Functions_Floor_Precise
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        return ret
 
     def fv(self, rate : 'any', nper : 'any', pmt : 'any', pv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Fv
     	# End_PlaceHolder_Functions_Fv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fv", OfficeExtension.OperationType.Default, [rate, nper, pmt, pv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fv", OfficeExtension.OperationType.Default, [rate, nper, pmt, pv, type], False, True))
+        return ret
 
     def gamma(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Gamma
     	# End_PlaceHolder_Functions_Gamma
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def gammaLn(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_GammaLn
     	# End_PlaceHolder_Functions_GammaLn
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def gammaLn_Precise(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_GammaLn_Precise
     	# End_PlaceHolder_Functions_GammaLn_Precise
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn_Precise", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn_Precise", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def gamma_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Gamma_Dist
     	# End_PlaceHolder_Functions_Gamma_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
+        return ret
 
     def gamma_Inv(self, probability : 'any', alpha : 'any', beta : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Gamma_Inv
     	# End_PlaceHolder_Functions_Gamma_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta], False, True))
+        return ret
 
     def gauss(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Gauss
     	# End_PlaceHolder_Functions_Gauss
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gauss", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gauss", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def gcd(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Gcd
     	# End_PlaceHolder_Functions_Gcd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gcd", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gcd", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def geStep(self, number : 'any', step : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_GeStep
     	# End_PlaceHolder_Functions_GeStep
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeStep", OfficeExtension.OperationType.Default, [number, step], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeStep", OfficeExtension.OperationType.Default, [number, step], False, True))
+        return ret
 
     def geoMean(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_GeoMean
     	# End_PlaceHolder_Functions_GeoMean
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeoMean", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeoMean", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def hlookup(self, lookupValue : 'any', tableArray : 'any', rowIndexNum : 'any', rangeLookup : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_HLookup
     	# End_PlaceHolder_Functions_HLookup
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, rowIndexNum, rangeLookup], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, rowIndexNum, rangeLookup], False, True))
+        return ret
 
     def harMean(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_HarMean
     	# End_PlaceHolder_Functions_HarMean
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HarMean", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HarMean", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def hex2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Hex2Bin
     	# End_PlaceHolder_Functions_Hex2Bin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def hex2Dec(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Hex2Dec
     	# End_PlaceHolder_Functions_Hex2Dec
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def hex2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Hex2Oct
     	# End_PlaceHolder_Functions_Hex2Oct
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def hour(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Hour
     	# End_PlaceHolder_Functions_Hour
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hour", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hour", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def hypGeom_Dist(self, sampleS : 'any', numberSample : 'any', populationS : 'any', numberPop : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_HypGeom_Dist
     	# End_PlaceHolder_Functions_HypGeom_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HypGeom_Dist", OfficeExtension.OperationType.Default, [sampleS, numberSample, populationS, numberPop, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HypGeom_Dist", OfficeExtension.OperationType.Default, [sampleS, numberSample, populationS, numberPop, cumulative], False, True))
+        return ret
 
     def hyperlink(self, linkLocation : 'any', friendlyName : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Hyperlink
     	# End_PlaceHolder_Functions_Hyperlink
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hyperlink", OfficeExtension.OperationType.Default, [linkLocation, friendlyName], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hyperlink", OfficeExtension.OperationType.Default, [linkLocation, friendlyName], False, True))
+        return ret
 
     def iso_Ceiling(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ISO_Ceiling
     	# End_PlaceHolder_Functions_ISO_Ceiling
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ISO_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ISO_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
+        return ret
 
     def if_(self, logicalTest : 'any', valueIfTrue : 'any' = None, valueIfFalse : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_If
     	# End_PlaceHolder_Functions_If
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "If", OfficeExtension.OperationType.Default, [logicalTest, valueIfTrue, valueIfFalse], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "If", OfficeExtension.OperationType.Default, [logicalTest, valueIfTrue, valueIfFalse], False, True))
+        return ret
 
     def imAbs(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImAbs
     	# End_PlaceHolder_Functions_ImAbs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImAbs", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImAbs", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imArgument(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImArgument
     	# End_PlaceHolder_Functions_ImArgument
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImArgument", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImArgument", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imConjugate(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImConjugate
     	# End_PlaceHolder_Functions_ImConjugate
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImConjugate", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImConjugate", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imCos(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImCos
     	# End_PlaceHolder_Functions_ImCos
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCos", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCos", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imCosh(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImCosh
     	# End_PlaceHolder_Functions_ImCosh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCosh", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCosh", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imCot(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImCot
     	# End_PlaceHolder_Functions_ImCot
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCot", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCot", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imCsc(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImCsc
     	# End_PlaceHolder_Functions_ImCsc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsc", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsc", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imCsch(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImCsch
     	# End_PlaceHolder_Functions_ImCsch
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsch", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsch", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imDiv(self, inumber1 : 'any', inumber2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImDiv
     	# End_PlaceHolder_Functions_ImDiv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImDiv", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImDiv", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
+        return ret
 
     def imExp(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImExp
     	# End_PlaceHolder_Functions_ImExp
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImExp", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImExp", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imLn(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImLn
     	# End_PlaceHolder_Functions_ImLn
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLn", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLn", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imLog10(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImLog10
     	# End_PlaceHolder_Functions_ImLog10
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog10", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog10", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imLog2(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImLog2
     	# End_PlaceHolder_Functions_ImLog2
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog2", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog2", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imPower(self, inumber : 'any', number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImPower
     	# End_PlaceHolder_Functions_ImPower
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImPower", OfficeExtension.OperationType.Default, [inumber, number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImPower", OfficeExtension.OperationType.Default, [inumber, number], False, True))
+        return ret
 
     def imProduct(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImProduct
     	# End_PlaceHolder_Functions_ImProduct
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImProduct", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImProduct", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def imReal(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImReal
     	# End_PlaceHolder_Functions_ImReal
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImReal", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImReal", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSec(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSec
     	# End_PlaceHolder_Functions_ImSec
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSec", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSec", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSech(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSech
     	# End_PlaceHolder_Functions_ImSech
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSech", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSech", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSin(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSin
     	# End_PlaceHolder_Functions_ImSin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSin", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSin", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSinh(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSinh
     	# End_PlaceHolder_Functions_ImSinh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSinh", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSinh", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSqrt(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSqrt
     	# End_PlaceHolder_Functions_ImSqrt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSqrt", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSqrt", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imSub(self, inumber1 : 'any', inumber2 : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSub
     	# End_PlaceHolder_Functions_ImSub
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSub", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSub", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
+        return ret
 
     def imSum(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImSum
     	# End_PlaceHolder_Functions_ImSum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSum", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSum", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def imTan(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ImTan
     	# End_PlaceHolder_Functions_ImTan
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImTan", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImTan", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def imaginary(self, inumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Imaginary
     	# End_PlaceHolder_Functions_Imaginary
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Imaginary", OfficeExtension.OperationType.Default, [inumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Imaginary", OfficeExtension.OperationType.Default, [inumber], False, True))
+        return ret
 
     def int(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Int
     	# End_PlaceHolder_Functions_Int
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Int", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Int", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def intRate(self, settlement : 'any', maturity : 'any', investment : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IntRate
     	# End_PlaceHolder_Functions_IntRate
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IntRate", OfficeExtension.OperationType.Default, [settlement, maturity, investment, redemption, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IntRate", OfficeExtension.OperationType.Default, [settlement, maturity, investment, redemption, basis], False, True))
+        return ret
 
     def ipmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ipmt
     	# End_PlaceHolder_Functions_Ipmt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ipmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ipmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
+        return ret
 
     def irr(self, values : 'any', guess : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Irr
     	# End_PlaceHolder_Functions_Irr
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Irr", OfficeExtension.OperationType.Default, [values, guess], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Irr", OfficeExtension.OperationType.Default, [values, guess], False, True))
+        return ret
 
     def isErr(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsErr
     	# End_PlaceHolder_Functions_IsErr
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsErr", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsErr", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isError(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsError
     	# End_PlaceHolder_Functions_IsError
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsError", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsError", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isEven(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsEven
     	# End_PlaceHolder_Functions_IsEven
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsEven", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsEven", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def isFormula(self, reference : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsFormula
     	# End_PlaceHolder_Functions_IsFormula
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsFormula", OfficeExtension.OperationType.Default, [reference], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsFormula", OfficeExtension.OperationType.Default, [reference], False, True))
+        return ret
 
     def isLogical(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsLogical
     	# End_PlaceHolder_Functions_IsLogical
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsLogical", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsLogical", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isNA(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsNA
     	# End_PlaceHolder_Functions_IsNA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNA", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNA", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isNonText(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsNonText
     	# End_PlaceHolder_Functions_IsNonText
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNonText", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNonText", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isNumber(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsNumber
     	# End_PlaceHolder_Functions_IsNumber
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNumber", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNumber", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isOdd(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsOdd
     	# End_PlaceHolder_Functions_IsOdd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsOdd", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsOdd", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def isText(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsText
     	# End_PlaceHolder_Functions_IsText
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsText", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsText", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def isoWeekNum(self, date : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_IsoWeekNum
     	# End_PlaceHolder_Functions_IsoWeekNum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsoWeekNum", OfficeExtension.OperationType.Default, [date], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsoWeekNum", OfficeExtension.OperationType.Default, [date], False, True))
+        return ret
 
     def ispmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ispmt
     	# End_PlaceHolder_Functions_Ispmt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ispmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ispmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv], False, True))
+        return ret
 
     def isref(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Isref
     	# End_PlaceHolder_Functions_Isref
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Isref", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Isref", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def kurt(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Kurt
     	# End_PlaceHolder_Functions_Kurt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Kurt", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Kurt", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def large(self, array : 'any', k : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Large
     	# End_PlaceHolder_Functions_Large
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Large", OfficeExtension.OperationType.Default, [array, k], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Large", OfficeExtension.OperationType.Default, [array, k], False, True))
+        return ret
 
     def lcm(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Lcm
     	# End_PlaceHolder_Functions_Lcm
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lcm", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lcm", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def left(self, text : 'any', numChars : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Left
     	# End_PlaceHolder_Functions_Left
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Left", OfficeExtension.OperationType.Default, [text, numChars], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Left", OfficeExtension.OperationType.Default, [text, numChars], False, True))
+        return ret
 
     def leftb(self, text : 'any', numBytes : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Leftb
     	# End_PlaceHolder_Functions_Leftb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Leftb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Leftb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
+        return ret
 
     def len(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Len
     	# End_PlaceHolder_Functions_Len
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Len", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Len", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def lenb(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Lenb
     	# End_PlaceHolder_Functions_Lenb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lenb", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lenb", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def ln(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ln
     	# End_PlaceHolder_Functions_Ln
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ln", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ln", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def log(self, number : 'any', base : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Log
     	# End_PlaceHolder_Functions_Log
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log", OfficeExtension.OperationType.Default, [number, base], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log", OfficeExtension.OperationType.Default, [number, base], False, True))
+        return ret
 
     def log10(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Log10
     	# End_PlaceHolder_Functions_Log10
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log10", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log10", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def logNorm_Dist(self, x : 'any', mean : 'any', standardDev : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_LogNorm_Dist
     	# End_PlaceHolder_Functions_LogNorm_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
+        return ret
 
     def logNorm_Inv(self, probability : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_LogNorm_Inv
     	# End_PlaceHolder_Functions_LogNorm_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
+        return ret
 
     def lookup(self, lookupValue : 'any', lookupVector : 'any', resultVector : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Lookup
     	# End_PlaceHolder_Functions_Lookup
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lookup", OfficeExtension.OperationType.Default, [lookupValue, lookupVector, resultVector], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lookup", OfficeExtension.OperationType.Default, [lookupValue, lookupVector, resultVector], False, True))
+        return ret
 
     def lower(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Lower
     	# End_PlaceHolder_Functions_Lower
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lower", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lower", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def mduration(self, settlement : 'any', maturity : 'any', coupon : 'any', yld : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MDuration
     	# End_PlaceHolder_Functions_MDuration
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MDuration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MDuration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
+        return ret
 
     def mirr(self, values : 'any', financeRate : 'any', reinvestRate : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MIrr
     	# End_PlaceHolder_Functions_MIrr
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MIrr", OfficeExtension.OperationType.Default, [values, financeRate, reinvestRate], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MIrr", OfficeExtension.OperationType.Default, [values, financeRate, reinvestRate], False, True))
+        return ret
 
     def mround(self, number : 'any', multiple : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MRound
     	# End_PlaceHolder_Functions_MRound
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MRound", OfficeExtension.OperationType.Default, [number, multiple], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MRound", OfficeExtension.OperationType.Default, [number, multiple], False, True))
+        return ret
 
     def match(self, lookupValue : 'any', lookupArray : 'any', matchType : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Match
     	# End_PlaceHolder_Functions_Match
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Match", OfficeExtension.OperationType.Default, [lookupValue, lookupArray, matchType], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Match", OfficeExtension.OperationType.Default, [lookupValue, lookupArray, matchType], False, True))
+        return ret
 
     def max(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Max
     	# End_PlaceHolder_Functions_Max
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Max", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Max", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def maxA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MaxA
     	# End_PlaceHolder_Functions_MaxA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MaxA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MaxA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def median(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Median
     	# End_PlaceHolder_Functions_Median
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Median", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Median", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def mid(self, text : 'any', startNum : 'any', numChars : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Mid
     	# End_PlaceHolder_Functions_Mid
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mid", OfficeExtension.OperationType.Default, [text, startNum, numChars], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mid", OfficeExtension.OperationType.Default, [text, startNum, numChars], False, True))
+        return ret
 
     def midb(self, text : 'any', startNum : 'any', numBytes : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Midb
     	# End_PlaceHolder_Functions_Midb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Midb", OfficeExtension.OperationType.Default, [text, startNum, numBytes], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Midb", OfficeExtension.OperationType.Default, [text, startNum, numBytes], False, True))
+        return ret
 
     def min(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Min
     	# End_PlaceHolder_Functions_Min
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Min", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Min", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def minA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MinA
     	# End_PlaceHolder_Functions_MinA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MinA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MinA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def minute(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Minute
     	# End_PlaceHolder_Functions_Minute
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Minute", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Minute", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def mod(self, number : 'any', divisor : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Mod
     	# End_PlaceHolder_Functions_Mod
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mod", OfficeExtension.OperationType.Default, [number, divisor], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mod", OfficeExtension.OperationType.Default, [number, divisor], False, True))
+        return ret
 
     def month(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Month
     	# End_PlaceHolder_Functions_Month
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Month", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Month", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def multiNomial(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_MultiNomial
     	# End_PlaceHolder_Functions_MultiNomial
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MultiNomial", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MultiNomial", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def n(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_N
     	# End_PlaceHolder_Functions_N
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "N", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "N", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def nper(self, rate : 'any', pmt : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_NPer
     	# End_PlaceHolder_Functions_NPer
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NPer", OfficeExtension.OperationType.Default, [rate, pmt, pv, fv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NPer", OfficeExtension.OperationType.Default, [rate, pmt, pv, fv, type], False, True))
+        return ret
 
     def na(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Na
     	# End_PlaceHolder_Functions_Na
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Na", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Na", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def negBinom_Dist(self, numberF : 'any', numberS : 'any', probabilityS : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_NegBinom_Dist
     	# End_PlaceHolder_Functions_NegBinom_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NegBinom_Dist", OfficeExtension.OperationType.Default, [numberF, numberS, probabilityS, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NegBinom_Dist", OfficeExtension.OperationType.Default, [numberF, numberS, probabilityS, cumulative], False, True))
+        return ret
 
     def networkDays(self, startDate : 'any', endDate : 'any', holidays : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_NetworkDays
     	# End_PlaceHolder_Functions_NetworkDays
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays", OfficeExtension.OperationType.Default, [startDate, endDate, holidays], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays", OfficeExtension.OperationType.Default, [startDate, endDate, holidays], False, True))
+        return ret
 
     def networkDays_Intl(self, startDate : 'any', endDate : 'any', weekend : 'any' = None, holidays : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_NetworkDays_Intl
     	# End_PlaceHolder_Functions_NetworkDays_Intl
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays_Intl", OfficeExtension.OperationType.Default, [startDate, endDate, weekend, holidays], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays_Intl", OfficeExtension.OperationType.Default, [startDate, endDate, weekend, holidays], False, True))
+        return ret
 
     def nominal(self, effectRate : 'any', npery : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Nominal
     	# End_PlaceHolder_Functions_Nominal
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Nominal", OfficeExtension.OperationType.Default, [effectRate, npery], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Nominal", OfficeExtension.OperationType.Default, [effectRate, npery], False, True))
+        return ret
 
     def norm_Dist(self, x : 'any', mean : 'any', standardDev : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Norm_Dist
     	# End_PlaceHolder_Functions_Norm_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
+        return ret
 
     def norm_Inv(self, probability : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Norm_Inv
     	# End_PlaceHolder_Functions_Norm_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
+        return ret
 
     def norm_S_Dist(self, z : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Norm_S_Dist
     	# End_PlaceHolder_Functions_Norm_S_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Dist", OfficeExtension.OperationType.Default, [z, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Dist", OfficeExtension.OperationType.Default, [z, cumulative], False, True))
+        return ret
 
     def norm_S_Inv(self, probability : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Norm_S_Inv
     	# End_PlaceHolder_Functions_Norm_S_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Inv", OfficeExtension.OperationType.Default, [probability], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Inv", OfficeExtension.OperationType.Default, [probability], False, True))
+        return ret
 
     def not_(self, logical : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Not
     	# End_PlaceHolder_Functions_Not
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Not", OfficeExtension.OperationType.Default, [logical], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Not", OfficeExtension.OperationType.Default, [logical], False, True))
+        return ret
 
     def now(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Now
     	# End_PlaceHolder_Functions_Now
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Now", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Now", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def npv(self, rate : 'any', values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Npv
     	# End_PlaceHolder_Functions_Npv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Npv", OfficeExtension.OperationType.Default, [rate, values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Npv", OfficeExtension.OperationType.Default, [rate, values], False, True))
+        return ret
 
     def numberValue(self, text : 'any', decimalSeparator : 'any' = None, groupSeparator : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_NumberValue
     	# End_PlaceHolder_Functions_NumberValue
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NumberValue", OfficeExtension.OperationType.Default, [text, decimalSeparator, groupSeparator], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NumberValue", OfficeExtension.OperationType.Default, [text, decimalSeparator, groupSeparator], False, True))
+        return ret
 
     def oct2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Oct2Bin
     	# End_PlaceHolder_Functions_Oct2Bin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def oct2Dec(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Oct2Dec
     	# End_PlaceHolder_Functions_Oct2Dec
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Dec", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def oct2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Oct2Hex
     	# End_PlaceHolder_Functions_Oct2Hex
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
+        return ret
 
     def odd(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Odd
     	# End_PlaceHolder_Functions_Odd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Odd", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Odd", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def oddFPrice(self, settlement : 'any', maturity : 'any', issue : 'any', firstCoupon : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_OddFPrice
     	# End_PlaceHolder_Functions_OddFPrice
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFPrice", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, yld, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFPrice", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, yld, redemption, frequency, basis], False, True))
+        return ret
 
     def oddFYield(self, settlement : 'any', maturity : 'any', issue : 'any', firstCoupon : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_OddFYield
     	# End_PlaceHolder_Functions_OddFYield
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFYield", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, pr, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFYield", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, pr, redemption, frequency, basis], False, True))
+        return ret
 
     def oddLPrice(self, settlement : 'any', maturity : 'any', lastInterest : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_OddLPrice
     	# End_PlaceHolder_Functions_OddLPrice
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLPrice", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, yld, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLPrice", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, yld, redemption, frequency, basis], False, True))
+        return ret
 
     def oddLYield(self, settlement : 'any', maturity : 'any', lastInterest : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_OddLYield
     	# End_PlaceHolder_Functions_OddLYield
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLYield", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, pr, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLYield", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, pr, redemption, frequency, basis], False, True))
+        return ret
 
     def or_(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Or
     	# End_PlaceHolder_Functions_Or
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Or", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Or", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def pduration(self, rate : 'any', pv : 'any', fv : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_PDuration
     	# End_PlaceHolder_Functions_PDuration
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PDuration", OfficeExtension.OperationType.Default, [rate, pv, fv], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PDuration", OfficeExtension.OperationType.Default, [rate, pv, fv], False, True))
+        return ret
 
     def percentRank_Exc(self, array : 'any', x : 'any', significance : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_PercentRank_Exc
     	# End_PlaceHolder_Functions_PercentRank_Exc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Exc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Exc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
+        return ret
 
     def percentRank_Inc(self, array : 'any', x : 'any', significance : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_PercentRank_Inc
     	# End_PlaceHolder_Functions_PercentRank_Inc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Inc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Inc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
+        return ret
 
     def percentile_Exc(self, array : 'any', k : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Percentile_Exc
     	# End_PlaceHolder_Functions_Percentile_Exc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Exc", OfficeExtension.OperationType.Default, [array, k], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Exc", OfficeExtension.OperationType.Default, [array, k], False, True))
+        return ret
 
     def percentile_Inc(self, array : 'any', k : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Percentile_Inc
     	# End_PlaceHolder_Functions_Percentile_Inc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Inc", OfficeExtension.OperationType.Default, [array, k], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Inc", OfficeExtension.OperationType.Default, [array, k], False, True))
+        return ret
 
     def permut(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Permut
     	# End_PlaceHolder_Functions_Permut
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permut", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permut", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        return ret
 
     def permutationa(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Permutationa
     	# End_PlaceHolder_Functions_Permutationa
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permutationa", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permutationa", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
+        return ret
 
     def phi(self, x : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Phi
     	# End_PlaceHolder_Functions_Phi
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Phi", OfficeExtension.OperationType.Default, [x], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Phi", OfficeExtension.OperationType.Default, [x], False, True))
+        return ret
 
     def pi(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Pi
     	# End_PlaceHolder_Functions_Pi
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pi", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pi", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def pmt(self, rate : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Pmt
     	# End_PlaceHolder_Functions_Pmt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pmt", OfficeExtension.OperationType.Default, [rate, nper, pv, fv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pmt", OfficeExtension.OperationType.Default, [rate, nper, pv, fv, type], False, True))
+        return ret
 
     def poisson_Dist(self, x : 'any', mean : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Poisson_Dist
     	# End_PlaceHolder_Functions_Poisson_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Poisson_Dist", OfficeExtension.OperationType.Default, [x, mean, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Poisson_Dist", OfficeExtension.OperationType.Default, [x, mean, cumulative], False, True))
+        return ret
 
     def power(self, number : 'any', power : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Power
     	# End_PlaceHolder_Functions_Power
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Power", OfficeExtension.OperationType.Default, [number, power], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Power", OfficeExtension.OperationType.Default, [number, power], False, True))
+        return ret
 
     def ppmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Ppmt
     	# End_PlaceHolder_Functions_Ppmt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ppmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ppmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
+        return ret
 
     def price(self, settlement : 'any', maturity : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Price
     	# End_PlaceHolder_Functions_Price
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Price", OfficeExtension.OperationType.Default, [settlement, maturity, rate, yld, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Price", OfficeExtension.OperationType.Default, [settlement, maturity, rate, yld, redemption, frequency, basis], False, True))
+        return ret
 
     def priceDisc(self, settlement : 'any', maturity : 'any', discount : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_PriceDisc
     	# End_PlaceHolder_Functions_PriceDisc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceDisc", OfficeExtension.OperationType.Default, [settlement, maturity, discount, redemption, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceDisc", OfficeExtension.OperationType.Default, [settlement, maturity, discount, redemption, basis], False, True))
+        return ret
 
     def priceMat(self, settlement : 'any', maturity : 'any', issue : 'any', rate : 'any', yld : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_PriceMat
     	# End_PlaceHolder_Functions_PriceMat
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, yld, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, yld, basis], False, True))
+        return ret
 
     def product(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Product
     	# End_PlaceHolder_Functions_Product
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Product", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Product", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def proper(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Proper
     	# End_PlaceHolder_Functions_Proper
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Proper", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Proper", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def pv(self, rate : 'any', nper : 'any', pmt : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Pv
     	# End_PlaceHolder_Functions_Pv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pv", OfficeExtension.OperationType.Default, [rate, nper, pmt, fv, type], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pv", OfficeExtension.OperationType.Default, [rate, nper, pmt, fv, type], False, True))
+        return ret
 
     def quartile_Exc(self, array : 'any', quart : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Quartile_Exc
     	# End_PlaceHolder_Functions_Quartile_Exc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Exc", OfficeExtension.OperationType.Default, [array, quart], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Exc", OfficeExtension.OperationType.Default, [array, quart], False, True))
+        return ret
 
     def quartile_Inc(self, array : 'any', quart : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Quartile_Inc
     	# End_PlaceHolder_Functions_Quartile_Inc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Inc", OfficeExtension.OperationType.Default, [array, quart], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Inc", OfficeExtension.OperationType.Default, [array, quart], False, True))
+        return ret
 
     def quotient(self, numerator : 'any', denominator : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Quotient
     	# End_PlaceHolder_Functions_Quotient
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quotient", OfficeExtension.OperationType.Default, [numerator, denominator], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quotient", OfficeExtension.OperationType.Default, [numerator, denominator], False, True))
+        return ret
 
     def radians(self, angle : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Radians
     	# End_PlaceHolder_Functions_Radians
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Radians", OfficeExtension.OperationType.Default, [angle], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Radians", OfficeExtension.OperationType.Default, [angle], False, True))
+        return ret
 
     def rand(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rand
     	# End_PlaceHolder_Functions_Rand
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rand", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rand", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def randBetween(self, bottom : 'any', top : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_RandBetween
     	# End_PlaceHolder_Functions_RandBetween
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RandBetween", OfficeExtension.OperationType.Default, [bottom, top], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RandBetween", OfficeExtension.OperationType.Default, [bottom, top], False, True))
+        return ret
 
     def rank_Avg(self, number : 'any', ref : 'any', order : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rank_Avg
     	# End_PlaceHolder_Functions_Rank_Avg
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Avg", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Avg", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
+        return ret
 
     def rank_Eq(self, number : 'any', ref : 'any', order : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rank_Eq
     	# End_PlaceHolder_Functions_Rank_Eq
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Eq", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Eq", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
+        return ret
 
     def rate(self, nper : 'any', pmt : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None, guess : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rate
     	# End_PlaceHolder_Functions_Rate
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rate", OfficeExtension.OperationType.Default, [nper, pmt, pv, fv, type, guess], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rate", OfficeExtension.OperationType.Default, [nper, pmt, pv, fv, type, guess], False, True))
+        return ret
 
     def received(self, settlement : 'any', maturity : 'any', investment : 'any', discount : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Received
     	# End_PlaceHolder_Functions_Received
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Received", OfficeExtension.OperationType.Default, [settlement, maturity, investment, discount, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Received", OfficeExtension.OperationType.Default, [settlement, maturity, investment, discount, basis], False, True))
+        return ret
 
     def replace(self, oldText : 'any', startNum : 'any', numChars : 'any', newText : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Replace
     	# End_PlaceHolder_Functions_Replace
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Replace", OfficeExtension.OperationType.Default, [oldText, startNum, numChars, newText], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Replace", OfficeExtension.OperationType.Default, [oldText, startNum, numChars, newText], False, True))
+        return ret
 
     def replaceB(self, oldText : 'any', startNum : 'any', numBytes : 'any', newText : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_ReplaceB
     	# End_PlaceHolder_Functions_ReplaceB
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ReplaceB", OfficeExtension.OperationType.Default, [oldText, startNum, numBytes, newText], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ReplaceB", OfficeExtension.OperationType.Default, [oldText, startNum, numBytes, newText], False, True))
+        return ret
 
     def rept(self, text : 'any', numberTimes : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rept
     	# End_PlaceHolder_Functions_Rept
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rept", OfficeExtension.OperationType.Default, [text, numberTimes], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rept", OfficeExtension.OperationType.Default, [text, numberTimes], False, True))
+        return ret
 
     def right(self, text : 'any', numChars : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Right
     	# End_PlaceHolder_Functions_Right
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Right", OfficeExtension.OperationType.Default, [text, numChars], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Right", OfficeExtension.OperationType.Default, [text, numChars], False, True))
+        return ret
 
     def rightb(self, text : 'any', numBytes : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rightb
     	# End_PlaceHolder_Functions_Rightb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rightb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rightb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
+        return ret
 
     def roman(self, number : 'any', form : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Roman
     	# End_PlaceHolder_Functions_Roman
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Roman", OfficeExtension.OperationType.Default, [number, form], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Roman", OfficeExtension.OperationType.Default, [number, form], False, True))
+        return ret
 
     def round(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Round
     	# End_PlaceHolder_Functions_Round
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Round", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Round", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        return ret
 
     def roundDown(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_RoundDown
     	# End_PlaceHolder_Functions_RoundDown
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundDown", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundDown", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        return ret
 
     def roundUp(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_RoundUp
     	# End_PlaceHolder_Functions_RoundUp
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundUp", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundUp", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        return ret
 
     def rows(self, array : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rows
     	# End_PlaceHolder_Functions_Rows
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rows", OfficeExtension.OperationType.Default, [array], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rows", OfficeExtension.OperationType.Default, [array], False, True))
+        return ret
 
     def rri(self, nper : 'any', pv : 'any', fv : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Rri
     	# End_PlaceHolder_Functions_Rri
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rri", OfficeExtension.OperationType.Default, [nper, pv, fv], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rri", OfficeExtension.OperationType.Default, [nper, pv, fv], False, True))
+        return ret
 
     def sec(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sec
     	# End_PlaceHolder_Functions_Sec
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sec", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sec", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def sech(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sech
     	# End_PlaceHolder_Functions_Sech
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sech", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sech", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def second(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Second
     	# End_PlaceHolder_Functions_Second
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Second", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Second", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def seriesSum(self, x : 'any', n : 'any', m : 'any', coefficients : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_SeriesSum
     	# End_PlaceHolder_Functions_SeriesSum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SeriesSum", OfficeExtension.OperationType.Default, [x, n, m, coefficients], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SeriesSum", OfficeExtension.OperationType.Default, [x, n, m, coefficients], False, True))
+        return ret
 
     def sheet(self, value : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sheet
     	# End_PlaceHolder_Functions_Sheet
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheet", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheet", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def sheets(self, reference : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sheets
     	# End_PlaceHolder_Functions_Sheets
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheets", OfficeExtension.OperationType.Default, [reference], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheets", OfficeExtension.OperationType.Default, [reference], False, True))
+        return ret
 
     def sign(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sign
     	# End_PlaceHolder_Functions_Sign
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sign", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sign", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def sin(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sin
     	# End_PlaceHolder_Functions_Sin
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sin", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sin", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def sinh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sinh
     	# End_PlaceHolder_Functions_Sinh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sinh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sinh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def skew(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Skew
     	# End_PlaceHolder_Functions_Skew
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def skew_p(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Skew_p
     	# End_PlaceHolder_Functions_Skew_p
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew_p", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew_p", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def sln(self, cost : 'any', salvage : 'any', life : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sln
     	# End_PlaceHolder_Functions_Sln
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sln", OfficeExtension.OperationType.Default, [cost, salvage, life], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sln", OfficeExtension.OperationType.Default, [cost, salvage, life], False, True))
+        return ret
 
     def small(self, array : 'any', k : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Small
     	# End_PlaceHolder_Functions_Small
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Small", OfficeExtension.OperationType.Default, [array, k], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Small", OfficeExtension.OperationType.Default, [array, k], False, True))
+        return ret
 
     def sqrt(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sqrt
     	# End_PlaceHolder_Functions_Sqrt
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sqrt", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sqrt", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def sqrtPi(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_SqrtPi
     	# End_PlaceHolder_Functions_SqrtPi
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SqrtPi", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SqrtPi", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def stDevA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_StDevA
     	# End_PlaceHolder_Functions_StDevA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def stDevPA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_StDevPA
     	# End_PlaceHolder_Functions_StDevPA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevPA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevPA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def stDev_P(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_StDev_P
     	# End_PlaceHolder_Functions_StDev_P
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_P", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_P", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def stDev_S(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_StDev_S
     	# End_PlaceHolder_Functions_StDev_S
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_S", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_S", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def standardize(self, x : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Standardize
     	# End_PlaceHolder_Functions_Standardize
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Standardize", OfficeExtension.OperationType.Default, [x, mean, standardDev], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Standardize", OfficeExtension.OperationType.Default, [x, mean, standardDev], False, True))
+        return ret
 
     def substitute(self, text : 'any', oldText : 'any', newText : 'any', instanceNum : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Substitute
     	# End_PlaceHolder_Functions_Substitute
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Substitute", OfficeExtension.OperationType.Default, [text, oldText, newText, instanceNum], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Substitute", OfficeExtension.OperationType.Default, [text, oldText, newText, instanceNum], False, True))
+        return ret
 
     def subtotal(self, functionNum : 'any', values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Subtotal
     	# End_PlaceHolder_Functions_Subtotal
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Subtotal", OfficeExtension.OperationType.Default, [functionNum, values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Subtotal", OfficeExtension.OperationType.Default, [functionNum, values], False, True))
+        return ret
 
     def sum(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Sum
     	# End_PlaceHolder_Functions_Sum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sum", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sum", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def sumIf(self, range : 'any', criteria : 'any', sumRange : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_SumIf
     	# End_PlaceHolder_Functions_SumIf
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIf", OfficeExtension.OperationType.Default, [range, criteria, sumRange], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIf", OfficeExtension.OperationType.Default, [range, criteria, sumRange], False, True))
+        return ret
 
     def sumIfs(self, sumRange : 'any', values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_SumIfs
     	# End_PlaceHolder_Functions_SumIfs
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIfs", OfficeExtension.OperationType.Default, [sumRange, values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIfs", OfficeExtension.OperationType.Default, [sumRange, values], False, True))
+        return ret
 
     def sumSq(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_SumSq
     	# End_PlaceHolder_Functions_SumSq
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumSq", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumSq", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def syd(self, cost : 'any', salvage : 'any', life : 'any', per : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Syd
     	# End_PlaceHolder_Functions_Syd
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Syd", OfficeExtension.OperationType.Default, [cost, salvage, life, per], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Syd", OfficeExtension.OperationType.Default, [cost, salvage, life, per], False, True))
+        return ret
 
     def t(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T
     	# End_PlaceHolder_Functions_T
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def tbillEq(self, settlement : 'any', maturity : 'any', discount : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_TBillEq
     	# End_PlaceHolder_Functions_TBillEq
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillEq", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillEq", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
+        return ret
 
     def tbillPrice(self, settlement : 'any', maturity : 'any', discount : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_TBillPrice
     	# End_PlaceHolder_Functions_TBillPrice
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillPrice", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillPrice", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
+        return ret
 
     def tbillYield(self, settlement : 'any', maturity : 'any', pr : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_TBillYield
     	# End_PlaceHolder_Functions_TBillYield
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillYield", OfficeExtension.OperationType.Default, [settlement, maturity, pr], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillYield", OfficeExtension.OperationType.Default, [settlement, maturity, pr], False, True))
+        return ret
 
     def t_Dist(self, x : 'any', degFreedom : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T_Dist
     	# End_PlaceHolder_Functions_T_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
+        return ret
 
     def t_Dist_2T(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T_Dist_2T
     	# End_PlaceHolder_Functions_T_Dist_2T
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_2T", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_2T", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        return ret
 
     def t_Dist_RT(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T_Dist_RT
     	# End_PlaceHolder_Functions_T_Dist_RT
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
+        return ret
 
     def t_Inv(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T_Inv
     	# End_PlaceHolder_Functions_T_Inv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        return ret
 
     def t_Inv_2T(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_T_Inv_2T
     	# End_PlaceHolder_Functions_T_Inv_2T
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv_2T", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv_2T", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
+        return ret
 
     def tan(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Tan
     	# End_PlaceHolder_Functions_Tan
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tan", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tan", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def tanh(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Tanh
     	# End_PlaceHolder_Functions_Tanh
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tanh", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tanh", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def text(self, value : 'any', formatText : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Text
     	# End_PlaceHolder_Functions_Text
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Text", OfficeExtension.OperationType.Default, [value, formatText], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Text", OfficeExtension.OperationType.Default, [value, formatText], False, True))
+        return ret
 
     def time(self, hour : 'any', minute : 'any', second : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Time
     	# End_PlaceHolder_Functions_Time
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Time", OfficeExtension.OperationType.Default, [hour, minute, second], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Time", OfficeExtension.OperationType.Default, [hour, minute, second], False, True))
+        return ret
 
     def timevalue(self, timeText : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Timevalue
     	# End_PlaceHolder_Functions_Timevalue
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Timevalue", OfficeExtension.OperationType.Default, [timeText], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Timevalue", OfficeExtension.OperationType.Default, [timeText], False, True))
+        return ret
 
     def today(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Today
     	# End_PlaceHolder_Functions_Today
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Today", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Today", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def trim(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Trim
     	# End_PlaceHolder_Functions_Trim
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trim", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trim", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def trimMean(self, array : 'any', percent : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_TrimMean
     	# End_PlaceHolder_Functions_TrimMean
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TrimMean", OfficeExtension.OperationType.Default, [array, percent], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TrimMean", OfficeExtension.OperationType.Default, [array, percent], False, True))
+        return ret
 
     def true(self) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_True
     	# End_PlaceHolder_Functions_True
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "True", OfficeExtension.OperationType.Default, [], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "True", OfficeExtension.OperationType.Default, [], False, True))
+        return ret
 
     def trunc(self, number : 'any', numDigits : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Trunc
     	# End_PlaceHolder_Functions_Trunc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trunc", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trunc", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
+        return ret
 
     def type(self, value : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Type
     	# End_PlaceHolder_Functions_Type
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Type", OfficeExtension.OperationType.Default, [value], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Type", OfficeExtension.OperationType.Default, [value], False, True))
+        return ret
 
     def usdollar(self, number : 'any', decimals : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_USDollar
     	# End_PlaceHolder_Functions_USDollar
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "USDollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "USDollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
+        return ret
 
     def unichar(self, number : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Unichar
     	# End_PlaceHolder_Functions_Unichar
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unichar", OfficeExtension.OperationType.Default, [number], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unichar", OfficeExtension.OperationType.Default, [number], False, True))
+        return ret
 
     def unicode(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Unicode
     	# End_PlaceHolder_Functions_Unicode
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unicode", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unicode", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def upper(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Upper
     	# End_PlaceHolder_Functions_Upper
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Upper", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Upper", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def vlookup(self, lookupValue : 'any', tableArray : 'any', colIndexNum : 'any', rangeLookup : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_VLookup
     	# End_PlaceHolder_Functions_VLookup
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, colIndexNum, rangeLookup], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, colIndexNum, rangeLookup], False, True))
+        return ret
 
     def value(self, text : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Value
     	# End_PlaceHolder_Functions_Value
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Value", OfficeExtension.OperationType.Default, [text], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Value", OfficeExtension.OperationType.Default, [text], False, True))
+        return ret
 
     def varA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_VarA
     	# End_PlaceHolder_Functions_VarA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def varPA(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_VarPA
     	# End_PlaceHolder_Functions_VarPA
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarPA", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarPA", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def var_P(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Var_P
     	# End_PlaceHolder_Functions_Var_P
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_P", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_P", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def var_S(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Var_S
     	# End_PlaceHolder_Functions_Var_S
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_S", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_S", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def vdb(self, cost : 'any', salvage : 'any', life : 'any', startPeriod : 'any', endPeriod : 'any', factor : 'any' = None, noSwitch : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Vdb
     	# End_PlaceHolder_Functions_Vdb
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Vdb", OfficeExtension.OperationType.Default, [cost, salvage, life, startPeriod, endPeriod, factor, noSwitch], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Vdb", OfficeExtension.OperationType.Default, [cost, salvage, life, startPeriod, endPeriod, factor, noSwitch], False, True))
+        return ret
 
     def weekNum(self, serialNumber : 'any', returnType : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_WeekNum
     	# End_PlaceHolder_Functions_WeekNum
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WeekNum", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WeekNum", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
+        return ret
 
     def weekday(self, serialNumber : 'any', returnType : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Weekday
     	# End_PlaceHolder_Functions_Weekday
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weekday", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weekday", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
+        return ret
 
     def weibull_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Weibull_Dist
     	# End_PlaceHolder_Functions_Weibull_Dist
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weibull_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weibull_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
+        return ret
 
     def workDay(self, startDate : 'any', days : 'any', holidays : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_WorkDay
     	# End_PlaceHolder_Functions_WorkDay
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay", OfficeExtension.OperationType.Default, [startDate, days, holidays], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay", OfficeExtension.OperationType.Default, [startDate, days, holidays], False, True))
+        return ret
 
     def workDay_Intl(self, startDate : 'any', days : 'any', weekend : 'any' = None, holidays : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_WorkDay_Intl
     	# End_PlaceHolder_Functions_WorkDay_Intl
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay_Intl", OfficeExtension.OperationType.Default, [startDate, days, weekend, holidays], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay_Intl", OfficeExtension.OperationType.Default, [startDate, days, weekend, holidays], False, True))
+        return ret
 
     def xirr(self, values : 'any', dates : 'any', guess : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Xirr
     	# End_PlaceHolder_Functions_Xirr
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xirr", OfficeExtension.OperationType.Default, [values, dates, guess], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xirr", OfficeExtension.OperationType.Default, [values, dates, guess], False, True))
+        return ret
 
     def xnpv(self, rate : 'any', values : 'any', dates : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Xnpv
     	# End_PlaceHolder_Functions_Xnpv
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xnpv", OfficeExtension.OperationType.Default, [rate, values, dates], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xnpv", OfficeExtension.OperationType.Default, [rate, values, dates], False, True))
+        return ret
 
     def xor(self, values : 'list') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Xor
     	# End_PlaceHolder_Functions_Xor
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xor", OfficeExtension.OperationType.Default, [values], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xor", OfficeExtension.OperationType.Default, [values], False, True))
+        return ret
 
     def year(self, serialNumber : 'any') -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Year
     	# End_PlaceHolder_Functions_Year
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Year", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Year", OfficeExtension.OperationType.Default, [serialNumber], False, True))
+        return ret
 
     def yearFrac(self, startDate : 'any', endDate : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_YearFrac
     	# End_PlaceHolder_Functions_YearFrac
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YearFrac", OfficeExtension.OperationType.Default, [startDate, endDate, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YearFrac", OfficeExtension.OperationType.Default, [startDate, endDate, basis], False, True))
+        return ret
 
     def yield_(self, settlement : 'any', maturity : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Yield
     	# End_PlaceHolder_Functions_Yield
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Yield", OfficeExtension.OperationType.Default, [settlement, maturity, rate, pr, redemption, frequency, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Yield", OfficeExtension.OperationType.Default, [settlement, maturity, rate, pr, redemption, frequency, basis], False, True))
+        return ret
 
     def yieldDisc(self, settlement : 'any', maturity : 'any', pr : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_YieldDisc
     	# End_PlaceHolder_Functions_YieldDisc
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldDisc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldDisc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
+        return ret
 
     def yieldMat(self, settlement : 'any', maturity : 'any', issue : 'any', rate : 'any', pr : 'any', basis : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_YieldMat
     	# End_PlaceHolder_Functions_YieldMat
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, pr, basis], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, pr, basis], False, True))
+        return ret
 
     def z_Test(self, array : 'any', x : 'any', sigma : 'any' = None) -> 'FunctionResult':
     	# Begin_PlaceHolder_Functions_Z_Test
     	# End_PlaceHolder_Functions_Z_Test
-        return FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Z_Test", OfficeExtension.OperationType.Default, [array, x, sigma], False, True))
+        ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Z_Test", OfficeExtension.OperationType.Default, [array, x, sigma], False, True))
+        return ret
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:

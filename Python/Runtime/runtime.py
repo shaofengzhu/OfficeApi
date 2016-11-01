@@ -1,6 +1,7 @@
 ﻿import sys
 import json
 import enum
+import datetime
 import logging
 import httphelper
 class Constants:
@@ -121,16 +122,31 @@ class HttpRequestExecutor(IRequestExecutor):
     def execute(self, requestInfo: httphelper.RequestInfo) -> httphelper.ResponseInfo:
         return httphelper.HttpUtility.invoke(requestInfo)
 
+class ClientResultProcessingType(enum.IntEnum):
+    none = 0
+    date = 1
+
 class ClientResult(IResultHandler):
-    def __init__(self):
+    def __init__(self, processingType: ClientResultProcessingType = ClientResultProcessingType.none):
         self._value = None
+        self._isLoaded = False
+        self._processingType = processingType
 
     @property
     def value(self):
+        if not self._isLoaded:
+            raise Utility.createRuntimeError(ErrorCodes.propertyNotLoaded)
         return self._value
 
     def _handleResult(self, value: any) -> None:
-        self._value = value
+        self._isLoaded = True
+        if isinstance(value, dict) and value.get("_IsNull"):
+            return
+        if self._processingType == ClientResultProcessingType.date:
+            self._value = Utility.adjustToDateTime(value)
+        else:
+            self._value = value
+
 
 class RequestUrlAndHeaderInfo:
     def __init__(self):
@@ -163,12 +179,14 @@ class ClientRequestContext:
         self._executionMode = executionMode
         if self._executionMode is None:
             self._executionMode = RequestExecutionMode.batch
+
         self._processingResult = False
         self._customData = Constants.iterativeExecutor
         if (ClientRequestContext.customRequestExecutor is not None):
             self._requestExecutor = ClientRequestContext.customRequestExecutor
         else:
             self._requestExecutor = HttpRequestExecutor()
+
         self._rootObject = None
         self.__pendingRequest = None
 
@@ -184,6 +202,10 @@ class ClientRequestContext:
     @property
     def executionMode(self) -> RequestExecutionMode:
         return self._executionMode
+
+    @executionMode.setter
+    def executionMode(self, value : RequestExecutionMode):
+        self._executionMode = value
 
     @property
     def _pendingRequest(self) -> 'ClientRequest':
@@ -232,7 +254,7 @@ class ClientRequestContext:
         if self._executionMode == RequestExecutionMode.immediateAndSlow :
             self.sync()
 
-    def trace(self, message: str):
+    def trace(self, message: str) -> None:
         ActionFactory.createTraceAction(self, message)
 
     def _parseSelectExpand(self, select: str) -> list:
@@ -693,6 +715,12 @@ class ResourceStrings:
     invalidArgument = "InvalidArgument"
     runMustReturnPromise = "RunMustReturnPromise"
 
+class ErrorCodes:
+    invalidObjectPath = "InvalidObjectPath"
+    propertyNotLoaded = "PropertyNotLoaded"
+    invalidRequestContext = "InvalidRequestContext"
+    invalidArgument = "InvalidArgument"
+
 class Utility:
     @staticmethod
     def checkArgumentNull(value, name: str):
@@ -914,3 +942,13 @@ class Utility:
     @staticmethod
     def normalizeName(name: str) -> str:
         return name[0:1].lower() + name[1:]
+
+    @staticmethod
+    def adjustToDateTime(value):
+        if isinstance(value, str):
+            return datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+        elif isinstance(value, list):
+            return map(Utility.adjustToDateTime, value)
+        return value
+
+

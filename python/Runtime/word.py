@@ -6,6 +6,7 @@
 import sys
 import json
 import enum
+import datetime
 import logging
 
 # Begin_PlaceHolder_GlobalHeader
@@ -1185,7 +1186,7 @@ class DocumentProperties(OfficeExtension.ClientObject):
         _syncIfImmediateExecution(self)
 
     @property
-    def creationDate(self) -> 'str':
+    def creationDate(self) -> 'datetime.datetime':
         _loadIfImmediateExecution(self, "creationDate", self._creationDate)
         _throwIfNotLoaded("creationDate", self._creationDate)
         return self._creationDate
@@ -1231,14 +1232,14 @@ class DocumentProperties(OfficeExtension.ClientObject):
         _syncIfImmediateExecution(self)
 
     @property
-    def lastPrintDate(self) -> 'str':
+    def lastPrintDate(self) -> 'datetime.datetime':
         _loadIfImmediateExecution(self, "lastPrintDate", self._lastPrintDate)
         _throwIfNotLoaded("lastPrintDate", self._lastPrintDate)
         return self._lastPrintDate
     
 
     @property
-    def lastSaveTime(self) -> 'str':
+    def lastSaveTime(self) -> 'datetime.datetime':
         _loadIfImmediateExecution(self, "lastSaveTime", self._lastSaveTime)
         _throwIfNotLoaded("lastSaveTime", self._lastSaveTime)
         return self._lastSaveTime
@@ -1334,7 +1335,7 @@ class DocumentProperties(OfficeExtension.ClientObject):
         if not _isUndefined(obj.get("Company")):
             self._company = obj.get("Company")
         if not _isUndefined(obj.get("CreationDate")):
-            self._creationDate = obj.get("CreationDate")
+            self._creationDate = _adjustToDateTime(obj.get("CreationDate"))
         if not _isUndefined(obj.get("Format")):
             self._format = obj.get("Format")
         if not _isUndefined(obj.get("Keywords")):
@@ -1342,9 +1343,9 @@ class DocumentProperties(OfficeExtension.ClientObject):
         if not _isUndefined(obj.get("LastAuthor")):
             self._lastAuthor = obj.get("LastAuthor")
         if not _isUndefined(obj.get("LastPrintDate")):
-            self._lastPrintDate = obj.get("LastPrintDate")
+            self._lastPrintDate = _adjustToDateTime(obj.get("LastPrintDate"))
         if not _isUndefined(obj.get("LastSaveTime")):
-            self._lastSaveTime = obj.get("LastSaveTime")
+            self._lastSaveTime = _adjustToDateTime(obj.get("LastSaveTime"))
         if not _isUndefined(obj.get("Manager")):
             self._manager = obj.get("Manager")
         if not _isUndefined(obj.get("RevisionNumber")):

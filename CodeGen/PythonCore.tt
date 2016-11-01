@@ -50,6 +50,7 @@
 import sys
 import json
 import enum
+import datetime
 import logging
 <#+
 		this.WriteLine(string.Empty);
@@ -368,9 +369,15 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
+		string clientResultType = "";
+		if (method.ReturnType.IsDateTimeOrDateTimeArray)
+		{
+			clientResultType = "OfficeExtension.ClientResultProcessingType.date";
+		}
+
 #>
     action = <#=PythonConstants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
-    ret = <#=Constants.TypeFullNames.ClientResult#>()
+    ret = <#=Constants.TypeFullNames.ClientResult#>(<#=clientResultType#>)
     <#=PythonConstants.MemberFullNames.AddActionResultHandler#>(self, action, ret)
     <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
     return ret
@@ -387,7 +394,16 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 		this.PopIndent();
 
 #>
-    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
+    ret = <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
+<#+
+		if (PythonUtility.ShouldAddImmediateExecutionForObjectMethod(method))
+		{
+#>
+    <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
+<#+
+		}
+#>
+    return ret
 <#+
 	}
 	
@@ -470,8 +486,19 @@ def _handleResult(self, value: dict) -> None:
 		{
 #>
     if not <#=PythonConstants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+<#+
+			if (prop.PropertyType.IsDateTimeOrDateTimeArray)
+			{
+#>
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = <#=PythonConstants.MemberFullNames.AdjustToDateTime#>(obj.get("<#=prop.Name#>"))
+<#+
+			}
+			else
+			{
+#>
         self.<#=PythonUtility.GetPythonFieldName(prop)#> = obj.get("<#=prop.Name#>")
 <#+
+			}
 		}
 
 		List<string> navPropNames = new List<string>();
@@ -653,6 +680,16 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 			return false;
 		}
 
+		public static bool ShouldAddImmediateExecutionForObjectMethod(ClientCallableMethodInfo method)
+		{
+			if (method.Name == "Add")
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public static string GetPythonFieldName(ClientCallablePropertyInfo prop)
 		{
 			return "_" + Utility.ToCamelLowerCase(prop.Name);
@@ -702,7 +739,7 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 					case "System.Void":
 						return "None";
 					case "System.DateTime":
-						return "str";
+						return "datetime.datetime";
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 				}
