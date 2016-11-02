@@ -485,7 +485,7 @@ def _handleResult(self, value: dict) -> None:
 		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
-    if not <#=PythonConstants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+    if "<#=prop.Name#>" in obj:
 <#+
 			if (prop.PropertyType.IsDateTimeOrDateTimeArray)
 			{
@@ -505,7 +505,7 @@ def _handleResult(self, value: dict) -> None:
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
-    if not <#=PythonConstants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+    if "<#=prop.Name#>" in obj:
         self.<#=Utility.ToCamelLowerCase(prop.Name)#>._handleResult(obj.get("<#=prop.Name#>"))
 <#+
 		}
@@ -514,7 +514,7 @@ def _handleResult(self, value: dict) -> None:
 		{
 			bool hasIndexerMethod = (type.Methods.FirstOrDefault(m => m.IsIndexerMethod) != null);
 #>
-    if not <#=PythonConstants.MemberFullNames.IsNullOrUndefined#>(obj.get(OfficeExtension.Constants.items)):
+    if OfficeExtension.Constants.items in obj:
         self.__items = []
         data = obj.get(OfficeExtension.Constants.items)
         for i, itemData in enumerate(data):
@@ -548,7 +548,7 @@ def _handleIdResult(self, value) -> None:
 					if (prop != null && !prop.ExcludedFromClientLibrary)
 					{
 #>
-    if not <#=PythonConstants.MemberFullNames.IsUndefined#>(value.get("<#=prop.Name#>")):
+    if "<#=prop.Name#>" in value:
         self.<#=PythonUtility.GetPythonFieldName(prop)#> = value.get("<#=prop.Name#>")
 <#+
 					}

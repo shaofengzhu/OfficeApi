@@ -58,7 +58,7 @@ class Application(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("CalculationMode")):
+        if "CalculationMode" in obj:
             self._calculationMode = obj.get("CalculationMode")
     
     def load(self, option = None) -> 'Application':
@@ -170,21 +170,21 @@ class Workbook(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Application")):
+        if "Application" in obj:
             self.application._handleResult(obj.get("Application"))
-        if not _isUndefined(obj.get("Bindings")):
+        if "Bindings" in obj:
             self.bindings._handleResult(obj.get("Bindings"))
-        if not _isUndefined(obj.get("Functions")):
+        if "Functions" in obj:
             self.functions._handleResult(obj.get("Functions"))
-        if not _isUndefined(obj.get("Names")):
+        if "Names" in obj:
             self.names._handleResult(obj.get("Names"))
-        if not _isUndefined(obj.get("PivotTables")):
+        if "PivotTables" in obj:
             self.pivotTables._handleResult(obj.get("PivotTables"))
-        if not _isUndefined(obj.get("Settings")):
+        if "Settings" in obj:
             self.settings._handleResult(obj.get("Settings"))
-        if not _isUndefined(obj.get("Tables")):
+        if "Tables" in obj:
             self.tables._handleResult(obj.get("Tables"))
-        if not _isUndefined(obj.get("Worksheets")):
+        if "Worksheets" in obj:
             self.worksheets._handleResult(obj.get("Worksheets"))
     
     def load(self, option = None) -> 'Workbook':
@@ -307,21 +307,21 @@ class Worksheet(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Id")):
+        if "Id" in obj:
             self._id = obj.get("Id")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Position")):
+        if "Position" in obj:
             self._position = obj.get("Position")
-        if not _isUndefined(obj.get("Visibility")):
+        if "Visibility" in obj:
             self._visibility = obj.get("Visibility")
-        if not _isUndefined(obj.get("Charts")):
+        if "Charts" in obj:
             self.charts._handleResult(obj.get("Charts"))
-        if not _isUndefined(obj.get("PivotTables")):
+        if "PivotTables" in obj:
             self.pivotTables._handleResult(obj.get("PivotTables"))
-        if not _isUndefined(obj.get("Protection")):
+        if "Protection" in obj:
             self.protection._handleResult(obj.get("Protection"))
-        if not _isUndefined(obj.get("Tables")):
+        if "Tables" in obj:
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'Worksheet':
@@ -330,7 +330,7 @@ class Worksheet(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("Id")):
+        if "Id" in value:
             self._id = value.get("Id")
 
 class WorksheetCollection(OfficeExtension.ClientObject):
@@ -378,7 +378,7 @@ class WorksheetCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -430,9 +430,9 @@ class WorksheetProtection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Options")):
+        if "Options" in obj:
             self._options = obj.get("Options")
-        if not _isUndefined(obj.get("Protected")):
+        if "Protected" in obj:
             self._protected = obj.get("Protected")
     
     def load(self, option = None) -> 'WorksheetProtection':
@@ -835,47 +835,47 @@ class Range(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Address")):
+        if "Address" in obj:
             self._address = obj.get("Address")
-        if not _isUndefined(obj.get("AddressLocal")):
+        if "AddressLocal" in obj:
             self._addressLocal = obj.get("AddressLocal")
-        if not _isUndefined(obj.get("CellCount")):
+        if "CellCount" in obj:
             self._cellCount = obj.get("CellCount")
-        if not _isUndefined(obj.get("ColumnCount")):
+        if "ColumnCount" in obj:
             self._columnCount = obj.get("ColumnCount")
-        if not _isUndefined(obj.get("ColumnHidden")):
+        if "ColumnHidden" in obj:
             self._columnHidden = obj.get("ColumnHidden")
-        if not _isUndefined(obj.get("ColumnIndex")):
+        if "ColumnIndex" in obj:
             self._columnIndex = obj.get("ColumnIndex")
-        if not _isUndefined(obj.get("Formulas")):
+        if "Formulas" in obj:
             self._formulas = obj.get("Formulas")
-        if not _isUndefined(obj.get("FormulasLocal")):
+        if "FormulasLocal" in obj:
             self._formulasLocal = obj.get("FormulasLocal")
-        if not _isUndefined(obj.get("FormulasR1C1")):
+        if "FormulasR1C1" in obj:
             self._formulasR1C1 = obj.get("FormulasR1C1")
-        if not _isUndefined(obj.get("Hidden")):
+        if "Hidden" in obj:
             self._hidden = obj.get("Hidden")
-        if not _isUndefined(obj.get("NumberFormat")):
+        if "NumberFormat" in obj:
             self._numberFormat = obj.get("NumberFormat")
-        if not _isUndefined(obj.get("RowCount")):
+        if "RowCount" in obj:
             self._rowCount = obj.get("RowCount")
-        if not _isUndefined(obj.get("RowHidden")):
+        if "RowHidden" in obj:
             self._rowHidden = obj.get("RowHidden")
-        if not _isUndefined(obj.get("RowIndex")):
+        if "RowIndex" in obj:
             self._rowIndex = obj.get("RowIndex")
-        if not _isUndefined(obj.get("Text")):
+        if "Text" in obj:
             self._text = obj.get("Text")
-        if not _isUndefined(obj.get("ValueTypes")):
+        if "ValueTypes" in obj:
             self._valueTypes = obj.get("ValueTypes")
-        if not _isUndefined(obj.get("Values")):
+        if "Values" in obj:
             self._values = obj.get("Values")
-        if not _isUndefined(obj.get("_ReferenceId")):
+        if "_ReferenceId" in obj:
             self.__ReferenceId = obj.get("_ReferenceId")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
-        if not _isUndefined(obj.get("Sort")):
+        if "Sort" in obj:
             self.sort._handleResult(obj.get("Sort"))
-        if not _isUndefined(obj.get("Worksheet")):
+        if "Worksheet" in obj:
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Range':
@@ -884,7 +884,7 @@ class Range(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("_ReferenceId")):
+        if "_ReferenceId" in value:
             self.__ReferenceId = value.get("_ReferenceId")
 
 class RangeReference:
@@ -1038,29 +1038,29 @@ class RangeView(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("CellAddresses")):
+        if "CellAddresses" in obj:
             self._cellAddresses = obj.get("CellAddresses")
-        if not _isUndefined(obj.get("ColumnCount")):
+        if "ColumnCount" in obj:
             self._columnCount = obj.get("ColumnCount")
-        if not _isUndefined(obj.get("Formulas")):
+        if "Formulas" in obj:
             self._formulas = obj.get("Formulas")
-        if not _isUndefined(obj.get("FormulasLocal")):
+        if "FormulasLocal" in obj:
             self._formulasLocal = obj.get("FormulasLocal")
-        if not _isUndefined(obj.get("FormulasR1C1")):
+        if "FormulasR1C1" in obj:
             self._formulasR1C1 = obj.get("FormulasR1C1")
-        if not _isUndefined(obj.get("Index")):
+        if "Index" in obj:
             self._index = obj.get("Index")
-        if not _isUndefined(obj.get("NumberFormat")):
+        if "NumberFormat" in obj:
             self._numberFormat = obj.get("NumberFormat")
-        if not _isUndefined(obj.get("RowCount")):
+        if "RowCount" in obj:
             self._rowCount = obj.get("RowCount")
-        if not _isUndefined(obj.get("Text")):
+        if "Text" in obj:
             self._text = obj.get("Text")
-        if not _isUndefined(obj.get("ValueTypes")):
+        if "ValueTypes" in obj:
             self._valueTypes = obj.get("ValueTypes")
-        if not _isUndefined(obj.get("Values")):
+        if "Values" in obj:
             self._values = obj.get("Values")
-        if not _isUndefined(obj.get("Rows")):
+        if "Rows" in obj:
             self.rows._handleResult(obj.get("Rows"))
     
     def load(self, option = None) -> 'RangeView':
@@ -1093,7 +1093,7 @@ class RangeViewCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1142,7 +1142,7 @@ class SettingCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1194,9 +1194,9 @@ class Setting(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Key")):
+        if "Key" in obj:
             self._key = obj.get("Key")
-        if not _isUndefined(obj.get("_Value")):
+        if "_Value" in obj:
             self.__Value = obj.get("_Value")
     
     def load(self, option = None) -> 'Setting':
@@ -1234,7 +1234,7 @@ class NamedItemCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1310,15 +1310,15 @@ class NamedItem(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Type")):
+        if "Type" in obj:
             self._type = obj.get("Type")
-        if not _isUndefined(obj.get("Value")):
+        if "Value" in obj:
             self._value = obj.get("Value")
-        if not _isUndefined(obj.get("Visible")):
+        if "Visible" in obj:
             self._visible = obj.get("Visible")
-        if not _isUndefined(obj.get("_Id")):
+        if "_Id" in obj:
             self.__Id = obj.get("_Id")
     
     def load(self, option = None) -> 'NamedItem':
@@ -1327,7 +1327,7 @@ class NamedItem(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("_Id")):
+        if "_Id" in value:
             self.__Id = value.get("_Id")
 
 class Binding(OfficeExtension.ClientObject):
@@ -1386,9 +1386,9 @@ class Binding(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Id")):
+        if "Id" in obj:
             self._id = obj.get("Id")
-        if not _isUndefined(obj.get("Type")):
+        if "Type" in obj:
             self._type = obj.get("Type")
     
     def load(self, option = None) -> 'Binding':
@@ -1397,7 +1397,7 @@ class Binding(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("Id")):
+        if "Id" in value:
             self._id = value.get("Id")
 
 class BindingCollection(OfficeExtension.ClientObject):
@@ -1465,9 +1465,9 @@ class BindingCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1531,9 +1531,9 @@ class TableCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1763,33 +1763,33 @@ class Table(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("HighlightFirstColumn")):
+        if "HighlightFirstColumn" in obj:
             self._highlightFirstColumn = obj.get("HighlightFirstColumn")
-        if not _isUndefined(obj.get("HighlightLastColumn")):
+        if "HighlightLastColumn" in obj:
             self._highlightLastColumn = obj.get("HighlightLastColumn")
-        if not _isUndefined(obj.get("Id")):
+        if "Id" in obj:
             self._id = obj.get("Id")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("ShowBandedColumns")):
+        if "ShowBandedColumns" in obj:
             self._showBandedColumns = obj.get("ShowBandedColumns")
-        if not _isUndefined(obj.get("ShowBandedRows")):
+        if "ShowBandedRows" in obj:
             self._showBandedRows = obj.get("ShowBandedRows")
-        if not _isUndefined(obj.get("ShowFilterButton")):
+        if "ShowFilterButton" in obj:
             self._showFilterButton = obj.get("ShowFilterButton")
-        if not _isUndefined(obj.get("ShowHeaders")):
+        if "ShowHeaders" in obj:
             self._showHeaders = obj.get("ShowHeaders")
-        if not _isUndefined(obj.get("ShowTotals")):
+        if "ShowTotals" in obj:
             self._showTotals = obj.get("ShowTotals")
-        if not _isUndefined(obj.get("Style")):
+        if "Style" in obj:
             self._style = obj.get("Style")
-        if not _isUndefined(obj.get("Columns")):
+        if "Columns" in obj:
             self.columns._handleResult(obj.get("Columns"))
-        if not _isUndefined(obj.get("Rows")):
+        if "Rows" in obj:
             self.rows._handleResult(obj.get("Rows"))
-        if not _isUndefined(obj.get("Sort")):
+        if "Sort" in obj:
             self.sort._handleResult(obj.get("Sort"))
-        if not _isUndefined(obj.get("Worksheet")):
+        if "Worksheet" in obj:
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Table':
@@ -1798,7 +1798,7 @@ class Table(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("Id")):
+        if "Id" in value:
             self._id = value.get("Id")
 
 class TableColumnCollection(OfficeExtension.ClientObject):
@@ -1854,9 +1854,9 @@ class TableColumnCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -1954,15 +1954,15 @@ class TableColumn(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Id")):
+        if "Id" in obj:
             self._id = obj.get("Id")
-        if not _isUndefined(obj.get("Index")):
+        if "Index" in obj:
             self._index = obj.get("Index")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Values")):
+        if "Values" in obj:
             self._values = obj.get("Values")
-        if not _isUndefined(obj.get("Filter")):
+        if "Filter" in obj:
             self.filter._handleResult(obj.get("Filter"))
     
     def load(self, option = None) -> 'TableColumn':
@@ -1971,7 +1971,7 @@ class TableColumn(OfficeExtension.ClientObject):
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
-        if not _isUndefined(value.get("Id")):
+        if "Id" in value:
             self._id = value.get("Id")
 
 class TableRowCollection(OfficeExtension.ClientObject):
@@ -2016,9 +2016,9 @@ class TableRowCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -2076,9 +2076,9 @@ class TableRow(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Index")):
+        if "Index" in obj:
             self._index = obj.get("Index")
-        if not _isUndefined(obj.get("Values")):
+        if "Values" in obj:
             self._values = obj.get("Values")
     
     def load(self, option = None) -> 'TableRow':
@@ -2203,23 +2203,23 @@ class RangeFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("ColumnWidth")):
+        if "ColumnWidth" in obj:
             self._columnWidth = obj.get("ColumnWidth")
-        if not _isUndefined(obj.get("HorizontalAlignment")):
+        if "HorizontalAlignment" in obj:
             self._horizontalAlignment = obj.get("HorizontalAlignment")
-        if not _isUndefined(obj.get("RowHeight")):
+        if "RowHeight" in obj:
             self._rowHeight = obj.get("RowHeight")
-        if not _isUndefined(obj.get("VerticalAlignment")):
+        if "VerticalAlignment" in obj:
             self._verticalAlignment = obj.get("VerticalAlignment")
-        if not _isUndefined(obj.get("WrapText")):
+        if "WrapText" in obj:
             self._wrapText = obj.get("WrapText")
-        if not _isUndefined(obj.get("Borders")):
+        if "Borders" in obj:
             self.borders._handleResult(obj.get("Borders"))
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
-        if not _isUndefined(obj.get("Protection")):
+        if "Protection" in obj:
             self.protection._handleResult(obj.get("Protection"))
     
     def load(self, option = None) -> 'RangeFormat':
@@ -2266,9 +2266,9 @@ class FormatProtection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("FormulaHidden")):
+        if "FormulaHidden" in obj:
             self._formulaHidden = obj.get("FormulaHidden")
-        if not _isUndefined(obj.get("Locked")):
+        if "Locked" in obj:
             self._locked = obj.get("Locked")
     
     def load(self, option = None) -> 'FormatProtection':
@@ -2307,7 +2307,7 @@ class RangeFill(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Color")):
+        if "Color" in obj:
             self._color = obj.get("Color")
     
     def load(self, option = None) -> 'RangeFill':
@@ -2376,13 +2376,13 @@ class RangeBorder(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Color")):
+        if "Color" in obj:
             self._color = obj.get("Color")
-        if not _isUndefined(obj.get("SideIndex")):
+        if "SideIndex" in obj:
             self._sideIndex = obj.get("SideIndex")
-        if not _isUndefined(obj.get("Style")):
+        if "Style" in obj:
             self._style = obj.get("Style")
-        if not _isUndefined(obj.get("Weight")):
+        if "Weight" in obj:
             self._weight = obj.get("Weight")
     
     def load(self, option = None) -> 'RangeBorder':
@@ -2428,9 +2428,9 @@ class RangeBorderCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -2538,17 +2538,17 @@ class RangeFont(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Bold")):
+        if "Bold" in obj:
             self._bold = obj.get("Bold")
-        if not _isUndefined(obj.get("Color")):
+        if "Color" in obj:
             self._color = obj.get("Color")
-        if not _isUndefined(obj.get("Italic")):
+        if "Italic" in obj:
             self._italic = obj.get("Italic")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Size")):
+        if "Size" in obj:
             self._size = obj.get("Size")
-        if not _isUndefined(obj.get("Underline")):
+        if "Underline" in obj:
             self._underline = obj.get("Underline")
     
     def load(self, option = None) -> 'RangeFont':
@@ -2613,9 +2613,9 @@ class ChartCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -2778,29 +2778,29 @@ class Chart(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Height")):
+        if "Height" in obj:
             self._height = obj.get("Height")
-        if not _isUndefined(obj.get("Left")):
+        if "Left" in obj:
             self._left = obj.get("Left")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Top")):
+        if "Top" in obj:
             self._top = obj.get("Top")
-        if not _isUndefined(obj.get("Width")):
+        if "Width" in obj:
             self._width = obj.get("Width")
-        if not _isUndefined(obj.get("Axes")):
+        if "Axes" in obj:
             self.axes._handleResult(obj.get("Axes"))
-        if not _isUndefined(obj.get("DataLabels")):
+        if "DataLabels" in obj:
             self.dataLabels._handleResult(obj.get("DataLabels"))
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
-        if not _isUndefined(obj.get("Legend")):
+        if "Legend" in obj:
             self.legend._handleResult(obj.get("Legend"))
-        if not _isUndefined(obj.get("Series")):
+        if "Series" in obj:
             self.series._handleResult(obj.get("Series"))
-        if not _isUndefined(obj.get("Title")):
+        if "Title" in obj:
             self.title._handleResult(obj.get("Title"))
-        if not _isUndefined(obj.get("Worksheet")):
+        if "Worksheet" in obj:
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Chart':
@@ -2831,9 +2831,9 @@ class ChartAreaFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartAreaFormat':
@@ -2874,9 +2874,9 @@ class ChartSeriesCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -2926,11 +2926,11 @@ class ChartSeries(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
-        if not _isUndefined(obj.get("Points")):
+        if "Points" in obj:
             self.points._handleResult(obj.get("Points"))
     
     def load(self, option = None) -> 'ChartSeries':
@@ -2961,9 +2961,9 @@ class ChartSeriesFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Line")):
+        if "Line" in obj:
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartSeriesFormat':
@@ -3004,9 +3004,9 @@ class ChartPointsCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Count")):
+        if "Count" in obj:
             self._count = obj.get("Count")
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -3044,9 +3044,9 @@ class ChartPoint(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Value")):
+        if "Value" in obj:
             self._value = obj.get("Value")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartPoint':
@@ -3071,7 +3071,7 @@ class ChartPointFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
     
     def load(self, option = None) -> 'ChartPointFormat':
@@ -3108,11 +3108,11 @@ class ChartAxes(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("CategoryAxis")):
+        if "CategoryAxis" in obj:
             self.categoryAxis._handleResult(obj.get("CategoryAxis"))
-        if not _isUndefined(obj.get("SeriesAxis")):
+        if "SeriesAxis" in obj:
             self.seriesAxis._handleResult(obj.get("SeriesAxis"))
-        if not _isUndefined(obj.get("ValueAxis")):
+        if "ValueAxis" in obj:
             self.valueAxis._handleResult(obj.get("ValueAxis"))
     
     def load(self, option = None) -> 'ChartAxes':
@@ -3211,21 +3211,21 @@ class ChartAxis(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("MajorUnit")):
+        if "MajorUnit" in obj:
             self._majorUnit = obj.get("MajorUnit")
-        if not _isUndefined(obj.get("Maximum")):
+        if "Maximum" in obj:
             self._maximum = obj.get("Maximum")
-        if not _isUndefined(obj.get("Minimum")):
+        if "Minimum" in obj:
             self._minimum = obj.get("Minimum")
-        if not _isUndefined(obj.get("MinorUnit")):
+        if "MinorUnit" in obj:
             self._minorUnit = obj.get("MinorUnit")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
-        if not _isUndefined(obj.get("MajorGridlines")):
+        if "MajorGridlines" in obj:
             self.majorGridlines._handleResult(obj.get("MajorGridlines"))
-        if not _isUndefined(obj.get("MinorGridlines")):
+        if "MinorGridlines" in obj:
             self.minorGridlines._handleResult(obj.get("MinorGridlines"))
-        if not _isUndefined(obj.get("Title")):
+        if "Title" in obj:
             self.title._handleResult(obj.get("Title"))
     
     def load(self, option = None) -> 'ChartAxis':
@@ -3256,9 +3256,9 @@ class ChartAxisFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
-        if not _isUndefined(obj.get("Line")):
+        if "Line" in obj:
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartAxisFormat':
@@ -3311,11 +3311,11 @@ class ChartAxisTitle(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Text")):
+        if "Text" in obj:
             self._text = obj.get("Text")
-        if not _isUndefined(obj.get("Visible")):
+        if "Visible" in obj:
             self._visible = obj.get("Visible")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartAxisTitle':
@@ -3340,7 +3340,7 @@ class ChartAxisTitleFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartAxisTitleFormat':
@@ -3477,23 +3477,23 @@ class ChartDataLabels(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Position")):
+        if "Position" in obj:
             self._position = obj.get("Position")
-        if not _isUndefined(obj.get("Separator")):
+        if "Separator" in obj:
             self._separator = obj.get("Separator")
-        if not _isUndefined(obj.get("ShowBubbleSize")):
+        if "ShowBubbleSize" in obj:
             self._showBubbleSize = obj.get("ShowBubbleSize")
-        if not _isUndefined(obj.get("ShowCategoryName")):
+        if "ShowCategoryName" in obj:
             self._showCategoryName = obj.get("ShowCategoryName")
-        if not _isUndefined(obj.get("ShowLegendKey")):
+        if "ShowLegendKey" in obj:
             self._showLegendKey = obj.get("ShowLegendKey")
-        if not _isUndefined(obj.get("ShowPercentage")):
+        if "ShowPercentage" in obj:
             self._showPercentage = obj.get("ShowPercentage")
-        if not _isUndefined(obj.get("ShowSeriesName")):
+        if "ShowSeriesName" in obj:
             self._showSeriesName = obj.get("ShowSeriesName")
-        if not _isUndefined(obj.get("ShowValue")):
+        if "ShowValue" in obj:
             self._showValue = obj.get("ShowValue")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartDataLabels':
@@ -3524,9 +3524,9 @@ class ChartDataLabelFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartDataLabelFormat':
@@ -3565,9 +3565,9 @@ class ChartGridlines(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Visible")):
+        if "Visible" in obj:
             self._visible = obj.get("Visible")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartGridlines':
@@ -3592,7 +3592,7 @@ class ChartGridlinesFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Line")):
+        if "Line" in obj:
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartGridlinesFormat':
@@ -3659,13 +3659,13 @@ class ChartLegend(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Overlay")):
+        if "Overlay" in obj:
             self._overlay = obj.get("Overlay")
-        if not _isUndefined(obj.get("Position")):
+        if "Position" in obj:
             self._position = obj.get("Position")
-        if not _isUndefined(obj.get("Visible")):
+        if "Visible" in obj:
             self._visible = obj.get("Visible")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartLegend':
@@ -3696,9 +3696,9 @@ class ChartLegendFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartLegendFormat':
@@ -3765,13 +3765,13 @@ class ChartTitle(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Overlay")):
+        if "Overlay" in obj:
             self._overlay = obj.get("Overlay")
-        if not _isUndefined(obj.get("Text")):
+        if "Text" in obj:
             self._text = obj.get("Text")
-        if not _isUndefined(obj.get("Visible")):
+        if "Visible" in obj:
             self._visible = obj.get("Visible")
-        if not _isUndefined(obj.get("Format")):
+        if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartTitle':
@@ -3802,9 +3802,9 @@ class ChartTitleFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fill")):
+        if "Fill" in obj:
             self.fill._handleResult(obj.get("Fill"))
-        if not _isUndefined(obj.get("Font")):
+        if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartTitleFormat':
@@ -3869,7 +3869,7 @@ class ChartLineFormat(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Color")):
+        if "Color" in obj:
             self._color = obj.get("Color")
     
     def load(self, option = None) -> 'ChartLineFormat':
@@ -3972,17 +3972,17 @@ class ChartFont(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Bold")):
+        if "Bold" in obj:
             self._bold = obj.get("Bold")
-        if not _isUndefined(obj.get("Color")):
+        if "Color" in obj:
             self._color = obj.get("Color")
-        if not _isUndefined(obj.get("Italic")):
+        if "Italic" in obj:
             self._italic = obj.get("Italic")
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Size")):
+        if "Size" in obj:
             self._size = obj.get("Size")
-        if not _isUndefined(obj.get("Underline")):
+        if "Underline" in obj:
             self._underline = obj.get("Underline")
     
     def load(self, option = None) -> 'ChartFont':
@@ -4063,11 +4063,11 @@ class TableSort(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Fields")):
+        if "Fields" in obj:
             self._fields = obj.get("Fields")
-        if not _isUndefined(obj.get("MatchCase")):
+        if "MatchCase" in obj:
             self._matchCase = obj.get("MatchCase")
-        if not _isUndefined(obj.get("Method")):
+        if "Method" in obj:
             self._method = obj.get("Method")
     
     def load(self, option = None) -> 'TableSort':
@@ -4179,7 +4179,7 @@ class Filter(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Criteria")):
+        if "Criteria" in obj:
             self._criteria = obj.get("Criteria")
     
     def load(self, option = None) -> 'Filter':
@@ -4256,7 +4256,7 @@ class PivotTableCollection(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isNullOrUndefined(obj.get(OfficeExtension.Constants.items)):
+        if OfficeExtension.Constants.items in obj:
             self.__items = []
             data = obj.get(OfficeExtension.Constants.items)
             for i, itemData in enumerate(data):
@@ -4306,9 +4306,9 @@ class PivotTable(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Name")):
+        if "Name" in obj:
             self._name = obj.get("Name")
-        if not _isUndefined(obj.get("Worksheet")):
+        if "Worksheet" in obj:
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'PivotTable':
@@ -4657,9 +4657,9 @@ class FunctionResult(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
-        if not _isUndefined(obj.get("Error")):
+        if "Error" in obj:
             self._error = obj.get("Error")
-        if not _isUndefined(obj.get("Value")):
+        if "Value" in obj:
             self._value = obj.get("Value")
     
     def load(self, option = None) -> 'FunctionResult':
