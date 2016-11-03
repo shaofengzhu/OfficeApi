@@ -3,7 +3,7 @@ import excel
 
 def simpleRangeTest():
     context = excel.RequestContext("http://localhost:8052")
-    context.executionMode = runtime.RequestExecutionMode.immediateAndSlow
+    context.executionMode = runtime.RequestExecutionMode.instantSync
     sheet = context.workbook.worksheets.getItem("Sheet1")
     sheet.getUsedRange().clear()
     r = sheet.getRange("A1:B2")

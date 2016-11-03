@@ -47,6 +47,7 @@ class ObjectPathType(enum.IntEnum):
     Property = 4
     Indexer = 5
     ReferenceId = 6
+    NullObject = 7
 
 class ClientRequestFlags(enum.IntEnum):
     NoneValue = 0
@@ -155,7 +156,7 @@ class RequestUrlAndHeaderInfo:
 
 class RequestExecutionMode(enum.IntEnum):
     batch = 0
-    immediateAndSlow = 1
+    instantSync = 1
 
 class ClientRequestContext:
     customRequestExecutor = None
@@ -251,7 +252,7 @@ class ClientRequestContext:
 
         action = ActionFactory.createQueryAction(self, clientObject, queryOption)
         self._pendingRequest.addActionResultHandler(action, clientObject)
-        if self._executionMode == RequestExecutionMode.immediateAndSlow :
+        if self._executionMode == RequestExecutionMode.instantSync :
             self.sync()
 
     def trace(self, message: str) -> None:
@@ -382,6 +383,16 @@ class ObjectPath:
                 self._argumentObjectPaths = None
                 return
 
+    def _updateAsNullObject(self) -> None:
+        self._isInvalidAfterRequest = False;
+        self._isValid = True;
+        self._objectPathInfo.ObjectPathType = ObjectPathType.NullObject;
+        self._objectPathInfo.Name = "";
+        self._objectPathInfo.ArgumentInfo = {};
+        self._parentObjectPath = None;
+        self._argumentObjectPaths = None;
+        return
+
 class ClientRequest:
     def __init__(self, context):
         self._context = context
@@ -478,6 +489,8 @@ class ClientObject(IResultHandler):
         self._context = context
         self.__objectPath = objectPath
         self.__isLoaded = False
+        # set __isNull to be undefined as we do not know the value yet
+        self.__isNull = None
         if self.__objectPath:
             if not context._processingResult:
                 ActionFactory.createInstantiateAction(context, self)
@@ -485,6 +498,14 @@ class ClientObject(IResultHandler):
     @property
     def context(self) -> ClientRequestContext:
         return self._context
+
+    @property
+    def isNullObject(self) -> bool:
+        if self.__isNull is None and self.context.executionMode == RequestExecutionMode.instantSync:
+            self.context.load(self)
+        if self.__isNull is None:
+            raise Utility.createRuntimeError(ErrorCodes.propertyNotLoaded)
+        return self.__isNull
 
     @property
     def _objectPath(self) -> ObjectPath:
@@ -498,10 +519,25 @@ class ClientObject(IResultHandler):
     def _isLoaded(self) -> bool:
         return self.__isLoaded
 
+    @property
+    def _isNull(self):
+        return self.__isNull
+
+    def _setAsNullObject(self):
+        if self.__objectPath:
+            self.__objectPath._updateAsNullObject()
+
     def _handleResult(self, value):
+        self.__isNull = Utility.isNullOrUndefined(value)
+        if self.__isNull and self.__objectPath:
+            self.__objectPath._updateAsNullObject()
+        self.__isLoaded = True
         Utility.fixObjectPathIfNecessary(self, value)
 
     def _handleIdResult(self, value):
+        self.__isNull = Utility.isNullOrUndefined(value)
+        if self.__isNull and self.__objectPath:
+            self.__objectPath._updateAsNullObject()
         Utility.fixObjectPathIfNecessary(self, value)
 
 
@@ -890,18 +926,20 @@ class Utility:
         return ret
     
     @staticmethod
-    def throwIfNotLoaded(propertyName: str, fieldValue):
-        if (fieldValue is None and propertyName[0] != "_"):
+    def throwIfNotLoaded(propertyName: str, fieldValue, entityName: str, isNull: bool):
+        # isNull could be None, True or False. When we do not know whether the object
+        # is null or not, isNull is None
+        if (not isNull and fieldValue is None and propertyName[0] != "_"):
             Utility.throwError(ResourceStrings.propertyNotLoaded, propertyName)
 
     @staticmethod
-    def loadIfImmediateExecution(clientObject: ClientObject, propertyName: str, fieldValue):
-        if clientObject.context.executionMode == RequestExecutionMode.immediateAndSlow and clientObject._isLoaded == False:
+    def loadIfInstantSyncExecutionMode(clientObject: ClientObject, propertyName: str, fieldValue) -> None:
+        if clientObject.context.executionMode == RequestExecutionMode.instantSync and clientObject._isLoaded == False:
             clientObject.load();
 
     @staticmethod
-    def syncIfImmediateExecution(clientObject: ClientObject):
-        if clientObject.context.executionMode == RequestExecutionMode.immediateAndSlow:
+    def syncIfInstantSyncExecutionMode(clientObject: ClientObject) -> None:
+        if clientObject.context.executionMode == RequestExecutionMode.instantSync:
             clientObject.context.sync()
 
     @staticmethod

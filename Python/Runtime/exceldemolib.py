@@ -154,3 +154,24 @@ class ExcelDemoLib:
         endTime = datetime.datetime.utcnow()
         diff = endTime - startTime
         return diff.seconds * 1000 + diff.microseconds / 1000
+
+    @staticmethod
+    def perfTestPopulateAndAnalyzeData(context: excel.RequestContext):
+        startTime = datetime.datetime.utcnow()
+        ExcelDemoLib.populateData(context)
+        ExcelDemoLib.analyzeData(context)
+        endTime = datetime.datetime.utcnow()
+        diff = endTime - startTime
+        return diff.seconds * 1000 + diff.microseconds / 1000
+
+    @staticmethod
+    def clearWorkbook(context: excel.RequestContext) -> None:
+        sheet1 = context.workbook.worksheets.getItemOrNull("Sheet1")
+        sheet2 = context.workbook.worksheets.getItemOrNull("Top 10 Growing Cities")
+        r = sheet1.getUsedRange()
+        r.clear()
+        r = sheet2.getUsedRange()
+        r.clear()
+        sheet2.delete()
+        context.sync()
+

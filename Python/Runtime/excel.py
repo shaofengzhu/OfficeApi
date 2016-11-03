@@ -25,8 +25,8 @@ _createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction
 _isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined
 _isUndefined = OfficeExtension.Utility.isUndefined
 _throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded
-_loadIfImmediateExecution = OfficeExtension.Utility.loadIfImmediateExecution
-_syncIfImmediateExecution = OfficeExtension.Utility.syncIfImmediateExecution
+_loadIfInstantSyncExecutionMode = OfficeExtension.Utility.loadIfInstantSyncExecutionMode
+_syncIfInstantSyncExecutionMode = OfficeExtension.Utility.syncIfInstantSyncExecutionMode
 _load = OfficeExtension.Utility.load
 _fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary
 _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler
@@ -41,16 +41,16 @@ class Application(OfficeExtension.ClientObject):
 
     @property
     def calculationMode(self) -> 'str':
-        _loadIfImmediateExecution(self, "calculationMode", self._calculationMode)
-        _throwIfNotLoaded("calculationMode", self._calculationMode)
+        _loadIfInstantSyncExecutionMode(self, "calculationMode", self._calculationMode)
+        _throwIfNotLoaded("calculationMode", self._calculationMode, "Application", self._isNull)
         return self._calculationMode
     
 
     def calculate(self, calculationType : 'str') -> None:
-    	# Begin_PlaceHolder_Application_Calculate
-    	# End_PlaceHolder_Application_Calculate
+        # Begin_PlaceHolder_Application_Calculate
+        # End_PlaceHolder_Application_Calculate
         _createMethodAction(self.context, self, "Calculate", OfficeExtension.OperationType.Default, [calculationType])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -120,8 +120,8 @@ class Workbook(OfficeExtension.ClientObject):
         return self._worksheets
 
     def getSelectedRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Workbook_GetSelectedRange
-    	# End_PlaceHolder_Workbook_GetSelectedRange
+        # Begin_PlaceHolder_Workbook_GetSelectedRange
+        # End_PlaceHolder_Workbook_GetSelectedRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetSelectedRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
@@ -131,7 +131,7 @@ class Workbook(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "_GetObjectByReferenceId", OfficeExtension.OperationType.Read, [bstrReferenceId])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def _GetObjectTypeNameByReferenceId(self, bstrReferenceId : 'str') -> OfficeExtension.ClientResult:
@@ -140,7 +140,7 @@ class Workbook(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "_GetObjectTypeNameByReferenceId", OfficeExtension.OperationType.Read, [bstrReferenceId])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def _GetReferenceCount(self) -> OfficeExtension.ClientResult:
@@ -149,20 +149,20 @@ class Workbook(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "_GetReferenceCount", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def _RemoveAllReferences(self) -> None:
-    	# Begin_PlaceHolder_Workbook__RemoveAllReferences
-    	# End_PlaceHolder_Workbook__RemoveAllReferences
+        # Begin_PlaceHolder_Workbook__RemoveAllReferences
+        # End_PlaceHolder_Workbook__RemoveAllReferences
         _createMethodAction(self.context, self, "_RemoveAllReferences", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _RemoveReference(self, bstrReferenceId : 'str') -> None:
-    	# Begin_PlaceHolder_Workbook__RemoveReference
-    	# End_PlaceHolder_Workbook__RemoveReference
+        # Begin_PlaceHolder_Workbook__RemoveReference
+        # End_PlaceHolder_Workbook__RemoveReference
         _createMethodAction(self.context, self, "_RemoveReference", OfficeExtension.OperationType.Read, [bstrReferenceId])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -227,15 +227,15 @@ class Worksheet(OfficeExtension.ClientObject):
 
     @property
     def id(self) -> 'str':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "Worksheet", self._isNull)
         return self._id
     
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "Worksheet", self._isNull)
         return self._name
     
 
@@ -243,12 +243,12 @@ class Worksheet(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def position(self) -> 'int':
-        _loadIfImmediateExecution(self, "position", self._position)
-        _throwIfNotLoaded("position", self._position)
+        _loadIfInstantSyncExecutionMode(self, "position", self._position)
+        _throwIfNotLoaded("position", self._position, "Worksheet", self._isNull)
         return self._position
     
 
@@ -256,12 +256,12 @@ class Worksheet(OfficeExtension.ClientObject):
     def position(self, value : 'int'):
         self._position = value
         _createSetPropertyAction(self.context, self, "Position", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def visibility(self) -> 'str':
-        _loadIfImmediateExecution(self, "visibility", self._visibility)
-        _throwIfNotLoaded("visibility", self._visibility)
+        _loadIfInstantSyncExecutionMode(self, "visibility", self._visibility)
+        _throwIfNotLoaded("visibility", self._visibility, "Worksheet", self._isNull)
         return self._visibility
     
 
@@ -269,35 +269,35 @@ class Worksheet(OfficeExtension.ClientObject):
     def visibility(self, value : 'str'):
         self._visibility = value
         _createSetPropertyAction(self.context, self, "Visibility", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def activate(self) -> None:
-    	# Begin_PlaceHolder_Worksheet_Activate
-    	# End_PlaceHolder_Worksheet_Activate
+        # Begin_PlaceHolder_Worksheet_Activate
+        # End_PlaceHolder_Worksheet_Activate
         _createMethodAction(self.context, self, "Activate", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Worksheet_Delete
-    	# End_PlaceHolder_Worksheet_Delete
+        # Begin_PlaceHolder_Worksheet_Delete
+        # End_PlaceHolder_Worksheet_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getCell(self, row : 'int', column : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Worksheet_GetCell
-    	# End_PlaceHolder_Worksheet_GetCell
+        # Begin_PlaceHolder_Worksheet_GetCell
+        # End_PlaceHolder_Worksheet_GetCell
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
         return ret
 
     def getRange(self, address : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_Worksheet_GetRange
-    	# End_PlaceHolder_Worksheet_GetRange
+        # Begin_PlaceHolder_Worksheet_GetRange
+        # End_PlaceHolder_Worksheet_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [address], False, True))
         return ret
 
     def getUsedRange(self, valuesOnly : 'bool' = None) -> 'Range':
-    	# Begin_PlaceHolder_Worksheet_GetUsedRange
-    	# End_PlaceHolder_Worksheet_GetUsedRange
+        # Begin_PlaceHolder_Worksheet_GetUsedRange
+        # End_PlaceHolder_Worksheet_GetUsedRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
         return ret
 
@@ -343,32 +343,32 @@ class WorksheetCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Worksheet':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "WorksheetCollection", self._isNull)
         return self.__items
     
 
     def add(self, name : 'str' = None) -> 'Worksheet':
-    	# Begin_PlaceHolder_WorksheetCollection_Add
-    	# End_PlaceHolder_WorksheetCollection_Add
+        # Begin_PlaceHolder_WorksheetCollection_Add
+        # End_PlaceHolder_WorksheetCollection_Add
         ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [name], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getActiveWorksheet(self) -> 'Worksheet':
-    	# Begin_PlaceHolder_WorksheetCollection_GetActiveWorksheet
-    	# End_PlaceHolder_WorksheetCollection_GetActiveWorksheet
+        # Begin_PlaceHolder_WorksheetCollection_GetActiveWorksheet
+        # End_PlaceHolder_WorksheetCollection_GetActiveWorksheet
         ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetActiveWorksheet", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getItem(self, key : 'str') -> 'Worksheet':
-    	# Begin_PlaceHolder_WorksheetCollection_GetItem
-    	# End_PlaceHolder_WorksheetCollection_GetItem
+        # Begin_PlaceHolder_WorksheetCollection_GetItem
+        # End_PlaceHolder_WorksheetCollection_GetItem
         return Worksheet(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     def getItemOrNull(self, key : 'str') -> 'Worksheet':
-    	# Begin_PlaceHolder_WorksheetCollection_GetItemOrNull
-    	# End_PlaceHolder_WorksheetCollection_GetItemOrNull
+        # Begin_PlaceHolder_WorksheetCollection_GetItemOrNull
+        # End_PlaceHolder_WorksheetCollection_GetItemOrNull
         ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
@@ -400,29 +400,29 @@ class WorksheetProtection(OfficeExtension.ClientObject):
 
     @property
     def options(self) -> 'WorksheetProtectionOptions':
-        _loadIfImmediateExecution(self, "options", self._options)
-        _throwIfNotLoaded("options", self._options)
+        _loadIfInstantSyncExecutionMode(self, "options", self._options)
+        _throwIfNotLoaded("options", self._options, "WorksheetProtection", self._isNull)
         return self._options
     
 
     @property
     def protected(self) -> 'bool':
-        _loadIfImmediateExecution(self, "protected", self._protected)
-        _throwIfNotLoaded("protected", self._protected)
+        _loadIfInstantSyncExecutionMode(self, "protected", self._protected)
+        _throwIfNotLoaded("protected", self._protected, "WorksheetProtection", self._isNull)
         return self._protected
     
 
     def protect(self, options : 'WorksheetProtectionOptions' = None) -> None:
-    	# Begin_PlaceHolder_WorksheetProtection_Protect
-    	# End_PlaceHolder_WorksheetProtection_Protect
+        # Begin_PlaceHolder_WorksheetProtection_Protect
+        # End_PlaceHolder_WorksheetProtection_Protect
         _createMethodAction(self.context, self, "Protect", OfficeExtension.OperationType.Default, [options])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def unprotect(self) -> None:
-    	# Begin_PlaceHolder_WorksheetProtection_Unprotect
-    	# End_PlaceHolder_WorksheetProtection_Unprotect
+        # Begin_PlaceHolder_WorksheetProtection_Unprotect
+        # End_PlaceHolder_WorksheetProtection_Unprotect
         _createMethodAction(self.context, self, "Unprotect", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -501,36 +501,36 @@ class Range(OfficeExtension.ClientObject):
 
     @property
     def address(self) -> 'str':
-        _loadIfImmediateExecution(self, "address", self._address)
-        _throwIfNotLoaded("address", self._address)
+        _loadIfInstantSyncExecutionMode(self, "address", self._address)
+        _throwIfNotLoaded("address", self._address, "Range", self._isNull)
         return self._address
     
 
     @property
     def addressLocal(self) -> 'str':
-        _loadIfImmediateExecution(self, "addressLocal", self._addressLocal)
-        _throwIfNotLoaded("addressLocal", self._addressLocal)
+        _loadIfInstantSyncExecutionMode(self, "addressLocal", self._addressLocal)
+        _throwIfNotLoaded("addressLocal", self._addressLocal, "Range", self._isNull)
         return self._addressLocal
     
 
     @property
     def cellCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "cellCount", self._cellCount)
-        _throwIfNotLoaded("cellCount", self._cellCount)
+        _loadIfInstantSyncExecutionMode(self, "cellCount", self._cellCount)
+        _throwIfNotLoaded("cellCount", self._cellCount, "Range", self._isNull)
         return self._cellCount
     
 
     @property
     def columnCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "columnCount", self._columnCount)
-        _throwIfNotLoaded("columnCount", self._columnCount)
+        _loadIfInstantSyncExecutionMode(self, "columnCount", self._columnCount)
+        _throwIfNotLoaded("columnCount", self._columnCount, "Range", self._isNull)
         return self._columnCount
     
 
     @property
     def columnHidden(self) -> 'bool':
-        _loadIfImmediateExecution(self, "columnHidden", self._columnHidden)
-        _throwIfNotLoaded("columnHidden", self._columnHidden)
+        _loadIfInstantSyncExecutionMode(self, "columnHidden", self._columnHidden)
+        _throwIfNotLoaded("columnHidden", self._columnHidden, "Range", self._isNull)
         return self._columnHidden
     
 
@@ -538,19 +538,19 @@ class Range(OfficeExtension.ClientObject):
     def columnHidden(self, value : 'bool'):
         self._columnHidden = value
         _createSetPropertyAction(self.context, self, "ColumnHidden", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def columnIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "columnIndex", self._columnIndex)
-        _throwIfNotLoaded("columnIndex", self._columnIndex)
+        _loadIfInstantSyncExecutionMode(self, "columnIndex", self._columnIndex)
+        _throwIfNotLoaded("columnIndex", self._columnIndex, "Range", self._isNull)
         return self._columnIndex
     
 
     @property
     def formulas(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulas", self._formulas)
-        _throwIfNotLoaded("formulas", self._formulas)
+        _loadIfInstantSyncExecutionMode(self, "formulas", self._formulas)
+        _throwIfNotLoaded("formulas", self._formulas, "Range", self._isNull)
         return self._formulas
     
 
@@ -558,12 +558,12 @@ class Range(OfficeExtension.ClientObject):
     def formulas(self, value : 'list'):
         self._formulas = value
         _createSetPropertyAction(self.context, self, "Formulas", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def formulasLocal(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulasLocal", self._formulasLocal)
-        _throwIfNotLoaded("formulasLocal", self._formulasLocal)
+        _loadIfInstantSyncExecutionMode(self, "formulasLocal", self._formulasLocal)
+        _throwIfNotLoaded("formulasLocal", self._formulasLocal, "Range", self._isNull)
         return self._formulasLocal
     
 
@@ -571,12 +571,12 @@ class Range(OfficeExtension.ClientObject):
     def formulasLocal(self, value : 'list'):
         self._formulasLocal = value
         _createSetPropertyAction(self.context, self, "FormulasLocal", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def formulasR1C1(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulasR1C1", self._formulasR1C1)
-        _throwIfNotLoaded("formulasR1C1", self._formulasR1C1)
+        _loadIfInstantSyncExecutionMode(self, "formulasR1C1", self._formulasR1C1)
+        _throwIfNotLoaded("formulasR1C1", self._formulasR1C1, "Range", self._isNull)
         return self._formulasR1C1
     
 
@@ -584,19 +584,19 @@ class Range(OfficeExtension.ClientObject):
     def formulasR1C1(self, value : 'list'):
         self._formulasR1C1 = value
         _createSetPropertyAction(self.context, self, "FormulasR1C1", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def hidden(self) -> 'bool':
-        _loadIfImmediateExecution(self, "hidden", self._hidden)
-        _throwIfNotLoaded("hidden", self._hidden)
+        _loadIfInstantSyncExecutionMode(self, "hidden", self._hidden)
+        _throwIfNotLoaded("hidden", self._hidden, "Range", self._isNull)
         return self._hidden
     
 
     @property
     def numberFormat(self) -> 'list':
-        _loadIfImmediateExecution(self, "numberFormat", self._numberFormat)
-        _throwIfNotLoaded("numberFormat", self._numberFormat)
+        _loadIfInstantSyncExecutionMode(self, "numberFormat", self._numberFormat)
+        _throwIfNotLoaded("numberFormat", self._numberFormat, "Range", self._isNull)
         return self._numberFormat
     
 
@@ -604,19 +604,19 @@ class Range(OfficeExtension.ClientObject):
     def numberFormat(self, value : 'list'):
         self._numberFormat = value
         _createSetPropertyAction(self.context, self, "NumberFormat", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowCount", self._rowCount)
-        _throwIfNotLoaded("rowCount", self._rowCount)
+        _loadIfInstantSyncExecutionMode(self, "rowCount", self._rowCount)
+        _throwIfNotLoaded("rowCount", self._rowCount, "Range", self._isNull)
         return self._rowCount
     
 
     @property
     def rowHidden(self) -> 'bool':
-        _loadIfImmediateExecution(self, "rowHidden", self._rowHidden)
-        _throwIfNotLoaded("rowHidden", self._rowHidden)
+        _loadIfInstantSyncExecutionMode(self, "rowHidden", self._rowHidden)
+        _throwIfNotLoaded("rowHidden", self._rowHidden, "Range", self._isNull)
         return self._rowHidden
     
 
@@ -624,33 +624,33 @@ class Range(OfficeExtension.ClientObject):
     def rowHidden(self, value : 'bool'):
         self._rowHidden = value
         _createSetPropertyAction(self.context, self, "RowHidden", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowIndex", self._rowIndex)
-        _throwIfNotLoaded("rowIndex", self._rowIndex)
+        _loadIfInstantSyncExecutionMode(self, "rowIndex", self._rowIndex)
+        _throwIfNotLoaded("rowIndex", self._rowIndex, "Range", self._isNull)
         return self._rowIndex
     
 
     @property
     def text(self) -> 'list':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "Range", self._isNull)
         return self._text
     
 
     @property
     def valueTypes(self) -> 'list':
-        _loadIfImmediateExecution(self, "valueTypes", self._valueTypes)
-        _throwIfNotLoaded("valueTypes", self._valueTypes)
+        _loadIfInstantSyncExecutionMode(self, "valueTypes", self._valueTypes)
+        _throwIfNotLoaded("valueTypes", self._valueTypes, "Range", self._isNull)
         return self._valueTypes
     
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "Range", self._isNull)
         return self._values
     
 
@@ -658,176 +658,176 @@ class Range(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Range", self._isNull)
         return self.__ReferenceId
     
 
     def clear(self, applyTo : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Range_Clear
-    	# End_PlaceHolder_Range_Clear
+        # Begin_PlaceHolder_Range_Clear
+        # End_PlaceHolder_Range_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [applyTo])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self, shift : 'str') -> None:
-    	# Begin_PlaceHolder_Range_Delete
-    	# End_PlaceHolder_Range_Delete
+        # Begin_PlaceHolder_Range_Delete
+        # End_PlaceHolder_Range_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [shift])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getBoundingRect(self, anotherRange : 'any') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetBoundingRect
-    	# End_PlaceHolder_Range_GetBoundingRect
+        # Begin_PlaceHolder_Range_GetBoundingRect
+        # End_PlaceHolder_Range_GetBoundingRect
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetBoundingRect", OfficeExtension.OperationType.Read, [anotherRange], False, True))
         return ret
 
     def getCell(self, row : 'int', column : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetCell
-    	# End_PlaceHolder_Range_GetCell
+        # Begin_PlaceHolder_Range_GetCell
+        # End_PlaceHolder_Range_GetCell
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [row, column], False, True))
         return ret
 
     def getColumn(self, column : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetColumn
-    	# End_PlaceHolder_Range_GetColumn
+        # Begin_PlaceHolder_Range_GetColumn
+        # End_PlaceHolder_Range_GetColumn
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumn", OfficeExtension.OperationType.Read, [column], False, True))
         return ret
 
     def getColumnsAfter(self, count : 'int' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetColumnsAfter
-    	# End_PlaceHolder_Range_GetColumnsAfter
+        # Begin_PlaceHolder_Range_GetColumnsAfter
+        # End_PlaceHolder_Range_GetColumnsAfter
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsAfter", OfficeExtension.OperationType.Read, [count], False, True))
         return ret
 
     def getColumnsBefore(self, count : 'int' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetColumnsBefore
-    	# End_PlaceHolder_Range_GetColumnsBefore
+        # Begin_PlaceHolder_Range_GetColumnsBefore
+        # End_PlaceHolder_Range_GetColumnsBefore
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetColumnsBefore", OfficeExtension.OperationType.Read, [count], False, True))
         return ret
 
     def getEntireColumn(self) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetEntireColumn
-    	# End_PlaceHolder_Range_GetEntireColumn
+        # Begin_PlaceHolder_Range_GetEntireColumn
+        # End_PlaceHolder_Range_GetEntireColumn
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireColumn", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getEntireRow(self) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetEntireRow
-    	# End_PlaceHolder_Range_GetEntireRow
+        # Begin_PlaceHolder_Range_GetEntireRow
+        # End_PlaceHolder_Range_GetEntireRow
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetEntireRow", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getIntersection(self, anotherRange : 'any') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetIntersection
-    	# End_PlaceHolder_Range_GetIntersection
+        # Begin_PlaceHolder_Range_GetIntersection
+        # End_PlaceHolder_Range_GetIntersection
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersection", OfficeExtension.OperationType.Read, [anotherRange], False, True))
         return ret
 
     def getIntersectionOrNull(self, anotherRange : 'any') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetIntersectionOrNull
-    	# End_PlaceHolder_Range_GetIntersectionOrNull
+        # Begin_PlaceHolder_Range_GetIntersectionOrNull
+        # End_PlaceHolder_Range_GetIntersectionOrNull
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersectionOrNull", OfficeExtension.OperationType.Read, [anotherRange], False, True))
         return ret
 
     def getLastCell(self) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetLastCell
-    	# End_PlaceHolder_Range_GetLastCell
+        # Begin_PlaceHolder_Range_GetLastCell
+        # End_PlaceHolder_Range_GetLastCell
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastCell", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getLastColumn(self) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetLastColumn
-    	# End_PlaceHolder_Range_GetLastColumn
+        # Begin_PlaceHolder_Range_GetLastColumn
+        # End_PlaceHolder_Range_GetLastColumn
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastColumn", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getLastRow(self) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetLastRow
-    	# End_PlaceHolder_Range_GetLastRow
+        # Begin_PlaceHolder_Range_GetLastRow
+        # End_PlaceHolder_Range_GetLastRow
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetLastRow", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getOffsetRange(self, rowOffset : 'int', columnOffset : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetOffsetRange
-    	# End_PlaceHolder_Range_GetOffsetRange
+        # Begin_PlaceHolder_Range_GetOffsetRange
+        # End_PlaceHolder_Range_GetOffsetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetOffsetRange", OfficeExtension.OperationType.Read, [rowOffset, columnOffset], False, True))
         return ret
 
     def getResizedRange(self, deltaRows : 'int', deltaColumns : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetResizedRange
-    	# End_PlaceHolder_Range_GetResizedRange
+        # Begin_PlaceHolder_Range_GetResizedRange
+        # End_PlaceHolder_Range_GetResizedRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetResizedRange", OfficeExtension.OperationType.Read, [deltaRows, deltaColumns], False, True))
         return ret
 
     def getRow(self, row : 'int') -> 'Range':
-    	# Begin_PlaceHolder_Range_GetRow
-    	# End_PlaceHolder_Range_GetRow
+        # Begin_PlaceHolder_Range_GetRow
+        # End_PlaceHolder_Range_GetRow
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRow", OfficeExtension.OperationType.Read, [row], False, True))
         return ret
 
     def getRowsAbove(self, count : 'int' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetRowsAbove
-    	# End_PlaceHolder_Range_GetRowsAbove
+        # Begin_PlaceHolder_Range_GetRowsAbove
+        # End_PlaceHolder_Range_GetRowsAbove
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsAbove", OfficeExtension.OperationType.Read, [count], False, True))
         return ret
 
     def getRowsBelow(self, count : 'int' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetRowsBelow
-    	# End_PlaceHolder_Range_GetRowsBelow
+        # Begin_PlaceHolder_Range_GetRowsBelow
+        # End_PlaceHolder_Range_GetRowsBelow
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRowsBelow", OfficeExtension.OperationType.Read, [count], False, True))
         return ret
 
     def getUsedRange(self, valuesOnly : 'bool' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetUsedRange
-    	# End_PlaceHolder_Range_GetUsedRange
+        # Begin_PlaceHolder_Range_GetUsedRange
+        # End_PlaceHolder_Range_GetUsedRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetUsedRange", OfficeExtension.OperationType.Read, [valuesOnly], False, True))
         return ret
 
     def getVisibleView(self) -> 'RangeView':
-    	# Begin_PlaceHolder_Range_GetVisibleView
-    	# End_PlaceHolder_Range_GetVisibleView
+        # Begin_PlaceHolder_Range_GetVisibleView
+        # End_PlaceHolder_Range_GetVisibleView
         ret = RangeView(self.context, _createMethodObjectPath(self.context, self, "GetVisibleView", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def insert(self, shift : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Range_Insert
-    	# End_PlaceHolder_Range_Insert
+        # Begin_PlaceHolder_Range_Insert
+        # End_PlaceHolder_Range_Insert
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "Insert", OfficeExtension.OperationType.Default, [shift], False, True))
         return ret
 
     def merge(self, across : 'bool' = None) -> None:
-    	# Begin_PlaceHolder_Range_Merge
-    	# End_PlaceHolder_Range_Merge
+        # Begin_PlaceHolder_Range_Merge
+        # End_PlaceHolder_Range_Merge
         _createMethodAction(self.context, self, "Merge", OfficeExtension.OperationType.Default, [across])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def select(self) -> None:
-    	# Begin_PlaceHolder_Range_Select
-    	# End_PlaceHolder_Range_Select
+        # Begin_PlaceHolder_Range_Select
+        # End_PlaceHolder_Range_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def unmerge(self) -> None:
-    	# Begin_PlaceHolder_Range_Unmerge
-    	# End_PlaceHolder_Range_Unmerge
+        # Begin_PlaceHolder_Range_Unmerge
+        # End_PlaceHolder_Range_Unmerge
         _createMethodAction(self.context, self, "Unmerge", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Range__KeepReference
-    	# End_PlaceHolder_Range__KeepReference
+        # Begin_PlaceHolder_Range__KeepReference
+        # End_PlaceHolder_Range__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _ValidateArraySize(self, rows : 'int', columns : 'int') -> None:
-    	# Begin_PlaceHolder_Range__ValidateArraySize
-    	# End_PlaceHolder_Range__ValidateArraySize
+        # Begin_PlaceHolder_Range__ValidateArraySize
+        # End_PlaceHolder_Range__ValidateArraySize
         _createMethodAction(self.context, self, "_ValidateArraySize", OfficeExtension.OperationType.Read, [rows, columns])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -921,22 +921,22 @@ class RangeView(OfficeExtension.ClientObject):
 
     @property
     def cellAddresses(self) -> 'list':
-        _loadIfImmediateExecution(self, "cellAddresses", self._cellAddresses)
-        _throwIfNotLoaded("cellAddresses", self._cellAddresses)
+        _loadIfInstantSyncExecutionMode(self, "cellAddresses", self._cellAddresses)
+        _throwIfNotLoaded("cellAddresses", self._cellAddresses, "RangeView", self._isNull)
         return self._cellAddresses
     
 
     @property
     def columnCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "columnCount", self._columnCount)
-        _throwIfNotLoaded("columnCount", self._columnCount)
+        _loadIfInstantSyncExecutionMode(self, "columnCount", self._columnCount)
+        _throwIfNotLoaded("columnCount", self._columnCount, "RangeView", self._isNull)
         return self._columnCount
     
 
     @property
     def formulas(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulas", self._formulas)
-        _throwIfNotLoaded("formulas", self._formulas)
+        _loadIfInstantSyncExecutionMode(self, "formulas", self._formulas)
+        _throwIfNotLoaded("formulas", self._formulas, "RangeView", self._isNull)
         return self._formulas
     
 
@@ -944,12 +944,12 @@ class RangeView(OfficeExtension.ClientObject):
     def formulas(self, value : 'list'):
         self._formulas = value
         _createSetPropertyAction(self.context, self, "Formulas", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def formulasLocal(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulasLocal", self._formulasLocal)
-        _throwIfNotLoaded("formulasLocal", self._formulasLocal)
+        _loadIfInstantSyncExecutionMode(self, "formulasLocal", self._formulasLocal)
+        _throwIfNotLoaded("formulasLocal", self._formulasLocal, "RangeView", self._isNull)
         return self._formulasLocal
     
 
@@ -957,12 +957,12 @@ class RangeView(OfficeExtension.ClientObject):
     def formulasLocal(self, value : 'list'):
         self._formulasLocal = value
         _createSetPropertyAction(self.context, self, "FormulasLocal", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def formulasR1C1(self) -> 'list':
-        _loadIfImmediateExecution(self, "formulasR1C1", self._formulasR1C1)
-        _throwIfNotLoaded("formulasR1C1", self._formulasR1C1)
+        _loadIfInstantSyncExecutionMode(self, "formulasR1C1", self._formulasR1C1)
+        _throwIfNotLoaded("formulasR1C1", self._formulasR1C1, "RangeView", self._isNull)
         return self._formulasR1C1
     
 
@@ -970,19 +970,19 @@ class RangeView(OfficeExtension.ClientObject):
     def formulasR1C1(self, value : 'list'):
         self._formulasR1C1 = value
         _createSetPropertyAction(self.context, self, "FormulasR1C1", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def index(self) -> 'int':
-        _loadIfImmediateExecution(self, "index", self._index)
-        _throwIfNotLoaded("index", self._index)
+        _loadIfInstantSyncExecutionMode(self, "index", self._index)
+        _throwIfNotLoaded("index", self._index, "RangeView", self._isNull)
         return self._index
     
 
     @property
     def numberFormat(self) -> 'list':
-        _loadIfImmediateExecution(self, "numberFormat", self._numberFormat)
-        _throwIfNotLoaded("numberFormat", self._numberFormat)
+        _loadIfInstantSyncExecutionMode(self, "numberFormat", self._numberFormat)
+        _throwIfNotLoaded("numberFormat", self._numberFormat, "RangeView", self._isNull)
         return self._numberFormat
     
 
@@ -990,33 +990,33 @@ class RangeView(OfficeExtension.ClientObject):
     def numberFormat(self, value : 'list'):
         self._numberFormat = value
         _createSetPropertyAction(self.context, self, "NumberFormat", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowCount", self._rowCount)
-        _throwIfNotLoaded("rowCount", self._rowCount)
+        _loadIfInstantSyncExecutionMode(self, "rowCount", self._rowCount)
+        _throwIfNotLoaded("rowCount", self._rowCount, "RangeView", self._isNull)
         return self._rowCount
     
 
     @property
     def text(self) -> 'list':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "RangeView", self._isNull)
         return self._text
     
 
     @property
     def valueTypes(self) -> 'list':
-        _loadIfImmediateExecution(self, "valueTypes", self._valueTypes)
-        _throwIfNotLoaded("valueTypes", self._valueTypes)
+        _loadIfInstantSyncExecutionMode(self, "valueTypes", self._valueTypes)
+        _throwIfNotLoaded("valueTypes", self._valueTypes, "RangeView", self._isNull)
         return self._valueTypes
     
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "RangeView", self._isNull)
         return self._values
     
 
@@ -1024,11 +1024,11 @@ class RangeView(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_RangeView_GetRange
-    	# End_PlaceHolder_RangeView_GetRange
+        # Begin_PlaceHolder_RangeView_GetRange
+        # End_PlaceHolder_RangeView_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
@@ -1076,14 +1076,14 @@ class RangeViewCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of RangeView':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "RangeViewCollection", self._isNull)
         return self.__items
     
 
     def getItemAt(self, index : 'int') -> 'RangeView':
-    	# Begin_PlaceHolder_RangeViewCollection_GetItemAt
-    	# End_PlaceHolder_RangeViewCollection_GetItemAt
+        # Begin_PlaceHolder_RangeViewCollection_GetItemAt
+        # End_PlaceHolder_RangeViewCollection_GetItemAt
         ret = RangeView(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
@@ -1114,25 +1114,25 @@ class SettingCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Setting':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "SettingCollection", self._isNull)
         return self.__items
     
 
     def getItem(self, key : 'str') -> 'Setting':
-    	# Begin_PlaceHolder_SettingCollection_GetItem
-    	# End_PlaceHolder_SettingCollection_GetItem
+        # Begin_PlaceHolder_SettingCollection_GetItem
+        # End_PlaceHolder_SettingCollection_GetItem
         return Setting(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     def getItemOrNull(self, key : 'str') -> 'Setting':
-    	# Begin_PlaceHolder_SettingCollection_GetItemOrNull
-    	# End_PlaceHolder_SettingCollection_GetItemOrNull
+        # Begin_PlaceHolder_SettingCollection_GetItemOrNull
+        # End_PlaceHolder_SettingCollection_GetItemOrNull
         ret = Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
     def _Add(self, key : 'str', value : 'str') -> 'Setting':
-    	# Begin_PlaceHolder_SettingCollection__Add
-    	# End_PlaceHolder_SettingCollection__Add
+        # Begin_PlaceHolder_SettingCollection__Add
+        # End_PlaceHolder_SettingCollection__Add
         ret = Setting(self.context, _createMethodObjectPath(self.context, self, "_Add", OfficeExtension.OperationType.Default, [key, value], False, False))
         return ret
 
@@ -1164,15 +1164,15 @@ class Setting(OfficeExtension.ClientObject):
 
     @property
     def key(self) -> 'str':
-        _loadIfImmediateExecution(self, "key", self._key)
-        _throwIfNotLoaded("key", self._key)
+        _loadIfInstantSyncExecutionMode(self, "key", self._key)
+        _throwIfNotLoaded("key", self._key, "Setting", self._isNull)
         return self._key
     
 
     @property
     def _Value(self) -> 'str':
-        _loadIfImmediateExecution(self, "_Value", self.__Value)
-        _throwIfNotLoaded("_Value", self.__Value)
+        _loadIfInstantSyncExecutionMode(self, "_Value", self.__Value)
+        _throwIfNotLoaded("_Value", self.__Value, "Setting", self._isNull)
         return self.__Value
     
 
@@ -1180,13 +1180,13 @@ class Setting(OfficeExtension.ClientObject):
     def _Value(self, value : 'str'):
         self.__Value = value
         _createSetPropertyAction(self.context, self, "_Value", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Setting_Delete
-    	# End_PlaceHolder_Setting_Delete
+        # Begin_PlaceHolder_Setting_Delete
+        # End_PlaceHolder_Setting_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1212,19 +1212,19 @@ class NamedItemCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of NamedItem':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "NamedItemCollection", self._isNull)
         return self.__items
     
 
     def getItem(self, name : 'str') -> 'NamedItem':
-    	# Begin_PlaceHolder_NamedItemCollection_GetItem
-    	# End_PlaceHolder_NamedItemCollection_GetItem
+        # Begin_PlaceHolder_NamedItemCollection_GetItem
+        # End_PlaceHolder_NamedItemCollection_GetItem
         return NamedItem(self.context, _createIndexerObjectPath(self.context, self, [name]))
 
     def getItemOrNull(self, name : 'str') -> 'NamedItem':
-    	# Begin_PlaceHolder_NamedItemCollection_GetItemOrNull
-    	# End_PlaceHolder_NamedItemCollection_GetItemOrNull
+        # Begin_PlaceHolder_NamedItemCollection_GetItemOrNull
+        # End_PlaceHolder_NamedItemCollection_GetItemOrNull
         ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
@@ -1259,29 +1259,29 @@ class NamedItem(OfficeExtension.ClientObject):
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "NamedItem", self._isNull)
         return self._name
     
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "NamedItem", self._isNull)
         return self._type
     
 
     @property
     def value(self) -> 'any':
-        _loadIfImmediateExecution(self, "value", self._value)
-        _throwIfNotLoaded("value", self._value)
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "NamedItem", self._isNull)
         return self._value
     
 
     @property
     def visible(self) -> 'bool':
-        _loadIfImmediateExecution(self, "visible", self._visible)
-        _throwIfNotLoaded("visible", self._visible)
+        _loadIfInstantSyncExecutionMode(self, "visible", self._visible)
+        _throwIfNotLoaded("visible", self._visible, "NamedItem", self._isNull)
         return self._visible
     
 
@@ -1289,18 +1289,18 @@ class NamedItem(OfficeExtension.ClientObject):
     def visible(self, value : 'bool'):
         self._visible = value
         _createSetPropertyAction(self.context, self, "Visible", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _Id(self) -> 'str':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "NamedItem", self._isNull)
         return self.__Id
     
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_NamedItem_GetRange
-    	# End_PlaceHolder_NamedItem_GetRange
+        # Begin_PlaceHolder_NamedItem_GetRange
+        # End_PlaceHolder_NamedItem_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
@@ -1341,33 +1341,33 @@ class Binding(OfficeExtension.ClientObject):
 
     @property
     def id(self) -> 'str':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "Binding", self._isNull)
         return self._id
     
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "Binding", self._isNull)
         return self._type
     
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Binding_Delete
-    	# End_PlaceHolder_Binding_Delete
+        # Begin_PlaceHolder_Binding_Delete
+        # End_PlaceHolder_Binding_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Binding_GetRange
-    	# End_PlaceHolder_Binding_GetRange
+        # Begin_PlaceHolder_Binding_GetRange
+        # End_PlaceHolder_Binding_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getTable(self) -> 'Table':
-    	# Begin_PlaceHolder_Binding_GetTable
-    	# End_PlaceHolder_Binding_GetTable
+        # Begin_PlaceHolder_Binding_GetTable
+        # End_PlaceHolder_Binding_GetTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetTable", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
@@ -1377,7 +1377,7 @@ class Binding(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetText", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     # Handle results returned from the document
@@ -1411,51 +1411,51 @@ class BindingCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Binding':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "BindingCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "BindingCollection", self._isNull)
         return self._count
     
 
     def add(self, range : 'any', bindingType : 'str', id : 'str') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_Add
-    	# End_PlaceHolder_BindingCollection_Add
+        # Begin_PlaceHolder_BindingCollection_Add
+        # End_PlaceHolder_BindingCollection_Add
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [range, bindingType, id], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def addFromNamedItem(self, name : 'str', bindingType : 'str', id : 'str') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_AddFromNamedItem
-    	# End_PlaceHolder_BindingCollection_AddFromNamedItem
+        # Begin_PlaceHolder_BindingCollection_AddFromNamedItem
+        # End_PlaceHolder_BindingCollection_AddFromNamedItem
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromNamedItem", OfficeExtension.OperationType.Default, [name, bindingType, id], False, False))
         return ret
 
     def addFromSelection(self, bindingType : 'str', id : 'str') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_AddFromSelection
-    	# End_PlaceHolder_BindingCollection_AddFromSelection
+        # Begin_PlaceHolder_BindingCollection_AddFromSelection
+        # End_PlaceHolder_BindingCollection_AddFromSelection
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "AddFromSelection", OfficeExtension.OperationType.Default, [bindingType, id], False, False))
         return ret
 
     def getItem(self, id : 'str') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_GetItem
-    	# End_PlaceHolder_BindingCollection_GetItem
+        # Begin_PlaceHolder_BindingCollection_GetItem
+        # End_PlaceHolder_BindingCollection_GetItem
         return Binding(self.context, _createIndexerObjectPath(self.context, self, [id]))
 
     def getItemAt(self, index : 'int') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_GetItemAt
-    	# End_PlaceHolder_BindingCollection_GetItemAt
+        # Begin_PlaceHolder_BindingCollection_GetItemAt
+        # End_PlaceHolder_BindingCollection_GetItemAt
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
     def getItemOrNull(self, id : 'str') -> 'Binding':
-    	# Begin_PlaceHolder_BindingCollection_GetItemOrNull
-    	# End_PlaceHolder_BindingCollection_GetItemOrNull
+        # Begin_PlaceHolder_BindingCollection_GetItemOrNull
+        # End_PlaceHolder_BindingCollection_GetItemOrNull
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
@@ -1489,39 +1489,39 @@ class TableCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Table':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "TableCollection", self._isNull)
         return self._count
     
 
     def add(self, address : 'any', hasHeaders : 'bool') -> 'Table':
-    	# Begin_PlaceHolder_TableCollection_Add
-    	# End_PlaceHolder_TableCollection_Add
+        # Begin_PlaceHolder_TableCollection_Add
+        # End_PlaceHolder_TableCollection_Add
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [address, hasHeaders], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getItem(self, key : 'any') -> 'Table':
-    	# Begin_PlaceHolder_TableCollection_GetItem
-    	# End_PlaceHolder_TableCollection_GetItem
+        # Begin_PlaceHolder_TableCollection_GetItem
+        # End_PlaceHolder_TableCollection_GetItem
         return Table(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     def getItemAt(self, index : 'int') -> 'Table':
-    	# Begin_PlaceHolder_TableCollection_GetItemAt
-    	# End_PlaceHolder_TableCollection_GetItemAt
+        # Begin_PlaceHolder_TableCollection_GetItemAt
+        # End_PlaceHolder_TableCollection_GetItemAt
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
     def getItemOrNull(self, key : 'any') -> 'Table':
-    	# Begin_PlaceHolder_TableCollection_GetItemOrNull
-    	# End_PlaceHolder_TableCollection_GetItemOrNull
+        # Begin_PlaceHolder_TableCollection_GetItemOrNull
+        # End_PlaceHolder_TableCollection_GetItemOrNull
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
@@ -1587,8 +1587,8 @@ class Table(OfficeExtension.ClientObject):
 
     @property
     def highlightFirstColumn(self) -> 'bool':
-        _loadIfImmediateExecution(self, "highlightFirstColumn", self._highlightFirstColumn)
-        _throwIfNotLoaded("highlightFirstColumn", self._highlightFirstColumn)
+        _loadIfInstantSyncExecutionMode(self, "highlightFirstColumn", self._highlightFirstColumn)
+        _throwIfNotLoaded("highlightFirstColumn", self._highlightFirstColumn, "Table", self._isNull)
         return self._highlightFirstColumn
     
 
@@ -1596,12 +1596,12 @@ class Table(OfficeExtension.ClientObject):
     def highlightFirstColumn(self, value : 'bool'):
         self._highlightFirstColumn = value
         _createSetPropertyAction(self.context, self, "HighlightFirstColumn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def highlightLastColumn(self) -> 'bool':
-        _loadIfImmediateExecution(self, "highlightLastColumn", self._highlightLastColumn)
-        _throwIfNotLoaded("highlightLastColumn", self._highlightLastColumn)
+        _loadIfInstantSyncExecutionMode(self, "highlightLastColumn", self._highlightLastColumn)
+        _throwIfNotLoaded("highlightLastColumn", self._highlightLastColumn, "Table", self._isNull)
         return self._highlightLastColumn
     
 
@@ -1609,19 +1609,19 @@ class Table(OfficeExtension.ClientObject):
     def highlightLastColumn(self, value : 'bool'):
         self._highlightLastColumn = value
         _createSetPropertyAction(self.context, self, "HighlightLastColumn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def id(self) -> 'int':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "Table", self._isNull)
         return self._id
     
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "Table", self._isNull)
         return self._name
     
 
@@ -1629,12 +1629,12 @@ class Table(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showBandedColumns(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showBandedColumns", self._showBandedColumns)
-        _throwIfNotLoaded("showBandedColumns", self._showBandedColumns)
+        _loadIfInstantSyncExecutionMode(self, "showBandedColumns", self._showBandedColumns)
+        _throwIfNotLoaded("showBandedColumns", self._showBandedColumns, "Table", self._isNull)
         return self._showBandedColumns
     
 
@@ -1642,12 +1642,12 @@ class Table(OfficeExtension.ClientObject):
     def showBandedColumns(self, value : 'bool'):
         self._showBandedColumns = value
         _createSetPropertyAction(self.context, self, "ShowBandedColumns", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showBandedRows(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showBandedRows", self._showBandedRows)
-        _throwIfNotLoaded("showBandedRows", self._showBandedRows)
+        _loadIfInstantSyncExecutionMode(self, "showBandedRows", self._showBandedRows)
+        _throwIfNotLoaded("showBandedRows", self._showBandedRows, "Table", self._isNull)
         return self._showBandedRows
     
 
@@ -1655,12 +1655,12 @@ class Table(OfficeExtension.ClientObject):
     def showBandedRows(self, value : 'bool'):
         self._showBandedRows = value
         _createSetPropertyAction(self.context, self, "ShowBandedRows", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showFilterButton(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showFilterButton", self._showFilterButton)
-        _throwIfNotLoaded("showFilterButton", self._showFilterButton)
+        _loadIfInstantSyncExecutionMode(self, "showFilterButton", self._showFilterButton)
+        _throwIfNotLoaded("showFilterButton", self._showFilterButton, "Table", self._isNull)
         return self._showFilterButton
     
 
@@ -1668,12 +1668,12 @@ class Table(OfficeExtension.ClientObject):
     def showFilterButton(self, value : 'bool'):
         self._showFilterButton = value
         _createSetPropertyAction(self.context, self, "ShowFilterButton", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showHeaders(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showHeaders", self._showHeaders)
-        _throwIfNotLoaded("showHeaders", self._showHeaders)
+        _loadIfInstantSyncExecutionMode(self, "showHeaders", self._showHeaders)
+        _throwIfNotLoaded("showHeaders", self._showHeaders, "Table", self._isNull)
         return self._showHeaders
     
 
@@ -1681,12 +1681,12 @@ class Table(OfficeExtension.ClientObject):
     def showHeaders(self, value : 'bool'):
         self._showHeaders = value
         _createSetPropertyAction(self.context, self, "ShowHeaders", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showTotals(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showTotals", self._showTotals)
-        _throwIfNotLoaded("showTotals", self._showTotals)
+        _loadIfInstantSyncExecutionMode(self, "showTotals", self._showTotals)
+        _throwIfNotLoaded("showTotals", self._showTotals, "Table", self._isNull)
         return self._showTotals
     
 
@@ -1694,12 +1694,12 @@ class Table(OfficeExtension.ClientObject):
     def showTotals(self, value : 'bool'):
         self._showTotals = value
         _createSetPropertyAction(self.context, self, "ShowTotals", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "Table", self._isNull)
         return self._style
     
 
@@ -1707,55 +1707,55 @@ class Table(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clearFilters(self) -> None:
-    	# Begin_PlaceHolder_Table_ClearFilters
-    	# End_PlaceHolder_Table_ClearFilters
+        # Begin_PlaceHolder_Table_ClearFilters
+        # End_PlaceHolder_Table_ClearFilters
         _createMethodAction(self.context, self, "ClearFilters", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def convertToRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Table_ConvertToRange
-    	# End_PlaceHolder_Table_ConvertToRange
+        # Begin_PlaceHolder_Table_ConvertToRange
+        # End_PlaceHolder_Table_ConvertToRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "ConvertToRange", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Table_Delete
-    	# End_PlaceHolder_Table_Delete
+        # Begin_PlaceHolder_Table_Delete
+        # End_PlaceHolder_Table_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getDataBodyRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Table_GetDataBodyRange
-    	# End_PlaceHolder_Table_GetDataBodyRange
+        # Begin_PlaceHolder_Table_GetDataBodyRange
+        # End_PlaceHolder_Table_GetDataBodyRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getHeaderRowRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Table_GetHeaderRowRange
-    	# End_PlaceHolder_Table_GetHeaderRowRange
+        # Begin_PlaceHolder_Table_GetHeaderRowRange
+        # End_PlaceHolder_Table_GetHeaderRowRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Table_GetRange
-    	# End_PlaceHolder_Table_GetRange
+        # Begin_PlaceHolder_Table_GetRange
+        # End_PlaceHolder_Table_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getTotalRowRange(self) -> 'Range':
-    	# Begin_PlaceHolder_Table_GetTotalRowRange
-    	# End_PlaceHolder_Table_GetTotalRowRange
+        # Begin_PlaceHolder_Table_GetTotalRowRange
+        # End_PlaceHolder_Table_GetTotalRowRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def reapplyFilters(self) -> None:
-    	# Begin_PlaceHolder_Table_ReapplyFilters
-    	# End_PlaceHolder_Table_ReapplyFilters
+        # Begin_PlaceHolder_Table_ReapplyFilters
+        # End_PlaceHolder_Table_ReapplyFilters
         _createMethodAction(self.context, self, "ReapplyFilters", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1812,39 +1812,39 @@ class TableColumnCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of TableColumn':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableColumnCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "TableColumnCollection", self._isNull)
         return self._count
     
 
     def add(self, index : 'int' = None, values : 'any' = None) -> 'TableColumn':
-    	# Begin_PlaceHolder_TableColumnCollection_Add
-    	# End_PlaceHolder_TableColumnCollection_Add
+        # Begin_PlaceHolder_TableColumnCollection_Add
+        # End_PlaceHolder_TableColumnCollection_Add
         ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getItem(self, key : 'any') -> 'TableColumn':
-    	# Begin_PlaceHolder_TableColumnCollection_GetItem
-    	# End_PlaceHolder_TableColumnCollection_GetItem
+        # Begin_PlaceHolder_TableColumnCollection_GetItem
+        # End_PlaceHolder_TableColumnCollection_GetItem
         return TableColumn(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     def getItemAt(self, index : 'int') -> 'TableColumn':
-    	# Begin_PlaceHolder_TableColumnCollection_GetItemAt
-    	# End_PlaceHolder_TableColumnCollection_GetItemAt
+        # Begin_PlaceHolder_TableColumnCollection_GetItemAt
+        # End_PlaceHolder_TableColumnCollection_GetItemAt
         ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
     def getItemOrNull(self, key : 'any') -> 'TableColumn':
-    	# Begin_PlaceHolder_TableColumnCollection_GetItemOrNull
-    	# End_PlaceHolder_TableColumnCollection_GetItemOrNull
+        # Begin_PlaceHolder_TableColumnCollection_GetItemOrNull
+        # End_PlaceHolder_TableColumnCollection_GetItemOrNull
         ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
@@ -1886,29 +1886,29 @@ class TableColumn(OfficeExtension.ClientObject):
 
     @property
     def id(self) -> 'int':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "TableColumn", self._isNull)
         return self._id
     
 
     @property
     def index(self) -> 'int':
-        _loadIfImmediateExecution(self, "index", self._index)
-        _throwIfNotLoaded("index", self._index)
+        _loadIfInstantSyncExecutionMode(self, "index", self._index)
+        _throwIfNotLoaded("index", self._index, "TableColumn", self._isNull)
         return self._index
     
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "TableColumn", self._isNull)
         return self._name
     
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "TableColumn", self._isNull)
         return self._values
     
 
@@ -1916,35 +1916,35 @@ class TableColumn(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_TableColumn_Delete
-    	# End_PlaceHolder_TableColumn_Delete
+        # Begin_PlaceHolder_TableColumn_Delete
+        # End_PlaceHolder_TableColumn_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getDataBodyRange(self) -> 'Range':
-    	# Begin_PlaceHolder_TableColumn_GetDataBodyRange
-    	# End_PlaceHolder_TableColumn_GetDataBodyRange
+        # Begin_PlaceHolder_TableColumn_GetDataBodyRange
+        # End_PlaceHolder_TableColumn_GetDataBodyRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetDataBodyRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getHeaderRowRange(self) -> 'Range':
-    	# Begin_PlaceHolder_TableColumn_GetHeaderRowRange
-    	# End_PlaceHolder_TableColumn_GetHeaderRowRange
+        # Begin_PlaceHolder_TableColumn_GetHeaderRowRange
+        # End_PlaceHolder_TableColumn_GetHeaderRowRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetHeaderRowRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_TableColumn_GetRange
-    	# End_PlaceHolder_TableColumn_GetRange
+        # Begin_PlaceHolder_TableColumn_GetRange
+        # End_PlaceHolder_TableColumn_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def getTotalRowRange(self) -> 'Range':
-    	# Begin_PlaceHolder_TableColumn_GetTotalRowRange
-    	# End_PlaceHolder_TableColumn_GetTotalRowRange
+        # Begin_PlaceHolder_TableColumn_GetTotalRowRange
+        # End_PlaceHolder_TableColumn_GetTotalRowRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetTotalRowRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
@@ -1985,28 +1985,28 @@ class TableRowCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of TableRow':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableRowCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "TableRowCollection", self._isNull)
         return self._count
     
 
     def add(self, index : 'int' = None, values : 'any' = None) -> 'TableRow':
-    	# Begin_PlaceHolder_TableRowCollection_Add
-    	# End_PlaceHolder_TableRowCollection_Add
+        # Begin_PlaceHolder_TableRowCollection_Add
+        # End_PlaceHolder_TableRowCollection_Add
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getItemAt(self, index : 'int') -> 'TableRow':
-    	# Begin_PlaceHolder_TableRowCollection_GetItemAt
-    	# End_PlaceHolder_TableRowCollection_GetItemAt
+        # Begin_PlaceHolder_TableRowCollection_GetItemAt
+        # End_PlaceHolder_TableRowCollection_GetItemAt
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
@@ -2040,15 +2040,15 @@ class TableRow(OfficeExtension.ClientObject):
 
     @property
     def index(self) -> 'int':
-        _loadIfImmediateExecution(self, "index", self._index)
-        _throwIfNotLoaded("index", self._index)
+        _loadIfInstantSyncExecutionMode(self, "index", self._index)
+        _throwIfNotLoaded("index", self._index, "TableRow", self._isNull)
         return self._index
     
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "TableRow", self._isNull)
         return self._values
     
 
@@ -2056,17 +2056,17 @@ class TableRow(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_TableRow_Delete
-    	# End_PlaceHolder_TableRow_Delete
+        # Begin_PlaceHolder_TableRow_Delete
+        # End_PlaceHolder_TableRow_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getRange(self) -> 'Range':
-    	# Begin_PlaceHolder_TableRow_GetRange
-    	# End_PlaceHolder_TableRow_GetRange
+        # Begin_PlaceHolder_TableRow_GetRange
+        # End_PlaceHolder_TableRow_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
@@ -2122,8 +2122,8 @@ class RangeFormat(OfficeExtension.ClientObject):
 
     @property
     def columnWidth(self) -> 'float':
-        _loadIfImmediateExecution(self, "columnWidth", self._columnWidth)
-        _throwIfNotLoaded("columnWidth", self._columnWidth)
+        _loadIfInstantSyncExecutionMode(self, "columnWidth", self._columnWidth)
+        _throwIfNotLoaded("columnWidth", self._columnWidth, "RangeFormat", self._isNull)
         return self._columnWidth
     
 
@@ -2131,12 +2131,12 @@ class RangeFormat(OfficeExtension.ClientObject):
     def columnWidth(self, value : 'float'):
         self._columnWidth = value
         _createSetPropertyAction(self.context, self, "ColumnWidth", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def horizontalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "horizontalAlignment", self._horizontalAlignment)
-        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "horizontalAlignment", self._horizontalAlignment)
+        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment, "RangeFormat", self._isNull)
         return self._horizontalAlignment
     
 
@@ -2144,12 +2144,12 @@ class RangeFormat(OfficeExtension.ClientObject):
     def horizontalAlignment(self, value : 'str'):
         self._horizontalAlignment = value
         _createSetPropertyAction(self.context, self, "HorizontalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowHeight(self) -> 'float':
-        _loadIfImmediateExecution(self, "rowHeight", self._rowHeight)
-        _throwIfNotLoaded("rowHeight", self._rowHeight)
+        _loadIfInstantSyncExecutionMode(self, "rowHeight", self._rowHeight)
+        _throwIfNotLoaded("rowHeight", self._rowHeight, "RangeFormat", self._isNull)
         return self._rowHeight
     
 
@@ -2157,12 +2157,12 @@ class RangeFormat(OfficeExtension.ClientObject):
     def rowHeight(self, value : 'float'):
         self._rowHeight = value
         _createSetPropertyAction(self.context, self, "RowHeight", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def verticalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "verticalAlignment", self._verticalAlignment)
-        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "verticalAlignment", self._verticalAlignment)
+        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment, "RangeFormat", self._isNull)
         return self._verticalAlignment
     
 
@@ -2170,12 +2170,12 @@ class RangeFormat(OfficeExtension.ClientObject):
     def verticalAlignment(self, value : 'str'):
         self._verticalAlignment = value
         _createSetPropertyAction(self.context, self, "VerticalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def wrapText(self) -> 'bool':
-        _loadIfImmediateExecution(self, "wrapText", self._wrapText)
-        _throwIfNotLoaded("wrapText", self._wrapText)
+        _loadIfInstantSyncExecutionMode(self, "wrapText", self._wrapText)
+        _throwIfNotLoaded("wrapText", self._wrapText, "RangeFormat", self._isNull)
         return self._wrapText
     
 
@@ -2183,19 +2183,19 @@ class RangeFormat(OfficeExtension.ClientObject):
     def wrapText(self, value : 'bool'):
         self._wrapText = value
         _createSetPropertyAction(self.context, self, "WrapText", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def autofitColumns(self) -> None:
-    	# Begin_PlaceHolder_RangeFormat_AutofitColumns
-    	# End_PlaceHolder_RangeFormat_AutofitColumns
+        # Begin_PlaceHolder_RangeFormat_AutofitColumns
+        # End_PlaceHolder_RangeFormat_AutofitColumns
         _createMethodAction(self.context, self, "AutofitColumns", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def autofitRows(self) -> None:
-    	# Begin_PlaceHolder_RangeFormat_AutofitRows
-    	# End_PlaceHolder_RangeFormat_AutofitRows
+        # Begin_PlaceHolder_RangeFormat_AutofitRows
+        # End_PlaceHolder_RangeFormat_AutofitRows
         _createMethodAction(self.context, self, "AutofitRows", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2236,8 +2236,8 @@ class FormatProtection(OfficeExtension.ClientObject):
 
     @property
     def formulaHidden(self) -> 'bool':
-        _loadIfImmediateExecution(self, "formulaHidden", self._formulaHidden)
-        _throwIfNotLoaded("formulaHidden", self._formulaHidden)
+        _loadIfInstantSyncExecutionMode(self, "formulaHidden", self._formulaHidden)
+        _throwIfNotLoaded("formulaHidden", self._formulaHidden, "FormatProtection", self._isNull)
         return self._formulaHidden
     
 
@@ -2245,12 +2245,12 @@ class FormatProtection(OfficeExtension.ClientObject):
     def formulaHidden(self, value : 'bool'):
         self._formulaHidden = value
         _createSetPropertyAction(self.context, self, "FormulaHidden", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def locked(self) -> 'bool':
-        _loadIfImmediateExecution(self, "locked", self._locked)
-        _throwIfNotLoaded("locked", self._locked)
+        _loadIfInstantSyncExecutionMode(self, "locked", self._locked)
+        _throwIfNotLoaded("locked", self._locked, "FormatProtection", self._isNull)
         return self._locked
     
 
@@ -2258,7 +2258,7 @@ class FormatProtection(OfficeExtension.ClientObject):
     def locked(self, value : 'bool'):
         self._locked = value
         _createSetPropertyAction(self.context, self, "Locked", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2284,8 +2284,8 @@ class RangeFill(OfficeExtension.ClientObject):
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "RangeFill", self._isNull)
         return self._color
     
 
@@ -2293,13 +2293,13 @@ class RangeFill(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_RangeFill_Clear
-    	# End_PlaceHolder_RangeFill_Clear
+        # Begin_PlaceHolder_RangeFill_Clear
+        # End_PlaceHolder_RangeFill_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2326,8 +2326,8 @@ class RangeBorder(OfficeExtension.ClientObject):
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "RangeBorder", self._isNull)
         return self._color
     
 
@@ -2335,19 +2335,19 @@ class RangeBorder(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def sideIndex(self) -> 'str':
-        _loadIfImmediateExecution(self, "sideIndex", self._sideIndex)
-        _throwIfNotLoaded("sideIndex", self._sideIndex)
+        _loadIfInstantSyncExecutionMode(self, "sideIndex", self._sideIndex)
+        _throwIfNotLoaded("sideIndex", self._sideIndex, "RangeBorder", self._isNull)
         return self._sideIndex
     
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "RangeBorder", self._isNull)
         return self._style
     
 
@@ -2355,12 +2355,12 @@ class RangeBorder(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def weight(self) -> 'str':
-        _loadIfImmediateExecution(self, "weight", self._weight)
-        _throwIfNotLoaded("weight", self._weight)
+        _loadIfInstantSyncExecutionMode(self, "weight", self._weight)
+        _throwIfNotLoaded("weight", self._weight, "RangeBorder", self._isNull)
         return self._weight
     
 
@@ -2368,7 +2368,7 @@ class RangeBorder(OfficeExtension.ClientObject):
     def weight(self, value : 'str'):
         self._weight = value
         _createSetPropertyAction(self.context, self, "Weight", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2399,26 +2399,26 @@ class RangeBorderCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of RangeBorder':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "RangeBorderCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "RangeBorderCollection", self._isNull)
         return self._count
     
 
     def getItem(self, index : 'str') -> 'RangeBorder':
-    	# Begin_PlaceHolder_RangeBorderCollection_GetItem
-    	# End_PlaceHolder_RangeBorderCollection_GetItem
+        # Begin_PlaceHolder_RangeBorderCollection_GetItem
+        # End_PlaceHolder_RangeBorderCollection_GetItem
         return RangeBorder(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def getItemAt(self, index : 'int') -> 'RangeBorder':
-    	# Begin_PlaceHolder_RangeBorderCollection_GetItemAt
-    	# End_PlaceHolder_RangeBorderCollection_GetItemAt
+        # Begin_PlaceHolder_RangeBorderCollection_GetItemAt
+        # End_PlaceHolder_RangeBorderCollection_GetItemAt
         ret = RangeBorder(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
@@ -2456,8 +2456,8 @@ class RangeFont(OfficeExtension.ClientObject):
 
     @property
     def bold(self) -> 'bool':
-        _loadIfImmediateExecution(self, "bold", self._bold)
-        _throwIfNotLoaded("bold", self._bold)
+        _loadIfInstantSyncExecutionMode(self, "bold", self._bold)
+        _throwIfNotLoaded("bold", self._bold, "RangeFont", self._isNull)
         return self._bold
     
 
@@ -2465,12 +2465,12 @@ class RangeFont(OfficeExtension.ClientObject):
     def bold(self, value : 'bool'):
         self._bold = value
         _createSetPropertyAction(self.context, self, "Bold", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "RangeFont", self._isNull)
         return self._color
     
 
@@ -2478,12 +2478,12 @@ class RangeFont(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def italic(self) -> 'bool':
-        _loadIfImmediateExecution(self, "italic", self._italic)
-        _throwIfNotLoaded("italic", self._italic)
+        _loadIfInstantSyncExecutionMode(self, "italic", self._italic)
+        _throwIfNotLoaded("italic", self._italic, "RangeFont", self._isNull)
         return self._italic
     
 
@@ -2491,12 +2491,12 @@ class RangeFont(OfficeExtension.ClientObject):
     def italic(self, value : 'bool'):
         self._italic = value
         _createSetPropertyAction(self.context, self, "Italic", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "RangeFont", self._isNull)
         return self._name
     
 
@@ -2504,12 +2504,12 @@ class RangeFont(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def size(self) -> 'float':
-        _loadIfImmediateExecution(self, "size", self._size)
-        _throwIfNotLoaded("size", self._size)
+        _loadIfInstantSyncExecutionMode(self, "size", self._size)
+        _throwIfNotLoaded("size", self._size, "RangeFont", self._isNull)
         return self._size
     
 
@@ -2517,12 +2517,12 @@ class RangeFont(OfficeExtension.ClientObject):
     def size(self, value : 'float'):
         self._size = value
         _createSetPropertyAction(self.context, self, "Size", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def underline(self) -> 'str':
-        _loadIfImmediateExecution(self, "underline", self._underline)
-        _throwIfNotLoaded("underline", self._underline)
+        _loadIfInstantSyncExecutionMode(self, "underline", self._underline)
+        _throwIfNotLoaded("underline", self._underline, "RangeFont", self._isNull)
         return self._underline
     
 
@@ -2530,7 +2530,7 @@ class RangeFont(OfficeExtension.ClientObject):
     def underline(self, value : 'str'):
         self._underline = value
         _createSetPropertyAction(self.context, self, "Underline", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2565,46 +2565,46 @@ class ChartCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Chart':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ChartCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "ChartCollection", self._isNull)
         return self._count
     
 
     def add(self, type : 'str', sourceData : 'any', seriesBy : 'str' = None) -> 'Chart':
-    	# Begin_PlaceHolder_ChartCollection_Add
-    	# End_PlaceHolder_ChartCollection_Add
+        # Begin_PlaceHolder_ChartCollection_Add
+        # End_PlaceHolder_ChartCollection_Add
         ret = Chart(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [type, sourceData, seriesBy], False, True))
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getItem(self, name : 'str') -> 'Chart':
-    	# Begin_PlaceHolder_ChartCollection_GetItem
-    	# End_PlaceHolder_ChartCollection_GetItem
+        # Begin_PlaceHolder_ChartCollection_GetItem
+        # End_PlaceHolder_ChartCollection_GetItem
         ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItem", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     def getItemAt(self, index : 'int') -> 'Chart':
-    	# Begin_PlaceHolder_ChartCollection_GetItemAt
-    	# End_PlaceHolder_ChartCollection_GetItemAt
+        # Begin_PlaceHolder_ChartCollection_GetItemAt
+        # End_PlaceHolder_ChartCollection_GetItemAt
         ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
     def getItemOrNull(self, name : 'str') -> 'Chart':
-    	# Begin_PlaceHolder_ChartCollection_GetItemOrNull
-    	# End_PlaceHolder_ChartCollection_GetItemOrNull
+        # Begin_PlaceHolder_ChartCollection_GetItemOrNull
+        # End_PlaceHolder_ChartCollection_GetItemOrNull
         ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     def _GetItem(self, key : 'str') -> 'Chart':
-    	# Begin_PlaceHolder_ChartCollection__GetItem
-    	# End_PlaceHolder_ChartCollection__GetItem
+        # Begin_PlaceHolder_ChartCollection__GetItem
+        # End_PlaceHolder_ChartCollection__GetItem
         return Chart(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     # Handle results returned from the document
@@ -2682,8 +2682,8 @@ class Chart(OfficeExtension.ClientObject):
 
     @property
     def height(self) -> 'float':
-        _loadIfImmediateExecution(self, "height", self._height)
-        _throwIfNotLoaded("height", self._height)
+        _loadIfInstantSyncExecutionMode(self, "height", self._height)
+        _throwIfNotLoaded("height", self._height, "Chart", self._isNull)
         return self._height
     
 
@@ -2691,12 +2691,12 @@ class Chart(OfficeExtension.ClientObject):
     def height(self, value : 'float'):
         self._height = value
         _createSetPropertyAction(self.context, self, "Height", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def left(self) -> 'float':
-        _loadIfImmediateExecution(self, "left", self._left)
-        _throwIfNotLoaded("left", self._left)
+        _loadIfInstantSyncExecutionMode(self, "left", self._left)
+        _throwIfNotLoaded("left", self._left, "Chart", self._isNull)
         return self._left
     
 
@@ -2704,12 +2704,12 @@ class Chart(OfficeExtension.ClientObject):
     def left(self, value : 'float'):
         self._left = value
         _createSetPropertyAction(self.context, self, "Left", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "Chart", self._isNull)
         return self._name
     
 
@@ -2717,12 +2717,12 @@ class Chart(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def top(self) -> 'float':
-        _loadIfImmediateExecution(self, "top", self._top)
-        _throwIfNotLoaded("top", self._top)
+        _loadIfInstantSyncExecutionMode(self, "top", self._top)
+        _throwIfNotLoaded("top", self._top, "Chart", self._isNull)
         return self._top
     
 
@@ -2730,12 +2730,12 @@ class Chart(OfficeExtension.ClientObject):
     def top(self, value : 'float'):
         self._top = value
         _createSetPropertyAction(self.context, self, "Top", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def width(self) -> 'float':
-        _loadIfImmediateExecution(self, "width", self._width)
-        _throwIfNotLoaded("width", self._width)
+        _loadIfInstantSyncExecutionMode(self, "width", self._width)
+        _throwIfNotLoaded("width", self._width, "Chart", self._isNull)
         return self._width
     
 
@@ -2743,13 +2743,13 @@ class Chart(OfficeExtension.ClientObject):
     def width(self, value : 'float'):
         self._width = value
         _createSetPropertyAction(self.context, self, "Width", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Chart_Delete
-    	# End_PlaceHolder_Chart_Delete
+        # Begin_PlaceHolder_Chart_Delete
+        # End_PlaceHolder_Chart_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getImage(self, width : 'int' = None, height : 'int' = None, fittingMode : 'str' = None) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Chart_GetImage
@@ -2757,20 +2757,20 @@ class Chart(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetImage", OfficeExtension.OperationType.Read, [width, height, fittingMode])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def setData(self, sourceData : 'any', seriesBy : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Chart_SetData
-    	# End_PlaceHolder_Chart_SetData
+        # Begin_PlaceHolder_Chart_SetData
+        # End_PlaceHolder_Chart_SetData
         _createMethodAction(self.context, self, "SetData", OfficeExtension.OperationType.Default, [sourceData, seriesBy])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setPosition(self, startCell : 'any', endCell : 'any' = None) -> None:
-    	# Begin_PlaceHolder_Chart_SetPosition
-    	# End_PlaceHolder_Chart_SetPosition
+        # Begin_PlaceHolder_Chart_SetPosition
+        # End_PlaceHolder_Chart_SetPosition
         _createMethodAction(self.context, self, "SetPosition", OfficeExtension.OperationType.Default, [startCell, endCell])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2850,21 +2850,21 @@ class ChartSeriesCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of ChartSeries':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ChartSeriesCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "ChartSeriesCollection", self._isNull)
         return self._count
     
 
     def getItemAt(self, index : 'int') -> 'ChartSeries':
-    	# Begin_PlaceHolder_ChartSeriesCollection_GetItemAt
-    	# End_PlaceHolder_ChartSeriesCollection_GetItemAt
+        # Begin_PlaceHolder_ChartSeriesCollection_GetItemAt
+        # End_PlaceHolder_ChartSeriesCollection_GetItemAt
         ret = ChartSeries(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
@@ -2909,8 +2909,8 @@ class ChartSeries(OfficeExtension.ClientObject):
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "ChartSeries", self._isNull)
         return self._name
     
 
@@ -2918,7 +2918,7 @@ class ChartSeries(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2980,21 +2980,21 @@ class ChartPointsCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of ChartPoint':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ChartPointsCollection", self._isNull)
         return self.__items
     
 
     @property
     def count(self) -> 'int':
-        _loadIfImmediateExecution(self, "count", self._count)
-        _throwIfNotLoaded("count", self._count)
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "ChartPointsCollection", self._isNull)
         return self._count
     
 
     def getItemAt(self, index : 'int') -> 'ChartPoint':
-    	# Begin_PlaceHolder_ChartPointsCollection_GetItemAt
-    	# End_PlaceHolder_ChartPointsCollection_GetItemAt
+        # Begin_PlaceHolder_ChartPointsCollection_GetItemAt
+        # End_PlaceHolder_ChartPointsCollection_GetItemAt
         ret = ChartPoint(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
@@ -3033,8 +3033,8 @@ class ChartPoint(OfficeExtension.ClientObject):
 
     @property
     def value(self) -> 'any':
-        _loadIfImmediateExecution(self, "value", self._value)
-        _throwIfNotLoaded("value", self._value)
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "ChartPoint", self._isNull)
         return self._value
     
 
@@ -3155,8 +3155,8 @@ class ChartAxis(OfficeExtension.ClientObject):
 
     @property
     def majorUnit(self) -> 'any':
-        _loadIfImmediateExecution(self, "majorUnit", self._majorUnit)
-        _throwIfNotLoaded("majorUnit", self._majorUnit)
+        _loadIfInstantSyncExecutionMode(self, "majorUnit", self._majorUnit)
+        _throwIfNotLoaded("majorUnit", self._majorUnit, "ChartAxis", self._isNull)
         return self._majorUnit
     
 
@@ -3164,12 +3164,12 @@ class ChartAxis(OfficeExtension.ClientObject):
     def majorUnit(self, value : 'any'):
         self._majorUnit = value
         _createSetPropertyAction(self.context, self, "MajorUnit", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def maximum(self) -> 'any':
-        _loadIfImmediateExecution(self, "maximum", self._maximum)
-        _throwIfNotLoaded("maximum", self._maximum)
+        _loadIfInstantSyncExecutionMode(self, "maximum", self._maximum)
+        _throwIfNotLoaded("maximum", self._maximum, "ChartAxis", self._isNull)
         return self._maximum
     
 
@@ -3177,12 +3177,12 @@ class ChartAxis(OfficeExtension.ClientObject):
     def maximum(self, value : 'any'):
         self._maximum = value
         _createSetPropertyAction(self.context, self, "Maximum", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def minimum(self) -> 'any':
-        _loadIfImmediateExecution(self, "minimum", self._minimum)
-        _throwIfNotLoaded("minimum", self._minimum)
+        _loadIfInstantSyncExecutionMode(self, "minimum", self._minimum)
+        _throwIfNotLoaded("minimum", self._minimum, "ChartAxis", self._isNull)
         return self._minimum
     
 
@@ -3190,12 +3190,12 @@ class ChartAxis(OfficeExtension.ClientObject):
     def minimum(self, value : 'any'):
         self._minimum = value
         _createSetPropertyAction(self.context, self, "Minimum", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def minorUnit(self) -> 'any':
-        _loadIfImmediateExecution(self, "minorUnit", self._minorUnit)
-        _throwIfNotLoaded("minorUnit", self._minorUnit)
+        _loadIfInstantSyncExecutionMode(self, "minorUnit", self._minorUnit)
+        _throwIfNotLoaded("minorUnit", self._minorUnit, "ChartAxis", self._isNull)
         return self._minorUnit
     
 
@@ -3203,7 +3203,7 @@ class ChartAxis(OfficeExtension.ClientObject):
     def minorUnit(self, value : 'any'):
         self._minorUnit = value
         _createSetPropertyAction(self.context, self, "MinorUnit", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3281,8 +3281,8 @@ class ChartAxisTitle(OfficeExtension.ClientObject):
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "ChartAxisTitle", self._isNull)
         return self._text
     
 
@@ -3290,12 +3290,12 @@ class ChartAxisTitle(OfficeExtension.ClientObject):
     def text(self, value : 'str'):
         self._text = value
         _createSetPropertyAction(self.context, self, "Text", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def visible(self) -> 'bool':
-        _loadIfImmediateExecution(self, "visible", self._visible)
-        _throwIfNotLoaded("visible", self._visible)
+        _loadIfInstantSyncExecutionMode(self, "visible", self._visible)
+        _throwIfNotLoaded("visible", self._visible, "ChartAxisTitle", self._isNull)
         return self._visible
     
 
@@ -3303,7 +3303,7 @@ class ChartAxisTitle(OfficeExtension.ClientObject):
     def visible(self, value : 'bool'):
         self._visible = value
         _createSetPropertyAction(self.context, self, "Visible", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3369,8 +3369,8 @@ class ChartDataLabels(OfficeExtension.ClientObject):
 
     @property
     def position(self) -> 'str':
-        _loadIfImmediateExecution(self, "position", self._position)
-        _throwIfNotLoaded("position", self._position)
+        _loadIfInstantSyncExecutionMode(self, "position", self._position)
+        _throwIfNotLoaded("position", self._position, "ChartDataLabels", self._isNull)
         return self._position
     
 
@@ -3378,12 +3378,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def position(self, value : 'str'):
         self._position = value
         _createSetPropertyAction(self.context, self, "Position", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def separator(self) -> 'str':
-        _loadIfImmediateExecution(self, "separator", self._separator)
-        _throwIfNotLoaded("separator", self._separator)
+        _loadIfInstantSyncExecutionMode(self, "separator", self._separator)
+        _throwIfNotLoaded("separator", self._separator, "ChartDataLabels", self._isNull)
         return self._separator
     
 
@@ -3391,12 +3391,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def separator(self, value : 'str'):
         self._separator = value
         _createSetPropertyAction(self.context, self, "Separator", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showBubbleSize(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showBubbleSize", self._showBubbleSize)
-        _throwIfNotLoaded("showBubbleSize", self._showBubbleSize)
+        _loadIfInstantSyncExecutionMode(self, "showBubbleSize", self._showBubbleSize)
+        _throwIfNotLoaded("showBubbleSize", self._showBubbleSize, "ChartDataLabels", self._isNull)
         return self._showBubbleSize
     
 
@@ -3404,12 +3404,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showBubbleSize(self, value : 'bool'):
         self._showBubbleSize = value
         _createSetPropertyAction(self.context, self, "ShowBubbleSize", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showCategoryName(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showCategoryName", self._showCategoryName)
-        _throwIfNotLoaded("showCategoryName", self._showCategoryName)
+        _loadIfInstantSyncExecutionMode(self, "showCategoryName", self._showCategoryName)
+        _throwIfNotLoaded("showCategoryName", self._showCategoryName, "ChartDataLabels", self._isNull)
         return self._showCategoryName
     
 
@@ -3417,12 +3417,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showCategoryName(self, value : 'bool'):
         self._showCategoryName = value
         _createSetPropertyAction(self.context, self, "ShowCategoryName", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showLegendKey(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showLegendKey", self._showLegendKey)
-        _throwIfNotLoaded("showLegendKey", self._showLegendKey)
+        _loadIfInstantSyncExecutionMode(self, "showLegendKey", self._showLegendKey)
+        _throwIfNotLoaded("showLegendKey", self._showLegendKey, "ChartDataLabels", self._isNull)
         return self._showLegendKey
     
 
@@ -3430,12 +3430,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showLegendKey(self, value : 'bool'):
         self._showLegendKey = value
         _createSetPropertyAction(self.context, self, "ShowLegendKey", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showPercentage(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showPercentage", self._showPercentage)
-        _throwIfNotLoaded("showPercentage", self._showPercentage)
+        _loadIfInstantSyncExecutionMode(self, "showPercentage", self._showPercentage)
+        _throwIfNotLoaded("showPercentage", self._showPercentage, "ChartDataLabels", self._isNull)
         return self._showPercentage
     
 
@@ -3443,12 +3443,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showPercentage(self, value : 'bool'):
         self._showPercentage = value
         _createSetPropertyAction(self.context, self, "ShowPercentage", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showSeriesName(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showSeriesName", self._showSeriesName)
-        _throwIfNotLoaded("showSeriesName", self._showSeriesName)
+        _loadIfInstantSyncExecutionMode(self, "showSeriesName", self._showSeriesName)
+        _throwIfNotLoaded("showSeriesName", self._showSeriesName, "ChartDataLabels", self._isNull)
         return self._showSeriesName
     
 
@@ -3456,12 +3456,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showSeriesName(self, value : 'bool'):
         self._showSeriesName = value
         _createSetPropertyAction(self.context, self, "ShowSeriesName", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def showValue(self) -> 'bool':
-        _loadIfImmediateExecution(self, "showValue", self._showValue)
-        _throwIfNotLoaded("showValue", self._showValue)
+        _loadIfInstantSyncExecutionMode(self, "showValue", self._showValue)
+        _throwIfNotLoaded("showValue", self._showValue, "ChartDataLabels", self._isNull)
         return self._showValue
     
 
@@ -3469,7 +3469,7 @@ class ChartDataLabels(OfficeExtension.ClientObject):
     def showValue(self, value : 'bool'):
         self._showValue = value
         _createSetPropertyAction(self.context, self, "ShowValue", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3548,8 +3548,8 @@ class ChartGridlines(OfficeExtension.ClientObject):
 
     @property
     def visible(self) -> 'bool':
-        _loadIfImmediateExecution(self, "visible", self._visible)
-        _throwIfNotLoaded("visible", self._visible)
+        _loadIfInstantSyncExecutionMode(self, "visible", self._visible)
+        _throwIfNotLoaded("visible", self._visible, "ChartGridlines", self._isNull)
         return self._visible
     
 
@@ -3557,7 +3557,7 @@ class ChartGridlines(OfficeExtension.ClientObject):
     def visible(self, value : 'bool'):
         self._visible = value
         _createSetPropertyAction(self.context, self, "Visible", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3616,8 +3616,8 @@ class ChartLegend(OfficeExtension.ClientObject):
 
     @property
     def overlay(self) -> 'bool':
-        _loadIfImmediateExecution(self, "overlay", self._overlay)
-        _throwIfNotLoaded("overlay", self._overlay)
+        _loadIfInstantSyncExecutionMode(self, "overlay", self._overlay)
+        _throwIfNotLoaded("overlay", self._overlay, "ChartLegend", self._isNull)
         return self._overlay
     
 
@@ -3625,12 +3625,12 @@ class ChartLegend(OfficeExtension.ClientObject):
     def overlay(self, value : 'bool'):
         self._overlay = value
         _createSetPropertyAction(self.context, self, "Overlay", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def position(self) -> 'str':
-        _loadIfImmediateExecution(self, "position", self._position)
-        _throwIfNotLoaded("position", self._position)
+        _loadIfInstantSyncExecutionMode(self, "position", self._position)
+        _throwIfNotLoaded("position", self._position, "ChartLegend", self._isNull)
         return self._position
     
 
@@ -3638,12 +3638,12 @@ class ChartLegend(OfficeExtension.ClientObject):
     def position(self, value : 'str'):
         self._position = value
         _createSetPropertyAction(self.context, self, "Position", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def visible(self) -> 'bool':
-        _loadIfImmediateExecution(self, "visible", self._visible)
-        _throwIfNotLoaded("visible", self._visible)
+        _loadIfInstantSyncExecutionMode(self, "visible", self._visible)
+        _throwIfNotLoaded("visible", self._visible, "ChartLegend", self._isNull)
         return self._visible
     
 
@@ -3651,7 +3651,7 @@ class ChartLegend(OfficeExtension.ClientObject):
     def visible(self, value : 'bool'):
         self._visible = value
         _createSetPropertyAction(self.context, self, "Visible", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3722,8 +3722,8 @@ class ChartTitle(OfficeExtension.ClientObject):
 
     @property
     def overlay(self) -> 'bool':
-        _loadIfImmediateExecution(self, "overlay", self._overlay)
-        _throwIfNotLoaded("overlay", self._overlay)
+        _loadIfInstantSyncExecutionMode(self, "overlay", self._overlay)
+        _throwIfNotLoaded("overlay", self._overlay, "ChartTitle", self._isNull)
         return self._overlay
     
 
@@ -3731,12 +3731,12 @@ class ChartTitle(OfficeExtension.ClientObject):
     def overlay(self, value : 'bool'):
         self._overlay = value
         _createSetPropertyAction(self.context, self, "Overlay", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "ChartTitle", self._isNull)
         return self._text
     
 
@@ -3744,12 +3744,12 @@ class ChartTitle(OfficeExtension.ClientObject):
     def text(self, value : 'str'):
         self._text = value
         _createSetPropertyAction(self.context, self, "Text", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def visible(self) -> 'bool':
-        _loadIfImmediateExecution(self, "visible", self._visible)
-        _throwIfNotLoaded("visible", self._visible)
+        _loadIfInstantSyncExecutionMode(self, "visible", self._visible)
+        _throwIfNotLoaded("visible", self._visible, "ChartTitle", self._isNull)
         return self._visible
     
 
@@ -3757,7 +3757,7 @@ class ChartTitle(OfficeExtension.ClientObject):
     def visible(self, value : 'bool'):
         self._visible = value
         _createSetPropertyAction(self.context, self, "Visible", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3818,16 +3818,16 @@ class ChartFill(OfficeExtension.ClientObject):
 
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_ChartFill_Clear
-    	# End_PlaceHolder_ChartFill_Clear
+        # Begin_PlaceHolder_ChartFill_Clear
+        # End_PlaceHolder_ChartFill_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setSolidColor(self, color : 'str') -> None:
-    	# Begin_PlaceHolder_ChartFill_SetSolidColor
-    	# End_PlaceHolder_ChartFill_SetSolidColor
+        # Begin_PlaceHolder_ChartFill_SetSolidColor
+        # End_PlaceHolder_ChartFill_SetSolidColor
         _createMethodAction(self.context, self, "SetSolidColor", OfficeExtension.OperationType.Default, [color])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3846,8 +3846,8 @@ class ChartLineFormat(OfficeExtension.ClientObject):
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ChartLineFormat", self._isNull)
         return self._color
     
 
@@ -3855,13 +3855,13 @@ class ChartLineFormat(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_ChartLineFormat_Clear
-    	# End_PlaceHolder_ChartLineFormat_Clear
+        # Begin_PlaceHolder_ChartLineFormat_Clear
+        # End_PlaceHolder_ChartLineFormat_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3890,8 +3890,8 @@ class ChartFont(OfficeExtension.ClientObject):
 
     @property
     def bold(self) -> 'bool':
-        _loadIfImmediateExecution(self, "bold", self._bold)
-        _throwIfNotLoaded("bold", self._bold)
+        _loadIfInstantSyncExecutionMode(self, "bold", self._bold)
+        _throwIfNotLoaded("bold", self._bold, "ChartFont", self._isNull)
         return self._bold
     
 
@@ -3899,12 +3899,12 @@ class ChartFont(OfficeExtension.ClientObject):
     def bold(self, value : 'bool'):
         self._bold = value
         _createSetPropertyAction(self.context, self, "Bold", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ChartFont", self._isNull)
         return self._color
     
 
@@ -3912,12 +3912,12 @@ class ChartFont(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def italic(self) -> 'bool':
-        _loadIfImmediateExecution(self, "italic", self._italic)
-        _throwIfNotLoaded("italic", self._italic)
+        _loadIfInstantSyncExecutionMode(self, "italic", self._italic)
+        _throwIfNotLoaded("italic", self._italic, "ChartFont", self._isNull)
         return self._italic
     
 
@@ -3925,12 +3925,12 @@ class ChartFont(OfficeExtension.ClientObject):
     def italic(self, value : 'bool'):
         self._italic = value
         _createSetPropertyAction(self.context, self, "Italic", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "ChartFont", self._isNull)
         return self._name
     
 
@@ -3938,12 +3938,12 @@ class ChartFont(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def size(self) -> 'float':
-        _loadIfImmediateExecution(self, "size", self._size)
-        _throwIfNotLoaded("size", self._size)
+        _loadIfInstantSyncExecutionMode(self, "size", self._size)
+        _throwIfNotLoaded("size", self._size, "ChartFont", self._isNull)
         return self._size
     
 
@@ -3951,12 +3951,12 @@ class ChartFont(OfficeExtension.ClientObject):
     def size(self, value : 'float'):
         self._size = value
         _createSetPropertyAction(self.context, self, "Size", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def underline(self) -> 'str':
-        _loadIfImmediateExecution(self, "underline", self._underline)
-        _throwIfNotLoaded("underline", self._underline)
+        _loadIfInstantSyncExecutionMode(self, "underline", self._underline)
+        _throwIfNotLoaded("underline", self._underline, "ChartFont", self._isNull)
         return self._underline
     
 
@@ -3964,7 +3964,7 @@ class ChartFont(OfficeExtension.ClientObject):
     def underline(self, value : 'str'):
         self._underline = value
         _createSetPropertyAction(self.context, self, "Underline", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3996,10 +3996,10 @@ class RangeSort(OfficeExtension.ClientObject):
 
 
     def apply(self, fields : 'list', matchCase : 'bool' = None, hasHeaders : 'bool' = None, orientation : 'str' = None, method : 'str' = None) -> None:
-    	# Begin_PlaceHolder_RangeSort_Apply
-    	# End_PlaceHolder_RangeSort_Apply
+        # Begin_PlaceHolder_RangeSort_Apply
+        # End_PlaceHolder_RangeSort_Apply
         _createMethodAction(self.context, self, "Apply", OfficeExtension.OperationType.Default, [fields, matchCase, hasHeaders, orientation, method])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4020,42 +4020,42 @@ class TableSort(OfficeExtension.ClientObject):
 
     @property
     def fields(self) -> 'list':
-        _loadIfImmediateExecution(self, "fields", self._fields)
-        _throwIfNotLoaded("fields", self._fields)
+        _loadIfInstantSyncExecutionMode(self, "fields", self._fields)
+        _throwIfNotLoaded("fields", self._fields, "TableSort", self._isNull)
         return self._fields
     
 
     @property
     def matchCase(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchCase", self._matchCase)
-        _throwIfNotLoaded("matchCase", self._matchCase)
+        _loadIfInstantSyncExecutionMode(self, "matchCase", self._matchCase)
+        _throwIfNotLoaded("matchCase", self._matchCase, "TableSort", self._isNull)
         return self._matchCase
     
 
     @property
     def method(self) -> 'str':
-        _loadIfImmediateExecution(self, "method", self._method)
-        _throwIfNotLoaded("method", self._method)
+        _loadIfInstantSyncExecutionMode(self, "method", self._method)
+        _throwIfNotLoaded("method", self._method, "TableSort", self._isNull)
         return self._method
     
 
     def apply(self, fields : 'list', matchCase : 'bool' = None, method : 'str' = None) -> None:
-    	# Begin_PlaceHolder_TableSort_Apply
-    	# End_PlaceHolder_TableSort_Apply
+        # Begin_PlaceHolder_TableSort_Apply
+        # End_PlaceHolder_TableSort_Apply
         _createMethodAction(self.context, self, "Apply", OfficeExtension.OperationType.Default, [fields, matchCase, method])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_TableSort_Clear
-    	# End_PlaceHolder_TableSort_Clear
+        # Begin_PlaceHolder_TableSort_Clear
+        # End_PlaceHolder_TableSort_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def reapply(self) -> None:
-    	# Begin_PlaceHolder_TableSort_Reapply
-    	# End_PlaceHolder_TableSort_Reapply
+        # Begin_PlaceHolder_TableSort_Reapply
+        # End_PlaceHolder_TableSort_Reapply
         _createMethodAction(self.context, self, "Reapply", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4096,82 +4096,82 @@ class Filter(OfficeExtension.ClientObject):
 
     @property
     def criteria(self) -> 'FilterCriteria':
-        _loadIfImmediateExecution(self, "criteria", self._criteria)
-        _throwIfNotLoaded("criteria", self._criteria)
+        _loadIfInstantSyncExecutionMode(self, "criteria", self._criteria)
+        _throwIfNotLoaded("criteria", self._criteria, "Filter", self._isNull)
         return self._criteria
     
 
     def apply(self, criteria : 'FilterCriteria') -> None:
-    	# Begin_PlaceHolder_Filter_Apply
-    	# End_PlaceHolder_Filter_Apply
+        # Begin_PlaceHolder_Filter_Apply
+        # End_PlaceHolder_Filter_Apply
         _createMethodAction(self.context, self, "Apply", OfficeExtension.OperationType.Default, [criteria])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyBottomItemsFilter(self, count : 'int') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyBottomItemsFilter
-    	# End_PlaceHolder_Filter_ApplyBottomItemsFilter
+        # Begin_PlaceHolder_Filter_ApplyBottomItemsFilter
+        # End_PlaceHolder_Filter_ApplyBottomItemsFilter
         _createMethodAction(self.context, self, "ApplyBottomItemsFilter", OfficeExtension.OperationType.Default, [count])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyBottomPercentFilter(self, percent : 'int') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyBottomPercentFilter
-    	# End_PlaceHolder_Filter_ApplyBottomPercentFilter
+        # Begin_PlaceHolder_Filter_ApplyBottomPercentFilter
+        # End_PlaceHolder_Filter_ApplyBottomPercentFilter
         _createMethodAction(self.context, self, "ApplyBottomPercentFilter", OfficeExtension.OperationType.Default, [percent])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyCellColorFilter(self, color : 'str') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyCellColorFilter
-    	# End_PlaceHolder_Filter_ApplyCellColorFilter
+        # Begin_PlaceHolder_Filter_ApplyCellColorFilter
+        # End_PlaceHolder_Filter_ApplyCellColorFilter
         _createMethodAction(self.context, self, "ApplyCellColorFilter", OfficeExtension.OperationType.Default, [color])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyCustomFilter(self, criteria1 : 'str', criteria2 : 'str' = None, oper : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Filter_ApplyCustomFilter
-    	# End_PlaceHolder_Filter_ApplyCustomFilter
+        # Begin_PlaceHolder_Filter_ApplyCustomFilter
+        # End_PlaceHolder_Filter_ApplyCustomFilter
         _createMethodAction(self.context, self, "ApplyCustomFilter", OfficeExtension.OperationType.Default, [criteria1, criteria2, oper])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyDynamicFilter(self, criteria : 'str') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyDynamicFilter
-    	# End_PlaceHolder_Filter_ApplyDynamicFilter
+        # Begin_PlaceHolder_Filter_ApplyDynamicFilter
+        # End_PlaceHolder_Filter_ApplyDynamicFilter
         _createMethodAction(self.context, self, "ApplyDynamicFilter", OfficeExtension.OperationType.Default, [criteria])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyFontColorFilter(self, color : 'str') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyFontColorFilter
-    	# End_PlaceHolder_Filter_ApplyFontColorFilter
+        # Begin_PlaceHolder_Filter_ApplyFontColorFilter
+        # End_PlaceHolder_Filter_ApplyFontColorFilter
         _createMethodAction(self.context, self, "ApplyFontColorFilter", OfficeExtension.OperationType.Default, [color])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyIconFilter(self, icon : 'Icon') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyIconFilter
-    	# End_PlaceHolder_Filter_ApplyIconFilter
+        # Begin_PlaceHolder_Filter_ApplyIconFilter
+        # End_PlaceHolder_Filter_ApplyIconFilter
         _createMethodAction(self.context, self, "ApplyIconFilter", OfficeExtension.OperationType.Default, [icon])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyTopItemsFilter(self, count : 'int') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyTopItemsFilter
-    	# End_PlaceHolder_Filter_ApplyTopItemsFilter
+        # Begin_PlaceHolder_Filter_ApplyTopItemsFilter
+        # End_PlaceHolder_Filter_ApplyTopItemsFilter
         _createMethodAction(self.context, self, "ApplyTopItemsFilter", OfficeExtension.OperationType.Default, [count])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyTopPercentFilter(self, percent : 'int') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyTopPercentFilter
-    	# End_PlaceHolder_Filter_ApplyTopPercentFilter
+        # Begin_PlaceHolder_Filter_ApplyTopPercentFilter
+        # End_PlaceHolder_Filter_ApplyTopPercentFilter
         _createMethodAction(self.context, self, "ApplyTopPercentFilter", OfficeExtension.OperationType.Default, [percent])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def applyValuesFilter(self, values : 'list') -> None:
-    	# Begin_PlaceHolder_Filter_ApplyValuesFilter
-    	# End_PlaceHolder_Filter_ApplyValuesFilter
+        # Begin_PlaceHolder_Filter_ApplyValuesFilter
+        # End_PlaceHolder_Filter_ApplyValuesFilter
         _createMethodAction(self.context, self, "ApplyValuesFilter", OfficeExtension.OperationType.Default, [values])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_Filter_Clear
-    	# End_PlaceHolder_Filter_Clear
+        # Begin_PlaceHolder_Filter_Clear
+        # End_PlaceHolder_Filter_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4228,27 +4228,27 @@ class PivotTableCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of PivotTable':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "PivotTableCollection", self._isNull)
         return self.__items
     
 
     def getItem(self, name : 'str') -> 'PivotTable':
-    	# Begin_PlaceHolder_PivotTableCollection_GetItem
-    	# End_PlaceHolder_PivotTableCollection_GetItem
+        # Begin_PlaceHolder_PivotTableCollection_GetItem
+        # End_PlaceHolder_PivotTableCollection_GetItem
         return PivotTable(self.context, _createIndexerObjectPath(self.context, self, [name]))
 
     def getItemOrNull(self, name : 'str') -> 'PivotTable':
-    	# Begin_PlaceHolder_PivotTableCollection_GetItemOrNull
-    	# End_PlaceHolder_PivotTableCollection_GetItemOrNull
+        # Begin_PlaceHolder_PivotTableCollection_GetItemOrNull
+        # End_PlaceHolder_PivotTableCollection_GetItemOrNull
         ret = PivotTable(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     def refreshAll(self) -> None:
-    	# Begin_PlaceHolder_PivotTableCollection_RefreshAll
-    	# End_PlaceHolder_PivotTableCollection_RefreshAll
+        # Begin_PlaceHolder_PivotTableCollection_RefreshAll
+        # End_PlaceHolder_PivotTableCollection_RefreshAll
         _createMethodAction(self.context, self, "RefreshAll", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4283,8 +4283,8 @@ class PivotTable(OfficeExtension.ClientObject):
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "PivotTable", self._isNull)
         return self._name
     
 
@@ -4292,13 +4292,13 @@ class PivotTable(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def refresh(self) -> None:
-    	# Begin_PlaceHolder_PivotTable_Refresh
-    	# End_PlaceHolder_PivotTable_Refresh
+        # Begin_PlaceHolder_PivotTable_Refresh
+        # End_PlaceHolder_PivotTable_Refresh
         _createMethodAction(self.context, self, "Refresh", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4639,15 +4639,15 @@ class FunctionResult(OfficeExtension.ClientObject):
 
     @property
     def error(self) -> 'str':
-        _loadIfImmediateExecution(self, "error", self._error)
-        _throwIfNotLoaded("error", self._error)
+        _loadIfInstantSyncExecutionMode(self, "error", self._error)
+        _throwIfNotLoaded("error", self._error, "FunctionResult", self._isNull)
         return self._error
     
 
     @property
     def value(self) -> 'any':
-        _loadIfImmediateExecution(self, "value", self._value)
-        _throwIfNotLoaded("value", self._value)
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "FunctionResult", self._isNull)
         return self._value
     
 
@@ -4673,2198 +4673,2198 @@ class Functions(OfficeExtension.ClientObject):
 
 
     def abs(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Abs
-    	# End_PlaceHolder_Functions_Abs
+        # Begin_PlaceHolder_Functions_Abs
+        # End_PlaceHolder_Functions_Abs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Abs", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def accrInt(self, issue : 'any', firstInterest : 'any', settlement : 'any', rate : 'any', par : 'any', frequency : 'any', basis : 'any' = None, calcMethod : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AccrInt
-    	# End_PlaceHolder_Functions_AccrInt
+        # Begin_PlaceHolder_Functions_AccrInt
+        # End_PlaceHolder_Functions_AccrInt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrInt", OfficeExtension.OperationType.Default, [issue, firstInterest, settlement, rate, par, frequency, basis, calcMethod], False, True))
         return ret
 
     def accrIntM(self, issue : 'any', settlement : 'any', rate : 'any', par : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AccrIntM
-    	# End_PlaceHolder_Functions_AccrIntM
+        # Begin_PlaceHolder_Functions_AccrIntM
+        # End_PlaceHolder_Functions_AccrIntM
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AccrIntM", OfficeExtension.OperationType.Default, [issue, settlement, rate, par, basis], False, True))
         return ret
 
     def acos(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Acos
-    	# End_PlaceHolder_Functions_Acos
+        # Begin_PlaceHolder_Functions_Acos
+        # End_PlaceHolder_Functions_Acos
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acos", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def acosh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Acosh
-    	# End_PlaceHolder_Functions_Acosh
+        # Begin_PlaceHolder_Functions_Acosh
+        # End_PlaceHolder_Functions_Acosh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acosh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def acot(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Acot
-    	# End_PlaceHolder_Functions_Acot
+        # Begin_PlaceHolder_Functions_Acot
+        # End_PlaceHolder_Functions_Acot
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acot", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def acoth(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Acoth
-    	# End_PlaceHolder_Functions_Acoth
+        # Begin_PlaceHolder_Functions_Acoth
+        # End_PlaceHolder_Functions_Acoth
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Acoth", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def amorDegrc(self, cost : 'any', datePurchased : 'any', firstPeriod : 'any', salvage : 'any', period : 'any', rate : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AmorDegrc
-    	# End_PlaceHolder_Functions_AmorDegrc
+        # Begin_PlaceHolder_Functions_AmorDegrc
+        # End_PlaceHolder_Functions_AmorDegrc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorDegrc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
         return ret
 
     def amorLinc(self, cost : 'any', datePurchased : 'any', firstPeriod : 'any', salvage : 'any', period : 'any', rate : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AmorLinc
-    	# End_PlaceHolder_Functions_AmorLinc
+        # Begin_PlaceHolder_Functions_AmorLinc
+        # End_PlaceHolder_Functions_AmorLinc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AmorLinc", OfficeExtension.OperationType.Default, [cost, datePurchased, firstPeriod, salvage, period, rate, basis], False, True))
         return ret
 
     def and_(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_And
-    	# End_PlaceHolder_Functions_And
+        # Begin_PlaceHolder_Functions_And
+        # End_PlaceHolder_Functions_And
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "And", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def arabic(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Arabic
-    	# End_PlaceHolder_Functions_Arabic
+        # Begin_PlaceHolder_Functions_Arabic
+        # End_PlaceHolder_Functions_Arabic
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Arabic", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def areas(self, reference : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Areas
-    	# End_PlaceHolder_Functions_Areas
+        # Begin_PlaceHolder_Functions_Areas
+        # End_PlaceHolder_Functions_Areas
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Areas", OfficeExtension.OperationType.Default, [reference], False, True))
         return ret
 
     def asc(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Asc
-    	# End_PlaceHolder_Functions_Asc
+        # Begin_PlaceHolder_Functions_Asc
+        # End_PlaceHolder_Functions_Asc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asc", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def asin(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Asin
-    	# End_PlaceHolder_Functions_Asin
+        # Begin_PlaceHolder_Functions_Asin
+        # End_PlaceHolder_Functions_Asin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asin", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def asinh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Asinh
-    	# End_PlaceHolder_Functions_Asinh
+        # Begin_PlaceHolder_Functions_Asinh
+        # End_PlaceHolder_Functions_Asinh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Asinh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def atan(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Atan
-    	# End_PlaceHolder_Functions_Atan
+        # Begin_PlaceHolder_Functions_Atan
+        # End_PlaceHolder_Functions_Atan
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def atan2(self, xNum : 'any', yNum : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Atan2
-    	# End_PlaceHolder_Functions_Atan2
+        # Begin_PlaceHolder_Functions_Atan2
+        # End_PlaceHolder_Functions_Atan2
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atan2", OfficeExtension.OperationType.Default, [xNum, yNum], False, True))
         return ret
 
     def atanh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Atanh
-    	# End_PlaceHolder_Functions_Atanh
+        # Begin_PlaceHolder_Functions_Atanh
+        # End_PlaceHolder_Functions_Atanh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Atanh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def aveDev(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AveDev
-    	# End_PlaceHolder_Functions_AveDev
+        # Begin_PlaceHolder_Functions_AveDev
+        # End_PlaceHolder_Functions_AveDev
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AveDev", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def average(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Average
-    	# End_PlaceHolder_Functions_Average
+        # Begin_PlaceHolder_Functions_Average
+        # End_PlaceHolder_Functions_Average
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Average", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def averageA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AverageA
-    	# End_PlaceHolder_Functions_AverageA
+        # Begin_PlaceHolder_Functions_AverageA
+        # End_PlaceHolder_Functions_AverageA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def averageIf(self, range : 'any', criteria : 'any', averageRange : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AverageIf
-    	# End_PlaceHolder_Functions_AverageIf
+        # Begin_PlaceHolder_Functions_AverageIf
+        # End_PlaceHolder_Functions_AverageIf
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIf", OfficeExtension.OperationType.Default, [range, criteria, averageRange], False, True))
         return ret
 
     def averageIfs(self, averageRange : 'any', values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_AverageIfs
-    	# End_PlaceHolder_Functions_AverageIfs
+        # Begin_PlaceHolder_Functions_AverageIfs
+        # End_PlaceHolder_Functions_AverageIfs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "AverageIfs", OfficeExtension.OperationType.Default, [averageRange, values], False, True))
         return ret
 
     def bahtText(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_BahtText
-    	# End_PlaceHolder_Functions_BahtText
+        # Begin_PlaceHolder_Functions_BahtText
+        # End_PlaceHolder_Functions_BahtText
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BahtText", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def base(self, number : 'any', radix : 'any', minLength : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Base
-    	# End_PlaceHolder_Functions_Base
+        # Begin_PlaceHolder_Functions_Base
+        # End_PlaceHolder_Functions_Base
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Base", OfficeExtension.OperationType.Default, [number, radix, minLength], False, True))
         return ret
 
     def besselI(self, x : 'any', n : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_BesselI
-    	# End_PlaceHolder_Functions_BesselI
+        # Begin_PlaceHolder_Functions_BesselI
+        # End_PlaceHolder_Functions_BesselI
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselI", OfficeExtension.OperationType.Default, [x, n], False, True))
         return ret
 
     def besselJ(self, x : 'any', n : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_BesselJ
-    	# End_PlaceHolder_Functions_BesselJ
+        # Begin_PlaceHolder_Functions_BesselJ
+        # End_PlaceHolder_Functions_BesselJ
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselJ", OfficeExtension.OperationType.Default, [x, n], False, True))
         return ret
 
     def besselK(self, x : 'any', n : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_BesselK
-    	# End_PlaceHolder_Functions_BesselK
+        # Begin_PlaceHolder_Functions_BesselK
+        # End_PlaceHolder_Functions_BesselK
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselK", OfficeExtension.OperationType.Default, [x, n], False, True))
         return ret
 
     def besselY(self, x : 'any', n : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_BesselY
-    	# End_PlaceHolder_Functions_BesselY
+        # Begin_PlaceHolder_Functions_BesselY
+        # End_PlaceHolder_Functions_BesselY
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "BesselY", OfficeExtension.OperationType.Default, [x, n], False, True))
         return ret
 
     def beta_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any', A : 'any' = None, B : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Beta_Dist
-    	# End_PlaceHolder_Functions_Beta_Dist
+        # Begin_PlaceHolder_Functions_Beta_Dist
+        # End_PlaceHolder_Functions_Beta_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative, A, B], False, True))
         return ret
 
     def beta_Inv(self, probability : 'any', alpha : 'any', beta : 'any', A : 'any' = None, B : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Beta_Inv
-    	# End_PlaceHolder_Functions_Beta_Inv
+        # Begin_PlaceHolder_Functions_Beta_Inv
+        # End_PlaceHolder_Functions_Beta_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Beta_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta, A, B], False, True))
         return ret
 
     def bin2Dec(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bin2Dec
-    	# End_PlaceHolder_Functions_Bin2Dec
+        # Begin_PlaceHolder_Functions_Bin2Dec
+        # End_PlaceHolder_Functions_Bin2Dec
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Dec", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def bin2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bin2Hex
-    	# End_PlaceHolder_Functions_Bin2Hex
+        # Begin_PlaceHolder_Functions_Bin2Hex
+        # End_PlaceHolder_Functions_Bin2Hex
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def bin2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bin2Oct
-    	# End_PlaceHolder_Functions_Bin2Oct
+        # Begin_PlaceHolder_Functions_Bin2Oct
+        # End_PlaceHolder_Functions_Bin2Oct
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bin2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def binom_Dist(self, numberS : 'any', trials : 'any', probabilityS : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Binom_Dist
-    	# End_PlaceHolder_Functions_Binom_Dist
+        # Begin_PlaceHolder_Functions_Binom_Dist
+        # End_PlaceHolder_Functions_Binom_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist", OfficeExtension.OperationType.Default, [numberS, trials, probabilityS, cumulative], False, True))
         return ret
 
     def binom_Dist_Range(self, trials : 'any', probabilityS : 'any', numberS : 'any', numberS2 : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Binom_Dist_Range
-    	# End_PlaceHolder_Functions_Binom_Dist_Range
+        # Begin_PlaceHolder_Functions_Binom_Dist_Range
+        # End_PlaceHolder_Functions_Binom_Dist_Range
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Dist_Range", OfficeExtension.OperationType.Default, [trials, probabilityS, numberS, numberS2], False, True))
         return ret
 
     def binom_Inv(self, trials : 'any', probabilityS : 'any', alpha : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Binom_Inv
-    	# End_PlaceHolder_Functions_Binom_Inv
+        # Begin_PlaceHolder_Functions_Binom_Inv
+        # End_PlaceHolder_Functions_Binom_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Binom_Inv", OfficeExtension.OperationType.Default, [trials, probabilityS, alpha], False, True))
         return ret
 
     def bitand(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bitand
-    	# End_PlaceHolder_Functions_Bitand
+        # Begin_PlaceHolder_Functions_Bitand
+        # End_PlaceHolder_Functions_Bitand
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitand", OfficeExtension.OperationType.Default, [number1, number2], False, True))
         return ret
 
     def bitlshift(self, number : 'any', shiftAmount : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bitlshift
-    	# End_PlaceHolder_Functions_Bitlshift
+        # Begin_PlaceHolder_Functions_Bitlshift
+        # End_PlaceHolder_Functions_Bitlshift
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitlshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
         return ret
 
     def bitor(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bitor
-    	# End_PlaceHolder_Functions_Bitor
+        # Begin_PlaceHolder_Functions_Bitor
+        # End_PlaceHolder_Functions_Bitor
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
         return ret
 
     def bitrshift(self, number : 'any', shiftAmount : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bitrshift
-    	# End_PlaceHolder_Functions_Bitrshift
+        # Begin_PlaceHolder_Functions_Bitrshift
+        # End_PlaceHolder_Functions_Bitrshift
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitrshift", OfficeExtension.OperationType.Default, [number, shiftAmount], False, True))
         return ret
 
     def bitxor(self, number1 : 'any', number2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Bitxor
-    	# End_PlaceHolder_Functions_Bitxor
+        # Begin_PlaceHolder_Functions_Bitxor
+        # End_PlaceHolder_Functions_Bitxor
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Bitxor", OfficeExtension.OperationType.Default, [number1, number2], False, True))
         return ret
 
     def ceiling_Math(self, number : 'any', significance : 'any' = None, mode : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ceiling_Math
-    	# End_PlaceHolder_Functions_Ceiling_Math
+        # Begin_PlaceHolder_Functions_Ceiling_Math
+        # End_PlaceHolder_Functions_Ceiling_Math
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
         return ret
 
     def ceiling_Precise(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ceiling_Precise
-    	# End_PlaceHolder_Functions_Ceiling_Precise
+        # Begin_PlaceHolder_Functions_Ceiling_Precise
+        # End_PlaceHolder_Functions_Ceiling_Precise
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ceiling_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
         return ret
 
     def char(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Char
-    	# End_PlaceHolder_Functions_Char
+        # Begin_PlaceHolder_Functions_Char
+        # End_PlaceHolder_Functions_Char
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Char", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def chiSq_Dist(self, x : 'any', degFreedom : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ChiSq_Dist
-    	# End_PlaceHolder_Functions_ChiSq_Dist
+        # Begin_PlaceHolder_Functions_ChiSq_Dist
+        # End_PlaceHolder_Functions_ChiSq_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
         return ret
 
     def chiSq_Dist_RT(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ChiSq_Dist_RT
-    	# End_PlaceHolder_Functions_ChiSq_Dist_RT
+        # Begin_PlaceHolder_Functions_ChiSq_Dist_RT
+        # End_PlaceHolder_Functions_ChiSq_Dist_RT
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
         return ret
 
     def chiSq_Inv(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ChiSq_Inv
-    	# End_PlaceHolder_Functions_ChiSq_Inv
+        # Begin_PlaceHolder_Functions_ChiSq_Inv
+        # End_PlaceHolder_Functions_ChiSq_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
         return ret
 
     def chiSq_Inv_RT(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ChiSq_Inv_RT
-    	# End_PlaceHolder_Functions_ChiSq_Inv_RT
+        # Begin_PlaceHolder_Functions_ChiSq_Inv_RT
+        # End_PlaceHolder_Functions_ChiSq_Inv_RT
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ChiSq_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
         return ret
 
     def choose(self, indexNum : 'any', values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Choose
-    	# End_PlaceHolder_Functions_Choose
+        # Begin_PlaceHolder_Functions_Choose
+        # End_PlaceHolder_Functions_Choose
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Choose", OfficeExtension.OperationType.Default, [indexNum, values], False, True))
         return ret
 
     def clean(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Clean
-    	# End_PlaceHolder_Functions_Clean
+        # Begin_PlaceHolder_Functions_Clean
+        # End_PlaceHolder_Functions_Clean
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Clean", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def code(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Code
-    	# End_PlaceHolder_Functions_Code
+        # Begin_PlaceHolder_Functions_Code
+        # End_PlaceHolder_Functions_Code
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Code", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def columns(self, array : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Columns
-    	# End_PlaceHolder_Functions_Columns
+        # Begin_PlaceHolder_Functions_Columns
+        # End_PlaceHolder_Functions_Columns
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Columns", OfficeExtension.OperationType.Default, [array], False, True))
         return ret
 
     def combin(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Combin
-    	# End_PlaceHolder_Functions_Combin
+        # Begin_PlaceHolder_Functions_Combin
+        # End_PlaceHolder_Functions_Combin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combin", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
         return ret
 
     def combina(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Combina
-    	# End_PlaceHolder_Functions_Combina
+        # Begin_PlaceHolder_Functions_Combina
+        # End_PlaceHolder_Functions_Combina
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Combina", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
         return ret
 
     def complex(self, realNum : 'any', iNum : 'any', suffix : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Complex
-    	# End_PlaceHolder_Functions_Complex
+        # Begin_PlaceHolder_Functions_Complex
+        # End_PlaceHolder_Functions_Complex
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Complex", OfficeExtension.OperationType.Default, [realNum, iNum, suffix], False, True))
         return ret
 
     def concatenate(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Concatenate
-    	# End_PlaceHolder_Functions_Concatenate
+        # Begin_PlaceHolder_Functions_Concatenate
+        # End_PlaceHolder_Functions_Concatenate
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Concatenate", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def confidence_Norm(self, alpha : 'any', standardDev : 'any', size : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Confidence_Norm
-    	# End_PlaceHolder_Functions_Confidence_Norm
+        # Begin_PlaceHolder_Functions_Confidence_Norm
+        # End_PlaceHolder_Functions_Confidence_Norm
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_Norm", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
         return ret
 
     def confidence_T(self, alpha : 'any', standardDev : 'any', size : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Confidence_T
-    	# End_PlaceHolder_Functions_Confidence_T
+        # Begin_PlaceHolder_Functions_Confidence_T
+        # End_PlaceHolder_Functions_Confidence_T
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Confidence_T", OfficeExtension.OperationType.Default, [alpha, standardDev, size], False, True))
         return ret
 
     def convert(self, number : 'any', fromUnit : 'any', toUnit : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Convert
-    	# End_PlaceHolder_Functions_Convert
+        # Begin_PlaceHolder_Functions_Convert
+        # End_PlaceHolder_Functions_Convert
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Convert", OfficeExtension.OperationType.Default, [number, fromUnit, toUnit], False, True))
         return ret
 
     def cos(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Cos
-    	# End_PlaceHolder_Functions_Cos
+        # Begin_PlaceHolder_Functions_Cos
+        # End_PlaceHolder_Functions_Cos
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cos", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def cosh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Cosh
-    	# End_PlaceHolder_Functions_Cosh
+        # Begin_PlaceHolder_Functions_Cosh
+        # End_PlaceHolder_Functions_Cosh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cosh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def cot(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Cot
-    	# End_PlaceHolder_Functions_Cot
+        # Begin_PlaceHolder_Functions_Cot
+        # End_PlaceHolder_Functions_Cot
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Cot", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def coth(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Coth
-    	# End_PlaceHolder_Functions_Coth
+        # Begin_PlaceHolder_Functions_Coth
+        # End_PlaceHolder_Functions_Coth
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Coth", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def count(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Count
-    	# End_PlaceHolder_Functions_Count
+        # Begin_PlaceHolder_Functions_Count
+        # End_PlaceHolder_Functions_Count
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Count", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def countA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CountA
-    	# End_PlaceHolder_Functions_CountA
+        # Begin_PlaceHolder_Functions_CountA
+        # End_PlaceHolder_Functions_CountA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def countBlank(self, range : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CountBlank
-    	# End_PlaceHolder_Functions_CountBlank
+        # Begin_PlaceHolder_Functions_CountBlank
+        # End_PlaceHolder_Functions_CountBlank
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountBlank", OfficeExtension.OperationType.Default, [range], False, True))
         return ret
 
     def countIf(self, range : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CountIf
-    	# End_PlaceHolder_Functions_CountIf
+        # Begin_PlaceHolder_Functions_CountIf
+        # End_PlaceHolder_Functions_CountIf
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIf", OfficeExtension.OperationType.Default, [range, criteria], False, True))
         return ret
 
     def countIfs(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CountIfs
-    	# End_PlaceHolder_Functions_CountIfs
+        # Begin_PlaceHolder_Functions_CountIfs
+        # End_PlaceHolder_Functions_CountIfs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CountIfs", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def coupDayBs(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupDayBs
-    	# End_PlaceHolder_Functions_CoupDayBs
+        # Begin_PlaceHolder_Functions_CoupDayBs
+        # End_PlaceHolder_Functions_CoupDayBs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDayBs", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def coupDays(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupDays
-    	# End_PlaceHolder_Functions_CoupDays
+        # Begin_PlaceHolder_Functions_CoupDays
+        # End_PlaceHolder_Functions_CoupDays
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDays", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def coupDaysNc(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupDaysNc
-    	# End_PlaceHolder_Functions_CoupDaysNc
+        # Begin_PlaceHolder_Functions_CoupDaysNc
+        # End_PlaceHolder_Functions_CoupDaysNc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupDaysNc", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def coupNcd(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupNcd
-    	# End_PlaceHolder_Functions_CoupNcd
+        # Begin_PlaceHolder_Functions_CoupNcd
+        # End_PlaceHolder_Functions_CoupNcd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def coupNum(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupNum
-    	# End_PlaceHolder_Functions_CoupNum
+        # Begin_PlaceHolder_Functions_CoupNum
+        # End_PlaceHolder_Functions_CoupNum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupNum", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def coupPcd(self, settlement : 'any', maturity : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CoupPcd
-    	# End_PlaceHolder_Functions_CoupPcd
+        # Begin_PlaceHolder_Functions_CoupPcd
+        # End_PlaceHolder_Functions_CoupPcd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CoupPcd", OfficeExtension.OperationType.Default, [settlement, maturity, frequency, basis], False, True))
         return ret
 
     def csc(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Csc
-    	# End_PlaceHolder_Functions_Csc
+        # Begin_PlaceHolder_Functions_Csc
+        # End_PlaceHolder_Functions_Csc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csc", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def csch(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Csch
-    	# End_PlaceHolder_Functions_Csch
+        # Begin_PlaceHolder_Functions_Csch
+        # End_PlaceHolder_Functions_Csch
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Csch", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def cumIPmt(self, rate : 'any', nper : 'any', pv : 'any', startPeriod : 'any', endPeriod : 'any', type : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CumIPmt
-    	# End_PlaceHolder_Functions_CumIPmt
+        # Begin_PlaceHolder_Functions_CumIPmt
+        # End_PlaceHolder_Functions_CumIPmt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumIPmt", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
         return ret
 
     def cumPrinc(self, rate : 'any', nper : 'any', pv : 'any', startPeriod : 'any', endPeriod : 'any', type : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_CumPrinc
-    	# End_PlaceHolder_Functions_CumPrinc
+        # Begin_PlaceHolder_Functions_CumPrinc
+        # End_PlaceHolder_Functions_CumPrinc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "CumPrinc", OfficeExtension.OperationType.Default, [rate, nper, pv, startPeriod, endPeriod, type], False, True))
         return ret
 
     def daverage(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DAverage
-    	# End_PlaceHolder_Functions_DAverage
+        # Begin_PlaceHolder_Functions_DAverage
+        # End_PlaceHolder_Functions_DAverage
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DAverage", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dcount(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DCount
-    	# End_PlaceHolder_Functions_DCount
+        # Begin_PlaceHolder_Functions_DCount
+        # End_PlaceHolder_Functions_DCount
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCount", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dcountA(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DCountA
-    	# End_PlaceHolder_Functions_DCountA
+        # Begin_PlaceHolder_Functions_DCountA
+        # End_PlaceHolder_Functions_DCountA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DCountA", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dget(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DGet
-    	# End_PlaceHolder_Functions_DGet
+        # Begin_PlaceHolder_Functions_DGet
+        # End_PlaceHolder_Functions_DGet
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DGet", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dmax(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DMax
-    	# End_PlaceHolder_Functions_DMax
+        # Begin_PlaceHolder_Functions_DMax
+        # End_PlaceHolder_Functions_DMax
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMax", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dmin(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DMin
-    	# End_PlaceHolder_Functions_DMin
+        # Begin_PlaceHolder_Functions_DMin
+        # End_PlaceHolder_Functions_DMin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DMin", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dproduct(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DProduct
-    	# End_PlaceHolder_Functions_DProduct
+        # Begin_PlaceHolder_Functions_DProduct
+        # End_PlaceHolder_Functions_DProduct
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DProduct", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dstDev(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DStDev
-    	# End_PlaceHolder_Functions_DStDev
+        # Begin_PlaceHolder_Functions_DStDev
+        # End_PlaceHolder_Functions_DStDev
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDev", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dstDevP(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DStDevP
-    	# End_PlaceHolder_Functions_DStDevP
+        # Begin_PlaceHolder_Functions_DStDevP
+        # End_PlaceHolder_Functions_DStDevP
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DStDevP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dsum(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DSum
-    	# End_PlaceHolder_Functions_DSum
+        # Begin_PlaceHolder_Functions_DSum
+        # End_PlaceHolder_Functions_DSum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DSum", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dvar(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DVar
-    	# End_PlaceHolder_Functions_DVar
+        # Begin_PlaceHolder_Functions_DVar
+        # End_PlaceHolder_Functions_DVar
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVar", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def dvarP(self, database : 'any', field : 'any', criteria : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DVarP
-    	# End_PlaceHolder_Functions_DVarP
+        # Begin_PlaceHolder_Functions_DVarP
+        # End_PlaceHolder_Functions_DVarP
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DVarP", OfficeExtension.OperationType.Default, [database, field, criteria], False, True))
         return ret
 
     def date(self, year : 'any', month : 'any', day : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Date
-    	# End_PlaceHolder_Functions_Date
+        # Begin_PlaceHolder_Functions_Date
+        # End_PlaceHolder_Functions_Date
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Date", OfficeExtension.OperationType.Default, [year, month, day], False, True))
         return ret
 
     def datevalue(self, dateText : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Datevalue
-    	# End_PlaceHolder_Functions_Datevalue
+        # Begin_PlaceHolder_Functions_Datevalue
+        # End_PlaceHolder_Functions_Datevalue
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Datevalue", OfficeExtension.OperationType.Default, [dateText], False, True))
         return ret
 
     def day(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Day
-    	# End_PlaceHolder_Functions_Day
+        # Begin_PlaceHolder_Functions_Day
+        # End_PlaceHolder_Functions_Day
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Day", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def days(self, endDate : 'any', startDate : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Days
-    	# End_PlaceHolder_Functions_Days
+        # Begin_PlaceHolder_Functions_Days
+        # End_PlaceHolder_Functions_Days
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days", OfficeExtension.OperationType.Default, [endDate, startDate], False, True))
         return ret
 
     def days360(self, startDate : 'any', endDate : 'any', method : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Days360
-    	# End_PlaceHolder_Functions_Days360
+        # Begin_PlaceHolder_Functions_Days360
+        # End_PlaceHolder_Functions_Days360
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Days360", OfficeExtension.OperationType.Default, [startDate, endDate, method], False, True))
         return ret
 
     def db(self, cost : 'any', salvage : 'any', life : 'any', period : 'any', month : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Db
-    	# End_PlaceHolder_Functions_Db
+        # Begin_PlaceHolder_Functions_Db
+        # End_PlaceHolder_Functions_Db
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Db", OfficeExtension.OperationType.Default, [cost, salvage, life, period, month], False, True))
         return ret
 
     def dbcs(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Dbcs
-    	# End_PlaceHolder_Functions_Dbcs
+        # Begin_PlaceHolder_Functions_Dbcs
+        # End_PlaceHolder_Functions_Dbcs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dbcs", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def ddb(self, cost : 'any', salvage : 'any', life : 'any', period : 'any', factor : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ddb
-    	# End_PlaceHolder_Functions_Ddb
+        # Begin_PlaceHolder_Functions_Ddb
+        # End_PlaceHolder_Functions_Ddb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ddb", OfficeExtension.OperationType.Default, [cost, salvage, life, period, factor], False, True))
         return ret
 
     def dec2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Dec2Bin
-    	# End_PlaceHolder_Functions_Dec2Bin
+        # Begin_PlaceHolder_Functions_Dec2Bin
+        # End_PlaceHolder_Functions_Dec2Bin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def dec2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Dec2Hex
-    	# End_PlaceHolder_Functions_Dec2Hex
+        # Begin_PlaceHolder_Functions_Dec2Hex
+        # End_PlaceHolder_Functions_Dec2Hex
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def dec2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Dec2Oct
-    	# End_PlaceHolder_Functions_Dec2Oct
+        # Begin_PlaceHolder_Functions_Dec2Oct
+        # End_PlaceHolder_Functions_Dec2Oct
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dec2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def decimal(self, number : 'any', radix : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Decimal
-    	# End_PlaceHolder_Functions_Decimal
+        # Begin_PlaceHolder_Functions_Decimal
+        # End_PlaceHolder_Functions_Decimal
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Decimal", OfficeExtension.OperationType.Default, [number, radix], False, True))
         return ret
 
     def degrees(self, angle : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Degrees
-    	# End_PlaceHolder_Functions_Degrees
+        # Begin_PlaceHolder_Functions_Degrees
+        # End_PlaceHolder_Functions_Degrees
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Degrees", OfficeExtension.OperationType.Default, [angle], False, True))
         return ret
 
     def delta(self, number1 : 'any', number2 : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Delta
-    	# End_PlaceHolder_Functions_Delta
+        # Begin_PlaceHolder_Functions_Delta
+        # End_PlaceHolder_Functions_Delta
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Delta", OfficeExtension.OperationType.Default, [number1, number2], False, True))
         return ret
 
     def devSq(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DevSq
-    	# End_PlaceHolder_Functions_DevSq
+        # Begin_PlaceHolder_Functions_DevSq
+        # End_PlaceHolder_Functions_DevSq
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DevSq", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def disc(self, settlement : 'any', maturity : 'any', pr : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Disc
-    	# End_PlaceHolder_Functions_Disc
+        # Begin_PlaceHolder_Functions_Disc
+        # End_PlaceHolder_Functions_Disc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Disc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
         return ret
 
     def dollar(self, number : 'any', decimals : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Dollar
-    	# End_PlaceHolder_Functions_Dollar
+        # Begin_PlaceHolder_Functions_Dollar
+        # End_PlaceHolder_Functions_Dollar
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Dollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
         return ret
 
     def dollarDe(self, fractionalDollar : 'any', fraction : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DollarDe
-    	# End_PlaceHolder_Functions_DollarDe
+        # Begin_PlaceHolder_Functions_DollarDe
+        # End_PlaceHolder_Functions_DollarDe
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarDe", OfficeExtension.OperationType.Default, [fractionalDollar, fraction], False, True))
         return ret
 
     def dollarFr(self, decimalDollar : 'any', fraction : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_DollarFr
-    	# End_PlaceHolder_Functions_DollarFr
+        # Begin_PlaceHolder_Functions_DollarFr
+        # End_PlaceHolder_Functions_DollarFr
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "DollarFr", OfficeExtension.OperationType.Default, [decimalDollar, fraction], False, True))
         return ret
 
     def duration(self, settlement : 'any', maturity : 'any', coupon : 'any', yld : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Duration
-    	# End_PlaceHolder_Functions_Duration
+        # Begin_PlaceHolder_Functions_Duration
+        # End_PlaceHolder_Functions_Duration
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Duration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
         return ret
 
     def ecma_Ceiling(self, number : 'any', significance : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ECMA_Ceiling
-    	# End_PlaceHolder_Functions_ECMA_Ceiling
+        # Begin_PlaceHolder_Functions_ECMA_Ceiling
+        # End_PlaceHolder_Functions_ECMA_Ceiling
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ECMA_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
         return ret
 
     def edate(self, startDate : 'any', months : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_EDate
-    	# End_PlaceHolder_Functions_EDate
+        # Begin_PlaceHolder_Functions_EDate
+        # End_PlaceHolder_Functions_EDate
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EDate", OfficeExtension.OperationType.Default, [startDate, months], False, True))
         return ret
 
     def effect(self, nominalRate : 'any', npery : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Effect
-    	# End_PlaceHolder_Functions_Effect
+        # Begin_PlaceHolder_Functions_Effect
+        # End_PlaceHolder_Functions_Effect
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Effect", OfficeExtension.OperationType.Default, [nominalRate, npery], False, True))
         return ret
 
     def eoMonth(self, startDate : 'any', months : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_EoMonth
-    	# End_PlaceHolder_Functions_EoMonth
+        # Begin_PlaceHolder_Functions_EoMonth
+        # End_PlaceHolder_Functions_EoMonth
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "EoMonth", OfficeExtension.OperationType.Default, [startDate, months], False, True))
         return ret
 
     def erf(self, lowerLimit : 'any', upperLimit : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Erf
-    	# End_PlaceHolder_Functions_Erf
+        # Begin_PlaceHolder_Functions_Erf
+        # End_PlaceHolder_Functions_Erf
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf", OfficeExtension.OperationType.Default, [lowerLimit, upperLimit], False, True))
         return ret
 
     def erfC(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ErfC
-    	# End_PlaceHolder_Functions_ErfC
+        # Begin_PlaceHolder_Functions_ErfC
+        # End_PlaceHolder_Functions_ErfC
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def erfC_Precise(self, X : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ErfC_Precise
-    	# End_PlaceHolder_Functions_ErfC_Precise
+        # Begin_PlaceHolder_Functions_ErfC_Precise
+        # End_PlaceHolder_Functions_ErfC_Precise
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ErfC_Precise", OfficeExtension.OperationType.Default, [X], False, True))
         return ret
 
     def erf_Precise(self, X : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Erf_Precise
-    	# End_PlaceHolder_Functions_Erf_Precise
+        # Begin_PlaceHolder_Functions_Erf_Precise
+        # End_PlaceHolder_Functions_Erf_Precise
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Erf_Precise", OfficeExtension.OperationType.Default, [X], False, True))
         return ret
 
     def error_Type(self, errorVal : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Error_Type
-    	# End_PlaceHolder_Functions_Error_Type
+        # Begin_PlaceHolder_Functions_Error_Type
+        # End_PlaceHolder_Functions_Error_Type
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Error_Type", OfficeExtension.OperationType.Default, [errorVal], False, True))
         return ret
 
     def even(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Even
-    	# End_PlaceHolder_Functions_Even
+        # Begin_PlaceHolder_Functions_Even
+        # End_PlaceHolder_Functions_Even
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Even", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def exact(self, text1 : 'any', text2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Exact
-    	# End_PlaceHolder_Functions_Exact
+        # Begin_PlaceHolder_Functions_Exact
+        # End_PlaceHolder_Functions_Exact
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exact", OfficeExtension.OperationType.Default, [text1, text2], False, True))
         return ret
 
     def exp(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Exp
-    	# End_PlaceHolder_Functions_Exp
+        # Begin_PlaceHolder_Functions_Exp
+        # End_PlaceHolder_Functions_Exp
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Exp", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def expon_Dist(self, x : 'any', lambda_ : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Expon_Dist
-    	# End_PlaceHolder_Functions_Expon_Dist
+        # Begin_PlaceHolder_Functions_Expon_Dist
+        # End_PlaceHolder_Functions_Expon_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Expon_Dist", OfficeExtension.OperationType.Default, [x, lambda_, cumulative], False, True))
         return ret
 
     def fvschedule(self, principal : 'any', schedule : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_FVSchedule
-    	# End_PlaceHolder_Functions_FVSchedule
+        # Begin_PlaceHolder_Functions_FVSchedule
+        # End_PlaceHolder_Functions_FVSchedule
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FVSchedule", OfficeExtension.OperationType.Default, [principal, schedule], False, True))
         return ret
 
     def f_Dist(self, x : 'any', degFreedom1 : 'any', degFreedom2 : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_F_Dist
-    	# End_PlaceHolder_Functions_F_Dist
+        # Begin_PlaceHolder_Functions_F_Dist
+        # End_PlaceHolder_Functions_F_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2, cumulative], False, True))
         return ret
 
     def f_Dist_RT(self, x : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_F_Dist_RT
-    	# End_PlaceHolder_Functions_F_Dist_RT
+        # Begin_PlaceHolder_Functions_F_Dist_RT
+        # End_PlaceHolder_Functions_F_Dist_RT
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom1, degFreedom2], False, True))
         return ret
 
     def f_Inv(self, probability : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_F_Inv
-    	# End_PlaceHolder_Functions_F_Inv
+        # Begin_PlaceHolder_Functions_F_Inv
+        # End_PlaceHolder_Functions_F_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
         return ret
 
     def f_Inv_RT(self, probability : 'any', degFreedom1 : 'any', degFreedom2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_F_Inv_RT
-    	# End_PlaceHolder_Functions_F_Inv_RT
+        # Begin_PlaceHolder_Functions_F_Inv_RT
+        # End_PlaceHolder_Functions_F_Inv_RT
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "F_Inv_RT", OfficeExtension.OperationType.Default, [probability, degFreedom1, degFreedom2], False, True))
         return ret
 
     def fact(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Fact
-    	# End_PlaceHolder_Functions_Fact
+        # Begin_PlaceHolder_Functions_Fact
+        # End_PlaceHolder_Functions_Fact
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fact", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def factDouble(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_FactDouble
-    	# End_PlaceHolder_Functions_FactDouble
+        # Begin_PlaceHolder_Functions_FactDouble
+        # End_PlaceHolder_Functions_FactDouble
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FactDouble", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def false(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_False
-    	# End_PlaceHolder_Functions_False
+        # Begin_PlaceHolder_Functions_False
+        # End_PlaceHolder_Functions_False
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "False", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def find(self, findText : 'any', withinText : 'any', startNum : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Find
-    	# End_PlaceHolder_Functions_Find
+        # Begin_PlaceHolder_Functions_Find
+        # End_PlaceHolder_Functions_Find
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Find", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
         return ret
 
     def findB(self, findText : 'any', withinText : 'any', startNum : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_FindB
-    	# End_PlaceHolder_Functions_FindB
+        # Begin_PlaceHolder_Functions_FindB
+        # End_PlaceHolder_Functions_FindB
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FindB", OfficeExtension.OperationType.Default, [findText, withinText, startNum], False, True))
         return ret
 
     def fisher(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Fisher
-    	# End_PlaceHolder_Functions_Fisher
+        # Begin_PlaceHolder_Functions_Fisher
+        # End_PlaceHolder_Functions_Fisher
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fisher", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def fisherInv(self, y : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_FisherInv
-    	# End_PlaceHolder_Functions_FisherInv
+        # Begin_PlaceHolder_Functions_FisherInv
+        # End_PlaceHolder_Functions_FisherInv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "FisherInv", OfficeExtension.OperationType.Default, [y], False, True))
         return ret
 
     def fixed(self, number : 'any', decimals : 'any' = None, noCommas : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Fixed
-    	# End_PlaceHolder_Functions_Fixed
+        # Begin_PlaceHolder_Functions_Fixed
+        # End_PlaceHolder_Functions_Fixed
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fixed", OfficeExtension.OperationType.Default, [number, decimals, noCommas], False, True))
         return ret
 
     def floor_Math(self, number : 'any', significance : 'any' = None, mode : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Floor_Math
-    	# End_PlaceHolder_Functions_Floor_Math
+        # Begin_PlaceHolder_Functions_Floor_Math
+        # End_PlaceHolder_Functions_Floor_Math
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Math", OfficeExtension.OperationType.Default, [number, significance, mode], False, True))
         return ret
 
     def floor_Precise(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Floor_Precise
-    	# End_PlaceHolder_Functions_Floor_Precise
+        # Begin_PlaceHolder_Functions_Floor_Precise
+        # End_PlaceHolder_Functions_Floor_Precise
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Floor_Precise", OfficeExtension.OperationType.Default, [number, significance], False, True))
         return ret
 
     def fv(self, rate : 'any', nper : 'any', pmt : 'any', pv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Fv
-    	# End_PlaceHolder_Functions_Fv
+        # Begin_PlaceHolder_Functions_Fv
+        # End_PlaceHolder_Functions_Fv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Fv", OfficeExtension.OperationType.Default, [rate, nper, pmt, pv, type], False, True))
         return ret
 
     def gamma(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Gamma
-    	# End_PlaceHolder_Functions_Gamma
+        # Begin_PlaceHolder_Functions_Gamma
+        # End_PlaceHolder_Functions_Gamma
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def gammaLn(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_GammaLn
-    	# End_PlaceHolder_Functions_GammaLn
+        # Begin_PlaceHolder_Functions_GammaLn
+        # End_PlaceHolder_Functions_GammaLn
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def gammaLn_Precise(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_GammaLn_Precise
-    	# End_PlaceHolder_Functions_GammaLn_Precise
+        # Begin_PlaceHolder_Functions_GammaLn_Precise
+        # End_PlaceHolder_Functions_GammaLn_Precise
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GammaLn_Precise", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def gamma_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Gamma_Dist
-    	# End_PlaceHolder_Functions_Gamma_Dist
+        # Begin_PlaceHolder_Functions_Gamma_Dist
+        # End_PlaceHolder_Functions_Gamma_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
         return ret
 
     def gamma_Inv(self, probability : 'any', alpha : 'any', beta : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Gamma_Inv
-    	# End_PlaceHolder_Functions_Gamma_Inv
+        # Begin_PlaceHolder_Functions_Gamma_Inv
+        # End_PlaceHolder_Functions_Gamma_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gamma_Inv", OfficeExtension.OperationType.Default, [probability, alpha, beta], False, True))
         return ret
 
     def gauss(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Gauss
-    	# End_PlaceHolder_Functions_Gauss
+        # Begin_PlaceHolder_Functions_Gauss
+        # End_PlaceHolder_Functions_Gauss
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gauss", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def gcd(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Gcd
-    	# End_PlaceHolder_Functions_Gcd
+        # Begin_PlaceHolder_Functions_Gcd
+        # End_PlaceHolder_Functions_Gcd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Gcd", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def geStep(self, number : 'any', step : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_GeStep
-    	# End_PlaceHolder_Functions_GeStep
+        # Begin_PlaceHolder_Functions_GeStep
+        # End_PlaceHolder_Functions_GeStep
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeStep", OfficeExtension.OperationType.Default, [number, step], False, True))
         return ret
 
     def geoMean(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_GeoMean
-    	# End_PlaceHolder_Functions_GeoMean
+        # Begin_PlaceHolder_Functions_GeoMean
+        # End_PlaceHolder_Functions_GeoMean
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "GeoMean", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def hlookup(self, lookupValue : 'any', tableArray : 'any', rowIndexNum : 'any', rangeLookup : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_HLookup
-    	# End_PlaceHolder_Functions_HLookup
+        # Begin_PlaceHolder_Functions_HLookup
+        # End_PlaceHolder_Functions_HLookup
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, rowIndexNum, rangeLookup], False, True))
         return ret
 
     def harMean(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_HarMean
-    	# End_PlaceHolder_Functions_HarMean
+        # Begin_PlaceHolder_Functions_HarMean
+        # End_PlaceHolder_Functions_HarMean
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HarMean", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def hex2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Hex2Bin
-    	# End_PlaceHolder_Functions_Hex2Bin
+        # Begin_PlaceHolder_Functions_Hex2Bin
+        # End_PlaceHolder_Functions_Hex2Bin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def hex2Dec(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Hex2Dec
-    	# End_PlaceHolder_Functions_Hex2Dec
+        # Begin_PlaceHolder_Functions_Hex2Dec
+        # End_PlaceHolder_Functions_Hex2Dec
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Dec", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def hex2Oct(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Hex2Oct
-    	# End_PlaceHolder_Functions_Hex2Oct
+        # Begin_PlaceHolder_Functions_Hex2Oct
+        # End_PlaceHolder_Functions_Hex2Oct
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hex2Oct", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def hour(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Hour
-    	# End_PlaceHolder_Functions_Hour
+        # Begin_PlaceHolder_Functions_Hour
+        # End_PlaceHolder_Functions_Hour
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hour", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def hypGeom_Dist(self, sampleS : 'any', numberSample : 'any', populationS : 'any', numberPop : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_HypGeom_Dist
-    	# End_PlaceHolder_Functions_HypGeom_Dist
+        # Begin_PlaceHolder_Functions_HypGeom_Dist
+        # End_PlaceHolder_Functions_HypGeom_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "HypGeom_Dist", OfficeExtension.OperationType.Default, [sampleS, numberSample, populationS, numberPop, cumulative], False, True))
         return ret
 
     def hyperlink(self, linkLocation : 'any', friendlyName : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Hyperlink
-    	# End_PlaceHolder_Functions_Hyperlink
+        # Begin_PlaceHolder_Functions_Hyperlink
+        # End_PlaceHolder_Functions_Hyperlink
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Hyperlink", OfficeExtension.OperationType.Default, [linkLocation, friendlyName], False, True))
         return ret
 
     def iso_Ceiling(self, number : 'any', significance : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ISO_Ceiling
-    	# End_PlaceHolder_Functions_ISO_Ceiling
+        # Begin_PlaceHolder_Functions_ISO_Ceiling
+        # End_PlaceHolder_Functions_ISO_Ceiling
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ISO_Ceiling", OfficeExtension.OperationType.Default, [number, significance], False, True))
         return ret
 
     def if_(self, logicalTest : 'any', valueIfTrue : 'any' = None, valueIfFalse : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_If
-    	# End_PlaceHolder_Functions_If
+        # Begin_PlaceHolder_Functions_If
+        # End_PlaceHolder_Functions_If
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "If", OfficeExtension.OperationType.Default, [logicalTest, valueIfTrue, valueIfFalse], False, True))
         return ret
 
     def imAbs(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImAbs
-    	# End_PlaceHolder_Functions_ImAbs
+        # Begin_PlaceHolder_Functions_ImAbs
+        # End_PlaceHolder_Functions_ImAbs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImAbs", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imArgument(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImArgument
-    	# End_PlaceHolder_Functions_ImArgument
+        # Begin_PlaceHolder_Functions_ImArgument
+        # End_PlaceHolder_Functions_ImArgument
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImArgument", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imConjugate(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImConjugate
-    	# End_PlaceHolder_Functions_ImConjugate
+        # Begin_PlaceHolder_Functions_ImConjugate
+        # End_PlaceHolder_Functions_ImConjugate
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImConjugate", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imCos(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImCos
-    	# End_PlaceHolder_Functions_ImCos
+        # Begin_PlaceHolder_Functions_ImCos
+        # End_PlaceHolder_Functions_ImCos
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCos", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imCosh(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImCosh
-    	# End_PlaceHolder_Functions_ImCosh
+        # Begin_PlaceHolder_Functions_ImCosh
+        # End_PlaceHolder_Functions_ImCosh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCosh", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imCot(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImCot
-    	# End_PlaceHolder_Functions_ImCot
+        # Begin_PlaceHolder_Functions_ImCot
+        # End_PlaceHolder_Functions_ImCot
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCot", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imCsc(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImCsc
-    	# End_PlaceHolder_Functions_ImCsc
+        # Begin_PlaceHolder_Functions_ImCsc
+        # End_PlaceHolder_Functions_ImCsc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsc", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imCsch(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImCsch
-    	# End_PlaceHolder_Functions_ImCsch
+        # Begin_PlaceHolder_Functions_ImCsch
+        # End_PlaceHolder_Functions_ImCsch
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImCsch", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imDiv(self, inumber1 : 'any', inumber2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImDiv
-    	# End_PlaceHolder_Functions_ImDiv
+        # Begin_PlaceHolder_Functions_ImDiv
+        # End_PlaceHolder_Functions_ImDiv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImDiv", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
         return ret
 
     def imExp(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImExp
-    	# End_PlaceHolder_Functions_ImExp
+        # Begin_PlaceHolder_Functions_ImExp
+        # End_PlaceHolder_Functions_ImExp
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImExp", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imLn(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImLn
-    	# End_PlaceHolder_Functions_ImLn
+        # Begin_PlaceHolder_Functions_ImLn
+        # End_PlaceHolder_Functions_ImLn
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLn", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imLog10(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImLog10
-    	# End_PlaceHolder_Functions_ImLog10
+        # Begin_PlaceHolder_Functions_ImLog10
+        # End_PlaceHolder_Functions_ImLog10
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog10", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imLog2(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImLog2
-    	# End_PlaceHolder_Functions_ImLog2
+        # Begin_PlaceHolder_Functions_ImLog2
+        # End_PlaceHolder_Functions_ImLog2
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImLog2", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imPower(self, inumber : 'any', number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImPower
-    	# End_PlaceHolder_Functions_ImPower
+        # Begin_PlaceHolder_Functions_ImPower
+        # End_PlaceHolder_Functions_ImPower
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImPower", OfficeExtension.OperationType.Default, [inumber, number], False, True))
         return ret
 
     def imProduct(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImProduct
-    	# End_PlaceHolder_Functions_ImProduct
+        # Begin_PlaceHolder_Functions_ImProduct
+        # End_PlaceHolder_Functions_ImProduct
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImProduct", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def imReal(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImReal
-    	# End_PlaceHolder_Functions_ImReal
+        # Begin_PlaceHolder_Functions_ImReal
+        # End_PlaceHolder_Functions_ImReal
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImReal", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSec(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSec
-    	# End_PlaceHolder_Functions_ImSec
+        # Begin_PlaceHolder_Functions_ImSec
+        # End_PlaceHolder_Functions_ImSec
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSec", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSech(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSech
-    	# End_PlaceHolder_Functions_ImSech
+        # Begin_PlaceHolder_Functions_ImSech
+        # End_PlaceHolder_Functions_ImSech
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSech", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSin(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSin
-    	# End_PlaceHolder_Functions_ImSin
+        # Begin_PlaceHolder_Functions_ImSin
+        # End_PlaceHolder_Functions_ImSin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSin", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSinh(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSinh
-    	# End_PlaceHolder_Functions_ImSinh
+        # Begin_PlaceHolder_Functions_ImSinh
+        # End_PlaceHolder_Functions_ImSinh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSinh", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSqrt(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSqrt
-    	# End_PlaceHolder_Functions_ImSqrt
+        # Begin_PlaceHolder_Functions_ImSqrt
+        # End_PlaceHolder_Functions_ImSqrt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSqrt", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imSub(self, inumber1 : 'any', inumber2 : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSub
-    	# End_PlaceHolder_Functions_ImSub
+        # Begin_PlaceHolder_Functions_ImSub
+        # End_PlaceHolder_Functions_ImSub
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSub", OfficeExtension.OperationType.Default, [inumber1, inumber2], False, True))
         return ret
 
     def imSum(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImSum
-    	# End_PlaceHolder_Functions_ImSum
+        # Begin_PlaceHolder_Functions_ImSum
+        # End_PlaceHolder_Functions_ImSum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImSum", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def imTan(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ImTan
-    	# End_PlaceHolder_Functions_ImTan
+        # Begin_PlaceHolder_Functions_ImTan
+        # End_PlaceHolder_Functions_ImTan
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ImTan", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def imaginary(self, inumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Imaginary
-    	# End_PlaceHolder_Functions_Imaginary
+        # Begin_PlaceHolder_Functions_Imaginary
+        # End_PlaceHolder_Functions_Imaginary
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Imaginary", OfficeExtension.OperationType.Default, [inumber], False, True))
         return ret
 
     def int(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Int
-    	# End_PlaceHolder_Functions_Int
+        # Begin_PlaceHolder_Functions_Int
+        # End_PlaceHolder_Functions_Int
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Int", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def intRate(self, settlement : 'any', maturity : 'any', investment : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IntRate
-    	# End_PlaceHolder_Functions_IntRate
+        # Begin_PlaceHolder_Functions_IntRate
+        # End_PlaceHolder_Functions_IntRate
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IntRate", OfficeExtension.OperationType.Default, [settlement, maturity, investment, redemption, basis], False, True))
         return ret
 
     def ipmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ipmt
-    	# End_PlaceHolder_Functions_Ipmt
+        # Begin_PlaceHolder_Functions_Ipmt
+        # End_PlaceHolder_Functions_Ipmt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ipmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
         return ret
 
     def irr(self, values : 'any', guess : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Irr
-    	# End_PlaceHolder_Functions_Irr
+        # Begin_PlaceHolder_Functions_Irr
+        # End_PlaceHolder_Functions_Irr
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Irr", OfficeExtension.OperationType.Default, [values, guess], False, True))
         return ret
 
     def isErr(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsErr
-    	# End_PlaceHolder_Functions_IsErr
+        # Begin_PlaceHolder_Functions_IsErr
+        # End_PlaceHolder_Functions_IsErr
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsErr", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isError(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsError
-    	# End_PlaceHolder_Functions_IsError
+        # Begin_PlaceHolder_Functions_IsError
+        # End_PlaceHolder_Functions_IsError
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsError", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isEven(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsEven
-    	# End_PlaceHolder_Functions_IsEven
+        # Begin_PlaceHolder_Functions_IsEven
+        # End_PlaceHolder_Functions_IsEven
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsEven", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def isFormula(self, reference : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsFormula
-    	# End_PlaceHolder_Functions_IsFormula
+        # Begin_PlaceHolder_Functions_IsFormula
+        # End_PlaceHolder_Functions_IsFormula
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsFormula", OfficeExtension.OperationType.Default, [reference], False, True))
         return ret
 
     def isLogical(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsLogical
-    	# End_PlaceHolder_Functions_IsLogical
+        # Begin_PlaceHolder_Functions_IsLogical
+        # End_PlaceHolder_Functions_IsLogical
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsLogical", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isNA(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsNA
-    	# End_PlaceHolder_Functions_IsNA
+        # Begin_PlaceHolder_Functions_IsNA
+        # End_PlaceHolder_Functions_IsNA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNA", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isNonText(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsNonText
-    	# End_PlaceHolder_Functions_IsNonText
+        # Begin_PlaceHolder_Functions_IsNonText
+        # End_PlaceHolder_Functions_IsNonText
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNonText", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isNumber(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsNumber
-    	# End_PlaceHolder_Functions_IsNumber
+        # Begin_PlaceHolder_Functions_IsNumber
+        # End_PlaceHolder_Functions_IsNumber
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsNumber", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isOdd(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsOdd
-    	# End_PlaceHolder_Functions_IsOdd
+        # Begin_PlaceHolder_Functions_IsOdd
+        # End_PlaceHolder_Functions_IsOdd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsOdd", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def isText(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsText
-    	# End_PlaceHolder_Functions_IsText
+        # Begin_PlaceHolder_Functions_IsText
+        # End_PlaceHolder_Functions_IsText
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsText", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def isoWeekNum(self, date : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_IsoWeekNum
-    	# End_PlaceHolder_Functions_IsoWeekNum
+        # Begin_PlaceHolder_Functions_IsoWeekNum
+        # End_PlaceHolder_Functions_IsoWeekNum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "IsoWeekNum", OfficeExtension.OperationType.Default, [date], False, True))
         return ret
 
     def ispmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ispmt
-    	# End_PlaceHolder_Functions_Ispmt
+        # Begin_PlaceHolder_Functions_Ispmt
+        # End_PlaceHolder_Functions_Ispmt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ispmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv], False, True))
         return ret
 
     def isref(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Isref
-    	# End_PlaceHolder_Functions_Isref
+        # Begin_PlaceHolder_Functions_Isref
+        # End_PlaceHolder_Functions_Isref
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Isref", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def kurt(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Kurt
-    	# End_PlaceHolder_Functions_Kurt
+        # Begin_PlaceHolder_Functions_Kurt
+        # End_PlaceHolder_Functions_Kurt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Kurt", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def large(self, array : 'any', k : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Large
-    	# End_PlaceHolder_Functions_Large
+        # Begin_PlaceHolder_Functions_Large
+        # End_PlaceHolder_Functions_Large
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Large", OfficeExtension.OperationType.Default, [array, k], False, True))
         return ret
 
     def lcm(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Lcm
-    	# End_PlaceHolder_Functions_Lcm
+        # Begin_PlaceHolder_Functions_Lcm
+        # End_PlaceHolder_Functions_Lcm
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lcm", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def left(self, text : 'any', numChars : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Left
-    	# End_PlaceHolder_Functions_Left
+        # Begin_PlaceHolder_Functions_Left
+        # End_PlaceHolder_Functions_Left
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Left", OfficeExtension.OperationType.Default, [text, numChars], False, True))
         return ret
 
     def leftb(self, text : 'any', numBytes : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Leftb
-    	# End_PlaceHolder_Functions_Leftb
+        # Begin_PlaceHolder_Functions_Leftb
+        # End_PlaceHolder_Functions_Leftb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Leftb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
         return ret
 
     def len(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Len
-    	# End_PlaceHolder_Functions_Len
+        # Begin_PlaceHolder_Functions_Len
+        # End_PlaceHolder_Functions_Len
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Len", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def lenb(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Lenb
-    	# End_PlaceHolder_Functions_Lenb
+        # Begin_PlaceHolder_Functions_Lenb
+        # End_PlaceHolder_Functions_Lenb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lenb", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def ln(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ln
-    	# End_PlaceHolder_Functions_Ln
+        # Begin_PlaceHolder_Functions_Ln
+        # End_PlaceHolder_Functions_Ln
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ln", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def log(self, number : 'any', base : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Log
-    	# End_PlaceHolder_Functions_Log
+        # Begin_PlaceHolder_Functions_Log
+        # End_PlaceHolder_Functions_Log
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log", OfficeExtension.OperationType.Default, [number, base], False, True))
         return ret
 
     def log10(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Log10
-    	# End_PlaceHolder_Functions_Log10
+        # Begin_PlaceHolder_Functions_Log10
+        # End_PlaceHolder_Functions_Log10
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Log10", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def logNorm_Dist(self, x : 'any', mean : 'any', standardDev : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_LogNorm_Dist
-    	# End_PlaceHolder_Functions_LogNorm_Dist
+        # Begin_PlaceHolder_Functions_LogNorm_Dist
+        # End_PlaceHolder_Functions_LogNorm_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
         return ret
 
     def logNorm_Inv(self, probability : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_LogNorm_Inv
-    	# End_PlaceHolder_Functions_LogNorm_Inv
+        # Begin_PlaceHolder_Functions_LogNorm_Inv
+        # End_PlaceHolder_Functions_LogNorm_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "LogNorm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
         return ret
 
     def lookup(self, lookupValue : 'any', lookupVector : 'any', resultVector : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Lookup
-    	# End_PlaceHolder_Functions_Lookup
+        # Begin_PlaceHolder_Functions_Lookup
+        # End_PlaceHolder_Functions_Lookup
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lookup", OfficeExtension.OperationType.Default, [lookupValue, lookupVector, resultVector], False, True))
         return ret
 
     def lower(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Lower
-    	# End_PlaceHolder_Functions_Lower
+        # Begin_PlaceHolder_Functions_Lower
+        # End_PlaceHolder_Functions_Lower
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Lower", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def mduration(self, settlement : 'any', maturity : 'any', coupon : 'any', yld : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MDuration
-    	# End_PlaceHolder_Functions_MDuration
+        # Begin_PlaceHolder_Functions_MDuration
+        # End_PlaceHolder_Functions_MDuration
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MDuration", OfficeExtension.OperationType.Default, [settlement, maturity, coupon, yld, frequency, basis], False, True))
         return ret
 
     def mirr(self, values : 'any', financeRate : 'any', reinvestRate : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MIrr
-    	# End_PlaceHolder_Functions_MIrr
+        # Begin_PlaceHolder_Functions_MIrr
+        # End_PlaceHolder_Functions_MIrr
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MIrr", OfficeExtension.OperationType.Default, [values, financeRate, reinvestRate], False, True))
         return ret
 
     def mround(self, number : 'any', multiple : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MRound
-    	# End_PlaceHolder_Functions_MRound
+        # Begin_PlaceHolder_Functions_MRound
+        # End_PlaceHolder_Functions_MRound
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MRound", OfficeExtension.OperationType.Default, [number, multiple], False, True))
         return ret
 
     def match(self, lookupValue : 'any', lookupArray : 'any', matchType : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Match
-    	# End_PlaceHolder_Functions_Match
+        # Begin_PlaceHolder_Functions_Match
+        # End_PlaceHolder_Functions_Match
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Match", OfficeExtension.OperationType.Default, [lookupValue, lookupArray, matchType], False, True))
         return ret
 
     def max(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Max
-    	# End_PlaceHolder_Functions_Max
+        # Begin_PlaceHolder_Functions_Max
+        # End_PlaceHolder_Functions_Max
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Max", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def maxA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MaxA
-    	# End_PlaceHolder_Functions_MaxA
+        # Begin_PlaceHolder_Functions_MaxA
+        # End_PlaceHolder_Functions_MaxA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MaxA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def median(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Median
-    	# End_PlaceHolder_Functions_Median
+        # Begin_PlaceHolder_Functions_Median
+        # End_PlaceHolder_Functions_Median
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Median", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def mid(self, text : 'any', startNum : 'any', numChars : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Mid
-    	# End_PlaceHolder_Functions_Mid
+        # Begin_PlaceHolder_Functions_Mid
+        # End_PlaceHolder_Functions_Mid
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mid", OfficeExtension.OperationType.Default, [text, startNum, numChars], False, True))
         return ret
 
     def midb(self, text : 'any', startNum : 'any', numBytes : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Midb
-    	# End_PlaceHolder_Functions_Midb
+        # Begin_PlaceHolder_Functions_Midb
+        # End_PlaceHolder_Functions_Midb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Midb", OfficeExtension.OperationType.Default, [text, startNum, numBytes], False, True))
         return ret
 
     def min(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Min
-    	# End_PlaceHolder_Functions_Min
+        # Begin_PlaceHolder_Functions_Min
+        # End_PlaceHolder_Functions_Min
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Min", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def minA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MinA
-    	# End_PlaceHolder_Functions_MinA
+        # Begin_PlaceHolder_Functions_MinA
+        # End_PlaceHolder_Functions_MinA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MinA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def minute(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Minute
-    	# End_PlaceHolder_Functions_Minute
+        # Begin_PlaceHolder_Functions_Minute
+        # End_PlaceHolder_Functions_Minute
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Minute", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def mod(self, number : 'any', divisor : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Mod
-    	# End_PlaceHolder_Functions_Mod
+        # Begin_PlaceHolder_Functions_Mod
+        # End_PlaceHolder_Functions_Mod
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Mod", OfficeExtension.OperationType.Default, [number, divisor], False, True))
         return ret
 
     def month(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Month
-    	# End_PlaceHolder_Functions_Month
+        # Begin_PlaceHolder_Functions_Month
+        # End_PlaceHolder_Functions_Month
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Month", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def multiNomial(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_MultiNomial
-    	# End_PlaceHolder_Functions_MultiNomial
+        # Begin_PlaceHolder_Functions_MultiNomial
+        # End_PlaceHolder_Functions_MultiNomial
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "MultiNomial", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def n(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_N
-    	# End_PlaceHolder_Functions_N
+        # Begin_PlaceHolder_Functions_N
+        # End_PlaceHolder_Functions_N
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "N", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def nper(self, rate : 'any', pmt : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_NPer
-    	# End_PlaceHolder_Functions_NPer
+        # Begin_PlaceHolder_Functions_NPer
+        # End_PlaceHolder_Functions_NPer
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NPer", OfficeExtension.OperationType.Default, [rate, pmt, pv, fv, type], False, True))
         return ret
 
     def na(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Na
-    	# End_PlaceHolder_Functions_Na
+        # Begin_PlaceHolder_Functions_Na
+        # End_PlaceHolder_Functions_Na
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Na", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def negBinom_Dist(self, numberF : 'any', numberS : 'any', probabilityS : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_NegBinom_Dist
-    	# End_PlaceHolder_Functions_NegBinom_Dist
+        # Begin_PlaceHolder_Functions_NegBinom_Dist
+        # End_PlaceHolder_Functions_NegBinom_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NegBinom_Dist", OfficeExtension.OperationType.Default, [numberF, numberS, probabilityS, cumulative], False, True))
         return ret
 
     def networkDays(self, startDate : 'any', endDate : 'any', holidays : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_NetworkDays
-    	# End_PlaceHolder_Functions_NetworkDays
+        # Begin_PlaceHolder_Functions_NetworkDays
+        # End_PlaceHolder_Functions_NetworkDays
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays", OfficeExtension.OperationType.Default, [startDate, endDate, holidays], False, True))
         return ret
 
     def networkDays_Intl(self, startDate : 'any', endDate : 'any', weekend : 'any' = None, holidays : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_NetworkDays_Intl
-    	# End_PlaceHolder_Functions_NetworkDays_Intl
+        # Begin_PlaceHolder_Functions_NetworkDays_Intl
+        # End_PlaceHolder_Functions_NetworkDays_Intl
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NetworkDays_Intl", OfficeExtension.OperationType.Default, [startDate, endDate, weekend, holidays], False, True))
         return ret
 
     def nominal(self, effectRate : 'any', npery : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Nominal
-    	# End_PlaceHolder_Functions_Nominal
+        # Begin_PlaceHolder_Functions_Nominal
+        # End_PlaceHolder_Functions_Nominal
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Nominal", OfficeExtension.OperationType.Default, [effectRate, npery], False, True))
         return ret
 
     def norm_Dist(self, x : 'any', mean : 'any', standardDev : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Norm_Dist
-    	# End_PlaceHolder_Functions_Norm_Dist
+        # Begin_PlaceHolder_Functions_Norm_Dist
+        # End_PlaceHolder_Functions_Norm_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Dist", OfficeExtension.OperationType.Default, [x, mean, standardDev, cumulative], False, True))
         return ret
 
     def norm_Inv(self, probability : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Norm_Inv
-    	# End_PlaceHolder_Functions_Norm_Inv
+        # Begin_PlaceHolder_Functions_Norm_Inv
+        # End_PlaceHolder_Functions_Norm_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_Inv", OfficeExtension.OperationType.Default, [probability, mean, standardDev], False, True))
         return ret
 
     def norm_S_Dist(self, z : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Norm_S_Dist
-    	# End_PlaceHolder_Functions_Norm_S_Dist
+        # Begin_PlaceHolder_Functions_Norm_S_Dist
+        # End_PlaceHolder_Functions_Norm_S_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Dist", OfficeExtension.OperationType.Default, [z, cumulative], False, True))
         return ret
 
     def norm_S_Inv(self, probability : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Norm_S_Inv
-    	# End_PlaceHolder_Functions_Norm_S_Inv
+        # Begin_PlaceHolder_Functions_Norm_S_Inv
+        # End_PlaceHolder_Functions_Norm_S_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Norm_S_Inv", OfficeExtension.OperationType.Default, [probability], False, True))
         return ret
 
     def not_(self, logical : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Not
-    	# End_PlaceHolder_Functions_Not
+        # Begin_PlaceHolder_Functions_Not
+        # End_PlaceHolder_Functions_Not
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Not", OfficeExtension.OperationType.Default, [logical], False, True))
         return ret
 
     def now(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Now
-    	# End_PlaceHolder_Functions_Now
+        # Begin_PlaceHolder_Functions_Now
+        # End_PlaceHolder_Functions_Now
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Now", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def npv(self, rate : 'any', values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Npv
-    	# End_PlaceHolder_Functions_Npv
+        # Begin_PlaceHolder_Functions_Npv
+        # End_PlaceHolder_Functions_Npv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Npv", OfficeExtension.OperationType.Default, [rate, values], False, True))
         return ret
 
     def numberValue(self, text : 'any', decimalSeparator : 'any' = None, groupSeparator : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_NumberValue
-    	# End_PlaceHolder_Functions_NumberValue
+        # Begin_PlaceHolder_Functions_NumberValue
+        # End_PlaceHolder_Functions_NumberValue
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "NumberValue", OfficeExtension.OperationType.Default, [text, decimalSeparator, groupSeparator], False, True))
         return ret
 
     def oct2Bin(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Oct2Bin
-    	# End_PlaceHolder_Functions_Oct2Bin
+        # Begin_PlaceHolder_Functions_Oct2Bin
+        # End_PlaceHolder_Functions_Oct2Bin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Bin", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def oct2Dec(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Oct2Dec
-    	# End_PlaceHolder_Functions_Oct2Dec
+        # Begin_PlaceHolder_Functions_Oct2Dec
+        # End_PlaceHolder_Functions_Oct2Dec
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Dec", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def oct2Hex(self, number : 'any', places : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Oct2Hex
-    	# End_PlaceHolder_Functions_Oct2Hex
+        # Begin_PlaceHolder_Functions_Oct2Hex
+        # End_PlaceHolder_Functions_Oct2Hex
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Oct2Hex", OfficeExtension.OperationType.Default, [number, places], False, True))
         return ret
 
     def odd(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Odd
-    	# End_PlaceHolder_Functions_Odd
+        # Begin_PlaceHolder_Functions_Odd
+        # End_PlaceHolder_Functions_Odd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Odd", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def oddFPrice(self, settlement : 'any', maturity : 'any', issue : 'any', firstCoupon : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_OddFPrice
-    	# End_PlaceHolder_Functions_OddFPrice
+        # Begin_PlaceHolder_Functions_OddFPrice
+        # End_PlaceHolder_Functions_OddFPrice
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFPrice", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, yld, redemption, frequency, basis], False, True))
         return ret
 
     def oddFYield(self, settlement : 'any', maturity : 'any', issue : 'any', firstCoupon : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_OddFYield
-    	# End_PlaceHolder_Functions_OddFYield
+        # Begin_PlaceHolder_Functions_OddFYield
+        # End_PlaceHolder_Functions_OddFYield
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddFYield", OfficeExtension.OperationType.Default, [settlement, maturity, issue, firstCoupon, rate, pr, redemption, frequency, basis], False, True))
         return ret
 
     def oddLPrice(self, settlement : 'any', maturity : 'any', lastInterest : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_OddLPrice
-    	# End_PlaceHolder_Functions_OddLPrice
+        # Begin_PlaceHolder_Functions_OddLPrice
+        # End_PlaceHolder_Functions_OddLPrice
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLPrice", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, yld, redemption, frequency, basis], False, True))
         return ret
 
     def oddLYield(self, settlement : 'any', maturity : 'any', lastInterest : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_OddLYield
-    	# End_PlaceHolder_Functions_OddLYield
+        # Begin_PlaceHolder_Functions_OddLYield
+        # End_PlaceHolder_Functions_OddLYield
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "OddLYield", OfficeExtension.OperationType.Default, [settlement, maturity, lastInterest, rate, pr, redemption, frequency, basis], False, True))
         return ret
 
     def or_(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Or
-    	# End_PlaceHolder_Functions_Or
+        # Begin_PlaceHolder_Functions_Or
+        # End_PlaceHolder_Functions_Or
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Or", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def pduration(self, rate : 'any', pv : 'any', fv : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_PDuration
-    	# End_PlaceHolder_Functions_PDuration
+        # Begin_PlaceHolder_Functions_PDuration
+        # End_PlaceHolder_Functions_PDuration
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PDuration", OfficeExtension.OperationType.Default, [rate, pv, fv], False, True))
         return ret
 
     def percentRank_Exc(self, array : 'any', x : 'any', significance : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_PercentRank_Exc
-    	# End_PlaceHolder_Functions_PercentRank_Exc
+        # Begin_PlaceHolder_Functions_PercentRank_Exc
+        # End_PlaceHolder_Functions_PercentRank_Exc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Exc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
         return ret
 
     def percentRank_Inc(self, array : 'any', x : 'any', significance : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_PercentRank_Inc
-    	# End_PlaceHolder_Functions_PercentRank_Inc
+        # Begin_PlaceHolder_Functions_PercentRank_Inc
+        # End_PlaceHolder_Functions_PercentRank_Inc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PercentRank_Inc", OfficeExtension.OperationType.Default, [array, x, significance], False, True))
         return ret
 
     def percentile_Exc(self, array : 'any', k : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Percentile_Exc
-    	# End_PlaceHolder_Functions_Percentile_Exc
+        # Begin_PlaceHolder_Functions_Percentile_Exc
+        # End_PlaceHolder_Functions_Percentile_Exc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Exc", OfficeExtension.OperationType.Default, [array, k], False, True))
         return ret
 
     def percentile_Inc(self, array : 'any', k : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Percentile_Inc
-    	# End_PlaceHolder_Functions_Percentile_Inc
+        # Begin_PlaceHolder_Functions_Percentile_Inc
+        # End_PlaceHolder_Functions_Percentile_Inc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Percentile_Inc", OfficeExtension.OperationType.Default, [array, k], False, True))
         return ret
 
     def permut(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Permut
-    	# End_PlaceHolder_Functions_Permut
+        # Begin_PlaceHolder_Functions_Permut
+        # End_PlaceHolder_Functions_Permut
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permut", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
         return ret
 
     def permutationa(self, number : 'any', numberChosen : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Permutationa
-    	# End_PlaceHolder_Functions_Permutationa
+        # Begin_PlaceHolder_Functions_Permutationa
+        # End_PlaceHolder_Functions_Permutationa
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Permutationa", OfficeExtension.OperationType.Default, [number, numberChosen], False, True))
         return ret
 
     def phi(self, x : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Phi
-    	# End_PlaceHolder_Functions_Phi
+        # Begin_PlaceHolder_Functions_Phi
+        # End_PlaceHolder_Functions_Phi
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Phi", OfficeExtension.OperationType.Default, [x], False, True))
         return ret
 
     def pi(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Pi
-    	# End_PlaceHolder_Functions_Pi
+        # Begin_PlaceHolder_Functions_Pi
+        # End_PlaceHolder_Functions_Pi
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pi", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def pmt(self, rate : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Pmt
-    	# End_PlaceHolder_Functions_Pmt
+        # Begin_PlaceHolder_Functions_Pmt
+        # End_PlaceHolder_Functions_Pmt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pmt", OfficeExtension.OperationType.Default, [rate, nper, pv, fv, type], False, True))
         return ret
 
     def poisson_Dist(self, x : 'any', mean : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Poisson_Dist
-    	# End_PlaceHolder_Functions_Poisson_Dist
+        # Begin_PlaceHolder_Functions_Poisson_Dist
+        # End_PlaceHolder_Functions_Poisson_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Poisson_Dist", OfficeExtension.OperationType.Default, [x, mean, cumulative], False, True))
         return ret
 
     def power(self, number : 'any', power : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Power
-    	# End_PlaceHolder_Functions_Power
+        # Begin_PlaceHolder_Functions_Power
+        # End_PlaceHolder_Functions_Power
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Power", OfficeExtension.OperationType.Default, [number, power], False, True))
         return ret
 
     def ppmt(self, rate : 'any', per : 'any', nper : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Ppmt
-    	# End_PlaceHolder_Functions_Ppmt
+        # Begin_PlaceHolder_Functions_Ppmt
+        # End_PlaceHolder_Functions_Ppmt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Ppmt", OfficeExtension.OperationType.Default, [rate, per, nper, pv, fv, type], False, True))
         return ret
 
     def price(self, settlement : 'any', maturity : 'any', rate : 'any', yld : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Price
-    	# End_PlaceHolder_Functions_Price
+        # Begin_PlaceHolder_Functions_Price
+        # End_PlaceHolder_Functions_Price
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Price", OfficeExtension.OperationType.Default, [settlement, maturity, rate, yld, redemption, frequency, basis], False, True))
         return ret
 
     def priceDisc(self, settlement : 'any', maturity : 'any', discount : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_PriceDisc
-    	# End_PlaceHolder_Functions_PriceDisc
+        # Begin_PlaceHolder_Functions_PriceDisc
+        # End_PlaceHolder_Functions_PriceDisc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceDisc", OfficeExtension.OperationType.Default, [settlement, maturity, discount, redemption, basis], False, True))
         return ret
 
     def priceMat(self, settlement : 'any', maturity : 'any', issue : 'any', rate : 'any', yld : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_PriceMat
-    	# End_PlaceHolder_Functions_PriceMat
+        # Begin_PlaceHolder_Functions_PriceMat
+        # End_PlaceHolder_Functions_PriceMat
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "PriceMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, yld, basis], False, True))
         return ret
 
     def product(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Product
-    	# End_PlaceHolder_Functions_Product
+        # Begin_PlaceHolder_Functions_Product
+        # End_PlaceHolder_Functions_Product
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Product", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def proper(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Proper
-    	# End_PlaceHolder_Functions_Proper
+        # Begin_PlaceHolder_Functions_Proper
+        # End_PlaceHolder_Functions_Proper
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Proper", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def pv(self, rate : 'any', nper : 'any', pmt : 'any', fv : 'any' = None, type : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Pv
-    	# End_PlaceHolder_Functions_Pv
+        # Begin_PlaceHolder_Functions_Pv
+        # End_PlaceHolder_Functions_Pv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Pv", OfficeExtension.OperationType.Default, [rate, nper, pmt, fv, type], False, True))
         return ret
 
     def quartile_Exc(self, array : 'any', quart : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Quartile_Exc
-    	# End_PlaceHolder_Functions_Quartile_Exc
+        # Begin_PlaceHolder_Functions_Quartile_Exc
+        # End_PlaceHolder_Functions_Quartile_Exc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Exc", OfficeExtension.OperationType.Default, [array, quart], False, True))
         return ret
 
     def quartile_Inc(self, array : 'any', quart : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Quartile_Inc
-    	# End_PlaceHolder_Functions_Quartile_Inc
+        # Begin_PlaceHolder_Functions_Quartile_Inc
+        # End_PlaceHolder_Functions_Quartile_Inc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quartile_Inc", OfficeExtension.OperationType.Default, [array, quart], False, True))
         return ret
 
     def quotient(self, numerator : 'any', denominator : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Quotient
-    	# End_PlaceHolder_Functions_Quotient
+        # Begin_PlaceHolder_Functions_Quotient
+        # End_PlaceHolder_Functions_Quotient
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Quotient", OfficeExtension.OperationType.Default, [numerator, denominator], False, True))
         return ret
 
     def radians(self, angle : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Radians
-    	# End_PlaceHolder_Functions_Radians
+        # Begin_PlaceHolder_Functions_Radians
+        # End_PlaceHolder_Functions_Radians
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Radians", OfficeExtension.OperationType.Default, [angle], False, True))
         return ret
 
     def rand(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rand
-    	# End_PlaceHolder_Functions_Rand
+        # Begin_PlaceHolder_Functions_Rand
+        # End_PlaceHolder_Functions_Rand
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rand", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def randBetween(self, bottom : 'any', top : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_RandBetween
-    	# End_PlaceHolder_Functions_RandBetween
+        # Begin_PlaceHolder_Functions_RandBetween
+        # End_PlaceHolder_Functions_RandBetween
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RandBetween", OfficeExtension.OperationType.Default, [bottom, top], False, True))
         return ret
 
     def rank_Avg(self, number : 'any', ref : 'any', order : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rank_Avg
-    	# End_PlaceHolder_Functions_Rank_Avg
+        # Begin_PlaceHolder_Functions_Rank_Avg
+        # End_PlaceHolder_Functions_Rank_Avg
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Avg", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
         return ret
 
     def rank_Eq(self, number : 'any', ref : 'any', order : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rank_Eq
-    	# End_PlaceHolder_Functions_Rank_Eq
+        # Begin_PlaceHolder_Functions_Rank_Eq
+        # End_PlaceHolder_Functions_Rank_Eq
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rank_Eq", OfficeExtension.OperationType.Default, [number, ref, order], False, True))
         return ret
 
     def rate(self, nper : 'any', pmt : 'any', pv : 'any', fv : 'any' = None, type : 'any' = None, guess : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rate
-    	# End_PlaceHolder_Functions_Rate
+        # Begin_PlaceHolder_Functions_Rate
+        # End_PlaceHolder_Functions_Rate
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rate", OfficeExtension.OperationType.Default, [nper, pmt, pv, fv, type, guess], False, True))
         return ret
 
     def received(self, settlement : 'any', maturity : 'any', investment : 'any', discount : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Received
-    	# End_PlaceHolder_Functions_Received
+        # Begin_PlaceHolder_Functions_Received
+        # End_PlaceHolder_Functions_Received
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Received", OfficeExtension.OperationType.Default, [settlement, maturity, investment, discount, basis], False, True))
         return ret
 
     def replace(self, oldText : 'any', startNum : 'any', numChars : 'any', newText : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Replace
-    	# End_PlaceHolder_Functions_Replace
+        # Begin_PlaceHolder_Functions_Replace
+        # End_PlaceHolder_Functions_Replace
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Replace", OfficeExtension.OperationType.Default, [oldText, startNum, numChars, newText], False, True))
         return ret
 
     def replaceB(self, oldText : 'any', startNum : 'any', numBytes : 'any', newText : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_ReplaceB
-    	# End_PlaceHolder_Functions_ReplaceB
+        # Begin_PlaceHolder_Functions_ReplaceB
+        # End_PlaceHolder_Functions_ReplaceB
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "ReplaceB", OfficeExtension.OperationType.Default, [oldText, startNum, numBytes, newText], False, True))
         return ret
 
     def rept(self, text : 'any', numberTimes : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rept
-    	# End_PlaceHolder_Functions_Rept
+        # Begin_PlaceHolder_Functions_Rept
+        # End_PlaceHolder_Functions_Rept
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rept", OfficeExtension.OperationType.Default, [text, numberTimes], False, True))
         return ret
 
     def right(self, text : 'any', numChars : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Right
-    	# End_PlaceHolder_Functions_Right
+        # Begin_PlaceHolder_Functions_Right
+        # End_PlaceHolder_Functions_Right
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Right", OfficeExtension.OperationType.Default, [text, numChars], False, True))
         return ret
 
     def rightb(self, text : 'any', numBytes : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rightb
-    	# End_PlaceHolder_Functions_Rightb
+        # Begin_PlaceHolder_Functions_Rightb
+        # End_PlaceHolder_Functions_Rightb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rightb", OfficeExtension.OperationType.Default, [text, numBytes], False, True))
         return ret
 
     def roman(self, number : 'any', form : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Roman
-    	# End_PlaceHolder_Functions_Roman
+        # Begin_PlaceHolder_Functions_Roman
+        # End_PlaceHolder_Functions_Roman
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Roman", OfficeExtension.OperationType.Default, [number, form], False, True))
         return ret
 
     def round(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Round
-    	# End_PlaceHolder_Functions_Round
+        # Begin_PlaceHolder_Functions_Round
+        # End_PlaceHolder_Functions_Round
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Round", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
         return ret
 
     def roundDown(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_RoundDown
-    	# End_PlaceHolder_Functions_RoundDown
+        # Begin_PlaceHolder_Functions_RoundDown
+        # End_PlaceHolder_Functions_RoundDown
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundDown", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
         return ret
 
     def roundUp(self, number : 'any', numDigits : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_RoundUp
-    	# End_PlaceHolder_Functions_RoundUp
+        # Begin_PlaceHolder_Functions_RoundUp
+        # End_PlaceHolder_Functions_RoundUp
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "RoundUp", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
         return ret
 
     def rows(self, array : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rows
-    	# End_PlaceHolder_Functions_Rows
+        # Begin_PlaceHolder_Functions_Rows
+        # End_PlaceHolder_Functions_Rows
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rows", OfficeExtension.OperationType.Default, [array], False, True))
         return ret
 
     def rri(self, nper : 'any', pv : 'any', fv : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Rri
-    	# End_PlaceHolder_Functions_Rri
+        # Begin_PlaceHolder_Functions_Rri
+        # End_PlaceHolder_Functions_Rri
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Rri", OfficeExtension.OperationType.Default, [nper, pv, fv], False, True))
         return ret
 
     def sec(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sec
-    	# End_PlaceHolder_Functions_Sec
+        # Begin_PlaceHolder_Functions_Sec
+        # End_PlaceHolder_Functions_Sec
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sec", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def sech(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sech
-    	# End_PlaceHolder_Functions_Sech
+        # Begin_PlaceHolder_Functions_Sech
+        # End_PlaceHolder_Functions_Sech
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sech", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def second(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Second
-    	# End_PlaceHolder_Functions_Second
+        # Begin_PlaceHolder_Functions_Second
+        # End_PlaceHolder_Functions_Second
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Second", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def seriesSum(self, x : 'any', n : 'any', m : 'any', coefficients : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_SeriesSum
-    	# End_PlaceHolder_Functions_SeriesSum
+        # Begin_PlaceHolder_Functions_SeriesSum
+        # End_PlaceHolder_Functions_SeriesSum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SeriesSum", OfficeExtension.OperationType.Default, [x, n, m, coefficients], False, True))
         return ret
 
     def sheet(self, value : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sheet
-    	# End_PlaceHolder_Functions_Sheet
+        # Begin_PlaceHolder_Functions_Sheet
+        # End_PlaceHolder_Functions_Sheet
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheet", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def sheets(self, reference : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sheets
-    	# End_PlaceHolder_Functions_Sheets
+        # Begin_PlaceHolder_Functions_Sheets
+        # End_PlaceHolder_Functions_Sheets
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sheets", OfficeExtension.OperationType.Default, [reference], False, True))
         return ret
 
     def sign(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sign
-    	# End_PlaceHolder_Functions_Sign
+        # Begin_PlaceHolder_Functions_Sign
+        # End_PlaceHolder_Functions_Sign
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sign", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def sin(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sin
-    	# End_PlaceHolder_Functions_Sin
+        # Begin_PlaceHolder_Functions_Sin
+        # End_PlaceHolder_Functions_Sin
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sin", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def sinh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sinh
-    	# End_PlaceHolder_Functions_Sinh
+        # Begin_PlaceHolder_Functions_Sinh
+        # End_PlaceHolder_Functions_Sinh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sinh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def skew(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Skew
-    	# End_PlaceHolder_Functions_Skew
+        # Begin_PlaceHolder_Functions_Skew
+        # End_PlaceHolder_Functions_Skew
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def skew_p(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Skew_p
-    	# End_PlaceHolder_Functions_Skew_p
+        # Begin_PlaceHolder_Functions_Skew_p
+        # End_PlaceHolder_Functions_Skew_p
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Skew_p", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def sln(self, cost : 'any', salvage : 'any', life : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sln
-    	# End_PlaceHolder_Functions_Sln
+        # Begin_PlaceHolder_Functions_Sln
+        # End_PlaceHolder_Functions_Sln
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sln", OfficeExtension.OperationType.Default, [cost, salvage, life], False, True))
         return ret
 
     def small(self, array : 'any', k : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Small
-    	# End_PlaceHolder_Functions_Small
+        # Begin_PlaceHolder_Functions_Small
+        # End_PlaceHolder_Functions_Small
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Small", OfficeExtension.OperationType.Default, [array, k], False, True))
         return ret
 
     def sqrt(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sqrt
-    	# End_PlaceHolder_Functions_Sqrt
+        # Begin_PlaceHolder_Functions_Sqrt
+        # End_PlaceHolder_Functions_Sqrt
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sqrt", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def sqrtPi(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_SqrtPi
-    	# End_PlaceHolder_Functions_SqrtPi
+        # Begin_PlaceHolder_Functions_SqrtPi
+        # End_PlaceHolder_Functions_SqrtPi
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SqrtPi", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def stDevA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_StDevA
-    	# End_PlaceHolder_Functions_StDevA
+        # Begin_PlaceHolder_Functions_StDevA
+        # End_PlaceHolder_Functions_StDevA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def stDevPA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_StDevPA
-    	# End_PlaceHolder_Functions_StDevPA
+        # Begin_PlaceHolder_Functions_StDevPA
+        # End_PlaceHolder_Functions_StDevPA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDevPA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def stDev_P(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_StDev_P
-    	# End_PlaceHolder_Functions_StDev_P
+        # Begin_PlaceHolder_Functions_StDev_P
+        # End_PlaceHolder_Functions_StDev_P
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_P", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def stDev_S(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_StDev_S
-    	# End_PlaceHolder_Functions_StDev_S
+        # Begin_PlaceHolder_Functions_StDev_S
+        # End_PlaceHolder_Functions_StDev_S
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "StDev_S", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def standardize(self, x : 'any', mean : 'any', standardDev : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Standardize
-    	# End_PlaceHolder_Functions_Standardize
+        # Begin_PlaceHolder_Functions_Standardize
+        # End_PlaceHolder_Functions_Standardize
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Standardize", OfficeExtension.OperationType.Default, [x, mean, standardDev], False, True))
         return ret
 
     def substitute(self, text : 'any', oldText : 'any', newText : 'any', instanceNum : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Substitute
-    	# End_PlaceHolder_Functions_Substitute
+        # Begin_PlaceHolder_Functions_Substitute
+        # End_PlaceHolder_Functions_Substitute
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Substitute", OfficeExtension.OperationType.Default, [text, oldText, newText, instanceNum], False, True))
         return ret
 
     def subtotal(self, functionNum : 'any', values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Subtotal
-    	# End_PlaceHolder_Functions_Subtotal
+        # Begin_PlaceHolder_Functions_Subtotal
+        # End_PlaceHolder_Functions_Subtotal
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Subtotal", OfficeExtension.OperationType.Default, [functionNum, values], False, True))
         return ret
 
     def sum(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Sum
-    	# End_PlaceHolder_Functions_Sum
+        # Begin_PlaceHolder_Functions_Sum
+        # End_PlaceHolder_Functions_Sum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Sum", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def sumIf(self, range : 'any', criteria : 'any', sumRange : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_SumIf
-    	# End_PlaceHolder_Functions_SumIf
+        # Begin_PlaceHolder_Functions_SumIf
+        # End_PlaceHolder_Functions_SumIf
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIf", OfficeExtension.OperationType.Default, [range, criteria, sumRange], False, True))
         return ret
 
     def sumIfs(self, sumRange : 'any', values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_SumIfs
-    	# End_PlaceHolder_Functions_SumIfs
+        # Begin_PlaceHolder_Functions_SumIfs
+        # End_PlaceHolder_Functions_SumIfs
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumIfs", OfficeExtension.OperationType.Default, [sumRange, values], False, True))
         return ret
 
     def sumSq(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_SumSq
-    	# End_PlaceHolder_Functions_SumSq
+        # Begin_PlaceHolder_Functions_SumSq
+        # End_PlaceHolder_Functions_SumSq
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "SumSq", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def syd(self, cost : 'any', salvage : 'any', life : 'any', per : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Syd
-    	# End_PlaceHolder_Functions_Syd
+        # Begin_PlaceHolder_Functions_Syd
+        # End_PlaceHolder_Functions_Syd
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Syd", OfficeExtension.OperationType.Default, [cost, salvage, life, per], False, True))
         return ret
 
     def t(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T
-    	# End_PlaceHolder_Functions_T
+        # Begin_PlaceHolder_Functions_T
+        # End_PlaceHolder_Functions_T
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def tbillEq(self, settlement : 'any', maturity : 'any', discount : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_TBillEq
-    	# End_PlaceHolder_Functions_TBillEq
+        # Begin_PlaceHolder_Functions_TBillEq
+        # End_PlaceHolder_Functions_TBillEq
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillEq", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
         return ret
 
     def tbillPrice(self, settlement : 'any', maturity : 'any', discount : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_TBillPrice
-    	# End_PlaceHolder_Functions_TBillPrice
+        # Begin_PlaceHolder_Functions_TBillPrice
+        # End_PlaceHolder_Functions_TBillPrice
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillPrice", OfficeExtension.OperationType.Default, [settlement, maturity, discount], False, True))
         return ret
 
     def tbillYield(self, settlement : 'any', maturity : 'any', pr : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_TBillYield
-    	# End_PlaceHolder_Functions_TBillYield
+        # Begin_PlaceHolder_Functions_TBillYield
+        # End_PlaceHolder_Functions_TBillYield
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TBillYield", OfficeExtension.OperationType.Default, [settlement, maturity, pr], False, True))
         return ret
 
     def t_Dist(self, x : 'any', degFreedom : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T_Dist
-    	# End_PlaceHolder_Functions_T_Dist
+        # Begin_PlaceHolder_Functions_T_Dist
+        # End_PlaceHolder_Functions_T_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist", OfficeExtension.OperationType.Default, [x, degFreedom, cumulative], False, True))
         return ret
 
     def t_Dist_2T(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T_Dist_2T
-    	# End_PlaceHolder_Functions_T_Dist_2T
+        # Begin_PlaceHolder_Functions_T_Dist_2T
+        # End_PlaceHolder_Functions_T_Dist_2T
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_2T", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
         return ret
 
     def t_Dist_RT(self, x : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T_Dist_RT
-    	# End_PlaceHolder_Functions_T_Dist_RT
+        # Begin_PlaceHolder_Functions_T_Dist_RT
+        # End_PlaceHolder_Functions_T_Dist_RT
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Dist_RT", OfficeExtension.OperationType.Default, [x, degFreedom], False, True))
         return ret
 
     def t_Inv(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T_Inv
-    	# End_PlaceHolder_Functions_T_Inv
+        # Begin_PlaceHolder_Functions_T_Inv
+        # End_PlaceHolder_Functions_T_Inv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
         return ret
 
     def t_Inv_2T(self, probability : 'any', degFreedom : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_T_Inv_2T
-    	# End_PlaceHolder_Functions_T_Inv_2T
+        # Begin_PlaceHolder_Functions_T_Inv_2T
+        # End_PlaceHolder_Functions_T_Inv_2T
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "T_Inv_2T", OfficeExtension.OperationType.Default, [probability, degFreedom], False, True))
         return ret
 
     def tan(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Tan
-    	# End_PlaceHolder_Functions_Tan
+        # Begin_PlaceHolder_Functions_Tan
+        # End_PlaceHolder_Functions_Tan
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tan", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def tanh(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Tanh
-    	# End_PlaceHolder_Functions_Tanh
+        # Begin_PlaceHolder_Functions_Tanh
+        # End_PlaceHolder_Functions_Tanh
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Tanh", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def text(self, value : 'any', formatText : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Text
-    	# End_PlaceHolder_Functions_Text
+        # Begin_PlaceHolder_Functions_Text
+        # End_PlaceHolder_Functions_Text
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Text", OfficeExtension.OperationType.Default, [value, formatText], False, True))
         return ret
 
     def time(self, hour : 'any', minute : 'any', second : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Time
-    	# End_PlaceHolder_Functions_Time
+        # Begin_PlaceHolder_Functions_Time
+        # End_PlaceHolder_Functions_Time
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Time", OfficeExtension.OperationType.Default, [hour, minute, second], False, True))
         return ret
 
     def timevalue(self, timeText : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Timevalue
-    	# End_PlaceHolder_Functions_Timevalue
+        # Begin_PlaceHolder_Functions_Timevalue
+        # End_PlaceHolder_Functions_Timevalue
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Timevalue", OfficeExtension.OperationType.Default, [timeText], False, True))
         return ret
 
     def today(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Today
-    	# End_PlaceHolder_Functions_Today
+        # Begin_PlaceHolder_Functions_Today
+        # End_PlaceHolder_Functions_Today
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Today", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def trim(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Trim
-    	# End_PlaceHolder_Functions_Trim
+        # Begin_PlaceHolder_Functions_Trim
+        # End_PlaceHolder_Functions_Trim
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trim", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def trimMean(self, array : 'any', percent : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_TrimMean
-    	# End_PlaceHolder_Functions_TrimMean
+        # Begin_PlaceHolder_Functions_TrimMean
+        # End_PlaceHolder_Functions_TrimMean
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "TrimMean", OfficeExtension.OperationType.Default, [array, percent], False, True))
         return ret
 
     def true(self) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_True
-    	# End_PlaceHolder_Functions_True
+        # Begin_PlaceHolder_Functions_True
+        # End_PlaceHolder_Functions_True
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "True", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def trunc(self, number : 'any', numDigits : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Trunc
-    	# End_PlaceHolder_Functions_Trunc
+        # Begin_PlaceHolder_Functions_Trunc
+        # End_PlaceHolder_Functions_Trunc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Trunc", OfficeExtension.OperationType.Default, [number, numDigits], False, True))
         return ret
 
     def type(self, value : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Type
-    	# End_PlaceHolder_Functions_Type
+        # Begin_PlaceHolder_Functions_Type
+        # End_PlaceHolder_Functions_Type
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Type", OfficeExtension.OperationType.Default, [value], False, True))
         return ret
 
     def usdollar(self, number : 'any', decimals : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_USDollar
-    	# End_PlaceHolder_Functions_USDollar
+        # Begin_PlaceHolder_Functions_USDollar
+        # End_PlaceHolder_Functions_USDollar
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "USDollar", OfficeExtension.OperationType.Default, [number, decimals], False, True))
         return ret
 
     def unichar(self, number : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Unichar
-    	# End_PlaceHolder_Functions_Unichar
+        # Begin_PlaceHolder_Functions_Unichar
+        # End_PlaceHolder_Functions_Unichar
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unichar", OfficeExtension.OperationType.Default, [number], False, True))
         return ret
 
     def unicode(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Unicode
-    	# End_PlaceHolder_Functions_Unicode
+        # Begin_PlaceHolder_Functions_Unicode
+        # End_PlaceHolder_Functions_Unicode
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Unicode", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def upper(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Upper
-    	# End_PlaceHolder_Functions_Upper
+        # Begin_PlaceHolder_Functions_Upper
+        # End_PlaceHolder_Functions_Upper
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Upper", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def vlookup(self, lookupValue : 'any', tableArray : 'any', colIndexNum : 'any', rangeLookup : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_VLookup
-    	# End_PlaceHolder_Functions_VLookup
+        # Begin_PlaceHolder_Functions_VLookup
+        # End_PlaceHolder_Functions_VLookup
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VLookup", OfficeExtension.OperationType.Default, [lookupValue, tableArray, colIndexNum, rangeLookup], False, True))
         return ret
 
     def value(self, text : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Value
-    	# End_PlaceHolder_Functions_Value
+        # Begin_PlaceHolder_Functions_Value
+        # End_PlaceHolder_Functions_Value
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Value", OfficeExtension.OperationType.Default, [text], False, True))
         return ret
 
     def varA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_VarA
-    	# End_PlaceHolder_Functions_VarA
+        # Begin_PlaceHolder_Functions_VarA
+        # End_PlaceHolder_Functions_VarA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def varPA(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_VarPA
-    	# End_PlaceHolder_Functions_VarPA
+        # Begin_PlaceHolder_Functions_VarPA
+        # End_PlaceHolder_Functions_VarPA
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "VarPA", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def var_P(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Var_P
-    	# End_PlaceHolder_Functions_Var_P
+        # Begin_PlaceHolder_Functions_Var_P
+        # End_PlaceHolder_Functions_Var_P
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_P", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def var_S(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Var_S
-    	# End_PlaceHolder_Functions_Var_S
+        # Begin_PlaceHolder_Functions_Var_S
+        # End_PlaceHolder_Functions_Var_S
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Var_S", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def vdb(self, cost : 'any', salvage : 'any', life : 'any', startPeriod : 'any', endPeriod : 'any', factor : 'any' = None, noSwitch : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Vdb
-    	# End_PlaceHolder_Functions_Vdb
+        # Begin_PlaceHolder_Functions_Vdb
+        # End_PlaceHolder_Functions_Vdb
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Vdb", OfficeExtension.OperationType.Default, [cost, salvage, life, startPeriod, endPeriod, factor, noSwitch], False, True))
         return ret
 
     def weekNum(self, serialNumber : 'any', returnType : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_WeekNum
-    	# End_PlaceHolder_Functions_WeekNum
+        # Begin_PlaceHolder_Functions_WeekNum
+        # End_PlaceHolder_Functions_WeekNum
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WeekNum", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
         return ret
 
     def weekday(self, serialNumber : 'any', returnType : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Weekday
-    	# End_PlaceHolder_Functions_Weekday
+        # Begin_PlaceHolder_Functions_Weekday
+        # End_PlaceHolder_Functions_Weekday
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weekday", OfficeExtension.OperationType.Default, [serialNumber, returnType], False, True))
         return ret
 
     def weibull_Dist(self, x : 'any', alpha : 'any', beta : 'any', cumulative : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Weibull_Dist
-    	# End_PlaceHolder_Functions_Weibull_Dist
+        # Begin_PlaceHolder_Functions_Weibull_Dist
+        # End_PlaceHolder_Functions_Weibull_Dist
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Weibull_Dist", OfficeExtension.OperationType.Default, [x, alpha, beta, cumulative], False, True))
         return ret
 
     def workDay(self, startDate : 'any', days : 'any', holidays : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_WorkDay
-    	# End_PlaceHolder_Functions_WorkDay
+        # Begin_PlaceHolder_Functions_WorkDay
+        # End_PlaceHolder_Functions_WorkDay
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay", OfficeExtension.OperationType.Default, [startDate, days, holidays], False, True))
         return ret
 
     def workDay_Intl(self, startDate : 'any', days : 'any', weekend : 'any' = None, holidays : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_WorkDay_Intl
-    	# End_PlaceHolder_Functions_WorkDay_Intl
+        # Begin_PlaceHolder_Functions_WorkDay_Intl
+        # End_PlaceHolder_Functions_WorkDay_Intl
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "WorkDay_Intl", OfficeExtension.OperationType.Default, [startDate, days, weekend, holidays], False, True))
         return ret
 
     def xirr(self, values : 'any', dates : 'any', guess : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Xirr
-    	# End_PlaceHolder_Functions_Xirr
+        # Begin_PlaceHolder_Functions_Xirr
+        # End_PlaceHolder_Functions_Xirr
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xirr", OfficeExtension.OperationType.Default, [values, dates, guess], False, True))
         return ret
 
     def xnpv(self, rate : 'any', values : 'any', dates : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Xnpv
-    	# End_PlaceHolder_Functions_Xnpv
+        # Begin_PlaceHolder_Functions_Xnpv
+        # End_PlaceHolder_Functions_Xnpv
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xnpv", OfficeExtension.OperationType.Default, [rate, values, dates], False, True))
         return ret
 
     def xor(self, values : 'list') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Xor
-    	# End_PlaceHolder_Functions_Xor
+        # Begin_PlaceHolder_Functions_Xor
+        # End_PlaceHolder_Functions_Xor
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Xor", OfficeExtension.OperationType.Default, [values], False, True))
         return ret
 
     def year(self, serialNumber : 'any') -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Year
-    	# End_PlaceHolder_Functions_Year
+        # Begin_PlaceHolder_Functions_Year
+        # End_PlaceHolder_Functions_Year
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Year", OfficeExtension.OperationType.Default, [serialNumber], False, True))
         return ret
 
     def yearFrac(self, startDate : 'any', endDate : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_YearFrac
-    	# End_PlaceHolder_Functions_YearFrac
+        # Begin_PlaceHolder_Functions_YearFrac
+        # End_PlaceHolder_Functions_YearFrac
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YearFrac", OfficeExtension.OperationType.Default, [startDate, endDate, basis], False, True))
         return ret
 
     def yield_(self, settlement : 'any', maturity : 'any', rate : 'any', pr : 'any', redemption : 'any', frequency : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Yield
-    	# End_PlaceHolder_Functions_Yield
+        # Begin_PlaceHolder_Functions_Yield
+        # End_PlaceHolder_Functions_Yield
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Yield", OfficeExtension.OperationType.Default, [settlement, maturity, rate, pr, redemption, frequency, basis], False, True))
         return ret
 
     def yieldDisc(self, settlement : 'any', maturity : 'any', pr : 'any', redemption : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_YieldDisc
-    	# End_PlaceHolder_Functions_YieldDisc
+        # Begin_PlaceHolder_Functions_YieldDisc
+        # End_PlaceHolder_Functions_YieldDisc
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldDisc", OfficeExtension.OperationType.Default, [settlement, maturity, pr, redemption, basis], False, True))
         return ret
 
     def yieldMat(self, settlement : 'any', maturity : 'any', issue : 'any', rate : 'any', pr : 'any', basis : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_YieldMat
-    	# End_PlaceHolder_Functions_YieldMat
+        # Begin_PlaceHolder_Functions_YieldMat
+        # End_PlaceHolder_Functions_YieldMat
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "YieldMat", OfficeExtension.OperationType.Default, [settlement, maturity, issue, rate, pr, basis], False, True))
         return ret
 
     def z_Test(self, array : 'any', x : 'any', sigma : 'any' = None) -> 'FunctionResult':
-    	# Begin_PlaceHolder_Functions_Z_Test
-    	# End_PlaceHolder_Functions_Z_Test
+        # Begin_PlaceHolder_Functions_Z_Test
+        # End_PlaceHolder_Functions_Z_Test
         ret = FunctionResult(self.context, _createMethodObjectPath(self.context, self, "Z_Test", OfficeExtension.OperationType.Default, [array, x, sigma], False, True))
         return ret
 

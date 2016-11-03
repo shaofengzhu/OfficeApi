@@ -25,8 +25,8 @@ _createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction
 _isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined
 _isUndefined = OfficeExtension.Utility.isUndefined
 _throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded
-_loadIfImmediateExecution = OfficeExtension.Utility.loadIfImmediateExecution
-_syncIfImmediateExecution = OfficeExtension.Utility.syncIfImmediateExecution
+_loadIfInstantSyncExecutionMode = OfficeExtension.Utility.loadIfInstantSyncExecutionMode
+_syncIfInstantSyncExecutionMode = OfficeExtension.Utility.syncIfInstantSyncExecutionMode
 _load = OfficeExtension.Utility.load
 _fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary
 _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler
@@ -39,8 +39,8 @@ class Application(OfficeExtension.ClientObject):
 
 
     def createDocument(self, base64File : 'str' = None) -> 'Document':
-    	# Begin_PlaceHolder_Application_CreateDocument
-    	# End_PlaceHolder_Application_CreateDocument
+        # Begin_PlaceHolder_Application_CreateDocument
+        # End_PlaceHolder_Application_CreateDocument
         ret = Document(self.context, _createMethodObjectPath(self.context, self, "CreateDocument", OfficeExtension.OperationType.Read, [base64File], False, False))
         return ret
 
@@ -125,8 +125,8 @@ class Body(OfficeExtension.ClientObject):
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "Body", self._isNull)
         return self._style
     
 
@@ -134,12 +134,12 @@ class Body(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBuiltIn(self) -> 'str':
-        _loadIfImmediateExecution(self, "styleBuiltIn", self._styleBuiltIn)
-        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn)
+        _loadIfInstantSyncExecutionMode(self, "styleBuiltIn", self._styleBuiltIn)
+        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn, "Body", self._isNull)
         return self._styleBuiltIn
     
 
@@ -147,34 +147,34 @@ class Body(OfficeExtension.ClientObject):
     def styleBuiltIn(self, value : 'str'):
         self._styleBuiltIn = value
         _createSetPropertyAction(self.context, self, "StyleBuiltIn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "Body", self._isNull)
         return self._text
     
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "Body", self._isNull)
         return self._type
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Body", self._isNull)
         return self.__ReferenceId
     
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_Body_Clear
-    	# End_PlaceHolder_Body_Clear
+        # Begin_PlaceHolder_Body_Clear
+        # End_PlaceHolder_Body_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getHtml(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Body_GetHtml
@@ -182,7 +182,7 @@ class Body(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetHtml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getOoxml(self) -> OfficeExtension.ClientResult:
@@ -191,86 +191,86 @@ class Body(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetOoxml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_Body_GetRange
-    	# End_PlaceHolder_Body_GetRange
+        # Begin_PlaceHolder_Body_GetRange
+        # End_PlaceHolder_Body_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
-    	# Begin_PlaceHolder_Body_InsertBreak
-    	# End_PlaceHolder_Body_InsertBreak
+        # Begin_PlaceHolder_Body_InsertBreak
+        # End_PlaceHolder_Body_InsertBreak
         _createMethodAction(self.context, self, "InsertBreak", OfficeExtension.OperationType.Default, [breakType, insertLocation])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertContentControl(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_Body_InsertContentControl
-    	# End_PlaceHolder_Body_InsertContentControl
+        # Begin_PlaceHolder_Body_InsertContentControl
+        # End_PlaceHolder_Body_InsertContentControl
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "InsertContentControl", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def insertFileFromBase64(self, base64File : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Body_InsertFileFromBase64
-    	# End_PlaceHolder_Body_InsertFileFromBase64
+        # Begin_PlaceHolder_Body_InsertFileFromBase64
+        # End_PlaceHolder_Body_InsertFileFromBase64
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertFileFromBase64", OfficeExtension.OperationType.Default, [base64File, insertLocation], False, True))
         return ret
 
     def insertHtml(self, html : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Body_InsertHtml
-    	# End_PlaceHolder_Body_InsertHtml
+        # Begin_PlaceHolder_Body_InsertHtml
+        # End_PlaceHolder_Body_InsertHtml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertHtml", OfficeExtension.OperationType.Default, [html, insertLocation], False, True))
         return ret
 
     def insertInlinePictureFromBase64(self, base64EncodedImage : 'str', insertLocation : 'str') -> 'InlinePicture':
-    	# Begin_PlaceHolder_Body_InsertInlinePictureFromBase64
-    	# End_PlaceHolder_Body_InsertInlinePictureFromBase64
+        # Begin_PlaceHolder_Body_InsertInlinePictureFromBase64
+        # End_PlaceHolder_Body_InsertInlinePictureFromBase64
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "InsertInlinePictureFromBase64", OfficeExtension.OperationType.Default, [base64EncodedImage, insertLocation], False, True))
         return ret
 
     def insertOoxml(self, ooxml : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Body_InsertOoxml
-    	# End_PlaceHolder_Body_InsertOoxml
+        # Begin_PlaceHolder_Body_InsertOoxml
+        # End_PlaceHolder_Body_InsertOoxml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertOoxml", OfficeExtension.OperationType.Default, [ooxml, insertLocation], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_Body_InsertParagraph
-    	# End_PlaceHolder_Body_InsertParagraph
+        # Begin_PlaceHolder_Body_InsertParagraph
+        # End_PlaceHolder_Body_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertTable(self, rowCount : 'int', columnCount : 'int', insertLocation : 'str', values : 'list' = None) -> 'Table':
-    	# Begin_PlaceHolder_Body_InsertTable
-    	# End_PlaceHolder_Body_InsertTable
+        # Begin_PlaceHolder_Body_InsertTable
+        # End_PlaceHolder_Body_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
         return ret
 
     def insertText(self, text : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Body_InsertText
-    	# End_PlaceHolder_Body_InsertText
+        # Begin_PlaceHolder_Body_InsertText
+        # End_PlaceHolder_Body_InsertText
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertText", OfficeExtension.OperationType.Default, [text, insertLocation], False, True))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Body_Search
-    	# End_PlaceHolder_Body_Search
+        # Begin_PlaceHolder_Body_Search
+        # End_PlaceHolder_Body_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Body_Select
-    	# End_PlaceHolder_Body_Select
+        # Begin_PlaceHolder_Body_Select
+        # End_PlaceHolder_Body_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Body__KeepReference
-    	# End_PlaceHolder_Body__KeepReference
+        # Begin_PlaceHolder_Body__KeepReference
+        # End_PlaceHolder_Body__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -400,8 +400,8 @@ class ContentControl(OfficeExtension.ClientObject):
 
     @property
     def appearance(self) -> 'str':
-        _loadIfImmediateExecution(self, "appearance", self._appearance)
-        _throwIfNotLoaded("appearance", self._appearance)
+        _loadIfInstantSyncExecutionMode(self, "appearance", self._appearance)
+        _throwIfNotLoaded("appearance", self._appearance, "ContentControl", self._isNull)
         return self._appearance
     
 
@@ -409,12 +409,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def appearance(self, value : 'str'):
         self._appearance = value
         _createSetPropertyAction(self.context, self, "Appearance", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def cannotDelete(self) -> 'bool':
-        _loadIfImmediateExecution(self, "cannotDelete", self._cannotDelete)
-        _throwIfNotLoaded("cannotDelete", self._cannotDelete)
+        _loadIfInstantSyncExecutionMode(self, "cannotDelete", self._cannotDelete)
+        _throwIfNotLoaded("cannotDelete", self._cannotDelete, "ContentControl", self._isNull)
         return self._cannotDelete
     
 
@@ -422,12 +422,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def cannotDelete(self, value : 'bool'):
         self._cannotDelete = value
         _createSetPropertyAction(self.context, self, "CannotDelete", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def cannotEdit(self) -> 'bool':
-        _loadIfImmediateExecution(self, "cannotEdit", self._cannotEdit)
-        _throwIfNotLoaded("cannotEdit", self._cannotEdit)
+        _loadIfInstantSyncExecutionMode(self, "cannotEdit", self._cannotEdit)
+        _throwIfNotLoaded("cannotEdit", self._cannotEdit, "ContentControl", self._isNull)
         return self._cannotEdit
     
 
@@ -435,12 +435,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def cannotEdit(self, value : 'bool'):
         self._cannotEdit = value
         _createSetPropertyAction(self.context, self, "CannotEdit", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ContentControl", self._isNull)
         return self._color
     
 
@@ -448,19 +448,19 @@ class ContentControl(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def id(self) -> 'int':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "ContentControl", self._isNull)
         return self._id
     
 
     @property
     def placeholderText(self) -> 'str':
-        _loadIfImmediateExecution(self, "placeholderText", self._placeholderText)
-        _throwIfNotLoaded("placeholderText", self._placeholderText)
+        _loadIfInstantSyncExecutionMode(self, "placeholderText", self._placeholderText)
+        _throwIfNotLoaded("placeholderText", self._placeholderText, "ContentControl", self._isNull)
         return self._placeholderText
     
 
@@ -468,12 +468,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def placeholderText(self, value : 'str'):
         self._placeholderText = value
         _createSetPropertyAction(self.context, self, "PlaceholderText", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def removeWhenEdited(self) -> 'bool':
-        _loadIfImmediateExecution(self, "removeWhenEdited", self._removeWhenEdited)
-        _throwIfNotLoaded("removeWhenEdited", self._removeWhenEdited)
+        _loadIfInstantSyncExecutionMode(self, "removeWhenEdited", self._removeWhenEdited)
+        _throwIfNotLoaded("removeWhenEdited", self._removeWhenEdited, "ContentControl", self._isNull)
         return self._removeWhenEdited
     
 
@@ -481,12 +481,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def removeWhenEdited(self, value : 'bool'):
         self._removeWhenEdited = value
         _createSetPropertyAction(self.context, self, "RemoveWhenEdited", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "ContentControl", self._isNull)
         return self._style
     
 
@@ -494,12 +494,12 @@ class ContentControl(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBuiltIn(self) -> 'str':
-        _loadIfImmediateExecution(self, "styleBuiltIn", self._styleBuiltIn)
-        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn)
+        _loadIfInstantSyncExecutionMode(self, "styleBuiltIn", self._styleBuiltIn)
+        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn, "ContentControl", self._isNull)
         return self._styleBuiltIn
     
 
@@ -507,19 +507,19 @@ class ContentControl(OfficeExtension.ClientObject):
     def styleBuiltIn(self, value : 'str'):
         self._styleBuiltIn = value
         _createSetPropertyAction(self.context, self, "StyleBuiltIn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def subtype(self) -> 'str':
-        _loadIfImmediateExecution(self, "subtype", self._subtype)
-        _throwIfNotLoaded("subtype", self._subtype)
+        _loadIfInstantSyncExecutionMode(self, "subtype", self._subtype)
+        _throwIfNotLoaded("subtype", self._subtype, "ContentControl", self._isNull)
         return self._subtype
     
 
     @property
     def tag(self) -> 'str':
-        _loadIfImmediateExecution(self, "tag", self._tag)
-        _throwIfNotLoaded("tag", self._tag)
+        _loadIfInstantSyncExecutionMode(self, "tag", self._tag)
+        _throwIfNotLoaded("tag", self._tag, "ContentControl", self._isNull)
         return self._tag
     
 
@@ -527,19 +527,19 @@ class ContentControl(OfficeExtension.ClientObject):
     def tag(self, value : 'str'):
         self._tag = value
         _createSetPropertyAction(self.context, self, "Tag", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "ContentControl", self._isNull)
         return self._text
     
 
     @property
     def title(self) -> 'str':
-        _loadIfImmediateExecution(self, "title", self._title)
-        _throwIfNotLoaded("title", self._title)
+        _loadIfInstantSyncExecutionMode(self, "title", self._title)
+        _throwIfNotLoaded("title", self._title, "ContentControl", self._isNull)
         return self._title
     
 
@@ -547,33 +547,33 @@ class ContentControl(OfficeExtension.ClientObject):
     def title(self, value : 'str'):
         self._title = value
         _createSetPropertyAction(self.context, self, "Title", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "ContentControl", self._isNull)
         return self._type
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "ContentControl", self._isNull)
         return self.__ReferenceId
     
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_ContentControl_Clear
-    	# End_PlaceHolder_ContentControl_Clear
+        # Begin_PlaceHolder_ContentControl_Clear
+        # End_PlaceHolder_ContentControl_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self, keepContent : 'bool') -> None:
-    	# Begin_PlaceHolder_ContentControl_Delete
-    	# End_PlaceHolder_ContentControl_Delete
+        # Begin_PlaceHolder_ContentControl_Delete
+        # End_PlaceHolder_ContentControl_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [keepContent])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getHtml(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_ContentControl_GetHtml
@@ -581,7 +581,7 @@ class ContentControl(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetHtml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getOoxml(self) -> OfficeExtension.ClientResult:
@@ -590,92 +590,92 @@ class ContentControl(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetOoxml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_ContentControl_GetRange
-    	# End_PlaceHolder_ContentControl_GetRange
+        # Begin_PlaceHolder_ContentControl_GetRange
+        # End_PlaceHolder_ContentControl_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def getTextRanges(self, endingMarks : 'list', trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_ContentControl_GetTextRanges
-    	# End_PlaceHolder_ContentControl_GetTextRanges
+        # Begin_PlaceHolder_ContentControl_GetTextRanges
+        # End_PlaceHolder_ContentControl_GetTextRanges
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "GetTextRanges", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], True, False))
         return ret
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
-    	# Begin_PlaceHolder_ContentControl_InsertBreak
-    	# End_PlaceHolder_ContentControl_InsertBreak
+        # Begin_PlaceHolder_ContentControl_InsertBreak
+        # End_PlaceHolder_ContentControl_InsertBreak
         _createMethodAction(self.context, self, "InsertBreak", OfficeExtension.OperationType.Default, [breakType, insertLocation])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertFileFromBase64(self, base64File : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_ContentControl_InsertFileFromBase64
-    	# End_PlaceHolder_ContentControl_InsertFileFromBase64
+        # Begin_PlaceHolder_ContentControl_InsertFileFromBase64
+        # End_PlaceHolder_ContentControl_InsertFileFromBase64
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertFileFromBase64", OfficeExtension.OperationType.Default, [base64File, insertLocation], False, True))
         return ret
 
     def insertHtml(self, html : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_ContentControl_InsertHtml
-    	# End_PlaceHolder_ContentControl_InsertHtml
+        # Begin_PlaceHolder_ContentControl_InsertHtml
+        # End_PlaceHolder_ContentControl_InsertHtml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertHtml", OfficeExtension.OperationType.Default, [html, insertLocation], False, True))
         return ret
 
     def insertInlinePictureFromBase64(self, base64EncodedImage : 'str', insertLocation : 'str') -> 'InlinePicture':
-    	# Begin_PlaceHolder_ContentControl_InsertInlinePictureFromBase64
-    	# End_PlaceHolder_ContentControl_InsertInlinePictureFromBase64
+        # Begin_PlaceHolder_ContentControl_InsertInlinePictureFromBase64
+        # End_PlaceHolder_ContentControl_InsertInlinePictureFromBase64
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "InsertInlinePictureFromBase64", OfficeExtension.OperationType.Default, [base64EncodedImage, insertLocation], False, True))
         return ret
 
     def insertOoxml(self, ooxml : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_ContentControl_InsertOoxml
-    	# End_PlaceHolder_ContentControl_InsertOoxml
+        # Begin_PlaceHolder_ContentControl_InsertOoxml
+        # End_PlaceHolder_ContentControl_InsertOoxml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertOoxml", OfficeExtension.OperationType.Default, [ooxml, insertLocation], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_ContentControl_InsertParagraph
-    	# End_PlaceHolder_ContentControl_InsertParagraph
+        # Begin_PlaceHolder_ContentControl_InsertParagraph
+        # End_PlaceHolder_ContentControl_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertTable(self, rowCount : 'int', columnCount : 'int', insertLocation : 'str', values : 'list' = None) -> 'Table':
-    	# Begin_PlaceHolder_ContentControl_InsertTable
-    	# End_PlaceHolder_ContentControl_InsertTable
+        # Begin_PlaceHolder_ContentControl_InsertTable
+        # End_PlaceHolder_ContentControl_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
         return ret
 
     def insertText(self, text : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_ContentControl_InsertText
-    	# End_PlaceHolder_ContentControl_InsertText
+        # Begin_PlaceHolder_ContentControl_InsertText
+        # End_PlaceHolder_ContentControl_InsertText
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertText", OfficeExtension.OperationType.Default, [text, insertLocation], False, True))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_ContentControl_Search
-    	# End_PlaceHolder_ContentControl_Search
+        # Begin_PlaceHolder_ContentControl_Search
+        # End_PlaceHolder_ContentControl_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_ContentControl_Select
-    	# End_PlaceHolder_ContentControl_Select
+        # Begin_PlaceHolder_ContentControl_Select
+        # End_PlaceHolder_ContentControl_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def split(self, delimiters : 'list', multiParagraphs : 'bool' = None, trimDelimiters : 'bool' = None, trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_ContentControl_Split
-    	# End_PlaceHolder_ContentControl_Split
+        # Begin_PlaceHolder_ContentControl_Split
+        # End_PlaceHolder_ContentControl_Split
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Split", OfficeExtension.OperationType.Read, [delimiters, multiParagraphs, trimDelimiters, trimSpacing], True, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_ContentControl__KeepReference
-    	# End_PlaceHolder_ContentControl__KeepReference
+        # Begin_PlaceHolder_ContentControl__KeepReference
+        # End_PlaceHolder_ContentControl__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -756,58 +756,58 @@ class ContentControlCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of ContentControl':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ContentControlCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "ContentControlCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getById(self, id : 'int') -> 'ContentControl':
-    	# Begin_PlaceHolder_ContentControlCollection_GetById
-    	# End_PlaceHolder_ContentControlCollection_GetById
+        # Begin_PlaceHolder_ContentControlCollection_GetById
+        # End_PlaceHolder_ContentControlCollection_GetById
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetById", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
     def getByTag(self, tag : 'str') -> 'ContentControlCollection':
-    	# Begin_PlaceHolder_ContentControlCollection_GetByTag
-    	# End_PlaceHolder_ContentControlCollection_GetByTag
+        # Begin_PlaceHolder_ContentControlCollection_GetByTag
+        # End_PlaceHolder_ContentControlCollection_GetByTag
         ret = ContentControlCollection(self.context, _createMethodObjectPath(self.context, self, "GetByTag", OfficeExtension.OperationType.Read, [tag], True, False))
         return ret
 
     def getByTitle(self, title : 'str') -> 'ContentControlCollection':
-    	# Begin_PlaceHolder_ContentControlCollection_GetByTitle
-    	# End_PlaceHolder_ContentControlCollection_GetByTitle
+        # Begin_PlaceHolder_ContentControlCollection_GetByTitle
+        # End_PlaceHolder_ContentControlCollection_GetByTitle
         ret = ContentControlCollection(self.context, _createMethodObjectPath(self.context, self, "GetByTitle", OfficeExtension.OperationType.Read, [title], True, False))
         return ret
 
     def getByTypes(self, types : 'list') -> 'ContentControlCollection':
-    	# Begin_PlaceHolder_ContentControlCollection_GetByTypes
-    	# End_PlaceHolder_ContentControlCollection_GetByTypes
+        # Begin_PlaceHolder_ContentControlCollection_GetByTypes
+        # End_PlaceHolder_ContentControlCollection_GetByTypes
         ret = ContentControlCollection(self.context, _createMethodObjectPath(self.context, self, "GetByTypes", OfficeExtension.OperationType.Read, [types], True, False))
         return ret
 
     def getFirst(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_ContentControlCollection_GetFirst
-    	# End_PlaceHolder_ContentControlCollection_GetFirst
+        # Begin_PlaceHolder_ContentControlCollection_GetFirst
+        # End_PlaceHolder_ContentControlCollection_GetFirst
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getItem(self, index : 'any') -> 'ContentControl':
-    	# Begin_PlaceHolder_ContentControlCollection_GetItem
-    	# End_PlaceHolder_ContentControlCollection_GetItem
+        # Begin_PlaceHolder_ContentControlCollection_GetItem
+        # End_PlaceHolder_ContentControlCollection_GetItem
         return ContentControl(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_ContentControlCollection__KeepReference
-    	# End_PlaceHolder_ContentControlCollection__KeepReference
+        # Begin_PlaceHolder_ContentControlCollection__KeepReference
+        # End_PlaceHolder_ContentControlCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -847,22 +847,22 @@ class CustomProperty(OfficeExtension.ClientObject):
 
     @property
     def key(self) -> 'str':
-        _loadIfImmediateExecution(self, "key", self._key)
-        _throwIfNotLoaded("key", self._key)
+        _loadIfInstantSyncExecutionMode(self, "key", self._key)
+        _throwIfNotLoaded("key", self._key, "CustomProperty", self._isNull)
         return self._key
     
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "CustomProperty", self._isNull)
         return self._type
     
 
     @property
     def value(self) -> 'any':
-        _loadIfImmediateExecution(self, "value", self._value)
-        _throwIfNotLoaded("value", self._value)
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "CustomProperty", self._isNull)
         return self._value
     
 
@@ -870,26 +870,26 @@ class CustomProperty(OfficeExtension.ClientObject):
     def value(self, value : 'any'):
         self._value = value
         _createSetPropertyAction(self.context, self, "Value", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "CustomProperty", self._isNull)
         return self.__ReferenceId
     
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_CustomProperty_Delete
-    	# End_PlaceHolder_CustomProperty_Delete
+        # Begin_PlaceHolder_CustomProperty_Delete
+        # End_PlaceHolder_CustomProperty_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_CustomProperty__KeepReference
-    	# End_PlaceHolder_CustomProperty__KeepReference
+        # Begin_PlaceHolder_CustomProperty__KeepReference
+        # End_PlaceHolder_CustomProperty__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -926,23 +926,23 @@ class CustomPropertyCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of CustomProperty':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "CustomPropertyCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "CustomPropertyCollection", self._isNull)
         return self.__ReferenceId
     
 
     def deleteAll(self) -> None:
-    	# Begin_PlaceHolder_CustomPropertyCollection_DeleteAll
-    	# End_PlaceHolder_CustomPropertyCollection_DeleteAll
+        # Begin_PlaceHolder_CustomPropertyCollection_DeleteAll
+        # End_PlaceHolder_CustomPropertyCollection_DeleteAll
         _createMethodAction(self.context, self, "DeleteAll", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getCount(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_CustomPropertyCollection_GetCount
@@ -950,25 +950,25 @@ class CustomPropertyCollection(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Default, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getItem(self, key : 'str') -> 'CustomProperty':
-    	# Begin_PlaceHolder_CustomPropertyCollection_GetItem
-    	# End_PlaceHolder_CustomPropertyCollection_GetItem
+        # Begin_PlaceHolder_CustomPropertyCollection_GetItem
+        # End_PlaceHolder_CustomPropertyCollection_GetItem
         return CustomProperty(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
     def set(self, key : 'str', value : 'any') -> 'CustomProperty':
-    	# Begin_PlaceHolder_CustomPropertyCollection_Set
-    	# End_PlaceHolder_CustomPropertyCollection_Set
+        # Begin_PlaceHolder_CustomPropertyCollection_Set
+        # End_PlaceHolder_CustomPropertyCollection_Set
         ret = CustomProperty(self.context, _createMethodObjectPath(self.context, self, "Set", OfficeExtension.OperationType.Default, [key, value], False, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_CustomPropertyCollection__KeepReference
-    	# End_PlaceHolder_CustomPropertyCollection__KeepReference
+        # Begin_PlaceHolder_CustomPropertyCollection__KeepReference
+        # End_PlaceHolder_CustomPropertyCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1030,35 +1030,35 @@ class Document(OfficeExtension.ClientObject):
 
     @property
     def saved(self) -> 'bool':
-        _loadIfImmediateExecution(self, "saved", self._saved)
-        _throwIfNotLoaded("saved", self._saved)
+        _loadIfInstantSyncExecutionMode(self, "saved", self._saved)
+        _throwIfNotLoaded("saved", self._saved, "Document", self._isNull)
         return self._saved
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Document", self._isNull)
         return self.__ReferenceId
     
 
     def getSelection(self) -> 'Range':
-    	# Begin_PlaceHolder_Document_GetSelection
-    	# End_PlaceHolder_Document_GetSelection
+        # Begin_PlaceHolder_Document_GetSelection
+        # End_PlaceHolder_Document_GetSelection
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetSelection", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     def open(self) -> None:
-    	# Begin_PlaceHolder_Document_Open
-    	# End_PlaceHolder_Document_Open
+        # Begin_PlaceHolder_Document_Open
+        # End_PlaceHolder_Document_Open
         _createMethodAction(self.context, self, "Open", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def save(self) -> None:
-    	# Begin_PlaceHolder_Document_Save
-    	# End_PlaceHolder_Document_Save
+        # Begin_PlaceHolder_Document_Save
+        # End_PlaceHolder_Document_Save
         _createMethodAction(self.context, self, "Save", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _GetObjectByReferenceId(self, referenceId : 'str') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Document__GetObjectByReferenceId
@@ -1066,7 +1066,7 @@ class Document(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "_GetObjectByReferenceId", OfficeExtension.OperationType.Read, [referenceId])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def _GetObjectTypeNameByReferenceId(self, referenceId : 'str') -> OfficeExtension.ClientResult:
@@ -1075,26 +1075,26 @@ class Document(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "_GetObjectTypeNameByReferenceId", OfficeExtension.OperationType.Read, [referenceId])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Document__KeepReference
-    	# End_PlaceHolder_Document__KeepReference
+        # Begin_PlaceHolder_Document__KeepReference
+        # End_PlaceHolder_Document__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _RemoveAllReferences(self) -> None:
-    	# Begin_PlaceHolder_Document__RemoveAllReferences
-    	# End_PlaceHolder_Document__RemoveAllReferences
+        # Begin_PlaceHolder_Document__RemoveAllReferences
+        # End_PlaceHolder_Document__RemoveAllReferences
         _createMethodAction(self.context, self, "_RemoveAllReferences", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _RemoveReference(self, referenceId : 'str') -> None:
-    	# Begin_PlaceHolder_Document__RemoveReference
-    	# End_PlaceHolder_Document__RemoveReference
+        # Begin_PlaceHolder_Document__RemoveReference
+        # End_PlaceHolder_Document__RemoveReference
         _createMethodAction(self.context, self, "_RemoveReference", OfficeExtension.OperationType.Read, [referenceId])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1157,15 +1157,15 @@ class DocumentProperties(OfficeExtension.ClientObject):
 
     @property
     def applicationName(self) -> 'str':
-        _loadIfImmediateExecution(self, "applicationName", self._applicationName)
-        _throwIfNotLoaded("applicationName", self._applicationName)
+        _loadIfInstantSyncExecutionMode(self, "applicationName", self._applicationName)
+        _throwIfNotLoaded("applicationName", self._applicationName, "DocumentProperties", self._isNull)
         return self._applicationName
     
 
     @property
     def author(self) -> 'str':
-        _loadIfImmediateExecution(self, "author", self._author)
-        _throwIfNotLoaded("author", self._author)
+        _loadIfInstantSyncExecutionMode(self, "author", self._author)
+        _throwIfNotLoaded("author", self._author, "DocumentProperties", self._isNull)
         return self._author
     
 
@@ -1173,12 +1173,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def author(self, value : 'str'):
         self._author = value
         _createSetPropertyAction(self.context, self, "Author", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def category(self) -> 'str':
-        _loadIfImmediateExecution(self, "category", self._category)
-        _throwIfNotLoaded("category", self._category)
+        _loadIfInstantSyncExecutionMode(self, "category", self._category)
+        _throwIfNotLoaded("category", self._category, "DocumentProperties", self._isNull)
         return self._category
     
 
@@ -1186,12 +1186,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def category(self, value : 'str'):
         self._category = value
         _createSetPropertyAction(self.context, self, "Category", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def comments(self) -> 'str':
-        _loadIfImmediateExecution(self, "comments", self._comments)
-        _throwIfNotLoaded("comments", self._comments)
+        _loadIfInstantSyncExecutionMode(self, "comments", self._comments)
+        _throwIfNotLoaded("comments", self._comments, "DocumentProperties", self._isNull)
         return self._comments
     
 
@@ -1199,12 +1199,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def comments(self, value : 'str'):
         self._comments = value
         _createSetPropertyAction(self.context, self, "Comments", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def company(self) -> 'str':
-        _loadIfImmediateExecution(self, "company", self._company)
-        _throwIfNotLoaded("company", self._company)
+        _loadIfInstantSyncExecutionMode(self, "company", self._company)
+        _throwIfNotLoaded("company", self._company, "DocumentProperties", self._isNull)
         return self._company
     
 
@@ -1212,19 +1212,19 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def company(self, value : 'str'):
         self._company = value
         _createSetPropertyAction(self.context, self, "Company", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def creationDate(self) -> 'datetime.datetime':
-        _loadIfImmediateExecution(self, "creationDate", self._creationDate)
-        _throwIfNotLoaded("creationDate", self._creationDate)
+        _loadIfInstantSyncExecutionMode(self, "creationDate", self._creationDate)
+        _throwIfNotLoaded("creationDate", self._creationDate, "DocumentProperties", self._isNull)
         return self._creationDate
     
 
     @property
     def format(self) -> 'str':
-        _loadIfImmediateExecution(self, "format", self._format)
-        _throwIfNotLoaded("format", self._format)
+        _loadIfInstantSyncExecutionMode(self, "format", self._format)
+        _throwIfNotLoaded("format", self._format, "DocumentProperties", self._isNull)
         return self._format
     
 
@@ -1232,12 +1232,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def format(self, value : 'str'):
         self._format = value
         _createSetPropertyAction(self.context, self, "Format", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def keywords(self) -> 'str':
-        _loadIfImmediateExecution(self, "keywords", self._keywords)
-        _throwIfNotLoaded("keywords", self._keywords)
+        _loadIfInstantSyncExecutionMode(self, "keywords", self._keywords)
+        _throwIfNotLoaded("keywords", self._keywords, "DocumentProperties", self._isNull)
         return self._keywords
     
 
@@ -1245,12 +1245,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def keywords(self, value : 'str'):
         self._keywords = value
         _createSetPropertyAction(self.context, self, "Keywords", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lastAuthor(self) -> 'str':
-        _loadIfImmediateExecution(self, "lastAuthor", self._lastAuthor)
-        _throwIfNotLoaded("lastAuthor", self._lastAuthor)
+        _loadIfInstantSyncExecutionMode(self, "lastAuthor", self._lastAuthor)
+        _throwIfNotLoaded("lastAuthor", self._lastAuthor, "DocumentProperties", self._isNull)
         return self._lastAuthor
     
 
@@ -1258,26 +1258,26 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def lastAuthor(self, value : 'str'):
         self._lastAuthor = value
         _createSetPropertyAction(self.context, self, "LastAuthor", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lastPrintDate(self) -> 'datetime.datetime':
-        _loadIfImmediateExecution(self, "lastPrintDate", self._lastPrintDate)
-        _throwIfNotLoaded("lastPrintDate", self._lastPrintDate)
+        _loadIfInstantSyncExecutionMode(self, "lastPrintDate", self._lastPrintDate)
+        _throwIfNotLoaded("lastPrintDate", self._lastPrintDate, "DocumentProperties", self._isNull)
         return self._lastPrintDate
     
 
     @property
     def lastSaveTime(self) -> 'datetime.datetime':
-        _loadIfImmediateExecution(self, "lastSaveTime", self._lastSaveTime)
-        _throwIfNotLoaded("lastSaveTime", self._lastSaveTime)
+        _loadIfInstantSyncExecutionMode(self, "lastSaveTime", self._lastSaveTime)
+        _throwIfNotLoaded("lastSaveTime", self._lastSaveTime, "DocumentProperties", self._isNull)
         return self._lastSaveTime
     
 
     @property
     def manager(self) -> 'str':
-        _loadIfImmediateExecution(self, "manager", self._manager)
-        _throwIfNotLoaded("manager", self._manager)
+        _loadIfInstantSyncExecutionMode(self, "manager", self._manager)
+        _throwIfNotLoaded("manager", self._manager, "DocumentProperties", self._isNull)
         return self._manager
     
 
@@ -1285,26 +1285,26 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def manager(self, value : 'str'):
         self._manager = value
         _createSetPropertyAction(self.context, self, "Manager", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def revisionNumber(self) -> 'str':
-        _loadIfImmediateExecution(self, "revisionNumber", self._revisionNumber)
-        _throwIfNotLoaded("revisionNumber", self._revisionNumber)
+        _loadIfInstantSyncExecutionMode(self, "revisionNumber", self._revisionNumber)
+        _throwIfNotLoaded("revisionNumber", self._revisionNumber, "DocumentProperties", self._isNull)
         return self._revisionNumber
     
 
     @property
     def security(self) -> 'int':
-        _loadIfImmediateExecution(self, "security", self._security)
-        _throwIfNotLoaded("security", self._security)
+        _loadIfInstantSyncExecutionMode(self, "security", self._security)
+        _throwIfNotLoaded("security", self._security, "DocumentProperties", self._isNull)
         return self._security
     
 
     @property
     def subject(self) -> 'str':
-        _loadIfImmediateExecution(self, "subject", self._subject)
-        _throwIfNotLoaded("subject", self._subject)
+        _loadIfInstantSyncExecutionMode(self, "subject", self._subject)
+        _throwIfNotLoaded("subject", self._subject, "DocumentProperties", self._isNull)
         return self._subject
     
 
@@ -1312,19 +1312,19 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def subject(self, value : 'str'):
         self._subject = value
         _createSetPropertyAction(self.context, self, "Subject", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def template(self) -> 'str':
-        _loadIfImmediateExecution(self, "template", self._template)
-        _throwIfNotLoaded("template", self._template)
+        _loadIfInstantSyncExecutionMode(self, "template", self._template)
+        _throwIfNotLoaded("template", self._template, "DocumentProperties", self._isNull)
         return self._template
     
 
     @property
     def title(self) -> 'str':
-        _loadIfImmediateExecution(self, "title", self._title)
-        _throwIfNotLoaded("title", self._title)
+        _loadIfInstantSyncExecutionMode(self, "title", self._title)
+        _throwIfNotLoaded("title", self._title, "DocumentProperties", self._isNull)
         return self._title
     
 
@@ -1332,20 +1332,20 @@ class DocumentProperties(OfficeExtension.ClientObject):
     def title(self, value : 'str'):
         self._title = value
         _createSetPropertyAction(self.context, self, "Title", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "DocumentProperties", self._isNull)
         return self.__ReferenceId
     
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_DocumentProperties__KeepReference
-    	# End_PlaceHolder_DocumentProperties__KeepReference
+        # Begin_PlaceHolder_DocumentProperties__KeepReference
+        # End_PlaceHolder_DocumentProperties__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1422,8 +1422,8 @@ class Font(OfficeExtension.ClientObject):
 
     @property
     def bold(self) -> 'bool':
-        _loadIfImmediateExecution(self, "bold", self._bold)
-        _throwIfNotLoaded("bold", self._bold)
+        _loadIfInstantSyncExecutionMode(self, "bold", self._bold)
+        _throwIfNotLoaded("bold", self._bold, "Font", self._isNull)
         return self._bold
     
 
@@ -1431,12 +1431,12 @@ class Font(OfficeExtension.ClientObject):
     def bold(self, value : 'bool'):
         self._bold = value
         _createSetPropertyAction(self.context, self, "Bold", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "Font", self._isNull)
         return self._color
     
 
@@ -1444,12 +1444,12 @@ class Font(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def doubleStrikeThrough(self) -> 'bool':
-        _loadIfImmediateExecution(self, "doubleStrikeThrough", self._doubleStrikeThrough)
-        _throwIfNotLoaded("doubleStrikeThrough", self._doubleStrikeThrough)
+        _loadIfInstantSyncExecutionMode(self, "doubleStrikeThrough", self._doubleStrikeThrough)
+        _throwIfNotLoaded("doubleStrikeThrough", self._doubleStrikeThrough, "Font", self._isNull)
         return self._doubleStrikeThrough
     
 
@@ -1457,12 +1457,12 @@ class Font(OfficeExtension.ClientObject):
     def doubleStrikeThrough(self, value : 'bool'):
         self._doubleStrikeThrough = value
         _createSetPropertyAction(self.context, self, "DoubleStrikeThrough", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def highlightColor(self) -> 'str':
-        _loadIfImmediateExecution(self, "highlightColor", self._highlightColor)
-        _throwIfNotLoaded("highlightColor", self._highlightColor)
+        _loadIfInstantSyncExecutionMode(self, "highlightColor", self._highlightColor)
+        _throwIfNotLoaded("highlightColor", self._highlightColor, "Font", self._isNull)
         return self._highlightColor
     
 
@@ -1470,12 +1470,12 @@ class Font(OfficeExtension.ClientObject):
     def highlightColor(self, value : 'str'):
         self._highlightColor = value
         _createSetPropertyAction(self.context, self, "HighlightColor", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def italic(self) -> 'bool':
-        _loadIfImmediateExecution(self, "italic", self._italic)
-        _throwIfNotLoaded("italic", self._italic)
+        _loadIfInstantSyncExecutionMode(self, "italic", self._italic)
+        _throwIfNotLoaded("italic", self._italic, "Font", self._isNull)
         return self._italic
     
 
@@ -1483,12 +1483,12 @@ class Font(OfficeExtension.ClientObject):
     def italic(self, value : 'bool'):
         self._italic = value
         _createSetPropertyAction(self.context, self, "Italic", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def name(self) -> 'str':
-        _loadIfImmediateExecution(self, "name", self._name)
-        _throwIfNotLoaded("name", self._name)
+        _loadIfInstantSyncExecutionMode(self, "name", self._name)
+        _throwIfNotLoaded("name", self._name, "Font", self._isNull)
         return self._name
     
 
@@ -1496,12 +1496,12 @@ class Font(OfficeExtension.ClientObject):
     def name(self, value : 'str'):
         self._name = value
         _createSetPropertyAction(self.context, self, "Name", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def size(self) -> 'float':
-        _loadIfImmediateExecution(self, "size", self._size)
-        _throwIfNotLoaded("size", self._size)
+        _loadIfInstantSyncExecutionMode(self, "size", self._size)
+        _throwIfNotLoaded("size", self._size, "Font", self._isNull)
         return self._size
     
 
@@ -1509,12 +1509,12 @@ class Font(OfficeExtension.ClientObject):
     def size(self, value : 'float'):
         self._size = value
         _createSetPropertyAction(self.context, self, "Size", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def strikeThrough(self) -> 'bool':
-        _loadIfImmediateExecution(self, "strikeThrough", self._strikeThrough)
-        _throwIfNotLoaded("strikeThrough", self._strikeThrough)
+        _loadIfInstantSyncExecutionMode(self, "strikeThrough", self._strikeThrough)
+        _throwIfNotLoaded("strikeThrough", self._strikeThrough, "Font", self._isNull)
         return self._strikeThrough
     
 
@@ -1522,12 +1522,12 @@ class Font(OfficeExtension.ClientObject):
     def strikeThrough(self, value : 'bool'):
         self._strikeThrough = value
         _createSetPropertyAction(self.context, self, "StrikeThrough", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def subscript(self) -> 'bool':
-        _loadIfImmediateExecution(self, "subscript", self._subscript)
-        _throwIfNotLoaded("subscript", self._subscript)
+        _loadIfInstantSyncExecutionMode(self, "subscript", self._subscript)
+        _throwIfNotLoaded("subscript", self._subscript, "Font", self._isNull)
         return self._subscript
     
 
@@ -1535,12 +1535,12 @@ class Font(OfficeExtension.ClientObject):
     def subscript(self, value : 'bool'):
         self._subscript = value
         _createSetPropertyAction(self.context, self, "Subscript", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def superscript(self) -> 'bool':
-        _loadIfImmediateExecution(self, "superscript", self._superscript)
-        _throwIfNotLoaded("superscript", self._superscript)
+        _loadIfInstantSyncExecutionMode(self, "superscript", self._superscript)
+        _throwIfNotLoaded("superscript", self._superscript, "Font", self._isNull)
         return self._superscript
     
 
@@ -1548,12 +1548,12 @@ class Font(OfficeExtension.ClientObject):
     def superscript(self, value : 'bool'):
         self._superscript = value
         _createSetPropertyAction(self.context, self, "Superscript", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def underline(self) -> 'str':
-        _loadIfImmediateExecution(self, "underline", self._underline)
-        _throwIfNotLoaded("underline", self._underline)
+        _loadIfInstantSyncExecutionMode(self, "underline", self._underline)
+        _throwIfNotLoaded("underline", self._underline, "Font", self._isNull)
         return self._underline
     
 
@@ -1561,20 +1561,20 @@ class Font(OfficeExtension.ClientObject):
     def underline(self, value : 'str'):
         self._underline = value
         _createSetPropertyAction(self.context, self, "Underline", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Font", self._isNull)
         return self.__ReferenceId
     
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Font__KeepReference
-    	# End_PlaceHolder_Font__KeepReference
+        # Begin_PlaceHolder_Font__KeepReference
+        # End_PlaceHolder_Font__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1657,8 +1657,8 @@ class InlinePicture(OfficeExtension.ClientObject):
 
     @property
     def altTextDescription(self) -> 'str':
-        _loadIfImmediateExecution(self, "altTextDescription", self._altTextDescription)
-        _throwIfNotLoaded("altTextDescription", self._altTextDescription)
+        _loadIfInstantSyncExecutionMode(self, "altTextDescription", self._altTextDescription)
+        _throwIfNotLoaded("altTextDescription", self._altTextDescription, "InlinePicture", self._isNull)
         return self._altTextDescription
     
 
@@ -1666,12 +1666,12 @@ class InlinePicture(OfficeExtension.ClientObject):
     def altTextDescription(self, value : 'str'):
         self._altTextDescription = value
         _createSetPropertyAction(self.context, self, "AltTextDescription", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def altTextTitle(self) -> 'str':
-        _loadIfImmediateExecution(self, "altTextTitle", self._altTextTitle)
-        _throwIfNotLoaded("altTextTitle", self._altTextTitle)
+        _loadIfInstantSyncExecutionMode(self, "altTextTitle", self._altTextTitle)
+        _throwIfNotLoaded("altTextTitle", self._altTextTitle, "InlinePicture", self._isNull)
         return self._altTextTitle
     
 
@@ -1679,12 +1679,12 @@ class InlinePicture(OfficeExtension.ClientObject):
     def altTextTitle(self, value : 'str'):
         self._altTextTitle = value
         _createSetPropertyAction(self.context, self, "AltTextTitle", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def height(self) -> 'float':
-        _loadIfImmediateExecution(self, "height", self._height)
-        _throwIfNotLoaded("height", self._height)
+        _loadIfInstantSyncExecutionMode(self, "height", self._height)
+        _throwIfNotLoaded("height", self._height, "InlinePicture", self._isNull)
         return self._height
     
 
@@ -1692,12 +1692,12 @@ class InlinePicture(OfficeExtension.ClientObject):
     def height(self, value : 'float'):
         self._height = value
         _createSetPropertyAction(self.context, self, "Height", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def hyperlink(self) -> 'str':
-        _loadIfImmediateExecution(self, "hyperlink", self._hyperlink)
-        _throwIfNotLoaded("hyperlink", self._hyperlink)
+        _loadIfInstantSyncExecutionMode(self, "hyperlink", self._hyperlink)
+        _throwIfNotLoaded("hyperlink", self._hyperlink, "InlinePicture", self._isNull)
         return self._hyperlink
     
 
@@ -1705,12 +1705,12 @@ class InlinePicture(OfficeExtension.ClientObject):
     def hyperlink(self, value : 'str'):
         self._hyperlink = value
         _createSetPropertyAction(self.context, self, "Hyperlink", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lockAspectRatio(self) -> 'bool':
-        _loadIfImmediateExecution(self, "lockAspectRatio", self._lockAspectRatio)
-        _throwIfNotLoaded("lockAspectRatio", self._lockAspectRatio)
+        _loadIfInstantSyncExecutionMode(self, "lockAspectRatio", self._lockAspectRatio)
+        _throwIfNotLoaded("lockAspectRatio", self._lockAspectRatio, "InlinePicture", self._isNull)
         return self._lockAspectRatio
     
 
@@ -1718,12 +1718,12 @@ class InlinePicture(OfficeExtension.ClientObject):
     def lockAspectRatio(self, value : 'bool'):
         self._lockAspectRatio = value
         _createSetPropertyAction(self.context, self, "LockAspectRatio", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def width(self) -> 'float':
-        _loadIfImmediateExecution(self, "width", self._width)
-        _throwIfNotLoaded("width", self._width)
+        _loadIfInstantSyncExecutionMode(self, "width", self._width)
+        _throwIfNotLoaded("width", self._width, "InlinePicture", self._isNull)
         return self._width
     
 
@@ -1731,27 +1731,27 @@ class InlinePicture(OfficeExtension.ClientObject):
     def width(self, value : 'float'):
         self._width = value
         _createSetPropertyAction(self.context, self, "Width", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "InlinePicture", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "InlinePicture", self._isNull)
         return self.__ReferenceId
     
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_InlinePicture_Delete
-    	# End_PlaceHolder_InlinePicture_Delete
+        # Begin_PlaceHolder_InlinePicture_Delete
+        # End_PlaceHolder_InlinePicture_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getBase64ImageSrc(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_InlinePicture_GetBase64ImageSrc
@@ -1759,80 +1759,80 @@ class InlinePicture(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetBase64ImageSrc", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getNext(self) -> 'InlinePicture':
-    	# Begin_PlaceHolder_InlinePicture_GetNext
-    	# End_PlaceHolder_InlinePicture_GetNext
+        # Begin_PlaceHolder_InlinePicture_GetNext
+        # End_PlaceHolder_InlinePicture_GetNext
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_InlinePicture_GetRange
-    	# End_PlaceHolder_InlinePicture_GetRange
+        # Begin_PlaceHolder_InlinePicture_GetRange
+        # End_PlaceHolder_InlinePicture_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
-    	# Begin_PlaceHolder_InlinePicture_InsertBreak
-    	# End_PlaceHolder_InlinePicture_InsertBreak
+        # Begin_PlaceHolder_InlinePicture_InsertBreak
+        # End_PlaceHolder_InlinePicture_InsertBreak
         _createMethodAction(self.context, self, "InsertBreak", OfficeExtension.OperationType.Default, [breakType, insertLocation])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertContentControl(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_InlinePicture_InsertContentControl
-    	# End_PlaceHolder_InlinePicture_InsertContentControl
+        # Begin_PlaceHolder_InlinePicture_InsertContentControl
+        # End_PlaceHolder_InlinePicture_InsertContentControl
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "InsertContentControl", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def insertFileFromBase64(self, base64File : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_InlinePicture_InsertFileFromBase64
-    	# End_PlaceHolder_InlinePicture_InsertFileFromBase64
+        # Begin_PlaceHolder_InlinePicture_InsertFileFromBase64
+        # End_PlaceHolder_InlinePicture_InsertFileFromBase64
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertFileFromBase64", OfficeExtension.OperationType.Default, [base64File, insertLocation], False, True))
         return ret
 
     def insertHtml(self, html : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_InlinePicture_InsertHtml
-    	# End_PlaceHolder_InlinePicture_InsertHtml
+        # Begin_PlaceHolder_InlinePicture_InsertHtml
+        # End_PlaceHolder_InlinePicture_InsertHtml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertHtml", OfficeExtension.OperationType.Default, [html, insertLocation], False, True))
         return ret
 
     def insertInlinePictureFromBase64(self, base64EncodedImage : 'str', insertLocation : 'str') -> 'InlinePicture':
-    	# Begin_PlaceHolder_InlinePicture_InsertInlinePictureFromBase64
-    	# End_PlaceHolder_InlinePicture_InsertInlinePictureFromBase64
+        # Begin_PlaceHolder_InlinePicture_InsertInlinePictureFromBase64
+        # End_PlaceHolder_InlinePicture_InsertInlinePictureFromBase64
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "InsertInlinePictureFromBase64", OfficeExtension.OperationType.Default, [base64EncodedImage, insertLocation], False, True))
         return ret
 
     def insertOoxml(self, ooxml : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_InlinePicture_InsertOoxml
-    	# End_PlaceHolder_InlinePicture_InsertOoxml
+        # Begin_PlaceHolder_InlinePicture_InsertOoxml
+        # End_PlaceHolder_InlinePicture_InsertOoxml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertOoxml", OfficeExtension.OperationType.Default, [ooxml, insertLocation], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_InlinePicture_InsertParagraph
-    	# End_PlaceHolder_InlinePicture_InsertParagraph
+        # Begin_PlaceHolder_InlinePicture_InsertParagraph
+        # End_PlaceHolder_InlinePicture_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertText(self, text : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_InlinePicture_InsertText
-    	# End_PlaceHolder_InlinePicture_InsertText
+        # Begin_PlaceHolder_InlinePicture_InsertText
+        # End_PlaceHolder_InlinePicture_InsertText
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertText", OfficeExtension.OperationType.Default, [text, insertLocation], False, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_InlinePicture_Select
-    	# End_PlaceHolder_InlinePicture_Select
+        # Begin_PlaceHolder_InlinePicture_Select
+        # End_PlaceHolder_InlinePicture_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_InlinePicture__KeepReference
-    	# End_PlaceHolder_InlinePicture__KeepReference
+        # Begin_PlaceHolder_InlinePicture__KeepReference
+        # End_PlaceHolder_InlinePicture__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1887,34 +1887,34 @@ class InlinePictureCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of InlinePicture':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "InlinePictureCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "InlinePictureCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'InlinePicture':
-    	# Begin_PlaceHolder_InlinePictureCollection_GetFirst
-    	# End_PlaceHolder_InlinePictureCollection_GetFirst
+        # Begin_PlaceHolder_InlinePictureCollection_GetFirst
+        # End_PlaceHolder_InlinePictureCollection_GetFirst
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'InlinePicture':
-    	# Begin_PlaceHolder_InlinePictureCollection__GetItem
-    	# End_PlaceHolder_InlinePictureCollection__GetItem
+        # Begin_PlaceHolder_InlinePictureCollection__GetItem
+        # End_PlaceHolder_InlinePictureCollection__GetItem
         return InlinePicture(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_InlinePictureCollection__KeepReference
-    	# End_PlaceHolder_InlinePictureCollection__KeepReference
+        # Begin_PlaceHolder_InlinePictureCollection__KeepReference
+        # End_PlaceHolder_InlinePictureCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -1960,35 +1960,35 @@ class List(OfficeExtension.ClientObject):
 
     @property
     def id(self) -> 'int':
-        _loadIfImmediateExecution(self, "id", self._id)
-        _throwIfNotLoaded("id", self._id)
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "List", self._isNull)
         return self._id
     
 
     @property
     def levelExistences(self) -> 'list':
-        _loadIfImmediateExecution(self, "levelExistences", self._levelExistences)
-        _throwIfNotLoaded("levelExistences", self._levelExistences)
+        _loadIfInstantSyncExecutionMode(self, "levelExistences", self._levelExistences)
+        _throwIfNotLoaded("levelExistences", self._levelExistences, "List", self._isNull)
         return self._levelExistences
     
 
     @property
     def levelTypes(self) -> 'list':
-        _loadIfImmediateExecution(self, "levelTypes", self._levelTypes)
-        _throwIfNotLoaded("levelTypes", self._levelTypes)
+        _loadIfInstantSyncExecutionMode(self, "levelTypes", self._levelTypes)
+        _throwIfNotLoaded("levelTypes", self._levelTypes, "List", self._isNull)
         return self._levelTypes
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "List", self._isNull)
         return self.__ReferenceId
     
 
     def getLevelParagraphs(self, level : 'int') -> 'ParagraphCollection':
-    	# Begin_PlaceHolder_List_GetLevelParagraphs
-    	# End_PlaceHolder_List_GetLevelParagraphs
+        # Begin_PlaceHolder_List_GetLevelParagraphs
+        # End_PlaceHolder_List_GetLevelParagraphs
         ret = ParagraphCollection(self.context, _createMethodObjectPath(self.context, self, "GetLevelParagraphs", OfficeExtension.OperationType.Read, [level], True, False))
         return ret
 
@@ -1998,50 +1998,50 @@ class List(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetLevelString", OfficeExtension.OperationType.Read, [level])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_List_InsertParagraph
-    	# End_PlaceHolder_List_InsertParagraph
+        # Begin_PlaceHolder_List_InsertParagraph
+        # End_PlaceHolder_List_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def setLevelAlignment(self, level : 'int', alignment : 'str') -> None:
-    	# Begin_PlaceHolder_List_SetLevelAlignment
-    	# End_PlaceHolder_List_SetLevelAlignment
+        # Begin_PlaceHolder_List_SetLevelAlignment
+        # End_PlaceHolder_List_SetLevelAlignment
         _createMethodAction(self.context, self, "SetLevelAlignment", OfficeExtension.OperationType.Default, [level, alignment])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setLevelBullet(self, level : 'int', listBullet : 'str', charCode : 'int' = None, fontName : 'str' = None) -> None:
-    	# Begin_PlaceHolder_List_SetLevelBullet
-    	# End_PlaceHolder_List_SetLevelBullet
+        # Begin_PlaceHolder_List_SetLevelBullet
+        # End_PlaceHolder_List_SetLevelBullet
         _createMethodAction(self.context, self, "SetLevelBullet", OfficeExtension.OperationType.Default, [level, listBullet, charCode, fontName])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setLevelIndents(self, level : 'int', textIndent : 'float', bulletNumberPictureIndent : 'float') -> None:
-    	# Begin_PlaceHolder_List_SetLevelIndents
-    	# End_PlaceHolder_List_SetLevelIndents
+        # Begin_PlaceHolder_List_SetLevelIndents
+        # End_PlaceHolder_List_SetLevelIndents
         _createMethodAction(self.context, self, "SetLevelIndents", OfficeExtension.OperationType.Default, [level, textIndent, bulletNumberPictureIndent])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setLevelNumbering(self, level : 'int', listNumbering : 'str', formatString : 'list' = None) -> None:
-    	# Begin_PlaceHolder_List_SetLevelNumbering
-    	# End_PlaceHolder_List_SetLevelNumbering
+        # Begin_PlaceHolder_List_SetLevelNumbering
+        # End_PlaceHolder_List_SetLevelNumbering
         _createMethodAction(self.context, self, "SetLevelNumbering", OfficeExtension.OperationType.Default, [level, listNumbering, formatString])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setLevelStartingNumber(self, level : 'int', startingNumber : 'int') -> None:
-    	# Begin_PlaceHolder_List_SetLevelStartingNumber
-    	# End_PlaceHolder_List_SetLevelStartingNumber
+        # Begin_PlaceHolder_List_SetLevelStartingNumber
+        # End_PlaceHolder_List_SetLevelStartingNumber
         _createMethodAction(self.context, self, "SetLevelStartingNumber", OfficeExtension.OperationType.Default, [level, startingNumber])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_List__KeepReference
-    	# End_PlaceHolder_List__KeepReference
+        # Begin_PlaceHolder_List__KeepReference
+        # End_PlaceHolder_List__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2082,40 +2082,40 @@ class ListCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of List':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ListCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "ListCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getById(self, id : 'int') -> 'List':
-    	# Begin_PlaceHolder_ListCollection_GetById
-    	# End_PlaceHolder_ListCollection_GetById
+        # Begin_PlaceHolder_ListCollection_GetById
+        # End_PlaceHolder_ListCollection_GetById
         ret = List(self.context, _createMethodObjectPath(self.context, self, "GetById", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
     def getFirst(self) -> 'List':
-    	# Begin_PlaceHolder_ListCollection_GetFirst
-    	# End_PlaceHolder_ListCollection_GetFirst
+        # Begin_PlaceHolder_ListCollection_GetFirst
+        # End_PlaceHolder_ListCollection_GetFirst
         ret = List(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getItem(self, index : 'any') -> 'List':
-    	# Begin_PlaceHolder_ListCollection_GetItem
-    	# End_PlaceHolder_ListCollection_GetItem
+        # Begin_PlaceHolder_ListCollection_GetItem
+        # End_PlaceHolder_ListCollection_GetItem
         return List(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_ListCollection__KeepReference
-    	# End_PlaceHolder_ListCollection__KeepReference
+        # Begin_PlaceHolder_ListCollection__KeepReference
+        # End_PlaceHolder_ListCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2155,8 +2155,8 @@ class ListItem(OfficeExtension.ClientObject):
 
     @property
     def level(self) -> 'int':
-        _loadIfImmediateExecution(self, "level", self._level)
-        _throwIfNotLoaded("level", self._level)
+        _loadIfInstantSyncExecutionMode(self, "level", self._level)
+        _throwIfNotLoaded("level", self._level, "ListItem", self._isNull)
         return self._level
     
 
@@ -2164,46 +2164,46 @@ class ListItem(OfficeExtension.ClientObject):
     def level(self, value : 'int'):
         self._level = value
         _createSetPropertyAction(self.context, self, "Level", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def listString(self) -> 'str':
-        _loadIfImmediateExecution(self, "listString", self._listString)
-        _throwIfNotLoaded("listString", self._listString)
+        _loadIfInstantSyncExecutionMode(self, "listString", self._listString)
+        _throwIfNotLoaded("listString", self._listString, "ListItem", self._isNull)
         return self._listString
     
 
     @property
     def siblingIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "siblingIndex", self._siblingIndex)
-        _throwIfNotLoaded("siblingIndex", self._siblingIndex)
+        _loadIfInstantSyncExecutionMode(self, "siblingIndex", self._siblingIndex)
+        _throwIfNotLoaded("siblingIndex", self._siblingIndex, "ListItem", self._isNull)
         return self._siblingIndex
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "ListItem", self._isNull)
         return self.__ReferenceId
     
 
     def getAncestor(self, parentOnly : 'bool' = None) -> 'Paragraph':
-    	# Begin_PlaceHolder_ListItem_GetAncestor
-    	# End_PlaceHolder_ListItem_GetAncestor
+        # Begin_PlaceHolder_ListItem_GetAncestor
+        # End_PlaceHolder_ListItem_GetAncestor
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetAncestor", OfficeExtension.OperationType.Read, [parentOnly], False, False))
         return ret
 
     def getDescendants(self, directChildrenOnly : 'bool' = None) -> 'ParagraphCollection':
-    	# Begin_PlaceHolder_ListItem_GetDescendants
-    	# End_PlaceHolder_ListItem_GetDescendants
+        # Begin_PlaceHolder_ListItem_GetDescendants
+        # End_PlaceHolder_ListItem_GetDescendants
         ret = ParagraphCollection(self.context, _createMethodObjectPath(self.context, self, "GetDescendants", OfficeExtension.OperationType.Read, [directChildrenOnly], True, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_ListItem__KeepReference
-    	# End_PlaceHolder_ListItem__KeepReference
+        # Begin_PlaceHolder_ListItem__KeepReference
+        # End_PlaceHolder_ListItem__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2310,8 +2310,8 @@ class Paragraph(OfficeExtension.ClientObject):
 
     @property
     def alignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "alignment", self._alignment)
-        _throwIfNotLoaded("alignment", self._alignment)
+        _loadIfInstantSyncExecutionMode(self, "alignment", self._alignment)
+        _throwIfNotLoaded("alignment", self._alignment, "Paragraph", self._isNull)
         return self._alignment
     
 
@@ -2319,12 +2319,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def alignment(self, value : 'str'):
         self._alignment = value
         _createSetPropertyAction(self.context, self, "Alignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def firstLineIndent(self) -> 'float':
-        _loadIfImmediateExecution(self, "firstLineIndent", self._firstLineIndent)
-        _throwIfNotLoaded("firstLineIndent", self._firstLineIndent)
+        _loadIfInstantSyncExecutionMode(self, "firstLineIndent", self._firstLineIndent)
+        _throwIfNotLoaded("firstLineIndent", self._firstLineIndent, "Paragraph", self._isNull)
         return self._firstLineIndent
     
 
@@ -2332,26 +2332,26 @@ class Paragraph(OfficeExtension.ClientObject):
     def firstLineIndent(self, value : 'float'):
         self._firstLineIndent = value
         _createSetPropertyAction(self.context, self, "FirstLineIndent", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def isLastParagraph(self) -> 'bool':
-        _loadIfImmediateExecution(self, "isLastParagraph", self._isLastParagraph)
-        _throwIfNotLoaded("isLastParagraph", self._isLastParagraph)
+        _loadIfInstantSyncExecutionMode(self, "isLastParagraph", self._isLastParagraph)
+        _throwIfNotLoaded("isLastParagraph", self._isLastParagraph, "Paragraph", self._isNull)
         return self._isLastParagraph
     
 
     @property
     def isListItem(self) -> 'bool':
-        _loadIfImmediateExecution(self, "isListItem", self._isListItem)
-        _throwIfNotLoaded("isListItem", self._isListItem)
+        _loadIfInstantSyncExecutionMode(self, "isListItem", self._isListItem)
+        _throwIfNotLoaded("isListItem", self._isListItem, "Paragraph", self._isNull)
         return self._isListItem
     
 
     @property
     def leftIndent(self) -> 'float':
-        _loadIfImmediateExecution(self, "leftIndent", self._leftIndent)
-        _throwIfNotLoaded("leftIndent", self._leftIndent)
+        _loadIfInstantSyncExecutionMode(self, "leftIndent", self._leftIndent)
+        _throwIfNotLoaded("leftIndent", self._leftIndent, "Paragraph", self._isNull)
         return self._leftIndent
     
 
@@ -2359,12 +2359,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def leftIndent(self, value : 'float'):
         self._leftIndent = value
         _createSetPropertyAction(self.context, self, "LeftIndent", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lineSpacing(self) -> 'float':
-        _loadIfImmediateExecution(self, "lineSpacing", self._lineSpacing)
-        _throwIfNotLoaded("lineSpacing", self._lineSpacing)
+        _loadIfInstantSyncExecutionMode(self, "lineSpacing", self._lineSpacing)
+        _throwIfNotLoaded("lineSpacing", self._lineSpacing, "Paragraph", self._isNull)
         return self._lineSpacing
     
 
@@ -2372,12 +2372,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def lineSpacing(self, value : 'float'):
         self._lineSpacing = value
         _createSetPropertyAction(self.context, self, "LineSpacing", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lineUnitAfter(self) -> 'float':
-        _loadIfImmediateExecution(self, "lineUnitAfter", self._lineUnitAfter)
-        _throwIfNotLoaded("lineUnitAfter", self._lineUnitAfter)
+        _loadIfInstantSyncExecutionMode(self, "lineUnitAfter", self._lineUnitAfter)
+        _throwIfNotLoaded("lineUnitAfter", self._lineUnitAfter, "Paragraph", self._isNull)
         return self._lineUnitAfter
     
 
@@ -2385,12 +2385,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def lineUnitAfter(self, value : 'float'):
         self._lineUnitAfter = value
         _createSetPropertyAction(self.context, self, "LineUnitAfter", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def lineUnitBefore(self) -> 'float':
-        _loadIfImmediateExecution(self, "lineUnitBefore", self._lineUnitBefore)
-        _throwIfNotLoaded("lineUnitBefore", self._lineUnitBefore)
+        _loadIfInstantSyncExecutionMode(self, "lineUnitBefore", self._lineUnitBefore)
+        _throwIfNotLoaded("lineUnitBefore", self._lineUnitBefore, "Paragraph", self._isNull)
         return self._lineUnitBefore
     
 
@@ -2398,12 +2398,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def lineUnitBefore(self, value : 'float'):
         self._lineUnitBefore = value
         _createSetPropertyAction(self.context, self, "LineUnitBefore", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def outlineLevel(self) -> 'int':
-        _loadIfImmediateExecution(self, "outlineLevel", self._outlineLevel)
-        _throwIfNotLoaded("outlineLevel", self._outlineLevel)
+        _loadIfInstantSyncExecutionMode(self, "outlineLevel", self._outlineLevel)
+        _throwIfNotLoaded("outlineLevel", self._outlineLevel, "Paragraph", self._isNull)
         return self._outlineLevel
     
 
@@ -2411,12 +2411,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def outlineLevel(self, value : 'int'):
         self._outlineLevel = value
         _createSetPropertyAction(self.context, self, "OutlineLevel", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rightIndent(self) -> 'float':
-        _loadIfImmediateExecution(self, "rightIndent", self._rightIndent)
-        _throwIfNotLoaded("rightIndent", self._rightIndent)
+        _loadIfInstantSyncExecutionMode(self, "rightIndent", self._rightIndent)
+        _throwIfNotLoaded("rightIndent", self._rightIndent, "Paragraph", self._isNull)
         return self._rightIndent
     
 
@@ -2424,12 +2424,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def rightIndent(self, value : 'float'):
         self._rightIndent = value
         _createSetPropertyAction(self.context, self, "RightIndent", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def spaceAfter(self) -> 'float':
-        _loadIfImmediateExecution(self, "spaceAfter", self._spaceAfter)
-        _throwIfNotLoaded("spaceAfter", self._spaceAfter)
+        _loadIfInstantSyncExecutionMode(self, "spaceAfter", self._spaceAfter)
+        _throwIfNotLoaded("spaceAfter", self._spaceAfter, "Paragraph", self._isNull)
         return self._spaceAfter
     
 
@@ -2437,12 +2437,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def spaceAfter(self, value : 'float'):
         self._spaceAfter = value
         _createSetPropertyAction(self.context, self, "SpaceAfter", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def spaceBefore(self) -> 'float':
-        _loadIfImmediateExecution(self, "spaceBefore", self._spaceBefore)
-        _throwIfNotLoaded("spaceBefore", self._spaceBefore)
+        _loadIfInstantSyncExecutionMode(self, "spaceBefore", self._spaceBefore)
+        _throwIfNotLoaded("spaceBefore", self._spaceBefore, "Paragraph", self._isNull)
         return self._spaceBefore
     
 
@@ -2450,12 +2450,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def spaceBefore(self, value : 'float'):
         self._spaceBefore = value
         _createSetPropertyAction(self.context, self, "SpaceBefore", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "Paragraph", self._isNull)
         return self._style
     
 
@@ -2463,12 +2463,12 @@ class Paragraph(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBuiltIn(self) -> 'str':
-        _loadIfImmediateExecution(self, "styleBuiltIn", self._styleBuiltIn)
-        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn)
+        _loadIfInstantSyncExecutionMode(self, "styleBuiltIn", self._styleBuiltIn)
+        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn, "Paragraph", self._isNull)
         return self._styleBuiltIn
     
 
@@ -2476,59 +2476,59 @@ class Paragraph(OfficeExtension.ClientObject):
     def styleBuiltIn(self, value : 'str'):
         self._styleBuiltIn = value
         _createSetPropertyAction(self.context, self, "StyleBuiltIn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def tableNestingLevel(self) -> 'int':
-        _loadIfImmediateExecution(self, "tableNestingLevel", self._tableNestingLevel)
-        _throwIfNotLoaded("tableNestingLevel", self._tableNestingLevel)
+        _loadIfInstantSyncExecutionMode(self, "tableNestingLevel", self._tableNestingLevel)
+        _throwIfNotLoaded("tableNestingLevel", self._tableNestingLevel, "Paragraph", self._isNull)
         return self._tableNestingLevel
     
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "Paragraph", self._isNull)
         return self._text
     
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "Paragraph", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Paragraph", self._isNull)
         return self.__ReferenceId
     
 
     def attachToList(self, listId : 'int', level : 'int') -> 'List':
-    	# Begin_PlaceHolder_Paragraph_AttachToList
-    	# End_PlaceHolder_Paragraph_AttachToList
+        # Begin_PlaceHolder_Paragraph_AttachToList
+        # End_PlaceHolder_Paragraph_AttachToList
         ret = List(self.context, _createMethodObjectPath(self.context, self, "AttachToList", OfficeExtension.OperationType.Default, [listId, level], False, False))
         return ret
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_Paragraph_Clear
-    	# End_PlaceHolder_Paragraph_Clear
+        # Begin_PlaceHolder_Paragraph_Clear
+        # End_PlaceHolder_Paragraph_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Paragraph_Delete
-    	# End_PlaceHolder_Paragraph_Delete
+        # Begin_PlaceHolder_Paragraph_Delete
+        # End_PlaceHolder_Paragraph_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def detachFromList(self) -> None:
-    	# Begin_PlaceHolder_Paragraph_DetachFromList
-    	# End_PlaceHolder_Paragraph_DetachFromList
+        # Begin_PlaceHolder_Paragraph_DetachFromList
+        # End_PlaceHolder_Paragraph_DetachFromList
         _createMethodAction(self.context, self, "DetachFromList", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getHtml(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Paragraph_GetHtml
@@ -2536,12 +2536,12 @@ class Paragraph(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetHtml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getNext(self) -> 'Paragraph':
-    	# Begin_PlaceHolder_Paragraph_GetNext
-    	# End_PlaceHolder_Paragraph_GetNext
+        # Begin_PlaceHolder_Paragraph_GetNext
+        # End_PlaceHolder_Paragraph_GetNext
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
@@ -2551,110 +2551,110 @@ class Paragraph(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetOoxml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getPrevious(self) -> 'Paragraph':
-    	# Begin_PlaceHolder_Paragraph_GetPrevious
-    	# End_PlaceHolder_Paragraph_GetPrevious
+        # Begin_PlaceHolder_Paragraph_GetPrevious
+        # End_PlaceHolder_Paragraph_GetPrevious
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetPrevious", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_Paragraph_GetRange
-    	# End_PlaceHolder_Paragraph_GetRange
+        # Begin_PlaceHolder_Paragraph_GetRange
+        # End_PlaceHolder_Paragraph_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def getTextRanges(self, endingMarks : 'list', trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Paragraph_GetTextRanges
-    	# End_PlaceHolder_Paragraph_GetTextRanges
+        # Begin_PlaceHolder_Paragraph_GetTextRanges
+        # End_PlaceHolder_Paragraph_GetTextRanges
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "GetTextRanges", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], True, False))
         return ret
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
-    	# Begin_PlaceHolder_Paragraph_InsertBreak
-    	# End_PlaceHolder_Paragraph_InsertBreak
+        # Begin_PlaceHolder_Paragraph_InsertBreak
+        # End_PlaceHolder_Paragraph_InsertBreak
         _createMethodAction(self.context, self, "InsertBreak", OfficeExtension.OperationType.Default, [breakType, insertLocation])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertContentControl(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_Paragraph_InsertContentControl
-    	# End_PlaceHolder_Paragraph_InsertContentControl
+        # Begin_PlaceHolder_Paragraph_InsertContentControl
+        # End_PlaceHolder_Paragraph_InsertContentControl
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "InsertContentControl", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def insertFileFromBase64(self, base64File : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Paragraph_InsertFileFromBase64
-    	# End_PlaceHolder_Paragraph_InsertFileFromBase64
+        # Begin_PlaceHolder_Paragraph_InsertFileFromBase64
+        # End_PlaceHolder_Paragraph_InsertFileFromBase64
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertFileFromBase64", OfficeExtension.OperationType.Default, [base64File, insertLocation], False, True))
         return ret
 
     def insertHtml(self, html : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Paragraph_InsertHtml
-    	# End_PlaceHolder_Paragraph_InsertHtml
+        # Begin_PlaceHolder_Paragraph_InsertHtml
+        # End_PlaceHolder_Paragraph_InsertHtml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertHtml", OfficeExtension.OperationType.Default, [html, insertLocation], False, True))
         return ret
 
     def insertInlinePictureFromBase64(self, base64EncodedImage : 'str', insertLocation : 'str') -> 'InlinePicture':
-    	# Begin_PlaceHolder_Paragraph_InsertInlinePictureFromBase64
-    	# End_PlaceHolder_Paragraph_InsertInlinePictureFromBase64
+        # Begin_PlaceHolder_Paragraph_InsertInlinePictureFromBase64
+        # End_PlaceHolder_Paragraph_InsertInlinePictureFromBase64
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "InsertInlinePictureFromBase64", OfficeExtension.OperationType.Default, [base64EncodedImage, insertLocation], False, True))
         return ret
 
     def insertOoxml(self, ooxml : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Paragraph_InsertOoxml
-    	# End_PlaceHolder_Paragraph_InsertOoxml
+        # Begin_PlaceHolder_Paragraph_InsertOoxml
+        # End_PlaceHolder_Paragraph_InsertOoxml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertOoxml", OfficeExtension.OperationType.Default, [ooxml, insertLocation], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_Paragraph_InsertParagraph
-    	# End_PlaceHolder_Paragraph_InsertParagraph
+        # Begin_PlaceHolder_Paragraph_InsertParagraph
+        # End_PlaceHolder_Paragraph_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertTable(self, rowCount : 'int', columnCount : 'int', insertLocation : 'str', values : 'list' = None) -> 'Table':
-    	# Begin_PlaceHolder_Paragraph_InsertTable
-    	# End_PlaceHolder_Paragraph_InsertTable
+        # Begin_PlaceHolder_Paragraph_InsertTable
+        # End_PlaceHolder_Paragraph_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
         return ret
 
     def insertText(self, text : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Paragraph_InsertText
-    	# End_PlaceHolder_Paragraph_InsertText
+        # Begin_PlaceHolder_Paragraph_InsertText
+        # End_PlaceHolder_Paragraph_InsertText
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertText", OfficeExtension.OperationType.Default, [text, insertLocation], False, True))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Paragraph_Search
-    	# End_PlaceHolder_Paragraph_Search
+        # Begin_PlaceHolder_Paragraph_Search
+        # End_PlaceHolder_Paragraph_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Paragraph_Select
-    	# End_PlaceHolder_Paragraph_Select
+        # Begin_PlaceHolder_Paragraph_Select
+        # End_PlaceHolder_Paragraph_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def split(self, delimiters : 'list', trimDelimiters : 'bool' = None, trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Paragraph_Split
-    	# End_PlaceHolder_Paragraph_Split
+        # Begin_PlaceHolder_Paragraph_Split
+        # End_PlaceHolder_Paragraph_Split
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Split", OfficeExtension.OperationType.Read, [delimiters, trimDelimiters, trimSpacing], True, False))
         return ret
 
     def startNewList(self) -> 'List':
-    	# Begin_PlaceHolder_Paragraph_StartNewList
-    	# End_PlaceHolder_Paragraph_StartNewList
+        # Begin_PlaceHolder_Paragraph_StartNewList
+        # End_PlaceHolder_Paragraph_StartNewList
         ret = List(self.context, _createMethodObjectPath(self.context, self, "StartNewList", OfficeExtension.OperationType.Default, [], False, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Paragraph__KeepReference
-    	# End_PlaceHolder_Paragraph__KeepReference
+        # Begin_PlaceHolder_Paragraph__KeepReference
+        # End_PlaceHolder_Paragraph__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2739,40 +2739,40 @@ class ParagraphCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Paragraph':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ParagraphCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "ParagraphCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'Paragraph':
-    	# Begin_PlaceHolder_ParagraphCollection_GetFirst
-    	# End_PlaceHolder_ParagraphCollection_GetFirst
+        # Begin_PlaceHolder_ParagraphCollection_GetFirst
+        # End_PlaceHolder_ParagraphCollection_GetFirst
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getLast(self) -> 'Paragraph':
-    	# Begin_PlaceHolder_ParagraphCollection_GetLast
-    	# End_PlaceHolder_ParagraphCollection_GetLast
+        # Begin_PlaceHolder_ParagraphCollection_GetLast
+        # End_PlaceHolder_ParagraphCollection_GetLast
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetLast", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Paragraph':
-    	# Begin_PlaceHolder_ParagraphCollection__GetItem
-    	# End_PlaceHolder_ParagraphCollection__GetItem
+        # Begin_PlaceHolder_ParagraphCollection__GetItem
+        # End_PlaceHolder_ParagraphCollection__GetItem
         return Paragraph(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_ParagraphCollection__KeepReference
-    	# End_PlaceHolder_ParagraphCollection__KeepReference
+        # Begin_PlaceHolder_ParagraphCollection__KeepReference
+        # End_PlaceHolder_ParagraphCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -2875,8 +2875,8 @@ class Range(OfficeExtension.ClientObject):
 
     @property
     def hyperlink(self) -> 'str':
-        _loadIfImmediateExecution(self, "hyperlink", self._hyperlink)
-        _throwIfNotLoaded("hyperlink", self._hyperlink)
+        _loadIfInstantSyncExecutionMode(self, "hyperlink", self._hyperlink)
+        _throwIfNotLoaded("hyperlink", self._hyperlink, "Range", self._isNull)
         return self._hyperlink
     
 
@@ -2884,19 +2884,19 @@ class Range(OfficeExtension.ClientObject):
     def hyperlink(self, value : 'str'):
         self._hyperlink = value
         _createSetPropertyAction(self.context, self, "Hyperlink", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def isEmpty(self) -> 'bool':
-        _loadIfImmediateExecution(self, "isEmpty", self._isEmpty)
-        _throwIfNotLoaded("isEmpty", self._isEmpty)
+        _loadIfInstantSyncExecutionMode(self, "isEmpty", self._isEmpty)
+        _throwIfNotLoaded("isEmpty", self._isEmpty, "Range", self._isNull)
         return self._isEmpty
     
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "Range", self._isNull)
         return self._style
     
 
@@ -2904,12 +2904,12 @@ class Range(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBuiltIn(self) -> 'str':
-        _loadIfImmediateExecution(self, "styleBuiltIn", self._styleBuiltIn)
-        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn)
+        _loadIfInstantSyncExecutionMode(self, "styleBuiltIn", self._styleBuiltIn)
+        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn, "Range", self._isNull)
         return self._styleBuiltIn
     
 
@@ -2917,34 +2917,34 @@ class Range(OfficeExtension.ClientObject):
     def styleBuiltIn(self, value : 'str'):
         self._styleBuiltIn = value
         _createSetPropertyAction(self.context, self, "StyleBuiltIn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def text(self) -> 'str':
-        _loadIfImmediateExecution(self, "text", self._text)
-        _throwIfNotLoaded("text", self._text)
+        _loadIfInstantSyncExecutionMode(self, "text", self._text)
+        _throwIfNotLoaded("text", self._text, "Range", self._isNull)
         return self._text
     
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "Range", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Range", self._isNull)
         return self.__ReferenceId
     
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_Range_Clear
-    	# End_PlaceHolder_Range_Clear
+        # Begin_PlaceHolder_Range_Clear
+        # End_PlaceHolder_Range_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def compareLocationWith(self, range : 'Range') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Range_CompareLocationWith
@@ -2952,18 +2952,18 @@ class Range(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "CompareLocationWith", OfficeExtension.OperationType.Read, [range])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Range_Delete
-    	# End_PlaceHolder_Range_Delete
+        # Begin_PlaceHolder_Range_Delete
+        # End_PlaceHolder_Range_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def expandTo(self, range : 'Range') -> 'Range':
-    	# Begin_PlaceHolder_Range_ExpandTo
-    	# End_PlaceHolder_Range_ExpandTo
+        # Begin_PlaceHolder_Range_ExpandTo
+        # End_PlaceHolder_Range_ExpandTo
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "ExpandTo", OfficeExtension.OperationType.Default, [range], False, False))
         return ret
 
@@ -2973,18 +2973,18 @@ class Range(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetHtml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getHyperlinkRanges(self) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Range_GetHyperlinkRanges
-    	# End_PlaceHolder_Range_GetHyperlinkRanges
+        # Begin_PlaceHolder_Range_GetHyperlinkRanges
+        # End_PlaceHolder_Range_GetHyperlinkRanges
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "GetHyperlinkRanges", OfficeExtension.OperationType.Read, [], True, False))
         return ret
 
     def getNextTextRange(self, endingMarks : 'list', trimSpacing : 'bool' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetNextTextRange
-    	# End_PlaceHolder_Range_GetNextTextRange
+        # Begin_PlaceHolder_Range_GetNextTextRange
+        # End_PlaceHolder_Range_GetNextTextRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetNextTextRange", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], False, False))
         return ret
 
@@ -2994,104 +2994,104 @@ class Range(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetOoxml", OfficeExtension.OperationType.Read, [])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_Range_GetRange
-    	# End_PlaceHolder_Range_GetRange
+        # Begin_PlaceHolder_Range_GetRange
+        # End_PlaceHolder_Range_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def getTextRanges(self, endingMarks : 'list', trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Range_GetTextRanges
-    	# End_PlaceHolder_Range_GetTextRanges
+        # Begin_PlaceHolder_Range_GetTextRanges
+        # End_PlaceHolder_Range_GetTextRanges
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "GetTextRanges", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], True, False))
         return ret
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
-    	# Begin_PlaceHolder_Range_InsertBreak
-    	# End_PlaceHolder_Range_InsertBreak
+        # Begin_PlaceHolder_Range_InsertBreak
+        # End_PlaceHolder_Range_InsertBreak
         _createMethodAction(self.context, self, "InsertBreak", OfficeExtension.OperationType.Default, [breakType, insertLocation])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertContentControl(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_Range_InsertContentControl
-    	# End_PlaceHolder_Range_InsertContentControl
+        # Begin_PlaceHolder_Range_InsertContentControl
+        # End_PlaceHolder_Range_InsertContentControl
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "InsertContentControl", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def insertFileFromBase64(self, base64File : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Range_InsertFileFromBase64
-    	# End_PlaceHolder_Range_InsertFileFromBase64
+        # Begin_PlaceHolder_Range_InsertFileFromBase64
+        # End_PlaceHolder_Range_InsertFileFromBase64
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertFileFromBase64", OfficeExtension.OperationType.Default, [base64File, insertLocation], False, True))
         return ret
 
     def insertHtml(self, html : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Range_InsertHtml
-    	# End_PlaceHolder_Range_InsertHtml
+        # Begin_PlaceHolder_Range_InsertHtml
+        # End_PlaceHolder_Range_InsertHtml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertHtml", OfficeExtension.OperationType.Default, [html, insertLocation], False, True))
         return ret
 
     def insertInlinePictureFromBase64(self, base64EncodedImage : 'str', insertLocation : 'str') -> 'InlinePicture':
-    	# Begin_PlaceHolder_Range_InsertInlinePictureFromBase64
-    	# End_PlaceHolder_Range_InsertInlinePictureFromBase64
+        # Begin_PlaceHolder_Range_InsertInlinePictureFromBase64
+        # End_PlaceHolder_Range_InsertInlinePictureFromBase64
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "InsertInlinePictureFromBase64", OfficeExtension.OperationType.Default, [base64EncodedImage, insertLocation], False, True))
         return ret
 
     def insertOoxml(self, ooxml : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Range_InsertOoxml
-    	# End_PlaceHolder_Range_InsertOoxml
+        # Begin_PlaceHolder_Range_InsertOoxml
+        # End_PlaceHolder_Range_InsertOoxml
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertOoxml", OfficeExtension.OperationType.Default, [ooxml, insertLocation], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_Range_InsertParagraph
-    	# End_PlaceHolder_Range_InsertParagraph
+        # Begin_PlaceHolder_Range_InsertParagraph
+        # End_PlaceHolder_Range_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertTable(self, rowCount : 'int', columnCount : 'int', insertLocation : 'str', values : 'list' = None) -> 'Table':
-    	# Begin_PlaceHolder_Range_InsertTable
-    	# End_PlaceHolder_Range_InsertTable
+        # Begin_PlaceHolder_Range_InsertTable
+        # End_PlaceHolder_Range_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
         return ret
 
     def insertText(self, text : 'str', insertLocation : 'str') -> 'Range':
-    	# Begin_PlaceHolder_Range_InsertText
-    	# End_PlaceHolder_Range_InsertText
+        # Begin_PlaceHolder_Range_InsertText
+        # End_PlaceHolder_Range_InsertText
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "InsertText", OfficeExtension.OperationType.Default, [text, insertLocation], False, True))
         return ret
 
     def intersectWith(self, range : 'Range') -> 'Range':
-    	# Begin_PlaceHolder_Range_IntersectWith
-    	# End_PlaceHolder_Range_IntersectWith
+        # Begin_PlaceHolder_Range_IntersectWith
+        # End_PlaceHolder_Range_IntersectWith
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "IntersectWith", OfficeExtension.OperationType.Default, [range], False, False))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Range_Search
-    	# End_PlaceHolder_Range_Search
+        # Begin_PlaceHolder_Range_Search
+        # End_PlaceHolder_Range_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Range_Select
-    	# End_PlaceHolder_Range_Select
+        # Begin_PlaceHolder_Range_Select
+        # End_PlaceHolder_Range_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def split(self, delimiters : 'list', multiParagraphs : 'bool' = None, trimDelimiters : 'bool' = None, trimSpacing : 'bool' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Range_Split
-    	# End_PlaceHolder_Range_Split
+        # Begin_PlaceHolder_Range_Split
+        # End_PlaceHolder_Range_Split
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Split", OfficeExtension.OperationType.Read, [delimiters, multiParagraphs, trimDelimiters, trimSpacing], True, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Range__KeepReference
-    	# End_PlaceHolder_Range__KeepReference
+        # Begin_PlaceHolder_Range__KeepReference
+        # End_PlaceHolder_Range__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3156,34 +3156,34 @@ class RangeCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Range':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "RangeCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "RangeCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'Range':
-    	# Begin_PlaceHolder_RangeCollection_GetFirst
-    	# End_PlaceHolder_RangeCollection_GetFirst
+        # Begin_PlaceHolder_RangeCollection_GetFirst
+        # End_PlaceHolder_RangeCollection_GetFirst
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Range':
-    	# Begin_PlaceHolder_RangeCollection__GetItem
-    	# End_PlaceHolder_RangeCollection__GetItem
+        # Begin_PlaceHolder_RangeCollection__GetItem
+        # End_PlaceHolder_RangeCollection__GetItem
         return Range(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_RangeCollection__KeepReference
-    	# End_PlaceHolder_RangeCollection__KeepReference
+        # Begin_PlaceHolder_RangeCollection__KeepReference
+        # End_PlaceHolder_RangeCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3226,8 +3226,8 @@ class SearchOptions(OfficeExtension.ClientObject):
 
     @property
     def ignorePunct(self) -> 'bool':
-        _loadIfImmediateExecution(self, "ignorePunct", self._ignorePunct)
-        _throwIfNotLoaded("ignorePunct", self._ignorePunct)
+        _loadIfInstantSyncExecutionMode(self, "ignorePunct", self._ignorePunct)
+        _throwIfNotLoaded("ignorePunct", self._ignorePunct, "SearchOptions", self._isNull)
         return self._ignorePunct
     
 
@@ -3235,12 +3235,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def ignorePunct(self, value : 'bool'):
         self._ignorePunct = value
         _createSetPropertyAction(self.context, self, "IgnorePunct", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def ignoreSpace(self) -> 'bool':
-        _loadIfImmediateExecution(self, "ignoreSpace", self._ignoreSpace)
-        _throwIfNotLoaded("ignoreSpace", self._ignoreSpace)
+        _loadIfInstantSyncExecutionMode(self, "ignoreSpace", self._ignoreSpace)
+        _throwIfNotLoaded("ignoreSpace", self._ignoreSpace, "SearchOptions", self._isNull)
         return self._ignoreSpace
     
 
@@ -3248,12 +3248,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def ignoreSpace(self, value : 'bool'):
         self._ignoreSpace = value
         _createSetPropertyAction(self.context, self, "IgnoreSpace", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def matchCase(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchCase", self._matchCase)
-        _throwIfNotLoaded("matchCase", self._matchCase)
+        _loadIfInstantSyncExecutionMode(self, "matchCase", self._matchCase)
+        _throwIfNotLoaded("matchCase", self._matchCase, "SearchOptions", self._isNull)
         return self._matchCase
     
 
@@ -3261,12 +3261,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def matchCase(self, value : 'bool'):
         self._matchCase = value
         _createSetPropertyAction(self.context, self, "MatchCase", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def matchPrefix(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchPrefix", self._matchPrefix)
-        _throwIfNotLoaded("matchPrefix", self._matchPrefix)
+        _loadIfInstantSyncExecutionMode(self, "matchPrefix", self._matchPrefix)
+        _throwIfNotLoaded("matchPrefix", self._matchPrefix, "SearchOptions", self._isNull)
         return self._matchPrefix
     
 
@@ -3274,12 +3274,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def matchPrefix(self, value : 'bool'):
         self._matchPrefix = value
         _createSetPropertyAction(self.context, self, "MatchPrefix", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def matchSuffix(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchSuffix", self._matchSuffix)
-        _throwIfNotLoaded("matchSuffix", self._matchSuffix)
+        _loadIfInstantSyncExecutionMode(self, "matchSuffix", self._matchSuffix)
+        _throwIfNotLoaded("matchSuffix", self._matchSuffix, "SearchOptions", self._isNull)
         return self._matchSuffix
     
 
@@ -3287,12 +3287,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def matchSuffix(self, value : 'bool'):
         self._matchSuffix = value
         _createSetPropertyAction(self.context, self, "MatchSuffix", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def matchWholeWord(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchWholeWord", self._matchWholeWord)
-        _throwIfNotLoaded("matchWholeWord", self._matchWholeWord)
+        _loadIfInstantSyncExecutionMode(self, "matchWholeWord", self._matchWholeWord)
+        _throwIfNotLoaded("matchWholeWord", self._matchWholeWord, "SearchOptions", self._isNull)
         return self._matchWholeWord
     
 
@@ -3300,12 +3300,12 @@ class SearchOptions(OfficeExtension.ClientObject):
     def matchWholeWord(self, value : 'bool'):
         self._matchWholeWord = value
         _createSetPropertyAction(self.context, self, "MatchWholeWord", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def matchWildcards(self) -> 'bool':
-        _loadIfImmediateExecution(self, "matchWildcards", self._matchWildcards)
-        _throwIfNotLoaded("matchWildcards", self._matchWildcards)
+        _loadIfInstantSyncExecutionMode(self, "matchWildcards", self._matchWildcards)
+        _throwIfNotLoaded("matchWildcards", self._matchWildcards, "SearchOptions", self._isNull)
         return self._matchWildcards
     
 
@@ -3313,7 +3313,7 @@ class SearchOptions(OfficeExtension.ClientObject):
     def matchWildcards(self, value : 'bool'):
         self._matchWildcards = value
         _createSetPropertyAction(self.context, self, "MatchWildcards", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3362,41 +3362,41 @@ class Section(OfficeExtension.ClientObject):
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "Section", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Section", self._isNull)
         return self.__ReferenceId
     
 
     def getFooter(self, type : 'str') -> 'Body':
-    	# Begin_PlaceHolder_Section_GetFooter
-    	# End_PlaceHolder_Section_GetFooter
+        # Begin_PlaceHolder_Section_GetFooter
+        # End_PlaceHolder_Section_GetFooter
         ret = Body(self.context, _createMethodObjectPath(self.context, self, "GetFooter", OfficeExtension.OperationType.Read, [type], False, True))
         return ret
 
     def getHeader(self, type : 'str') -> 'Body':
-    	# Begin_PlaceHolder_Section_GetHeader
-    	# End_PlaceHolder_Section_GetHeader
+        # Begin_PlaceHolder_Section_GetHeader
+        # End_PlaceHolder_Section_GetHeader
         ret = Body(self.context, _createMethodObjectPath(self.context, self, "GetHeader", OfficeExtension.OperationType.Read, [type], False, True))
         return ret
 
     def getNext(self) -> 'Section':
-    	# Begin_PlaceHolder_Section_GetNext
-    	# End_PlaceHolder_Section_GetNext
+        # Begin_PlaceHolder_Section_GetNext
+        # End_PlaceHolder_Section_GetNext
         ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Section__KeepReference
-    	# End_PlaceHolder_Section__KeepReference
+        # Begin_PlaceHolder_Section__KeepReference
+        # End_PlaceHolder_Section__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3433,34 +3433,34 @@ class SectionCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Section':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "SectionCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "SectionCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'Section':
-    	# Begin_PlaceHolder_SectionCollection_GetFirst
-    	# End_PlaceHolder_SectionCollection_GetFirst
+        # Begin_PlaceHolder_SectionCollection_GetFirst
+        # End_PlaceHolder_SectionCollection_GetFirst
         ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Section':
-    	# Begin_PlaceHolder_SectionCollection__GetItem
-    	# End_PlaceHolder_SectionCollection__GetItem
+        # Begin_PlaceHolder_SectionCollection__GetItem
+        # End_PlaceHolder_SectionCollection__GetItem
         return Section(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_SectionCollection__KeepReference
-    	# End_PlaceHolder_SectionCollection__KeepReference
+        # Begin_PlaceHolder_SectionCollection__KeepReference
+        # End_PlaceHolder_SectionCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3569,8 +3569,8 @@ class Table(OfficeExtension.ClientObject):
 
     @property
     def headerRowCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "headerRowCount", self._headerRowCount)
-        _throwIfNotLoaded("headerRowCount", self._headerRowCount)
+        _loadIfInstantSyncExecutionMode(self, "headerRowCount", self._headerRowCount)
+        _throwIfNotLoaded("headerRowCount", self._headerRowCount, "Table", self._isNull)
         return self._headerRowCount
     
 
@@ -3578,19 +3578,19 @@ class Table(OfficeExtension.ClientObject):
     def headerRowCount(self, value : 'int'):
         self._headerRowCount = value
         _createSetPropertyAction(self.context, self, "HeaderRowCount", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def height(self) -> 'float':
-        _loadIfImmediateExecution(self, "height", self._height)
-        _throwIfNotLoaded("height", self._height)
+        _loadIfInstantSyncExecutionMode(self, "height", self._height)
+        _throwIfNotLoaded("height", self._height, "Table", self._isNull)
         return self._height
     
 
     @property
     def horizontalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "horizontalAlignment", self._horizontalAlignment)
-        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "horizontalAlignment", self._horizontalAlignment)
+        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment, "Table", self._isNull)
         return self._horizontalAlignment
     
 
@@ -3598,33 +3598,33 @@ class Table(OfficeExtension.ClientObject):
     def horizontalAlignment(self, value : 'str'):
         self._horizontalAlignment = value
         _createSetPropertyAction(self.context, self, "HorizontalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def isUniform(self) -> 'bool':
-        _loadIfImmediateExecution(self, "isUniform", self._isUniform)
-        _throwIfNotLoaded("isUniform", self._isUniform)
+        _loadIfInstantSyncExecutionMode(self, "isUniform", self._isUniform)
+        _throwIfNotLoaded("isUniform", self._isUniform, "Table", self._isNull)
         return self._isUniform
     
 
     @property
     def nestingLevel(self) -> 'int':
-        _loadIfImmediateExecution(self, "nestingLevel", self._nestingLevel)
-        _throwIfNotLoaded("nestingLevel", self._nestingLevel)
+        _loadIfInstantSyncExecutionMode(self, "nestingLevel", self._nestingLevel)
+        _throwIfNotLoaded("nestingLevel", self._nestingLevel, "Table", self._isNull)
         return self._nestingLevel
     
 
     @property
     def rowCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowCount", self._rowCount)
-        _throwIfNotLoaded("rowCount", self._rowCount)
+        _loadIfInstantSyncExecutionMode(self, "rowCount", self._rowCount)
+        _throwIfNotLoaded("rowCount", self._rowCount, "Table", self._isNull)
         return self._rowCount
     
 
     @property
     def shadingColor(self) -> 'str':
-        _loadIfImmediateExecution(self, "shadingColor", self._shadingColor)
-        _throwIfNotLoaded("shadingColor", self._shadingColor)
+        _loadIfInstantSyncExecutionMode(self, "shadingColor", self._shadingColor)
+        _throwIfNotLoaded("shadingColor", self._shadingColor, "Table", self._isNull)
         return self._shadingColor
     
 
@@ -3632,12 +3632,12 @@ class Table(OfficeExtension.ClientObject):
     def shadingColor(self, value : 'str'):
         self._shadingColor = value
         _createSetPropertyAction(self.context, self, "ShadingColor", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def style(self) -> 'str':
-        _loadIfImmediateExecution(self, "style", self._style)
-        _throwIfNotLoaded("style", self._style)
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "Table", self._isNull)
         return self._style
     
 
@@ -3645,12 +3645,12 @@ class Table(OfficeExtension.ClientObject):
     def style(self, value : 'str'):
         self._style = value
         _createSetPropertyAction(self.context, self, "Style", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBandedColumns(self) -> 'bool':
-        _loadIfImmediateExecution(self, "styleBandedColumns", self._styleBandedColumns)
-        _throwIfNotLoaded("styleBandedColumns", self._styleBandedColumns)
+        _loadIfInstantSyncExecutionMode(self, "styleBandedColumns", self._styleBandedColumns)
+        _throwIfNotLoaded("styleBandedColumns", self._styleBandedColumns, "Table", self._isNull)
         return self._styleBandedColumns
     
 
@@ -3658,12 +3658,12 @@ class Table(OfficeExtension.ClientObject):
     def styleBandedColumns(self, value : 'bool'):
         self._styleBandedColumns = value
         _createSetPropertyAction(self.context, self, "StyleBandedColumns", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBandedRows(self) -> 'bool':
-        _loadIfImmediateExecution(self, "styleBandedRows", self._styleBandedRows)
-        _throwIfNotLoaded("styleBandedRows", self._styleBandedRows)
+        _loadIfInstantSyncExecutionMode(self, "styleBandedRows", self._styleBandedRows)
+        _throwIfNotLoaded("styleBandedRows", self._styleBandedRows, "Table", self._isNull)
         return self._styleBandedRows
     
 
@@ -3671,12 +3671,12 @@ class Table(OfficeExtension.ClientObject):
     def styleBandedRows(self, value : 'bool'):
         self._styleBandedRows = value
         _createSetPropertyAction(self.context, self, "StyleBandedRows", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleBuiltIn(self) -> 'str':
-        _loadIfImmediateExecution(self, "styleBuiltIn", self._styleBuiltIn)
-        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn)
+        _loadIfInstantSyncExecutionMode(self, "styleBuiltIn", self._styleBuiltIn)
+        _throwIfNotLoaded("styleBuiltIn", self._styleBuiltIn, "Table", self._isNull)
         return self._styleBuiltIn
     
 
@@ -3684,12 +3684,12 @@ class Table(OfficeExtension.ClientObject):
     def styleBuiltIn(self, value : 'str'):
         self._styleBuiltIn = value
         _createSetPropertyAction(self.context, self, "StyleBuiltIn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleFirstColumn(self) -> 'bool':
-        _loadIfImmediateExecution(self, "styleFirstColumn", self._styleFirstColumn)
-        _throwIfNotLoaded("styleFirstColumn", self._styleFirstColumn)
+        _loadIfInstantSyncExecutionMode(self, "styleFirstColumn", self._styleFirstColumn)
+        _throwIfNotLoaded("styleFirstColumn", self._styleFirstColumn, "Table", self._isNull)
         return self._styleFirstColumn
     
 
@@ -3697,12 +3697,12 @@ class Table(OfficeExtension.ClientObject):
     def styleFirstColumn(self, value : 'bool'):
         self._styleFirstColumn = value
         _createSetPropertyAction(self.context, self, "StyleFirstColumn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleLastColumn(self) -> 'bool':
-        _loadIfImmediateExecution(self, "styleLastColumn", self._styleLastColumn)
-        _throwIfNotLoaded("styleLastColumn", self._styleLastColumn)
+        _loadIfInstantSyncExecutionMode(self, "styleLastColumn", self._styleLastColumn)
+        _throwIfNotLoaded("styleLastColumn", self._styleLastColumn, "Table", self._isNull)
         return self._styleLastColumn
     
 
@@ -3710,12 +3710,12 @@ class Table(OfficeExtension.ClientObject):
     def styleLastColumn(self, value : 'bool'):
         self._styleLastColumn = value
         _createSetPropertyAction(self.context, self, "StyleLastColumn", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def styleTotalRow(self) -> 'bool':
-        _loadIfImmediateExecution(self, "styleTotalRow", self._styleTotalRow)
-        _throwIfNotLoaded("styleTotalRow", self._styleTotalRow)
+        _loadIfInstantSyncExecutionMode(self, "styleTotalRow", self._styleTotalRow)
+        _throwIfNotLoaded("styleTotalRow", self._styleTotalRow, "Table", self._isNull)
         return self._styleTotalRow
     
 
@@ -3723,12 +3723,12 @@ class Table(OfficeExtension.ClientObject):
     def styleTotalRow(self, value : 'bool'):
         self._styleTotalRow = value
         _createSetPropertyAction(self.context, self, "StyleTotalRow", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "Table", self._isNull)
         return self._values
     
 
@@ -3736,12 +3736,12 @@ class Table(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def verticalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "verticalAlignment", self._verticalAlignment)
-        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "verticalAlignment", self._verticalAlignment)
+        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment, "Table", self._isNull)
         return self._verticalAlignment
     
 
@@ -3749,12 +3749,12 @@ class Table(OfficeExtension.ClientObject):
     def verticalAlignment(self, value : 'str'):
         self._verticalAlignment = value
         _createSetPropertyAction(self.context, self, "VerticalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def width(self) -> 'float':
-        _loadIfImmediateExecution(self, "width", self._width)
-        _throwIfNotLoaded("width", self._width)
+        _loadIfInstantSyncExecutionMode(self, "width", self._width)
+        _throwIfNotLoaded("width", self._width, "Table", self._isNull)
         return self._width
     
 
@@ -3762,91 +3762,91 @@ class Table(OfficeExtension.ClientObject):
     def width(self, value : 'float'):
         self._width = value
         _createSetPropertyAction(self.context, self, "Width", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "Table", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Table", self._isNull)
         return self.__ReferenceId
     
 
     def addColumns(self, insertLocation : 'str', columnCount : 'int', values : 'list' = None) -> None:
-    	# Begin_PlaceHolder_Table_AddColumns
-    	# End_PlaceHolder_Table_AddColumns
+        # Begin_PlaceHolder_Table_AddColumns
+        # End_PlaceHolder_Table_AddColumns
         _createMethodAction(self.context, self, "AddColumns", OfficeExtension.OperationType.Default, [insertLocation, columnCount, values])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def addRows(self, insertLocation : 'str', rowCount : 'int', values : 'list' = None) -> 'TableRowCollection':
-    	# Begin_PlaceHolder_Table_AddRows
-    	# End_PlaceHolder_Table_AddRows
+        # Begin_PlaceHolder_Table_AddRows
+        # End_PlaceHolder_Table_AddRows
         ret = TableRowCollection(self.context, _createMethodObjectPath(self.context, self, "AddRows", OfficeExtension.OperationType.Default, [insertLocation, rowCount, values], True, False))
         return ret
 
     def autoFitContents(self) -> None:
-    	# Begin_PlaceHolder_Table_AutoFitContents
-    	# End_PlaceHolder_Table_AutoFitContents
+        # Begin_PlaceHolder_Table_AutoFitContents
+        # End_PlaceHolder_Table_AutoFitContents
         _createMethodAction(self.context, self, "AutoFitContents", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def autoFitWindow(self) -> None:
-    	# Begin_PlaceHolder_Table_AutoFitWindow
-    	# End_PlaceHolder_Table_AutoFitWindow
+        # Begin_PlaceHolder_Table_AutoFitWindow
+        # End_PlaceHolder_Table_AutoFitWindow
         _createMethodAction(self.context, self, "AutoFitWindow", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_Table_Clear
-    	# End_PlaceHolder_Table_Clear
+        # Begin_PlaceHolder_Table_Clear
+        # End_PlaceHolder_Table_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_Table_Delete
-    	# End_PlaceHolder_Table_Delete
+        # Begin_PlaceHolder_Table_Delete
+        # End_PlaceHolder_Table_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def deleteColumns(self, columnIndex : 'int', columnCount : 'int' = None) -> None:
-    	# Begin_PlaceHolder_Table_DeleteColumns
-    	# End_PlaceHolder_Table_DeleteColumns
+        # Begin_PlaceHolder_Table_DeleteColumns
+        # End_PlaceHolder_Table_DeleteColumns
         _createMethodAction(self.context, self, "DeleteColumns", OfficeExtension.OperationType.Default, [columnIndex, columnCount])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def deleteRows(self, rowIndex : 'int', rowCount : 'int' = None) -> None:
-    	# Begin_PlaceHolder_Table_DeleteRows
-    	# End_PlaceHolder_Table_DeleteRows
+        # Begin_PlaceHolder_Table_DeleteRows
+        # End_PlaceHolder_Table_DeleteRows
         _createMethodAction(self.context, self, "DeleteRows", OfficeExtension.OperationType.Default, [rowIndex, rowCount])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def distributeColumns(self) -> None:
-    	# Begin_PlaceHolder_Table_DistributeColumns
-    	# End_PlaceHolder_Table_DistributeColumns
+        # Begin_PlaceHolder_Table_DistributeColumns
+        # End_PlaceHolder_Table_DistributeColumns
         _createMethodAction(self.context, self, "DistributeColumns", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def distributeRows(self) -> None:
-    	# Begin_PlaceHolder_Table_DistributeRows
-    	# End_PlaceHolder_Table_DistributeRows
+        # Begin_PlaceHolder_Table_DistributeRows
+        # End_PlaceHolder_Table_DistributeRows
         _createMethodAction(self.context, self, "DistributeRows", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getBorder(self, borderLocation : 'str') -> 'TableBorder':
-    	# Begin_PlaceHolder_Table_GetBorder
-    	# End_PlaceHolder_Table_GetBorder
+        # Begin_PlaceHolder_Table_GetBorder
+        # End_PlaceHolder_Table_GetBorder
         ret = TableBorder(self.context, _createMethodObjectPath(self.context, self, "GetBorder", OfficeExtension.OperationType.Read, [borderLocation], False, False))
         return ret
 
     def getCell(self, rowIndex : 'int', cellIndex : 'int') -> 'TableCell':
-    	# Begin_PlaceHolder_Table_GetCell
-    	# End_PlaceHolder_Table_GetCell
+        # Begin_PlaceHolder_Table_GetCell
+        # End_PlaceHolder_Table_GetCell
         ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Default, [rowIndex, cellIndex], False, False))
         return ret
 
@@ -3856,62 +3856,62 @@ class Table(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetCellPadding", OfficeExtension.OperationType.Read, [cellPaddingLocation])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getNext(self) -> 'Table':
-    	# Begin_PlaceHolder_Table_GetNext
-    	# End_PlaceHolder_Table_GetNext
+        # Begin_PlaceHolder_Table_GetNext
+        # End_PlaceHolder_Table_GetNext
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
-    	# Begin_PlaceHolder_Table_GetRange
-    	# End_PlaceHolder_Table_GetRange
+        # Begin_PlaceHolder_Table_GetRange
+        # End_PlaceHolder_Table_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [rangeLocation], False, False))
         return ret
 
     def insertContentControl(self) -> 'ContentControl':
-    	# Begin_PlaceHolder_Table_InsertContentControl
-    	# End_PlaceHolder_Table_InsertContentControl
+        # Begin_PlaceHolder_Table_InsertContentControl
+        # End_PlaceHolder_Table_InsertContentControl
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "InsertContentControl", OfficeExtension.OperationType.Default, [], False, True))
         return ret
 
     def insertParagraph(self, paragraphText : 'str', insertLocation : 'str') -> 'Paragraph':
-    	# Begin_PlaceHolder_Table_InsertParagraph
-    	# End_PlaceHolder_Table_InsertParagraph
+        # Begin_PlaceHolder_Table_InsertParagraph
+        # End_PlaceHolder_Table_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
 
     def insertTable(self, rowCount : 'int', columnCount : 'int', insertLocation : 'str', values : 'list' = None) -> 'Table':
-    	# Begin_PlaceHolder_Table_InsertTable
-    	# End_PlaceHolder_Table_InsertTable
+        # Begin_PlaceHolder_Table_InsertTable
+        # End_PlaceHolder_Table_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_Table_Search
-    	# End_PlaceHolder_Table_Search
+        # Begin_PlaceHolder_Table_Search
+        # End_PlaceHolder_Table_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_Table_Select
-    	# End_PlaceHolder_Table_Select
+        # Begin_PlaceHolder_Table_Select
+        # End_PlaceHolder_Table_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setCellPadding(self, cellPaddingLocation : 'str', cellPadding : 'float') -> None:
-    	# Begin_PlaceHolder_Table_SetCellPadding
-    	# End_PlaceHolder_Table_SetCellPadding
+        # Begin_PlaceHolder_Table_SetCellPadding
+        # End_PlaceHolder_Table_SetCellPadding
         _createMethodAction(self.context, self, "SetCellPadding", OfficeExtension.OperationType.Default, [cellPaddingLocation, cellPadding])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_Table__KeepReference
-    	# End_PlaceHolder_Table__KeepReference
+        # Begin_PlaceHolder_Table__KeepReference
+        # End_PlaceHolder_Table__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -3998,34 +3998,34 @@ class TableCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of Table':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'Table':
-    	# Begin_PlaceHolder_TableCollection_GetFirst
-    	# End_PlaceHolder_TableCollection_GetFirst
+        # Begin_PlaceHolder_TableCollection_GetFirst
+        # End_PlaceHolder_TableCollection_GetFirst
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Table':
-    	# Begin_PlaceHolder_TableCollection__GetItem
-    	# End_PlaceHolder_TableCollection__GetItem
+        # Begin_PlaceHolder_TableCollection__GetItem
+        # End_PlaceHolder_TableCollection__GetItem
         return Table(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableCollection__KeepReference
-    	# End_PlaceHolder_TableCollection__KeepReference
+        # Begin_PlaceHolder_TableCollection__KeepReference
+        # End_PlaceHolder_TableCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4089,15 +4089,15 @@ class TableRow(OfficeExtension.ClientObject):
 
     @property
     def cellCount(self) -> 'int':
-        _loadIfImmediateExecution(self, "cellCount", self._cellCount)
-        _throwIfNotLoaded("cellCount", self._cellCount)
+        _loadIfInstantSyncExecutionMode(self, "cellCount", self._cellCount)
+        _throwIfNotLoaded("cellCount", self._cellCount, "TableRow", self._isNull)
         return self._cellCount
     
 
     @property
     def horizontalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "horizontalAlignment", self._horizontalAlignment)
-        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "horizontalAlignment", self._horizontalAlignment)
+        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment, "TableRow", self._isNull)
         return self._horizontalAlignment
     
 
@@ -4105,19 +4105,19 @@ class TableRow(OfficeExtension.ClientObject):
     def horizontalAlignment(self, value : 'str'):
         self._horizontalAlignment = value
         _createSetPropertyAction(self.context, self, "HorizontalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def isHeader(self) -> 'bool':
-        _loadIfImmediateExecution(self, "isHeader", self._isHeader)
-        _throwIfNotLoaded("isHeader", self._isHeader)
+        _loadIfInstantSyncExecutionMode(self, "isHeader", self._isHeader)
+        _throwIfNotLoaded("isHeader", self._isHeader, "TableRow", self._isNull)
         return self._isHeader
     
 
     @property
     def preferredHeight(self) -> 'float':
-        _loadIfImmediateExecution(self, "preferredHeight", self._preferredHeight)
-        _throwIfNotLoaded("preferredHeight", self._preferredHeight)
+        _loadIfInstantSyncExecutionMode(self, "preferredHeight", self._preferredHeight)
+        _throwIfNotLoaded("preferredHeight", self._preferredHeight, "TableRow", self._isNull)
         return self._preferredHeight
     
 
@@ -4125,19 +4125,19 @@ class TableRow(OfficeExtension.ClientObject):
     def preferredHeight(self, value : 'float'):
         self._preferredHeight = value
         _createSetPropertyAction(self.context, self, "PreferredHeight", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowIndex", self._rowIndex)
-        _throwIfNotLoaded("rowIndex", self._rowIndex)
+        _loadIfInstantSyncExecutionMode(self, "rowIndex", self._rowIndex)
+        _throwIfNotLoaded("rowIndex", self._rowIndex, "TableRow", self._isNull)
         return self._rowIndex
     
 
     @property
     def shadingColor(self) -> 'str':
-        _loadIfImmediateExecution(self, "shadingColor", self._shadingColor)
-        _throwIfNotLoaded("shadingColor", self._shadingColor)
+        _loadIfInstantSyncExecutionMode(self, "shadingColor", self._shadingColor)
+        _throwIfNotLoaded("shadingColor", self._shadingColor, "TableRow", self._isNull)
         return self._shadingColor
     
 
@@ -4145,12 +4145,12 @@ class TableRow(OfficeExtension.ClientObject):
     def shadingColor(self, value : 'str'):
         self._shadingColor = value
         _createSetPropertyAction(self.context, self, "ShadingColor", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def values(self) -> 'list':
-        _loadIfImmediateExecution(self, "values", self._values)
-        _throwIfNotLoaded("values", self._values)
+        _loadIfInstantSyncExecutionMode(self, "values", self._values)
+        _throwIfNotLoaded("values", self._values, "TableRow", self._isNull)
         return self._values
     
 
@@ -4158,12 +4158,12 @@ class TableRow(OfficeExtension.ClientObject):
     def values(self, value : 'list'):
         self._values = value
         _createSetPropertyAction(self.context, self, "Values", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def verticalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "verticalAlignment", self._verticalAlignment)
-        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "verticalAlignment", self._verticalAlignment)
+        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment, "TableRow", self._isNull)
         return self._verticalAlignment
     
 
@@ -4171,37 +4171,37 @@ class TableRow(OfficeExtension.ClientObject):
     def verticalAlignment(self, value : 'str'):
         self._verticalAlignment = value
         _createSetPropertyAction(self.context, self, "VerticalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "TableRow", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableRow", self._isNull)
         return self.__ReferenceId
     
 
     def clear(self) -> None:
-    	# Begin_PlaceHolder_TableRow_Clear
-    	# End_PlaceHolder_TableRow_Clear
+        # Begin_PlaceHolder_TableRow_Clear
+        # End_PlaceHolder_TableRow_Clear
         _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
-    	# Begin_PlaceHolder_TableRow_Delete
-    	# End_PlaceHolder_TableRow_Delete
+        # Begin_PlaceHolder_TableRow_Delete
+        # End_PlaceHolder_TableRow_Delete
         _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getBorder(self, borderLocation : 'str') -> 'TableBorder':
-    	# Begin_PlaceHolder_TableRow_GetBorder
-    	# End_PlaceHolder_TableRow_GetBorder
+        # Begin_PlaceHolder_TableRow_GetBorder
+        # End_PlaceHolder_TableRow_GetBorder
         ret = TableBorder(self.context, _createMethodObjectPath(self.context, self, "GetBorder", OfficeExtension.OperationType.Read, [borderLocation], False, False))
         return ret
 
@@ -4211,44 +4211,44 @@ class TableRow(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetCellPadding", OfficeExtension.OperationType.Read, [cellPaddingLocation])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getNext(self) -> 'TableRow':
-    	# Begin_PlaceHolder_TableRow_GetNext
-    	# End_PlaceHolder_TableRow_GetNext
+        # Begin_PlaceHolder_TableRow_GetNext
+        # End_PlaceHolder_TableRow_GetNext
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def insertRows(self, insertLocation : 'str', rowCount : 'int', values : 'list' = None) -> 'TableRowCollection':
-    	# Begin_PlaceHolder_TableRow_InsertRows
-    	# End_PlaceHolder_TableRow_InsertRows
+        # Begin_PlaceHolder_TableRow_InsertRows
+        # End_PlaceHolder_TableRow_InsertRows
         ret = TableRowCollection(self.context, _createMethodObjectPath(self.context, self, "InsertRows", OfficeExtension.OperationType.Read, [insertLocation, rowCount, values], True, False))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
-    	# Begin_PlaceHolder_TableRow_Search
-    	# End_PlaceHolder_TableRow_Search
+        # Begin_PlaceHolder_TableRow_Search
+        # End_PlaceHolder_TableRow_Search
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "Search", OfficeExtension.OperationType.Read, [searchText, searchOptions], True, True))
         return ret
 
     def select(self, selectionMode : 'str' = None) -> None:
-    	# Begin_PlaceHolder_TableRow_Select
-    	# End_PlaceHolder_TableRow_Select
+        # Begin_PlaceHolder_TableRow_Select
+        # End_PlaceHolder_TableRow_Select
         _createMethodAction(self.context, self, "Select", OfficeExtension.OperationType.Read, [selectionMode])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def setCellPadding(self, cellPaddingLocation : 'str', cellPadding : 'float') -> None:
-    	# Begin_PlaceHolder_TableRow_SetCellPadding
-    	# End_PlaceHolder_TableRow_SetCellPadding
+        # Begin_PlaceHolder_TableRow_SetCellPadding
+        # End_PlaceHolder_TableRow_SetCellPadding
         _createMethodAction(self.context, self, "SetCellPadding", OfficeExtension.OperationType.Default, [cellPaddingLocation, cellPadding])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableRow__KeepReference
-    	# End_PlaceHolder_TableRow__KeepReference
+        # Begin_PlaceHolder_TableRow__KeepReference
+        # End_PlaceHolder_TableRow__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4305,34 +4305,34 @@ class TableRowCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of TableRow':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableRowCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableRowCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'TableRow':
-    	# Begin_PlaceHolder_TableRowCollection_GetFirst
-    	# End_PlaceHolder_TableRowCollection_GetFirst
+        # Begin_PlaceHolder_TableRowCollection_GetFirst
+        # End_PlaceHolder_TableRowCollection_GetFirst
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'TableRow':
-    	# Begin_PlaceHolder_TableRowCollection__GetItem
-    	# End_PlaceHolder_TableRowCollection__GetItem
+        # Begin_PlaceHolder_TableRowCollection__GetItem
+        # End_PlaceHolder_TableRowCollection__GetItem
         return TableRow(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableRowCollection__KeepReference
-    	# End_PlaceHolder_TableRowCollection__KeepReference
+        # Begin_PlaceHolder_TableRowCollection__KeepReference
+        # End_PlaceHolder_TableRowCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4396,15 +4396,15 @@ class TableCell(OfficeExtension.ClientObject):
 
     @property
     def cellIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "cellIndex", self._cellIndex)
-        _throwIfNotLoaded("cellIndex", self._cellIndex)
+        _loadIfInstantSyncExecutionMode(self, "cellIndex", self._cellIndex)
+        _throwIfNotLoaded("cellIndex", self._cellIndex, "TableCell", self._isNull)
         return self._cellIndex
     
 
     @property
     def columnWidth(self) -> 'float':
-        _loadIfImmediateExecution(self, "columnWidth", self._columnWidth)
-        _throwIfNotLoaded("columnWidth", self._columnWidth)
+        _loadIfInstantSyncExecutionMode(self, "columnWidth", self._columnWidth)
+        _throwIfNotLoaded("columnWidth", self._columnWidth, "TableCell", self._isNull)
         return self._columnWidth
     
 
@@ -4412,12 +4412,12 @@ class TableCell(OfficeExtension.ClientObject):
     def columnWidth(self, value : 'float'):
         self._columnWidth = value
         _createSetPropertyAction(self.context, self, "ColumnWidth", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def horizontalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "horizontalAlignment", self._horizontalAlignment)
-        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "horizontalAlignment", self._horizontalAlignment)
+        _throwIfNotLoaded("horizontalAlignment", self._horizontalAlignment, "TableCell", self._isNull)
         return self._horizontalAlignment
     
 
@@ -4425,19 +4425,19 @@ class TableCell(OfficeExtension.ClientObject):
     def horizontalAlignment(self, value : 'str'):
         self._horizontalAlignment = value
         _createSetPropertyAction(self.context, self, "HorizontalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def rowIndex(self) -> 'int':
-        _loadIfImmediateExecution(self, "rowIndex", self._rowIndex)
-        _throwIfNotLoaded("rowIndex", self._rowIndex)
+        _loadIfInstantSyncExecutionMode(self, "rowIndex", self._rowIndex)
+        _throwIfNotLoaded("rowIndex", self._rowIndex, "TableCell", self._isNull)
         return self._rowIndex
     
 
     @property
     def shadingColor(self) -> 'str':
-        _loadIfImmediateExecution(self, "shadingColor", self._shadingColor)
-        _throwIfNotLoaded("shadingColor", self._shadingColor)
+        _loadIfInstantSyncExecutionMode(self, "shadingColor", self._shadingColor)
+        _throwIfNotLoaded("shadingColor", self._shadingColor, "TableCell", self._isNull)
         return self._shadingColor
     
 
@@ -4445,12 +4445,12 @@ class TableCell(OfficeExtension.ClientObject):
     def shadingColor(self, value : 'str'):
         self._shadingColor = value
         _createSetPropertyAction(self.context, self, "ShadingColor", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def value(self) -> 'str':
-        _loadIfImmediateExecution(self, "value", self._value)
-        _throwIfNotLoaded("value", self._value)
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "TableCell", self._isNull)
         return self._value
     
 
@@ -4458,12 +4458,12 @@ class TableCell(OfficeExtension.ClientObject):
     def value(self, value : 'str'):
         self._value = value
         _createSetPropertyAction(self.context, self, "Value", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def verticalAlignment(self) -> 'str':
-        _loadIfImmediateExecution(self, "verticalAlignment", self._verticalAlignment)
-        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment)
+        _loadIfInstantSyncExecutionMode(self, "verticalAlignment", self._verticalAlignment)
+        _throwIfNotLoaded("verticalAlignment", self._verticalAlignment, "TableCell", self._isNull)
         return self._verticalAlignment
     
 
@@ -4471,44 +4471,44 @@ class TableCell(OfficeExtension.ClientObject):
     def verticalAlignment(self, value : 'str'):
         self._verticalAlignment = value
         _createSetPropertyAction(self.context, self, "VerticalAlignment", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def width(self) -> 'float':
-        _loadIfImmediateExecution(self, "width", self._width)
-        _throwIfNotLoaded("width", self._width)
+        _loadIfInstantSyncExecutionMode(self, "width", self._width)
+        _throwIfNotLoaded("width", self._width, "TableCell", self._isNull)
         return self._width
     
 
     @property
     def _Id(self) -> 'int':
-        _loadIfImmediateExecution(self, "_Id", self.__Id)
-        _throwIfNotLoaded("_Id", self.__Id)
+        _loadIfInstantSyncExecutionMode(self, "_Id", self.__Id)
+        _throwIfNotLoaded("_Id", self.__Id, "TableCell", self._isNull)
         return self.__Id
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableCell", self._isNull)
         return self.__ReferenceId
     
 
     def deleteColumn(self) -> None:
-    	# Begin_PlaceHolder_TableCell_DeleteColumn
-    	# End_PlaceHolder_TableCell_DeleteColumn
+        # Begin_PlaceHolder_TableCell_DeleteColumn
+        # End_PlaceHolder_TableCell_DeleteColumn
         _createMethodAction(self.context, self, "DeleteColumn", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def deleteRow(self) -> None:
-    	# Begin_PlaceHolder_TableCell_DeleteRow
-    	# End_PlaceHolder_TableCell_DeleteRow
+        # Begin_PlaceHolder_TableCell_DeleteRow
+        # End_PlaceHolder_TableCell_DeleteRow
         _createMethodAction(self.context, self, "DeleteRow", OfficeExtension.OperationType.Default, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def getBorder(self, borderLocation : 'str') -> 'TableBorder':
-    	# Begin_PlaceHolder_TableCell_GetBorder
-    	# End_PlaceHolder_TableCell_GetBorder
+        # Begin_PlaceHolder_TableCell_GetBorder
+        # End_PlaceHolder_TableCell_GetBorder
         ret = TableBorder(self.context, _createMethodObjectPath(self.context, self, "GetBorder", OfficeExtension.OperationType.Read, [borderLocation], False, False))
         return ret
 
@@ -4518,38 +4518,38 @@ class TableCell(OfficeExtension.ClientObject):
         action = _createMethodAction(self.context, self, "GetCellPadding", OfficeExtension.OperationType.Read, [cellPaddingLocation])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getNext(self) -> 'TableCell':
-    	# Begin_PlaceHolder_TableCell_GetNext
-    	# End_PlaceHolder_TableCell_GetNext
+        # Begin_PlaceHolder_TableCell_GetNext
+        # End_PlaceHolder_TableCell_GetNext
         ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def insertColumns(self, insertLocation : 'str', columnCount : 'int', values : 'list' = None) -> None:
-    	# Begin_PlaceHolder_TableCell_InsertColumns
-    	# End_PlaceHolder_TableCell_InsertColumns
+        # Begin_PlaceHolder_TableCell_InsertColumns
+        # End_PlaceHolder_TableCell_InsertColumns
         _createMethodAction(self.context, self, "InsertColumns", OfficeExtension.OperationType.Default, [insertLocation, columnCount, values])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertRows(self, insertLocation : 'str', rowCount : 'int', values : 'list' = None) -> 'TableRowCollection':
-    	# Begin_PlaceHolder_TableCell_InsertRows
-    	# End_PlaceHolder_TableCell_InsertRows
+        # Begin_PlaceHolder_TableCell_InsertRows
+        # End_PlaceHolder_TableCell_InsertRows
         ret = TableRowCollection(self.context, _createMethodObjectPath(self.context, self, "InsertRows", OfficeExtension.OperationType.Default, [insertLocation, rowCount, values], True, False))
         return ret
 
     def setCellPadding(self, cellPaddingLocation : 'str', cellPadding : 'float') -> None:
-    	# Begin_PlaceHolder_TableCell_SetCellPadding
-    	# End_PlaceHolder_TableCell_SetCellPadding
+        # Begin_PlaceHolder_TableCell_SetCellPadding
+        # End_PlaceHolder_TableCell_SetCellPadding
         _createMethodAction(self.context, self, "SetCellPadding", OfficeExtension.OperationType.Default, [cellPaddingLocation, cellPadding])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableCell__KeepReference
-    	# End_PlaceHolder_TableCell__KeepReference
+        # Begin_PlaceHolder_TableCell__KeepReference
+        # End_PlaceHolder_TableCell__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4606,34 +4606,34 @@ class TableCellCollection(OfficeExtension.ClientObject):
     
     @property
     def items(self) -> 'list of TableCell':
-        _loadIfImmediateExecution(self, "items", self.__items)
-        _throwIfNotLoaded("items", self.__items)
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "TableCellCollection", self._isNull)
         return self.__items
     
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableCellCollection", self._isNull)
         return self.__ReferenceId
     
 
     def getFirst(self) -> 'TableCell':
-    	# Begin_PlaceHolder_TableCellCollection_GetFirst
-    	# End_PlaceHolder_TableCellCollection_GetFirst
+        # Begin_PlaceHolder_TableCellCollection_GetFirst
+        # End_PlaceHolder_TableCellCollection_GetFirst
         ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'TableCell':
-    	# Begin_PlaceHolder_TableCellCollection__GetItem
-    	# End_PlaceHolder_TableCellCollection__GetItem
+        # Begin_PlaceHolder_TableCellCollection__GetItem
+        # End_PlaceHolder_TableCellCollection__GetItem
         return TableCell(self.context, _createIndexerObjectPath(self.context, self, [index]))
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableCellCollection__KeepReference
-    	# End_PlaceHolder_TableCellCollection__KeepReference
+        # Begin_PlaceHolder_TableCellCollection__KeepReference
+        # End_PlaceHolder_TableCellCollection__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
@@ -4673,8 +4673,8 @@ class TableBorder(OfficeExtension.ClientObject):
 
     @property
     def color(self) -> 'str':
-        _loadIfImmediateExecution(self, "color", self._color)
-        _throwIfNotLoaded("color", self._color)
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "TableBorder", self._isNull)
         return self._color
     
 
@@ -4682,12 +4682,12 @@ class TableBorder(OfficeExtension.ClientObject):
     def color(self, value : 'str'):
         self._color = value
         _createSetPropertyAction(self.context, self, "Color", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def type(self) -> 'str':
-        _loadIfImmediateExecution(self, "type", self._type)
-        _throwIfNotLoaded("type", self._type)
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "TableBorder", self._isNull)
         return self._type
     
 
@@ -4695,12 +4695,12 @@ class TableBorder(OfficeExtension.ClientObject):
     def type(self, value : 'str'):
         self._type = value
         _createSetPropertyAction(self.context, self, "Type", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def width(self) -> 'float':
-        _loadIfImmediateExecution(self, "width", self._width)
-        _throwIfNotLoaded("width", self._width)
+        _loadIfInstantSyncExecutionMode(self, "width", self._width)
+        _throwIfNotLoaded("width", self._width, "TableBorder", self._isNull)
         return self._width
     
 
@@ -4708,20 +4708,20 @@ class TableBorder(OfficeExtension.ClientObject):
     def width(self, value : 'float'):
         self._width = value
         _createSetPropertyAction(self.context, self, "Width", value)
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _ReferenceId(self) -> 'str':
-        _loadIfImmediateExecution(self, "_ReferenceId", self.__ReferenceId)
-        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId)
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "TableBorder", self._isNull)
         return self.__ReferenceId
     
 
     def _KeepReference(self) -> None:
-    	# Begin_PlaceHolder_TableBorder__KeepReference
-    	# End_PlaceHolder_TableBorder__KeepReference
+        # Begin_PlaceHolder_TableBorder__KeepReference
+        # End_PlaceHolder_TableBorder__KeepReference
         _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
-        _syncIfImmediateExecution(self)
+        _syncIfInstantSyncExecutionMode(self)
 
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:

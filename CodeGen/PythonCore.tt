@@ -98,8 +98,8 @@ _createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction
 _isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined
 _isUndefined = OfficeExtension.Utility.isUndefined
 _throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded
-_loadIfImmediateExecution = OfficeExtension.Utility.loadIfImmediateExecution
-_syncIfImmediateExecution = OfficeExtension.Utility.syncIfImmediateExecution
+_loadIfInstantSyncExecutionMode = OfficeExtension.Utility.loadIfInstantSyncExecutionMode
+_syncIfInstantSyncExecutionMode = OfficeExtension.Utility.syncIfInstantSyncExecutionMode
 _load = OfficeExtension.Utility.load
 _fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary
 _addActionResultHandler = OfficeExtension.Utility._addActionResultHandler
@@ -279,8 +279,8 @@ def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=PythonUtility
 
 @property
 def items(self) -> 'list of <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>':
-    <#=PythonConstants.MemberFullNames.LoadIfImmediateExecution#>(self, "items", self.__items)
-    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("items", self.__items)
+    <#=PythonConstants.MemberFullNames.LoadIfInstantSyncExecutionMode#>(self, "items", self.__items)
+    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("items", self.__items, "<#=type.Name#>", self._isNull)
     return self.__items
 
 <#+
@@ -295,8 +295,8 @@ def items(self) -> 'list of <#=PythonUtility.GetPythonTypeName(type.ClientType.C
 #>
 @property
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
-    <#=PythonConstants.MemberFullNames.LoadIfImmediateExecution#>(self, "<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
-    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+    <#=PythonConstants.MemberFullNames.LoadIfInstantSyncExecutionMode#>(self, "<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>, "<#=type.Name#>", self._isNull)
     return self.<#=PythonUtility.GetPythonFieldName(prop)#>
 
 <#+
@@ -311,7 +311,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=P
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>'):
     self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
     <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
-    <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
 <#+	
 			}
 		}
@@ -352,12 +352,12 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : 
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> None:
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
     <#=PythonConstants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
-    <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
 <#+
 	}
 
@@ -379,7 +379,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
     action = <#=PythonConstants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
     ret = <#=Constants.TypeFullNames.ClientResult#>(<#=clientResultType#>)
     <#=PythonConstants.MemberFullNames.AddActionResultHandler#>(self, action, ret)
-    <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
     return ret
 <#+
 	}
@@ -389,17 +389,17 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 
 #>
     ret = <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
 <#+
-		if (PythonUtility.ShouldAddImmediateExecutionForObjectMethod(method))
+		if (PythonUtility.ShouldAddInstantSyncExecutionForObjectMethod(method))
 		{
 #>
-    <#=PythonConstants.MemberFullNames.SyncIfImmediateExecution#>(self)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
 <#+
 		}
 #>
@@ -412,7 +412,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
@@ -622,8 +622,8 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 			public const string AddActionResultHandler = "_addActionResultHandler";
 			public const string HandleNavigationPropertyResults = "_handleNavigationPropertyResults";
 			public const string AdjustToDateTime = "_adjustToDateTime";
-			public const string LoadIfImmediateExecution = "_loadIfImmediateExecution";
-			public const string SyncIfImmediateExecution = "_syncIfImmediateExecution";
+			public const string LoadIfInstantSyncExecutionMode = "_loadIfInstantSyncExecutionMode";
+			public const string SyncIfInstantSyncExecutionMode = "_syncIfInstantSyncExecutionMode";
 		}
 	}
 
@@ -680,7 +680,7 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 			return false;
 		}
 
-		public static bool ShouldAddImmediateExecutionForObjectMethod(ClientCallableMethodInfo method)
+		public static bool ShouldAddInstantSyncExecutionForObjectMethod(ClientCallableMethodInfo method)
 		{
 			if (method.Name == "Add")
 			{
