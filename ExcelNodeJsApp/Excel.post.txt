@@ -1,2 +1,0 @@
-exports.Excel = Excel;
-exports.OfficeExtension = OfficeExtension;
