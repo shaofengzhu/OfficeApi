@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Python.Runtime", "Python\Runtime\Runtime.pyproj", "{86EB8113-897D-41F6-9994-00735E8025F2}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Runtime", "Python\Runtime\Runtime.pyproj", "{86EB8113-897D-41F6-9994-00735E8025F2}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Python.Learn", "Python\Learn\Learn.pyproj", "{BCB0CBA8-323D-4733-91BC-B6CB3747B030}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Learn", "Python\Learn\Learn.pyproj", "{BCB0CBA8-323D-4733-91BC-B6CB3747B030}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGen.T4", "CodeGen\CodeGen.T4.csproj", "{0090A10B-23DE-44CC-B4CD-35F2812E19AF}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portable.Excel", "Portable\Excel\Portable.Excel.csproj", "{E38F29A9-24AA-4673-99C4-03F7940AB5AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portable.Excel.UnitTest", "Portable\Excel.UnitTest\Portable.Excel.UnitTest.csproj", "{0C24E1FA-6921-4D29-8FF0-E2064DA40320}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordApiMetadata", "WordApiMetadata\WordApiMetadata.csproj", "{EE1E032E-E135-4B19-A4E0-C58E1C200327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{0C24E1FA-6921-4D29-8FF0-E2064DA40320}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C24E1FA-6921-4D29-8FF0-E2064DA40320}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C24E1FA-6921-4D29-8FF0-E2064DA40320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE1E032E-E135-4B19-A4E0-C58E1C200327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE1E032E-E135-4B19-A4E0-C58E1C200327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE1E032E-E135-4B19-A4E0-C58E1C200327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE1E032E-E135-4B19-A4E0-C58E1C200327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

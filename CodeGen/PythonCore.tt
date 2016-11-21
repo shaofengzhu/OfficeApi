@@ -50,6 +50,7 @@
 import sys
 import json
 import enum
+import datetime
 import logging
 <#+
 		this.WriteLine(string.Empty);
@@ -85,21 +86,23 @@ import logging
 	private void WriteMethodAlias()
 	{
 #>
-_createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath;
-_createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath;
-_createIndexerObjectPath = OfficeExtension.ObjectPathFactory.createIndexerObjectPath;
-_createNewObjectObjectPath = OfficeExtension.ObjectPathFactory.createNewObjectObjectPath;
-_createChildItemObjectPathUsingIndexer = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexer;
-_createChildItemObjectPathUsingGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingGetItemAt;
-_createChildItemObjectPathUsingIndexerOrGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexerOrGetItemAt;
-_createMethodAction = OfficeExtension.ActionFactory.createMethodAction;
-_createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction;
-_isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined;
-_isUndefined = OfficeExtension.Utility.isUndefined;
-_throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded;
-_load = OfficeExtension.Utility.load;
-_fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary;
-_addActionResultHandler = OfficeExtension.Utility._addActionResultHandler;
+_createPropertyObjectPath = OfficeExtension.ObjectPathFactory.createPropertyObjectPath
+_createMethodObjectPath = OfficeExtension.ObjectPathFactory.createMethodObjectPath
+_createIndexerObjectPath = OfficeExtension.ObjectPathFactory.createIndexerObjectPath
+_createNewObjectObjectPath = OfficeExtension.ObjectPathFactory.createNewObjectObjectPath
+_createChildItemObjectPathUsingIndexer = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexer
+_createChildItemObjectPathUsingGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingGetItemAt
+_createChildItemObjectPathUsingIndexerOrGetItemAt = OfficeExtension.ObjectPathFactory.createChildItemObjectPathUsingIndexerOrGetItemAt
+_createMethodAction = OfficeExtension.ActionFactory.createMethodAction
+_createSetPropertyAction = OfficeExtension.ActionFactory.createSetPropertyAction
+_isNullOrUndefined = OfficeExtension.Utility.isNullOrUndefined
+_isUndefined = OfficeExtension.Utility.isUndefined
+_throwIfNotLoaded = OfficeExtension.Utility.throwIfNotLoaded
+_loadIfInstantSyncExecutionMode = OfficeExtension.Utility.loadIfInstantSyncExecutionMode
+_syncIfInstantSyncExecutionMode = OfficeExtension.Utility.syncIfInstantSyncExecutionMode
+_load = OfficeExtension.Utility.load
+_fixObjectPathIfNecessary = OfficeExtension.Utility.fixObjectPathIfNecessary
+_addActionResultHandler = OfficeExtension.Utility._addActionResultHandler
 <#+
 	}
 
@@ -191,7 +194,7 @@ class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 		this.WriteLine(string.Empty);
 		WriteHandleResult(type);
 		WriteLoadMethod(type);
-		WriteInitReferenceIdMethod(type);
+		WriteHandleIdResultMethod(type);
 		if (type.AllowCreation)
 		{
 			this.WriteLine(string.Empty);
@@ -234,7 +237,7 @@ self.__items = None
 @property
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
     if self.<#=PythonUtility.GetPythonFieldName(prop)#> is None:
-        self.<#=PythonUtility.GetPythonFieldName(prop)#> = <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, False))
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=PythonConstants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, False))
     return self.<#=PythonUtility.GetPythonFieldName(prop)#>
 <#+
 			if (!prop.IsReadonly)
@@ -244,7 +247,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=P
 @<#=Utility.ToCamelLowerCase(prop.Name)#>.setter
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>') -> None:
     self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
-    <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value);
+    <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value);
 <#+	
 			}
 		}
@@ -254,7 +257,7 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '
 			this.WriteLine(string.Empty);
 #>
 def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
-    return <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#>))
+    return <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=PythonConstants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#>))
 <#+
 			if (!prop.IsReadonly)
 			{
@@ -264,7 +267,7 @@ def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=PythonUtility.GetPy
 				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
 #>
 def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>') -> None:
-    <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
+    <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
 <#+
 			}
 		}
@@ -276,7 +279,8 @@ def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=PythonUtility
 
 @property
 def items(self) -> 'list of <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>':
-    <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("items", self.__items)
+    <#=PythonConstants.MemberFullNames.LoadIfInstantSyncExecutionMode#>(self, "items", self.__items)
+    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("items", self.__items, "<#=type.Name#>", self._isNull)
     return self.__items
 
 <#+
@@ -291,7 +295,8 @@ def items(self) -> 'list of <#=PythonUtility.GetPythonTypeName(type.ClientType.C
 #>
 @property
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
-    <#=Constants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+    <#=PythonConstants.MemberFullNames.LoadIfInstantSyncExecutionMode#>(self, "<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+    <#=PythonConstants.MemberFullNames.ThrowIfNotLoaded#>("<#=Utility.ToCamelLowerCase(prop.Name)#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>, "<#=type.Name#>", self._isNull)
     return self.<#=PythonUtility.GetPythonFieldName(prop)#>
 
 <#+
@@ -305,8 +310,8 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self) -> '<#=P
 @<#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>.setter
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>'):
     self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
-    <#=Constants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
-
+    <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
 <#+	
 			}
 		}
@@ -347,11 +352,12 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value : 
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> None:
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-    <#=Constants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
+    <#=PythonConstants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
 <#+
 	}
 
@@ -363,10 +369,17 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
+		string clientResultType = "";
+		if (method.ReturnType.IsDateTimeOrDateTimeArray)
+		{
+			clientResultType = "OfficeExtension.ClientResultProcessingType.date";
+		}
+
 #>
-    action = <#=Constants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
-    ret = <#=Constants.TypeFullNames.ClientResult#>()
-    <#=Constants.MemberFullNames.AddActionResultHandler#>(self, action, ret)
+    action = <#=PythonConstants.MemberFullNames.CreateMethodAction#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>)
+    ret = <#=Constants.TypeFullNames.ClientResult#>(<#=clientResultType#>)
+    <#=PythonConstants.MemberFullNames.AddActionResultHandler#>(self, action, ret)
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
     return ret
 <#+
 	}
@@ -376,12 +389,21 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 
 #>
-    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=Constants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
+    ret = <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateMethodObjectPath#>(self.context, self, "<#=method.Name#>", <#=Constants.TypeFullNames.OperationType#>.<#=method.OperationType#>, <#=BuildMethodParameterValueArray(method)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.ReturnType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(method.InvalidateReturnObjectPathAfterRequest)#>))
+<#+
+		if (PythonUtility.ShouldAddInstantSyncExecutionForObjectMethod(method))
+		{
+#>
+    <#=PythonConstants.MemberFullNames.SyncIfInstantSyncExecutionMode#>(self)
+<#+
+		}
+#>
+    return ret
 <#+
 	}
 	
@@ -390,11 +412,11 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMethodParameterList(method)#>) -> '<#=PythonUtility.GetPythonTypeName(method.ReturnType)#>':
 <#+
-		this.PushIndent(Constants.IndentString);
+		this.PushIndent(PythonUtility.IndentSpaceString);
 		this.WritePlaceHolderContent(type.Name + "_" + method.Name, existingFileContent);
 		this.PopIndent();
 #>
-    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=Constants.MemberFullNames.CreateIndexerObjectPath#>(self.context, self, <#=BuildMethodParameterValueArray(method)#>))
+    return <#=PythonUtility.GetPythonTypeName(method.ReturnType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateIndexerObjectPath#>(self.context, self, <#=BuildMethodParameterValueArray(method)#>))
 <#+
 	}
 
@@ -403,9 +425,9 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(method.Name))#>(<#=BuildMeth
 #>
 @staticmethod
 def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
-    var ret = <#=PythonUtility.GetPythonTypeName(type.ClientType)#>(context, <#=Constants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=PythonUtility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
+    ret = <#=PythonUtility.GetPythonTypeName(type.ClientType)#>(context, <#=PythonConstants.MemberFullNames.CreateNewObjectObjectPath#>(context, "<#=type.FullName#>", <#=PythonUtility.GetPythonBooleanLiteral(type.ClientType.IsClientObjectCollection)#>))
     return ret
-	}
+
 <#+
 	}
 
@@ -455,24 +477,35 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 #>
 # Handle results returned from the document
 def _handleResult(self, value: dict) -> None:
-    if <#=Constants.MemberFullNames.IsNullOrUndefined#>(value):
+    super(self.__class__, self)._handleIdResult(value)
+    if <#=PythonConstants.MemberFullNames.IsNullOrUndefined#>(value):
         return
     obj = value;
-    <#=Constants.MemberFullNames.FixObjectPathIfNecessary#>(self, obj);
 <#+
 		foreach(ClientCallablePropertyInfo prop in type.ScalarProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
-    if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+    if "<#=prop.Name#>" in obj:
+<#+
+			if (prop.PropertyType.IsDateTimeOrDateTimeArray)
+			{
+#>
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = <#=PythonConstants.MemberFullNames.AdjustToDateTime#>(obj.get("<#=prop.Name#>"))
+<#+
+			}
+			else
+			{
+#>
         self.<#=PythonUtility.GetPythonFieldName(prop)#> = obj.get("<#=prop.Name#>")
 <#+
+			}
 		}
 
 		List<string> navPropNames = new List<string>();
 		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
-    if not <#=Constants.MemberFullNames.IsUndefined#>(obj.get("<#=prop.Name#>")):
+    if "<#=prop.Name#>" in obj:
         self.<#=Utility.ToCamelLowerCase(prop.Name)#>._handleResult(obj.get("<#=prop.Name#>"))
 <#+
 		}
@@ -481,26 +514,46 @@ def _handleResult(self, value: dict) -> None:
 		{
 			bool hasIndexerMethod = (type.Methods.FirstOrDefault(m => m.IsIndexerMethod) != null);
 #>
-    if not <#=Constants.MemberFullNames.IsNullOrUndefined#>(obj.get(OfficeExtension.Constants.items)):
+    if OfficeExtension.Constants.items in obj:
         self.__items = []
         data = obj.get(OfficeExtension.Constants.items)
         for i, itemData in enumerate(data):
-            item = <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>(self.context, <#=Constants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=PythonUtility.GetPythonBooleanLiteral(hasIndexerMethod)#>, self.context, self, itemData, i))
+            item = <#=PythonUtility.GetPythonTypeName(type.ClientType.ChildItemClientType)#>(self.context, <#=PythonConstants.MemberFullNames.CreateChildItemObjectPathUsingIndexerOrGetItemAt#>(<#=PythonUtility.GetPythonBooleanLiteral(hasIndexerMethod)#>, self.context, self, itemData, i))
             item._handleResult(itemData)
             self.__items.append(item)
 <#+
 		}
 	}
 
-	private void WriteInitReferenceIdMethod(ClientCallableTypeInfo type)
+	private void WriteHandleIdResultMethod(ClientCallableTypeInfo type)
 	{
-		ClientCallablePropertyInfo prop = type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.ReferenceId);
-		if (!type.IsValueObject && prop != null)
+		if (!type.IsValueObject)
 		{
+			List<ClientCallablePropertyInfo> props = new List<ClientCallablePropertyInfo>();
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.ReferenceId));
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.Id));
+			props.Add(type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.IdPrivate));
+			
+
+			if (props.Any((prop) => prop != null && !prop.ExcludedFromClientLibrary))
+			{
 #>
-def _initReferenceId(self, value: str) -> None:
-    self.<#=PythonUtility.GetPythonFieldName(prop)#> = value;
+def _handleIdResult(self, value) -> None:
+    super(self.__class__, self)._handleIdResult(value)
+    if value is None:
+        return
 <#+
+				foreach(ClientCallablePropertyInfo prop in props)
+				{
+					if (prop != null && !prop.ExcludedFromClientLibrary)
+					{
+#>
+    if "<#=prop.Name#>" in value:
+        self.<#=PythonUtility.GetPythonFieldName(prop)#> = value.get("<#=prop.Name#>")
+<#+
+					}
+				}
+			}
 		}
 	}
 
@@ -516,7 +569,7 @@ def _initReferenceId(self, value: str) -> None:
 #>
 
 def load(self, option = None) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
-    <#=Constants.MemberFullNames.Load#>(self, option);
+    <#=PythonConstants.MemberFullNames.Load#>(self, option);
 <#+
 			}
 		}
@@ -543,6 +596,35 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 		this.WritePlaceHolderContent(type.Name + "_Custom_Members", existingFileContent);
 		this.PopIndent();
 		this.WriteLine(string.Empty);
+	}
+
+	public static class PythonConstants
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+		public static class MemberFullNames
+		{
+			public const string CreatePropertyObjectPath = "_createPropertyObjectPath";
+			public const string CreateMethodObjectPath = "_createMethodObjectPath";
+			public const string CreateIndexerObjectPath = "_createIndexerObjectPath";
+			public const string CreateNewObjectObjectPath = "_createNewObjectObjectPath";
+			public const string CreateChildItemObjectPathUsingIndexer = "_createChildItemObjectPathUsingIndexer";
+			public const string CreateChildItemObjectPathUsingGetItemAt = "_createChildItemObjectPathUsingGetItemAt";
+			public const string CreateChildItemObjectPathUsingIndexerOrGetItemAt = "_createChildItemObjectPathUsingIndexerOrGetItemAt";
+
+			public const string CreateSetPropertyAction = "_createSetPropertyAction";
+			public const string CreateMethodAction = "_createMethodAction";
+
+			public const string IsNullOrUndefined = "_isNullOrUndefined";
+			public const string IsUndefined = "_isUndefined";
+			public const string ThrowIfNotLoaded = "_throwIfNotLoaded";
+			public const string Load = "_load";
+			public const string FixObjectPathIfNecessary = "_fixObjectPathIfNecessary";
+			public const string AddActionResultHandler = "_addActionResultHandler";
+			public const string HandleNavigationPropertyResults = "_handleNavigationPropertyResults";
+			public const string AdjustToDateTime = "_adjustToDateTime";
+			public const string LoadIfInstantSyncExecutionMode = "_loadIfInstantSyncExecutionMode";
+			public const string SyncIfInstantSyncExecutionMode = "_syncIfInstantSyncExecutionMode";
+		}
 	}
 
 	static class PythonUtility
@@ -598,6 +680,16 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 			return false;
 		}
 
+		public static bool ShouldAddInstantSyncExecutionForObjectMethod(ClientCallableMethodInfo method)
+		{
+			if (method.Name == "Add")
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public static string GetPythonFieldName(ClientCallablePropertyInfo prop)
 		{
 			return "_" + Utility.ToCamelLowerCase(prop.Name);
@@ -646,6 +738,8 @@ self.<#=Utility.ToCamelLowerCase(prop.Name)#> = None
 						return "str";
 					case "System.Void":
 						return "None";
+					case "System.DateTime":
+						return "datetime.datetime";
 					default:
 						throw CodeGenException.CreateCodeGenException("Cannot handle type {0}", type.FullName);
 				}

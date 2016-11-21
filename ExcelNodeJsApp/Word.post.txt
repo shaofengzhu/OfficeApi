@@ -1,0 +1,2 @@
+exports.Word = Word;
+exports.OfficeExtension = OfficeExtension;

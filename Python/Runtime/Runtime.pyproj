@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>86eb8113-897d-41f6-9994-00735e8025f2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>exceldemo.py</StartupFile>
+    <StartupFile>exceltestimmediate.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -23,13 +23,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="excel.py" />
+    <Compile Include="excelandworddemo.py" />
     <Compile Include="exceldemo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="exceldemodesktop.py" />
+    <Compile Include="exceldemolib.py" />
     <Compile Include="excelhelper.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="exceltest.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="exceltestimmediate.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="httphelper.py">
@@ -37,6 +43,9 @@
     </Compile>
     <Compile Include="oauthhelper.py" />
     <Compile Include="runtime.py" />
+    <Compile Include="word.py" />
+    <Compile Include="worddemodesktop.py" />
+    <Compile Include="worddemolib.py" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
