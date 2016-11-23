@@ -1,7 +1,5 @@
-var excel = require('./excel.js');
-
-var Excel = excel.Excel;
-var OfficeExtension = excel.OfficeExtension;
+var Excel = require('excel');
+var OfficeExtension = require('office.runtime');
 
 function getAccessToken(clientId, refreshToken){
 	var tokenServiceUrl = "https://login.windows.net/common/oauth2/token";
@@ -20,7 +18,7 @@ function getAccessToken(clientId, refreshToken){
         });    
 }
 
-var refreshToken = "AQABAAAAAADRNYRQ3dhRSrm-4K-adpCJFL7Jq7PHgd8yc-eECZcX_-xRWXl_oTMUXZk1KSqkVssXKKSbwFRlrsRwQVqoP4Ybkn8kW0iadaMr5dCZgqC9cpaTyUOxCrp9gMg4IjUZXRRJHLTfk2x-lNl0FBZCUztNgbPtlyjW8ak6Bc1uNTSaW4z9hChZJ6AH8X7hpjAgIfXBks2kf19oZk9no5BuwGQnl1p2k0mWfaYkMi-RiPhJec4g_Sn3i5gHx5DA4-yx-LbPfWMcOm-q_-kmH4cbUmibfpe4ST24tMoBmEb3LWbVJTCveAY4FB0fxqNTgQkudK8ocrC41QzMmha9u0J7-pnSWr6Nwwr2ry6MClhabLoBuxRru393PbTRMv5OJXBwvwrIFDu9TKeisk8ZvOa8jf5C3DQPNpl-UUl9wYSNv58qyaq6_aFYw8FsS3F0NoY_Tld6jYBcQsBGSpRQDNnourkOP56SNv0pCMQx6Z-zcYIGw-Iv30tB7WfNu9hE8bepsY4UqguNT4DvDrQmP8HaciDzVdLx8xgWDJyc8gWSd4UO2PWcUErmLUAkz3vYy907NrrvLlGH4OyXJ0CbCBCOksCET3_7bKdHuVGP_zDHP09hKHAAIolF95fj0D0iF1hpHIoqtaSNL2RCymFs89d5ZGqaYKbwfaCRS17ylGyD04YSXCAA";
+var refreshToken = "AQABAAAAAADRNYRQ3dhRSrm-4K-adpCJl1v_-Gst20nb8P2_81OhMh1j32z9gDWkK6gxDdWOdf3gWsvSCFIl31sc-4LrVNFjBRtTP38qaFma5rbZaQ1YX6aXCAvvTfv-aKYTXcCkul4_WWdk8PeKl05oI_nRme2t4kUEy_NcDPecGsTyUfr9fp2B7YiGtwkYKXHO2Ypc9OXgE-ixti-gmpUEBFIDzylLjQg4oM9TbZnSu2h5iRnGY7Kt5lsRQie7XIdrNXTLIrCN9qg-gIjlHxKUquEETamg_Uau0mgkU7lXJvV7xymNvqx1cmXh7_jpazLnOHa_bbXxMN1LTQsx3sKZaiXlHiOehgyFqWMPEU-QaBD0Ki7ho8owmKgSZx0vUcx4t7tbszTHK7IkCQzjXFKhAr6LRERbP0Ycxz-GJR4ae66nKavoVzQtzIQbOWZdreG9tljou9vZY_te_IPgR4xlRtIfcWgRO3qtBuKrlL5ZuoDJFPbb6giaEWohQrwFMlG13pcCY7_11_x7yRndO_hT2mw2MVz5p3h4DG1W5ZkR_GClO_82GKeKCNtcf_h-vhKEv6FAr2JGKkyrRDAmIsvnuGQ2LnmgPSJa6MapQwrBYCuywqCsi0Pmzh89NqtOMUPtLFDNmvE6cb7b3aVCsNxE8-2E9lcCesy4u-Ol2jcX0q9n5tMWCiAA";
 
 var clientId = "8563463e-ea18-4355-9297-41ff32200164";
 
