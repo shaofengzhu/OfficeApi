@@ -1,4 +1,3 @@
-var request = require('request');
 var Excel = require('excel');
 var exceldemolib = require('./exceldemolib.js')
 var Excel = excel.Excel;

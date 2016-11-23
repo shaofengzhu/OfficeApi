@@ -1,4 +1,3 @@
-var request = require('request');
 var word = require('./word.js');
 var worddemolib = require('./worddemolib.js')
 var Word = word.Word;

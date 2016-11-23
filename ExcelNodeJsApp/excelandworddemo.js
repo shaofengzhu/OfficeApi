@@ -1,4 +1,3 @@
-var request = require('request');
 var excel = require('./excel.js');
 var word = require('./word.js');
 var exceldemolib = require('./exceldemolib.js');
