@@ -11,20 +11,6 @@ var OfficeExtension = excel.OfficeExtension;
 
 OfficeExtension.Utility._logEnabled = true;
 
-OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-    return new OfficeExtension.Promise(function(resolve, reject){
-        request(req, 
-            function(err, resp){
-                if (err){
-                    reject(err);
-                }
-                else{
-                    resolve(resp);
-                }            
-        });
-    });
-});
-
 var bitmap = fs.readFileSync('blank.xlsx');
 var buf = new Buffer(bitmap);
 fs.writeFileSync('demo.xlsx', buf);

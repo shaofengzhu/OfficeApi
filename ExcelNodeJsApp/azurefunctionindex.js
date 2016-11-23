@@ -184,21 +184,6 @@ module.exports = function(context, req) {
     context.log('Node.js HTTP trigger function processed a request. RequestUri=%s', req.originalUrl);
     context.log('Request headers = ' + JSON.stringify(req.headers));
 
-    OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-        return new OfficeExtension.Promise(function(resolve, reject){
-            request(req, 
-                function(err, resp){
-                    if (err){
-                        reject(err);
-                    }
-                    else{
-                        resolve(resp);
-                    }            
-            });
-        });
-    });
-
-
     var requestHeaders;
 
     oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)

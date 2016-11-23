@@ -5,21 +5,6 @@ var OfficeExtension = require('office.runtime');
 
 // OfficeExtension.Utility._logEnabled = true;
 
-OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-    return new OfficeExtension.Promise(function(resolve, reject){
-        request(req, 
-            function(err, resp){
-                if (err){
-                    reject(err);
-                }
-                else{
-                    resolve(resp);
-                }            
-        });
-    });
-});
-
-
 OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders = {url: "http://localhost:8052"};
 
 var startTime = process.hrtime();
