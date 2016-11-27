@@ -195,6 +195,7 @@ class <#= type.Name #>(<#=Constants.TypeFullNames.ClientObject#>):
 		WriteHandleResult(type);
 		WriteLoadMethod(type);
 		WriteHandleIdResultMethod(type);
+		WriteStrMethod(type);
 		if (type.AllowCreation)
 		{
 			this.WriteLine(string.Empty);
@@ -472,6 +473,38 @@ def newObject(context: <#=Constants.TypeFullNames.ClientRequestContext#>) -> '<#
 		return sb.ToString();
 	}
 
+	private void WriteStrMethod(ClientCallableTypeInfo type)
+	{
+		ClientCallablePropertyInfo prop = null;
+		prop = type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.Name);
+		if (prop == null)
+		{
+			prop = type.ScalarProperties.FirstOrDefault(p => p.Name == Constants.MemberNames.Id);
+		}
+
+		if (prop != null)
+		{
+#>
+
+def __str__(self) -> str:
+    <#=PythonConstants.MemberFullNames.LoadIfInstantSyncExecutionMode#>(self, "<#=prop.Name#>", self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+<#+
+			if (prop.PropertyType.FullName == "System.String")
+			{
+#>
+    return self.<#=PythonUtility.GetPythonFieldName(prop)#>
+<#+
+			}
+			else
+			{
+#>
+    return str(self.<#=PythonUtility.GetPythonFieldName(prop)#>)
+<#+
+			}
+		}
+	}
+
+
 	private void WriteHandleResult(ClientCallableTypeInfo type)
 	{
 #>
@@ -569,7 +602,12 @@ def _handleIdResult(self, value) -> None:
 #>
 
 def load(self, option = None) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
-    <#=PythonConstants.MemberFullNames.Load#>(self, option);
+    <#=PythonConstants.MemberFullNames.Load#>(self, option)
+    return self
+
+def reload(self) -> '<#=PythonUtility.GetPythonTypeName(type.ClientType)#>':
+    <#=PythonConstants.MemberFullNames.Load#>(self, None)
+    return self
 <#+
 			}
 		}

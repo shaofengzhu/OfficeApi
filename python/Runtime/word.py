@@ -308,7 +308,12 @@ class Body(OfficeExtension.ClientObject):
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'Body':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Body':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -735,7 +740,12 @@ class ContentControl(OfficeExtension.ClientObject):
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'ContentControl':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ContentControl':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -744,6 +754,10 @@ class ContentControl(OfficeExtension.ClientObject):
             self.__ReferenceId = value.get("_ReferenceId")
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
 
 class ContentControlCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ContentControlCollection_Custom_Members
@@ -826,7 +840,12 @@ class ContentControlCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ContentControlCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ContentControlCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -907,7 +926,12 @@ class CustomProperty(OfficeExtension.ClientObject):
             self.__ReferenceId = obj.get("_ReferenceId")
     
     def load(self, option = None) -> 'CustomProperty':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomProperty':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -987,7 +1011,12 @@ class CustomPropertyCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'CustomPropertyCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomPropertyCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -1116,7 +1145,12 @@ class Document(OfficeExtension.ClientObject):
             self.sections._handleResult(obj.get("Sections"))
     
     def load(self, option = None) -> 'Document':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Document':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -1393,7 +1427,12 @@ class DocumentProperties(OfficeExtension.ClientObject):
             self.customProperties._handleResult(obj.get("CustomProperties"))
     
     def load(self, option = None) -> 'DocumentProperties':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'DocumentProperties':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -1608,13 +1647,22 @@ class Font(OfficeExtension.ClientObject):
             self.__ReferenceId = obj.get("_ReferenceId")
     
     def load(self, option = None) -> 'Font':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Font':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "_ReferenceId" in value:
             self.__ReferenceId = value.get("_ReferenceId")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class InlinePicture(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_InlinePicture_Custom_Members
@@ -1866,7 +1914,12 @@ class InlinePicture(OfficeExtension.ClientObject):
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
     
     def load(self, option = None) -> 'InlinePicture':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'InlinePicture':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -1933,7 +1986,12 @@ class InlinePictureCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'InlinePictureCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'InlinePictureCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -2061,7 +2119,12 @@ class List(OfficeExtension.ClientObject):
             self.paragraphs._handleResult(obj.get("Paragraphs"))
     
     def load(self, option = None) -> 'List':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'List':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -2070,6 +2133,10 @@ class List(OfficeExtension.ClientObject):
             self.__ReferenceId = value.get("_ReferenceId")
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
 
 class ListCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ListCollection_Custom_Members
@@ -2134,7 +2201,12 @@ class ListCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ListCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ListCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -2221,7 +2293,12 @@ class ListItem(OfficeExtension.ClientObject):
             self.__ReferenceId = obj.get("_ReferenceId")
     
     def load(self, option = None) -> 'ListItem':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ListItem':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -2718,7 +2795,12 @@ class Paragraph(OfficeExtension.ClientObject):
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
     
     def load(self, option = None) -> 'Paragraph':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Paragraph':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -2791,7 +2873,12 @@ class ParagraphCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ParagraphCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ParagraphCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -3135,7 +3222,12 @@ class Range(OfficeExtension.ClientObject):
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'Range':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Range':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -3202,7 +3294,12 @@ class RangeCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'RangeCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -3337,7 +3434,12 @@ class SearchOptions(OfficeExtension.ClientObject):
             self._matchWildcards = obj.get("MatchWildcards")
     
     def load(self, option = None) -> 'SearchOptions':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SearchOptions':
+        _load(self, None)
+        return self
 
     @staticmethod
     def newObject(context: OfficeExtension.ClientRequestContext) -> 'SearchOptions':
@@ -3412,7 +3514,12 @@ class Section(OfficeExtension.ClientObject):
             self.body._handleResult(obj.get("Body"))
     
     def load(self, option = None) -> 'Section':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Section':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -3479,7 +3586,12 @@ class SectionCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'SectionCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SectionCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -3977,7 +4089,12 @@ class Table(OfficeExtension.ClientObject):
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'Table':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Table':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4044,7 +4161,12 @@ class TableCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4284,7 +4406,12 @@ class TableRow(OfficeExtension.ClientObject):
             self.parentTable._handleResult(obj.get("ParentTable"))
     
     def load(self, option = None) -> 'TableRow':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableRow':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4351,7 +4478,12 @@ class TableRowCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableRowCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableRowCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4585,7 +4717,12 @@ class TableCell(OfficeExtension.ClientObject):
             self.parentTable._handleResult(obj.get("ParentTable"))
     
     def load(self, option = None) -> 'TableCell':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableCell':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4652,7 +4789,12 @@ class TableCellCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableCellCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableCellCollection':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -4739,7 +4881,12 @@ class TableBorder(OfficeExtension.ClientObject):
             self.__ReferenceId = obj.get("_ReferenceId")
     
     def load(self, option = None) -> 'TableBorder':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableBorder':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:

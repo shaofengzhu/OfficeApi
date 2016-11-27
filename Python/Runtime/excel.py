@@ -62,7 +62,12 @@ class Application(OfficeExtension.ClientObject):
             self._calculationMode = obj.get("CalculationMode")
     
     def load(self, option = None) -> 'Application':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Application':
+        _load(self, None)
+        return self
 
 class Workbook(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Workbook_Custom_Members
@@ -188,7 +193,12 @@ class Workbook(OfficeExtension.ClientObject):
             self.worksheets._handleResult(obj.get("Worksheets"))
     
     def load(self, option = None) -> 'Workbook':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Workbook':
+        _load(self, None)
+        return self
 
 class Worksheet(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Worksheet_Custom_Members
@@ -325,13 +335,22 @@ class Worksheet(OfficeExtension.ClientObject):
             self.tables._handleResult(obj.get("Tables"))
     
     def load(self, option = None) -> 'Worksheet':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Worksheet':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class WorksheetCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_WorksheetCollection_Custom_Members
@@ -387,7 +406,12 @@ class WorksheetCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'WorksheetCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'WorksheetCollection':
+        _load(self, None)
+        return self
 
 class WorksheetProtection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_WorksheetProtection_Custom_Members
@@ -436,7 +460,12 @@ class WorksheetProtection(OfficeExtension.ClientObject):
             self._protected = obj.get("Protected")
     
     def load(self, option = None) -> 'WorksheetProtection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'WorksheetProtection':
+        _load(self, None)
+        return self
 
 class WorksheetProtectionOptions:
     def __init__(self):
@@ -879,7 +908,12 @@ class Range(OfficeExtension.ClientObject):
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Range':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Range':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
@@ -1064,7 +1098,12 @@ class RangeView(OfficeExtension.ClientObject):
             self.rows._handleResult(obj.get("Rows"))
     
     def load(self, option = None) -> 'RangeView':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeView':
+        _load(self, None)
+        return self
 
 class RangeViewCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeViewCollection_Custom_Members
@@ -1102,7 +1141,12 @@ class RangeViewCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'RangeViewCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeViewCollection':
+        _load(self, None)
+        return self
 
 class SettingCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_SettingCollection_Custom_Members
@@ -1151,7 +1195,12 @@ class SettingCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'SettingCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SettingCollection':
+        _load(self, None)
+        return self
 
 class Setting(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Setting_Custom_Members
@@ -1200,7 +1249,12 @@ class Setting(OfficeExtension.ClientObject):
             self.__Value = obj.get("_Value")
     
     def load(self, option = None) -> 'Setting':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Setting':
+        _load(self, None)
+        return self
 
 class NamedItemCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_NamedItemCollection_Custom_Members
@@ -1243,7 +1297,12 @@ class NamedItemCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'NamedItemCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'NamedItemCollection':
+        _load(self, None)
+        return self
 
 class NamedItem(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_NamedItem_Custom_Members
@@ -1322,13 +1381,22 @@ class NamedItem(OfficeExtension.ClientObject):
             self.__Id = obj.get("_Id")
     
     def load(self, option = None) -> 'NamedItem':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'NamedItem':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "_Id" in value:
             self.__Id = value.get("_Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class Binding(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Binding_Custom_Members
@@ -1392,13 +1460,22 @@ class Binding(OfficeExtension.ClientObject):
             self._type = obj.get("Type")
     
     def load(self, option = None) -> 'Binding':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Binding':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return self._id
 
 class BindingCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_BindingCollection_Custom_Members
@@ -1476,7 +1553,12 @@ class BindingCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'BindingCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'BindingCollection':
+        _load(self, None)
+        return self
 
 class TableCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TableCollection_Custom_Members
@@ -1542,7 +1624,12 @@ class TableCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableCollection':
+        _load(self, None)
+        return self
 
 class Table(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Table_Custom_Members
@@ -1793,13 +1880,22 @@ class Table(OfficeExtension.ClientObject):
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Table':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Table':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class TableColumnCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TableColumnCollection_Custom_Members
@@ -1865,7 +1961,12 @@ class TableColumnCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableColumnCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableColumnCollection':
+        _load(self, None)
+        return self
 
 class TableColumn(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TableColumn_Custom_Members
@@ -1966,13 +2067,22 @@ class TableColumn(OfficeExtension.ClientObject):
             self.filter._handleResult(obj.get("Filter"))
     
     def load(self, option = None) -> 'TableColumn':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableColumn':
+        _load(self, None)
+        return self
     def _handleIdResult(self, value) -> None:
         super(self.__class__, self)._handleIdResult(value)
         if value is None:
             return
         if "Id" in value:
             self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class TableRowCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TableRowCollection_Custom_Members
@@ -2027,7 +2137,12 @@ class TableRowCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'TableRowCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableRowCollection':
+        _load(self, None)
+        return self
 
 class TableRow(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TableRow_Custom_Members
@@ -2082,7 +2197,12 @@ class TableRow(OfficeExtension.ClientObject):
             self._values = obj.get("Values")
     
     def load(self, option = None) -> 'TableRow':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableRow':
+        _load(self, None)
+        return self
 
 class RangeFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeFormat_Custom_Members
@@ -2223,7 +2343,12 @@ class RangeFormat(OfficeExtension.ClientObject):
             self.protection._handleResult(obj.get("Protection"))
     
     def load(self, option = None) -> 'RangeFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeFormat':
+        _load(self, None)
+        return self
 
 class FormatProtection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_FormatProtection_Custom_Members
@@ -2272,7 +2397,12 @@ class FormatProtection(OfficeExtension.ClientObject):
             self._locked = obj.get("Locked")
     
     def load(self, option = None) -> 'FormatProtection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'FormatProtection':
+        _load(self, None)
+        return self
 
 class RangeFill(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeFill_Custom_Members
@@ -2311,7 +2441,12 @@ class RangeFill(OfficeExtension.ClientObject):
             self._color = obj.get("Color")
     
     def load(self, option = None) -> 'RangeFill':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeFill':
+        _load(self, None)
+        return self
 
 class RangeBorder(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeBorder_Custom_Members
@@ -2386,7 +2521,16 @@ class RangeBorder(OfficeExtension.ClientObject):
             self._weight = obj.get("Weight")
     
     def load(self, option = None) -> 'RangeBorder':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeBorder':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
 
 class RangeBorderCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeBorderCollection_Custom_Members
@@ -2439,7 +2583,12 @@ class RangeBorderCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'RangeBorderCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeBorderCollection':
+        _load(self, None)
+        return self
 
 class RangeFont(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeFont_Custom_Members
@@ -2552,7 +2701,16 @@ class RangeFont(OfficeExtension.ClientObject):
             self._underline = obj.get("Underline")
     
     def load(self, option = None) -> 'RangeFont':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeFont':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class ChartCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartCollection_Custom_Members
@@ -2624,7 +2782,12 @@ class ChartCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ChartCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartCollection':
+        _load(self, None)
+        return self
 
 class Chart(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Chart_Custom_Members
@@ -2804,7 +2967,16 @@ class Chart(OfficeExtension.ClientObject):
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'Chart':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Chart':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class ChartAreaFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAreaFormat_Custom_Members
@@ -2837,7 +3009,12 @@ class ChartAreaFormat(OfficeExtension.ClientObject):
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartAreaFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAreaFormat':
+        _load(self, None)
+        return self
 
 class ChartSeriesCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartSeriesCollection_Custom_Members
@@ -2885,7 +3062,12 @@ class ChartSeriesCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ChartSeriesCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartSeriesCollection':
+        _load(self, None)
+        return self
 
 class ChartSeries(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartSeries_Custom_Members
@@ -2934,7 +3116,16 @@ class ChartSeries(OfficeExtension.ClientObject):
             self.points._handleResult(obj.get("Points"))
     
     def load(self, option = None) -> 'ChartSeries':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartSeries':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class ChartSeriesFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartSeriesFormat_Custom_Members
@@ -2967,7 +3158,12 @@ class ChartSeriesFormat(OfficeExtension.ClientObject):
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartSeriesFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartSeriesFormat':
+        _load(self, None)
+        return self
 
 class ChartPointsCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartPointsCollection_Custom_Members
@@ -3015,7 +3211,12 @@ class ChartPointsCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'ChartPointsCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartPointsCollection':
+        _load(self, None)
+        return self
 
 class ChartPoint(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartPoint_Custom_Members
@@ -3050,7 +3251,12 @@ class ChartPoint(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartPoint':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartPoint':
+        _load(self, None)
+        return self
 
 class ChartPointFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartPointFormat_Custom_Members
@@ -3075,7 +3281,12 @@ class ChartPointFormat(OfficeExtension.ClientObject):
             self.fill._handleResult(obj.get("Fill"))
     
     def load(self, option = None) -> 'ChartPointFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartPointFormat':
+        _load(self, None)
+        return self
 
 class ChartAxes(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAxes_Custom_Members
@@ -3116,7 +3327,12 @@ class ChartAxes(OfficeExtension.ClientObject):
             self.valueAxis._handleResult(obj.get("ValueAxis"))
     
     def load(self, option = None) -> 'ChartAxes':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAxes':
+        _load(self, None)
+        return self
 
 class ChartAxis(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAxis_Custom_Members
@@ -3229,7 +3445,12 @@ class ChartAxis(OfficeExtension.ClientObject):
             self.title._handleResult(obj.get("Title"))
     
     def load(self, option = None) -> 'ChartAxis':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAxis':
+        _load(self, None)
+        return self
 
 class ChartAxisFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAxisFormat_Custom_Members
@@ -3262,7 +3483,12 @@ class ChartAxisFormat(OfficeExtension.ClientObject):
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartAxisFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAxisFormat':
+        _load(self, None)
+        return self
 
 class ChartAxisTitle(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAxisTitle_Custom_Members
@@ -3319,7 +3545,12 @@ class ChartAxisTitle(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartAxisTitle':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAxisTitle':
+        _load(self, None)
+        return self
 
 class ChartAxisTitleFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartAxisTitleFormat_Custom_Members
@@ -3344,7 +3575,12 @@ class ChartAxisTitleFormat(OfficeExtension.ClientObject):
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartAxisTitleFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartAxisTitleFormat':
+        _load(self, None)
+        return self
 
 class ChartDataLabels(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartDataLabels_Custom_Members
@@ -3497,7 +3733,12 @@ class ChartDataLabels(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartDataLabels':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartDataLabels':
+        _load(self, None)
+        return self
 
 class ChartDataLabelFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartDataLabelFormat_Custom_Members
@@ -3530,7 +3771,12 @@ class ChartDataLabelFormat(OfficeExtension.ClientObject):
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartDataLabelFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartDataLabelFormat':
+        _load(self, None)
+        return self
 
 class ChartGridlines(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartGridlines_Custom_Members
@@ -3571,7 +3817,12 @@ class ChartGridlines(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartGridlines':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartGridlines':
+        _load(self, None)
+        return self
 
 class ChartGridlinesFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartGridlinesFormat_Custom_Members
@@ -3596,7 +3847,12 @@ class ChartGridlinesFormat(OfficeExtension.ClientObject):
             self.line._handleResult(obj.get("Line"))
     
     def load(self, option = None) -> 'ChartGridlinesFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartGridlinesFormat':
+        _load(self, None)
+        return self
 
 class ChartLegend(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartLegend_Custom_Members
@@ -3669,7 +3925,12 @@ class ChartLegend(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartLegend':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartLegend':
+        _load(self, None)
+        return self
 
 class ChartLegendFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartLegendFormat_Custom_Members
@@ -3702,7 +3963,12 @@ class ChartLegendFormat(OfficeExtension.ClientObject):
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartLegendFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartLegendFormat':
+        _load(self, None)
+        return self
 
 class ChartTitle(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartTitle_Custom_Members
@@ -3775,7 +4041,12 @@ class ChartTitle(OfficeExtension.ClientObject):
             self.format._handleResult(obj.get("Format"))
     
     def load(self, option = None) -> 'ChartTitle':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartTitle':
+        _load(self, None)
+        return self
 
 class ChartTitleFormat(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartTitleFormat_Custom_Members
@@ -3808,7 +4079,12 @@ class ChartTitleFormat(OfficeExtension.ClientObject):
             self.font._handleResult(obj.get("Font"))
     
     def load(self, option = None) -> 'ChartTitleFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartTitleFormat':
+        _load(self, None)
+        return self
 
 class ChartFill(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartFill_Custom_Members
@@ -3873,7 +4149,12 @@ class ChartLineFormat(OfficeExtension.ClientObject):
             self._color = obj.get("Color")
     
     def load(self, option = None) -> 'ChartLineFormat':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartLineFormat':
+        _load(self, None)
+        return self
 
 class ChartFont(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_ChartFont_Custom_Members
@@ -3986,7 +4267,16 @@ class ChartFont(OfficeExtension.ClientObject):
             self._underline = obj.get("Underline")
     
     def load(self, option = None) -> 'ChartFont':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ChartFont':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class RangeSort(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_RangeSort_Custom_Members
@@ -4071,7 +4361,12 @@ class TableSort(OfficeExtension.ClientObject):
             self._method = obj.get("Method")
     
     def load(self, option = None) -> 'TableSort':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'TableSort':
+        _load(self, None)
+        return self
 
 class SortField:
     def __init__(self):
@@ -4183,7 +4478,12 @@ class Filter(OfficeExtension.ClientObject):
             self._criteria = obj.get("Criteria")
     
     def load(self, option = None) -> 'Filter':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Filter':
+        _load(self, None)
+        return self
 
 class FilterCriteria:
     def __init__(self):
@@ -4265,7 +4565,12 @@ class PivotTableCollection(OfficeExtension.ClientObject):
                 self.__items.append(item)
     
     def load(self, option = None) -> 'PivotTableCollection':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'PivotTableCollection':
+        _load(self, None)
+        return self
 
 class PivotTable(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_PivotTable_Custom_Members
@@ -4312,7 +4617,16 @@ class PivotTable(OfficeExtension.ClientObject):
             self.worksheet._handleResult(obj.get("Worksheet"))
     
     def load(self, option = None) -> 'PivotTable':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'PivotTable':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Name", self._name)
+        return self._name
 
 class BindingType:
     range = "Range"
@@ -4663,7 +4977,12 @@ class FunctionResult(OfficeExtension.ClientObject):
             self._value = obj.get("Value")
     
     def load(self, option = None) -> 'FunctionResult':
-        _load(self, option);
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'FunctionResult':
+        _load(self, None)
+        return self
 
 class Functions(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Functions_Custom_Members

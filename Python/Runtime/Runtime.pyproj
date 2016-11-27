@@ -32,6 +32,12 @@
     <Compile Include="excelhelper.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="excelperfinstantsyncdesktop.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="excelperfinstantsyncgraph.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="exceltest.py">
       <SubType>Code</SubType>
     </Compile>
