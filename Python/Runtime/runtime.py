@@ -4,6 +4,8 @@ import enum
 import datetime
 import logging
 import httphelper
+import namedpipeclient
+
 class Constants:
     getItemAt = "GetItemAt"
     id = "Id"
@@ -123,6 +125,58 @@ class HttpRequestExecutor(IRequestExecutor):
     def execute(self, requestInfo: httphelper.RequestInfo) -> httphelper.ResponseInfo:
         return httphelper.HttpUtility.invoke(requestInfo)
 
+class PipeExecutor(IRequestExecutor):
+    def execute(self, request: httphelper.RequestInfo) -> httphelper.ResponseInfo:
+        if request.method is None:
+            request.method = "GET"
+        request.method = request.method.upper()
+        if request.method == "GET" or request.method == "DELETE":
+            requestInfo.body = None
+
+        index = request.url.find('/_api')
+        if index < 0:
+            raise Exception("Invalid url")
+        indexPipeNameStart = request.url.rfind('/', 0, index)
+        if indexPipeNameStart < 0:
+            raise Exception("Cannot find pipename")
+        pipeName = request.url[indexPipeNameStart + 1: index]
+        index = index + len('/_api')
+        pathAndQuery = request.url[index:];
+
+        requestMessage = request.method + " " + pathAndQuery + " HTTP/1.1\n"
+        requestMessage = requestMessage + "\n"
+        if not Utility.isNullOrEmptyString(request.body):
+            requestMessage = requestMessage + request.body
+
+        requestBytes = requestMessage.encode('utf-8')
+        pipeClient = namedpipeclient.WinNamedPipeClient(pipeName)
+        pipeClient.write(requestBytes)
+        responseBytes = pipeClient.read()
+        pipeClient.close()
+        responseMessage = responseBytes.decode('utf-8')
+
+        ret = httphelper.ResponseInfo()
+        headerLines = []
+        lastNewLineIndex = -1
+        index = responseMessage.find('\n', 0)
+        while index > 0:
+            if lastNewLineIndex > 0 and lastNewLineIndex + 1 == index:
+                # Two consecutive newline
+                break
+            headerLines.append(responseMessage[lastNewLineIndex + 1 : index])
+            lastNewLineIndex = index
+            index = responseMessage.find('\n', index + 1)
+        if index > 0:
+            ret.body = responseMessage[index + 1: ]
+
+        if len(headerLines) == 0:
+            raise Utility.createRuntimeError(ErrorCodes.invalidArgument)
+        statusLineParts = headerLines[0].split()
+        if len(statusLineParts) < 2:
+            raise Utility.createRuntimeError(ErrorCodes.invalidArgument)
+        ret.statusCode = int(statusLineParts[0])
+        return ret
+
 class ClientResultProcessingType(enum.IntEnum):
     none = 0
     date = 1
@@ -186,7 +240,10 @@ class ClientRequestContext:
         if (ClientRequestContext.customRequestExecutor is not None):
             self._requestExecutor = ClientRequestContext.customRequestExecutor
         else:
-            self._requestExecutor = HttpRequestExecutor()
+            if self._url.startswith("pipe://"):
+                self._requestExecutor = PipeExecutor()
+            else:
+                self._requestExecutor = HttpRequestExecutor()
 
         self._rootObject = None
         self.__pendingRequest = None
@@ -229,26 +286,26 @@ class ClientRequestContext:
             elif isinstance(loadOption.select, list):
                 queryOption.Select = loadOption.select
             elif not Utility.isNullOrUndefined(loadOption.select):
-                Utility.throwError(ResourceStrings.invalidArgument, "option.select")
+                raise Utility.createInvalidArgumentException("option.select")
 
             if isinstance(loadOption.expand, str):
                 queryOption.Expand = self._parseSelectExpand(loadOption.expand)
             elif isinstance(loadOption.expand, list):
                 queryOption.Expand = loadOption.expand
             elif not Utility.isNullOrUndefined(loadOption.expand):
-                Utility.throwError(ResourceStrings.invalidArgument, "option.expand")
+                raise Utility.createInvalidArgumentException("option.expand")
 
             if isinstance(loadOption.top, int):
                 queryOption.Top = loadOption.top
             elif not Utility.isNullOrUndefined(loadOption.top):
-                Utility.throwError(ResourceStrings.invalidArgument, "option.top")
+                raise Utility.createInvalidArgumentException("option.top")
 
             if isinstance(loadOption.skip, int):
                 queryOption.Skip = loadOption.skip
             elif not Utility.isNullOrUndefined(loadOption.skip):
-                Utility.throwError(ResourceStrings.invalidArgument, "option.skip")
+                raise Utility.createInvalidArgumentException("option.skip")
         elif not Utility.isNullOrUndefined(option):
-            Utility.throwError(ResourceStrings.invalidArgument, "option")
+            raise Utility.createInvalidArgumentException("option")
 
         action = ActionFactory.createQueryAction(self, clientObject, queryOption)
         self._pendingRequest.addActionResultHandler(action, clientObject)
@@ -433,7 +490,7 @@ class ClientRequest:
             return
 
         if not objectPath.isValid:
-            Utility.throwError(ResourceStrings.invalidObjectPath, Utility.getObjectPathExpression(objectPath))
+            raise Utility.createRuntimeError(ErrorCodes.invalidObjectPath, Utility._getResourceString(ResourceStrings.invalidObjectPath, Utility.getObjectPathExpression(objectPath)))
 
         while objectPath:
             if objectPath.isWriteOperation:
@@ -757,11 +814,19 @@ class ErrorCodes:
     invalidRequestContext = "InvalidRequestContext"
     invalidArgument = "InvalidArgument"
 
+class RuntimeException(Exception):
+    def __init__(self, code: str, message: str, location = None):
+        self.code = code
+        self.message = message
+        self.location = location
+    def __str__(self):
+        return repr(self.code) + ":" + repr(self.message)
+
 class Utility:
     @staticmethod
     def checkArgumentNull(value, name: str):
         if (Utility.isNullOrUndefined(value)):
-            Utility.throwError(ResourceStrings.invalidArgument, name)
+            raise Utility.createInvalidArgumentException(name)
 
     @staticmethod
     def isUndefined(value) -> bool:
@@ -865,7 +930,7 @@ class Utility:
         while (objectPath):
             if (not objectPath.isValid):
                 pathExpression = Utility.getObjectPathExpression(objectPath)
-                Utility.throwError(ResourceStrings.invalidObjectPath, pathExpression)
+                raise Utility.createRuntimeError(ErrorCodes.invalidObjectPath, Utility._getResourceString(ResourceStrings.invalidObjectPath, pathExpression))
             objectPath = objectPath.parentObjectPath
 
     @staticmethod
@@ -876,13 +941,13 @@ class Utility:
                 while objectPath:
                     if (not objectPath.isValid):
                         pathExpression = Utility.getObjectPathExpression(objectPath)
-                        Utility.throwError(ResourceStrings.invalidObjectPath, pathExpression)
+                        raise Utility.createRuntimeError(ErrorCodes.invalidObjectPath, Utility._getResourceString(ResourceStrings.invalidObjectPath, pathExpression))
                     objectPath = objectPath.parentObjectPath
 
     @staticmethod
     def validateContext(context: ClientRequestContext, clientObject: ClientObject):
         if (clientObject and clientObject.context != context):
-            Utility.throwError(ResourceStrings.invalidRequestContext)
+            raise Utility.createRuntimeError(ErrorCodes.invalidRequestContext, Utility._getResourceString(ResourceStrings.invalidRequestContext))
 
 
     _logEnabled = False
@@ -899,14 +964,13 @@ class Utility:
     _underscoreCharCode = ord('_')
 
     @staticmethod
-    def throwError(resourceId: str, arg: str):
-        raise
-        #throw new _Internal.RuntimeError(resourceId, Utility._getResourceString(resourceId, arg), new Array<string>(), {})
+    def createRuntimeError(code: str, message: str = None, location: str = None) -> Exception:
+        return RuntimeError(code, message, location)
     
     @staticmethod
-    def createRuntimeError(code: str, message: str = None, location: str = None) -> Exception:
-        return RuntimeError(code, message, [], { errorLocation: location })
-    
+    def createInvalidArgumentException(name: str) -> Exception:
+        return RuntimeError(ErrorCodes.invalidArgument, Utility._getResourceString(ResourceStrings.invalidArgument, name));
+
     @staticmethod
     def _getResourceString(resourceId: str, arg: str = None) -> str:
         ret = resourceId
@@ -930,7 +994,7 @@ class Utility:
         # isNull could be None, True or False. When we do not know whether the object
         # is null or not, isNull is None
         if (not isNull and fieldValue is None and propertyName[0] != "_"):
-            Utility.throwError(ResourceStrings.propertyNotLoaded, propertyName)
+            raise Utility.createRuntimeError(ErrorCodes.propertyNotLoaded, Utility._getResourceString(ResourceStrings.propertyNotLoaded, propertyName))
 
     @staticmethod
     def loadIfInstantSyncExecutionMode(clientObject: ClientObject, propertyName: str, fieldValue) -> None:

@@ -159,6 +159,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PythonMain.tt</DependentUpon>
     </Content>
+    <Content Include="PythonMainFakeXlapi.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PythonMainFakeXlapi.txt</LastGenOutput>
+    </Content>
+    <Content Include="PythonMainFakeXlapi.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PythonMainFakeXlapi.tt</DependentUpon>
+    </Content>
     <Content Include="PythonMainWord.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PythonMainWord.txt</LastGenOutput>

@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>86eb8113-897d-41f6-9994-00735e8025f2</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>exceltestimmediate.py</StartupFile>
+    <StartupFile>fakexlapitest.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -44,9 +44,14 @@
     <Compile Include="exceltestimmediate.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="fakexlapi.py" />
+    <Compile Include="fakexlapitest.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="httphelper.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="namedpipeclient.py" />
     <Compile Include="oauthhelper.py" />
     <Compile Include="runtime.py" />
     <Compile Include="word.py" />
