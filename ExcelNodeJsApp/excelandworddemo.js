@@ -1,4 +1,3 @@
-var request = require('request');
 var excel = require('./excel.js');
 var word = require('./word.js');
 var exceldemolib = require('./exceldemolib.js');
@@ -10,20 +9,6 @@ var Word = word.Word;
 var OfficeExtension = excel.OfficeExtension;
 
 OfficeExtension.Utility._logEnabled = true;
-
-OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-    return new OfficeExtension.Promise(function(resolve, reject){
-        request(req, 
-            function(err, resp){
-                if (err){
-                    reject(err);
-                }
-                else{
-                    resolve(resp);
-                }            
-        });
-    });
-});
 
 var bitmap = fs.readFileSync('blank.xlsx');
 var buf = new Buffer(bitmap);

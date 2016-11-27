@@ -1,6 +1,5 @@
-var excel = require('./excel.js');
-var Excel = excel.Excel;
-var OfficeExtension = excel.OfficeExtension;
+var Excel = require('excel');
+var OfficeExtension = require('office.runtime');
 
 function createSessionAndBuildUrlAndHeaders(workbookUrl, requestHeaders){
     var url = workbookUrl + "/createSession"
