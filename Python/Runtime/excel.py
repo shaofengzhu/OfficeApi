@@ -7205,5 +7205,9 @@ class RequestContext(OfficeExtension.ClientRequestContext):
     def workbook(self) -> Workbook:
         return self._workbook
 
+def createInstantContext():
+    ret = RequestContext("pipe://./excel", OfficeExtension.RequestExecutionMode.instantSync)
+    return ret
+
 # End_PlaceHolder_GlobalFooter
 

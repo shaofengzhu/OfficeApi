@@ -11,7 +11,8 @@ class ExcelDemoLib:
     @staticmethod
     def initDesktopContext():
         requestUrlAndHeaders = runtime.RequestUrlAndHeaderInfo()
-        requestUrlAndHeaders.url = "http://localhost:8052"
+        #requestUrlAndHeaders.url = "http://localhost:8052"
+        requestUrlAndHeaders.url = "pipe://./excel/_api"
         runtime.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders
 
     @staticmethod

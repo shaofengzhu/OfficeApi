@@ -69,7 +69,7 @@ class WinNamedPipeClient:
             readMoreData = False
             if ret == 0:
                 err = WinNamedPipeClient.hk32['GetLastError']()
-                if err == ERROR_MORE_DATA:
+                if err == WinNamedPipeClient.ERROR_MORE_DATA:
                     readMoreData = True
 
             cnt = struct.unpack('I', cnt)[0]

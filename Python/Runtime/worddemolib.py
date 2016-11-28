@@ -8,7 +8,8 @@ class WordDemoLib:
     @staticmethod
     def initDesktopContext():
         requestUrlAndHeaders = runtime.RequestUrlAndHeaderInfo()
-        requestUrlAndHeaders.url = "http://localhost:8054"
+        #requestUrlAndHeaders.url = "http://localhost:8054"
+        requestUrlAndHeaders.url = "pipe://./word/_api"
         runtime.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders
         
     @staticmethod

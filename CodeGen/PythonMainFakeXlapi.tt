@@ -1,0 +1,16 @@
+﻿<#@ template debug="true" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ include file="PythonCore.tt" #>
+
+<#@ output extension=".txt" #>
+
+<#
+	this.SetParameter(ParameterName_Input, @"X:\git\OfficeApi\FakeXlapiMetadata\bin\Debug\FakeXlapi.dll");
+	this.SetParameter(ParameterName_Refs, @"X:\git\OfficeApi\CodeGen\Microsoft.OfficeExtension.CodeGen.Attributes.dll");
+	this.SetParameter(ParameterName_OutputDirectory, @"X:\git\OfficeApi\Python\Runtime");
+	this.WritePython();
+#>
