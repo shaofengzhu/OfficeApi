@@ -167,8 +167,8 @@ class ExcelDemoLib:
 
     @staticmethod
     def clearWorkbook(context: excel.RequestContext) -> None:
-        sheet1 = context.workbook.worksheets.getItemOrNull("Sheet1")
-        sheet2 = context.workbook.worksheets.getItemOrNull("Top 10 Growing Cities")
+        sheet1 = context.workbook.worksheets.getItemOrNullObject("Sheet1")
+        sheet2 = context.workbook.worksheets.getItemOrNullObject("Top 10 Growing Cities")
         r = sheet1.getUsedRange()
         r.clear()
         r = sheet2.getUsedRange()

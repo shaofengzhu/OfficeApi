@@ -213,7 +213,7 @@ def __init__(self, context: <#=Constants.TypeFullNames.ClientRequestContext#>, o
 #>
 super(self.__class__, self).__init__(context, objectPath)
 <#+
-		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
+		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
 self._<#=Utility.ToCamelLowerCase(prop.Name)#> = None
@@ -232,7 +232,7 @@ self.__items = None
 
 	private void WriteObjectProperties(ClientCallableTypeInfo type, XDocument xdoc)
 	{
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
 @property
@@ -250,26 +250,6 @@ def <#=NormalizeMemberName(Utility.ToCamelLowerCase(prop.Name))#>(self, value: '
     self.<#=PythonUtility.GetPythonFieldName(prop)#> = value
     <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value);
 <#+	
-			}
-		}
-
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
-		{
-			this.WriteLine(string.Empty);
-#>
-def get<#=Utility.ToCamelUpperCase(prop.Name)#>(self) -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>':
-    return <#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>(self.context, <#=PythonConstants.MemberFullNames.CreatePropertyObjectPath#>(self.context, self, "<#=prop.Name#>", <#=PythonUtility.GetPythonBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#>, <#=PythonUtility.GetPythonBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#>))
-<#+
-			if (!prop.IsReadonly)
-			{
-				this.WriteLine(string.Empty);
-				// NOTE: Do *NOT* write JSDOC comments on setters. Doing so creates a doubled-up comment on the property in the final TypeScript / d.ts file.
-				// Just writing the JSDOC comment on the getter is perfectly sufficient (and our underlying assumption is that there are
-				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
-#>
-def set<#=Utility.ToCamelUpperCase(prop.Name)#>(self, value -> '<#=PythonUtility.GetPythonTypeName(prop.PropertyType)#>') -> None:
-    <#=PythonConstants.MemberFullNames.CreateSetPropertyAction#>(self.context, self, "<#=prop.Name#>", value)
-<#+
 			}
 		}
 
@@ -535,7 +515,7 @@ def _handleResult(self, value: dict) -> None:
 		}
 
 		List<string> navPropNames = new List<string>();
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.ExcludedFromClientLibrary && !PythonUtility.ShouldSkipProperty(p)))
 		{
 #>
     if "<#=prop.Name#>" in obj:

@@ -6,16 +6,15 @@
 // <summary>
 // Contains the metadata of Excel API that is currently implemented.
 // The following is the workflow to add a new API
-// 1) PM add the API to xlshared\src\api\metadata\spec\ExcelApi.cs
-// 2) DEV add the API to xlshared\src\api\metadata\current\ExcelApi.cs
-// 3) DEV runs xlshared\util\XlsApiGen.bat to re-generate the following files
+// 1) DEV add the API to xlshared\src\api\metadata\current\ExcelApi.cs
+// 2) DEV runs xlshared\util\XlsApiGen.bat to re-generate the following files
 //      xlshared\src\api\Xlapi.h                COM CoClass header file
 //      xlshared\src\api\Xlapi_i.h              COM interface header file
 //      xlshared\src\api\Xlapi_i.cpp            COM GUIDs
 //      xlshared\src\api\TypeRegistration.cpp   Type registration file
 //      xlshared\src\api\*.disp.cpp             COM IDispatch interface related implementation
 //      xlshared\src\api\script\Xlapi.ts        TypeScript file
-// 4) DEV implement the new API, update xlshared\src\api\sources.inc if necessary.
+// 3) DEV implement the new API, update xlshared\src\api\sources.inc if necessary.
 // </summary>
 // --------------------------------------------------------------------------------------------------
 
@@ -118,7 +117,7 @@ namespace Microsoft.ExcelServices
 		internal const int BindingCollection_Add = 4;
 		internal const int BindingCollection_AddFromNamedItem = 5;
 		internal const int BindingCollection_AddFromSelection = 6;
-		internal const int BindingCollection_GetItemOrNull = 7;
+		internal const int BindingCollection_GetItemOrNullObject = 7;
 
 		internal const int ChartAxes_Category = 1;
 		internal const int ChartAxes_Series = 2;
@@ -177,7 +176,7 @@ namespace Microsoft.ExcelServices
 		internal const int ChartCollection_GetByName = 5;
 		internal const int ChartCollection_GetItem = 6;
 		internal const int ChartCollection_OnAccess = 7;
-		internal const int ChartCollection_GetItemOrNull = 8;
+		internal const int ChartCollection_GetItemOrNullObject = 8;
 
 		internal const int ChartDataLabels_Position = 1;
 		internal const int ChartDataLabels_ShowValue = 2;
@@ -266,14 +265,19 @@ namespace Microsoft.ExcelServices
 		internal const int ConditionalFormat_StopIfTrue = 3;
 		internal const int ConditionalFormat_Priority = 4;
 		internal const int ConditionalFormat_Type = 5;
-		internal const int ConditionalFormat_DataBarOrNull = 6;
-		internal const int ConditionalFormat_Delete = 7;
-		internal const int ConditionalFormat_OnAccess = 8;
+		internal const int ConditionalFormat_DataBarOrNullObject = 6;
+		internal const int ConditionalFormat_DataBar = 7;
+		internal const int ConditionalFormat_CustomOrNullObject = 8;
+		internal const int ConditionalFormat_Custom = 9;
+		internal const int ConditionalFormat_Delete = 10;
+		internal const int ConditionalFormat_OnAccess = 11;
+		internal const int ConditionalFormat_RangeOrNull = 12;
 
 		internal const int ConditionalFormatCollection_GetCount = 1;
 		internal const int ConditionalFormatCollection_ItemAt = 2;
 		internal const int ConditionalFormatCollection_ClearAll = 3;
-		internal const int ConditionalFormatCollection_OnAccess = 4;
+		internal const int ConditionalFormatCollection_Add = 4;
+		internal const int ConditionalFormatCollection_OnAccess = 5;
 
 		internal const int ConditionalFormatDataBar_ShowDataBarOnly = 1;
 		internal const int ConditionalFormatDataBar_BarDirection = 2;
@@ -301,7 +305,95 @@ namespace Microsoft.ExcelServices
 		internal const int ConditionalFormatDataBarRule_Formula = 2;
 		internal const int ConditionalFormatDataBarRule_FormulaLocal = 3;
 		internal const int ConditionalFormatDataBarRule_FormulaR1C1 = 4;
-		internal const int ConditionalFormatDataBarRule_OnAccess = 5;
+
+		internal const int ConditionalRangeBorder_SideIndex = 1;
+		internal const int ConditionalRangeBorder_LineStyle = 2;
+		internal const int ConditionalRangeBorder_Color = 3;
+		internal const int ConditionalRangeBorder_OnAccess = 4;
+		internal const int ConditionalRangeBorder_Id = 5;
+
+		internal const int ConditionalRangeBorderCollection_Indexer = 1;
+		internal const int ConditionalRangeBorderCollection_Count = 2;
+		internal const int ConditionalRangeBorderCollection_ItemAt = 3;
+		internal const int ConditionalRangeBorderCollection_OnAccess = 4;
+		internal const int ConditionalRangeBorderCollection_Top = 5;
+		internal const int ConditionalRangeBorderCollection_Bottom = 6;
+		internal const int ConditionalRangeBorderCollection_Left = 7;
+		internal const int ConditionalRangeBorderCollection_Right = 8;
+
+		internal const int ConditionalRangeFill_Color = 1;
+		internal const int ConditionalRangeFill_Clear = 2;
+		internal const int ConditionalRangeFill_OnAccess = 3;
+
+		internal const int ConditionalRangeFont_Color = 1;
+		internal const int ConditionalRangeFont_Italic = 2;
+		internal const int ConditionalRangeFont_Bold = 3;
+		internal const int ConditionalRangeFont_Underline = 4;
+		internal const int ConditionalRangeFont_OnAccess = 5;
+		internal const int ConditionalRangeFont_Strikethrough = 6;
+		internal const int ConditionalRangeFont_Clear = 7;
+
+		internal const int ConditionalRangeFormat_Fill = 1;
+		internal const int ConditionalRangeFormat_Font = 2;
+		internal const int ConditionalRangeFormat_Borders = 3;
+		internal const int ConditionalRangeFormat_OnAccess = 4;
+		internal const int ConditionalRangeFormat_NumberFormat = 5;
+
+		internal const int ConditionalFormatRule_Type = 1;
+		internal const int ConditionalFormatRule_Formula1 = 2;
+		internal const int ConditionalFormatRule_Formula1Local = 3;
+		internal const int ConditionalFormatRule_Formula1R1C1 = 4;
+		internal const int ConditionalFormatRule_Formula2 = 5;
+		internal const int ConditionalFormatRule_Formula2Local = 6;
+		internal const int ConditionalFormatRule_Formula2R1C1 = 7;
+		internal const int ConditionalFormatRule_OnAccess = 8;
+
+		internal const int ConditionalFormatCustom_FontColor = 1;
+		internal const int ConditionalFormatCustom_BorderColor = 2;
+		internal const int ConditionalFormatCustom_Fill = 3;
+		internal const int ConditionalFormatCustom_Rule = 4;
+		internal const int ConditionalFormatCustom_OnAccess = 5;
+		internal const int ConditionalFormatCustom_Format = 6;
+
+		internal const int ConditionalFormatIcon_ReverseIconOrder = 1;
+		internal const int ConditionalFormatIcon_ShowIconOnly = 2;
+		internal const int ConditionalFormatIcon_Style = 3;
+		internal const int ConditionalFormatIcon_Criteria = 4;
+		internal const int ConditionalFormatIcon_OnAccess = 5;
+
+		internal const int ConditionalFormatIconCriterion_Type = 1;
+		internal const int ConditionalFormatIconCriterion_Formula = 2;
+		internal const int ConditionalFormatIconCriterion_Operator = 3;
+		internal const int ConditionalFormatIconCriterion_CustomIcon = 4;
+		internal const int ConditionalFormatIconCriterion_OnAccess = 5;
+
+		internal const int CustomXmlPart_OnAccess = 1;
+		internal const int CustomXmlPart_Delete = 2;
+		internal const int CustomXmlPart_Id = 3;
+		internal const int CustomXmlPart_NamespaceUri = 4;
+		internal const int CustomXmlPart_GetXml = 5;
+		internal const int CustomXmlPart_SetXml = 6;
+		internal const int CustomXmlPart_InsertElement = 7;
+		internal const int CustomXmlPart_UpdateElement = 8;
+		internal const int CustomXmlPart_DeleteElement = 9;
+		internal const int CustomXmlPart_Query = 10;
+		internal const int CustomXmlPart_InsertAttribute = 11;
+		internal const int CustomXmlPart_UpdateAttribute = 12;
+		internal const int CustomXmlPart_DeleteAttribute = 13;
+
+		internal const int CustomXmlPartCollection_OnAccess = 1;
+		internal const int CustomXmlPartCollection_Indexer = 2;
+		internal const int CustomXmlPartCollection_Add = 3;
+		internal const int CustomXmlPartCollection_GetByNamespace = 4;
+		internal const int CustomXmlPartCollection_GetCount = 5;
+		internal const int CustomXmlPartCollection_GetItemOrNullObject = 6;
+
+		internal const int CustomXmlPartScopedCollection_OnAccess = 1;
+		internal const int CustomXmlPartScopedCollection_Indexer = 2;
+		internal const int CustomXmlPartScopedCollection_GetCount = 3;
+		internal const int CustomXmlPartScopedCollection_GetItemOrNullObject = 4;
+		internal const int CustomXmlPartScopedCollection_GetOnlyItem = 5;
+		internal const int CustomXmlPartScopedCollection_GetOnlyItemOrNullObject = 6;
 
 		internal const int FormatProtection_OnAccess = 1;
 		internal const int FormatProtection_Locked = 2;
@@ -346,9 +438,18 @@ namespace Microsoft.ExcelServices
 		internal const int NamedItem_Visible = 5;
 		internal const int NamedItem_Id = 6;
 		internal const int NamedItem_OnAccess = 7;
+		internal const int NamedItem_Delete = 8;
+		internal const int NamedItem_Comment = 9;
+		internal const int NamedItem_RangeOrNull = 10;
+		internal const int NamedItem_Scope = 11;
+		internal const int NamedItem_Worksheet = 12;
+		internal const int NamedItem_WorksheetOrNull = 13;
 
 		internal const int NamedItemCollection_Indexer = 1;
-		internal const int NamedItemCollection_GetItemOrNull = 2;
+		internal const int NamedItemCollection_GetItemOrNullObject = 2;
+		internal const int NamedItemCollection_Add = 3;
+		internal const int NamedItemCollection_AddFormulaLocal = 4;
+		internal const int NamedItemCollection_OnAccess = 5;
 
 		internal const int PivotTable_OnAccess = 1;
 		internal const int PivotTable_Name = 2;
@@ -357,7 +458,7 @@ namespace Microsoft.ExcelServices
 
 		internal const int PivotTableCollection_OnAccess = 1;
 		internal const int PivotTableCollection_Indexer = 2;
-		internal const int PivotTableCollection_GetItemOrNull = 3;
+		internal const int PivotTableCollection_GetItemOrNullObject = 3;
 		internal const int PivotTableCollection_RefreshAll = 4;
 
 		internal const int Range_NumberFormat = 1;	// DO NOT CHANGE Order of NumberFormat and Values
@@ -402,7 +503,7 @@ namespace Microsoft.ExcelServices
 		internal const int Range_RowHidden = 40;
 		internal const int Range_ColumnHidden = 41;
 		internal const int Range_ValidateArraySize = 42;
-		internal const int Range_GetIntersectionOrNull = 43;
+		internal const int Range_GetIntersectionOrNullObject = 43;
 		internal const int Range_GetRowsAbove = 44;
 		internal const int Range_GetRowsBelow = 45;
 		internal const int Range_GetColumnsBefore = 46;
@@ -474,7 +575,7 @@ namespace Microsoft.ExcelServices
 		internal const int SettingCollection_Set = 2;
 		internal const int SettingCollection_Save = 3;
 		internal const int SettingCollection_Refresh = 4;
-		internal const int SettingCollection_ItemOrNull = 5;
+		internal const int SettingCollection_ItemOrNullObject = 5;
 
 		internal const int Setting_OnAccess = 1;
 		internal const int Setting_Key = 2;
@@ -517,10 +618,10 @@ namespace Microsoft.ExcelServices
 		internal const int TableCollection_ItemAt = 3;
 		internal const int TableCollection_Add = 4;
 		internal const int TableCollection_OnAccess = 5;
-		internal const int TableCollection_GetItemOrNull = 6;
+		internal const int TableCollection_GetItemOrNullObject = 6;
 
 		internal const int TableColumn_Id = 1;
-		internal const int TableColumn_Name = 2;
+		// = 2 PREVIOUSLY USED ALREADY. DO NOT REUSE THIS ID.
 		internal const int TableColumn_Index = 3;
 		internal const int TableColumn_Range = 4;
 		internal const int TableColumn_HeaderRowRange = 5;
@@ -530,13 +631,14 @@ namespace Microsoft.ExcelServices
 		internal const int TableColumn_Delete = 9;
 		internal const int TableColumn_OnAccess = 10;
 		internal const int TableColumn_Filter = 11;
+		internal const int TableColumn_Name = 12;
 
 		internal const int TableColumnCollection_Count = 1;
 		internal const int TableColumnCollection_Indexer = 2;
 		internal const int TableColumnCollection_ItemAt = 3;
 		internal const int TableColumnCollection_Insert = 4;
 		internal const int TableColumnCollection_OnAccess = 5;
-		internal const int TableColumnCollection_GetItemOrNull = 6;
+		internal const int TableColumnCollection_GetItemOrNullObject = 6;
 
 		internal const int TableRow_Index = 1;
 		internal const int TableRow_Range = 2;
@@ -572,6 +674,7 @@ namespace Microsoft.ExcelServices
 		internal const int Workbook_V1Api = 13;
 		internal const int Workbook_PivotTables = 14;
 		internal const int Workbook_Settings = 15;
+		internal const int Workbook_CustomXmlParts = 16;
 
 		internal const int Worksheet_Range = 1;
 		internal const int Worksheet_UsedRange = 2;
@@ -587,11 +690,12 @@ namespace Microsoft.ExcelServices
 		internal const int Worksheet_Visible = 12;
 		internal const int Worksheet_Protection = 13;
 		internal const int Worksheet_PivotTables = 14;
+		internal const int Worksheet_Names = 15;
 
 		internal const int WorksheetCollection_Indexer = 1;
 		internal const int WorksheetCollection_Add = 2;
 		internal const int WorksheetCollection_ActiveWorksheet = 3;
-		internal const int WorksheetCollection_GetItemOrNull = 4;
+		internal const int WorksheetCollection_GetItemOrNullObject = 4;
 
 		internal const int WorksheetProtection_OnAccess = 1;
 		internal const int WorksheetProtection_Protected = 2;
@@ -674,7 +778,7 @@ namespace Microsoft.ExcelServices
 	/// Provides information about the binding that raised the DataChanged event.
 	/// </summary>
 	[ClientCallableType(ExcludedFromRest = true)]
-	[ApiSet(Version = 1.1, IntroducedInVersion = 1.3)]
+	[ApiSet(Version = 1.2, IntroducedInVersion = 1.3)]
 	public struct BindingDataChangedEventArgs
 	{
 		/// <summary>
@@ -688,7 +792,7 @@ namespace Microsoft.ExcelServices
 	/// Provides information about the document that raised the SelectionChanged event.
 	/// </summary>
 	[ClientCallableType(ExcludedFromRest = true)]
-	[ApiSet(Version = 1.1, IntroducedInVersion = 1.3)]
+	[ApiSet(Version = 1.2, IntroducedInVersion = 1.3)]
 	public struct SelectionChangedEventArgs
 	{
 		/// <summary>
@@ -702,13 +806,13 @@ namespace Microsoft.ExcelServices
 	/// Provides information about the setting that raised the SettingsChanged event
 	/// </summary>
 	[ClientCallableType(ExcludedFromRest = true)]
-	[ApiSet(Version = 1.3, IntroducedInVersion = 1.3)]
+	[ApiSet(Version = 1.4, IntroducedInVersion = 1.4)]
 	public struct SettingsChangedEventArgs
 	{
 		/// <summary>
 		/// Gets the Setting object that represents the binding that raised the SettingsChanged event
 		/// </summary>
-		[ApiSet(Version = 1.3, IntroducedInVersion = 1.3)]
+		[ApiSet(Version = 1.4, IntroducedInVersion = 1.4)]
 		public SettingCollection Settings { get; set; }
 	}
 
@@ -784,6 +888,13 @@ namespace Microsoft.ExcelServices
 		Application Application { get; }
 
 		/// <summary>
+		/// Represents the collection of custom XML parts contained by this workbook. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_CustomXmlParts)]
+		CustomXmlPartCollection CustomXmlParts { get; }
+
+		/// <summary>
 		/// Represents Excel application instance that contains this workbook. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.2)]
@@ -834,7 +945,7 @@ namespace Microsoft.ExcelServices
 		/// <summary>
 		/// Represents a collection of Settings associated with the workbook. Read-only.
 		/// </summary>
-		[ApiSet(Version = 1.3)]
+		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_Settings)]
 		[ClientCallableProperty(ExcludedFromRest = true)]
 		SettingCollection Settings { get; }
@@ -938,6 +1049,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.2)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Protection)]
+		[JsonStringify()]
 		WorksheetProtection Protection { get; }
 
 		/// <summary>
@@ -946,6 +1058,13 @@ namespace Microsoft.ExcelServices
 		[ApiSet(Version = 1.3)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_PivotTables)]
 		PivotTableCollection PivotTables { get; }
+
+		/// <summary>
+		/// Collection of names scoped to the current worksheet. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Names)]
+		NamedItemCollection Names { get; }
 	}
 
 	/// <summary>
@@ -971,13 +1090,13 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.WorksheetCollection_Indexer)]
 		Worksheet this[string key] { get; }
 		/// <summary>
-		/// Gets a worksheet object using its Name or ID. If the worksheet does not exist, the returned object's isNull property will be true.
+		/// Gets a worksheet object using its Name or ID. If the worksheet does not exist, will return a null object.
 		/// </summary>
 		/// <param name="key">The Name or ID of the worksheet.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.WorksheetCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.WorksheetCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		Worksheet GetItemOrNull(string key);
+		Worksheet GetItemOrNullObject(string key);
 		/// <summary>
 		/// Adds a new worksheet to the workbook. The worksheet will be added at the end of existing worksheets. If you wish to activate the newly added worksheet, call ".activate() on it.
 		/// </summary>
@@ -1004,7 +1123,7 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.WorksheetProtection_Protected)]
 		bool Protected { get; }
 		/// <summary>
-		/// Sheet protection options.
+		/// Sheet protection options. Read-Only.
 		/// </summary>
 		[ApiSet(Version = 1.2)]
 		[ClientCallableComMember(DispatchId = DispatchIds.WorksheetProtection_Options)]
@@ -1206,6 +1325,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_Format)]
+		[JsonStringify()]
 		RangeFormat Format { get; }
 		/// <summary>
 		/// Represents the formula in A1-style notation.
@@ -1290,10 +1410,10 @@ namespace Microsoft.ExcelServices
 		/// Gets the range object that represents the rectangular intersection of the given ranges. If no intersection is found, will return a null object.
 		/// </summary>
 		/// <param name="anotherRange">The range object or range address that will be used to determine the intersection of ranges.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.Range_GetIntersectionOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_GetIntersectionOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, InvalidateReturnObjectPathAfterRequest = true, RESTfulName = "")]
-		Range GetIntersectionOrNull([TypeScriptType("Excel.Range|string")]object anotherRange);
+		Range GetIntersectionOrNullObject([TypeScriptType("Excel.Range|string")]object anotherRange);
 		/// <summary>
 		/// Gets the last cell within the range. For example, the last cell of "B2:D5" is "D5".
 		/// </summary>
@@ -1596,7 +1716,7 @@ namespace Microsoft.ExcelServices
 	/// <summary>
 	/// Represents a collection of worksheet objects that are part of the workbook.
 	/// </summary>
-	[ApiSet(Version = 1.3)]
+	[ApiSet(Version = 1.4)]
 	[ClientCallableType(ExcludedFromRest = true)]
 	[ClientCallableComType(Name = "ISettingCollection", InterfaceId = "4BB24302-09C0-4717-B398-DCC2D834ED4C", CoClassName = "SettingCollection", SupportEnumeration = true)]
 	public interface SettingCollection : IEnumerable<Setting>
@@ -1615,21 +1735,21 @@ namespace Microsoft.ExcelServices
 		/// <param name="value">The Value for the new setting.</param>
 		[ApiSet(Version = 1.3)]
 		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_Set)]
-		Setting _Add(string key, string value);
+		Setting Add(string key, [TypeScriptType("string|number|boolean|Array<any>|any")] object value);
 
 		/// <summary>
-		/// Gets a Setting entry via the key. If the Setting does not exist, the returned object's isNull property will be true.
+		/// Gets a Setting entry via the key. If the Setting does not exist, will return a null object.
 		/// </summary>
 		/// <param name="key">The key of the setting.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_ItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_ItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		Setting GetItemOrNull(string key);
+		Setting GetItemOrNullObject(string key);
 
 		/// <summary>
 		/// Occurs when the Settings in the document are changed.
 		/// </summary>
-		[ApiSet(Version = 1.3, IntroducedInVersion = 1.3)]
+		[ApiSet(Version = 1.4, IntroducedInVersion = 1.4)]
 		event EventHandler<SettingsChangedEventArgs> SettingsChanged;
 	}
 
@@ -1657,7 +1777,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.3)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Setting_Value)]
-		string _Value { get; set; }
+		object Value { get; set; }
 
 		/// <summary>
 		/// Deletes the setting.
@@ -1668,9 +1788,9 @@ namespace Microsoft.ExcelServices
 	}
 	#endregion
 
-#region NamedItem
+	#region NamedItem
 	/// <summary>
-	/// A collection of all the nameditem objects that are part of the workbook.
+	/// A collection of all the nameditem objects that are part of the workbook or worksheet, depending on how it was reached.
 	/// </summary>
 	[ApiSet(Version = 1.1)]
 	[ClientCallableComType(Name = "INamedItemCollection", InterfaceId = "BD4C9F4B-F762-4779-AF4E-9E9665797830", CoClassName = "NamedItemCollection", SupportEnumeration = true)]
@@ -1683,20 +1803,47 @@ namespace Microsoft.ExcelServices
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_Indexer)]
 		NamedItem this[string name] { get; }
+
 		/// <summary>
-		/// Gets a nameditem object using its name. If the nameditem object does not exist, the returned object's isNull property will be true.
+		/// Gets a nameditem object using its name. If the nameditem object does not exist, will return a null object.
 		/// </summary>
 		/// <param name="name">nameditem name.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		NamedItem GetItemOrNull(string name);
+		NamedItem GetItemOrNullObject(string name);
+		/// <summary>
+		/// Adds a new name to the collection of the given scope.
+		/// </summary>
+		/// <param name="name">The name of the named item.</param>
+		/// <param name="reference">The formula or the range that the name will refer to.</param>
+		/// <param name="comment">The comment associated with the named item</param>
+		/// <returns></returns>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_Add)]
+		NamedItem Add(string name, [TypeScriptType("Excel.Range|string")]object reference, [Optional]string comment);
+
+		/// <summary>
+		/// Adds a new name to the collection of the given scope using the user's locale for the formula.
+		/// </summary>
+		/// <param name="name">The "name" of the named item.</param>
+		/// <param name="formula">The formula in the user's locale that the name will refer to.</param>
+		/// <param name="comment">The comment associated with the named item</param>
+		/// <returns></returns>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_AddFormulaLocal)]
+		NamedItem AddFormulaLocal(string name, string formula, [Optional] string comment);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItemCollection_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
 	}
 
 	/// <summary>
 	/// Represents a defined name for a range of cells or value. Names can be primitive named objects (as seen in the type below), range object, reference to a range. This object can be used to obtain range object associated with names.
 	/// </summary>
 	[ApiSet(Version = 1.1)]
+	[ClientCallableType(DeleteOperationName = "Delete")]
 	[ClientCallableComType(Name = "INamedItem", InterfaceId = "E76EE454-3E5E-4187-9389-3C65234609EF", CoClassName = "NamedItem")]
 	public interface NamedItem
 	{
@@ -1711,6 +1858,7 @@ namespace Microsoft.ExcelServices
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Name)]
 		string Name { get; }
+
 		/// <summary>
 		/// Returns the range object that is associated with the name. Throws an exception if the named item's type is not a range.
 		/// </summary>
@@ -1718,24 +1866,70 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Range)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "Range", InvalidateReturnObjectPathAfterRequest = true)]
 		Range GetRange();
+
 		/// <summary>
-		/// Indicates what type of reference is associated with the name. See Excel.NamedItemType for details. Read-only.
+		/// Returns the range object that is associated with the name. Returns a null object if the named item's type is not a range
+		/// </summary>
+		[ApiSet(Version = 1.1)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_RangeOrNull)]
+		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "", InvalidateReturnObjectPathAfterRequest = true)]
+		Range GetRangeOrNullObject();
+
+		/// <summary>
+		/// Indicates the type of the value returned by the name's formula. See Excel.NamedItemType for details. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Type)]
 		NamedItemType? Type { get; }
+
 		/// <summary>
-		/// Represents the formula that the name is defined to refer to. E.g. =Sheet14!$B$2:$H$12, =4.75, etc. Read-only.
+		/// Represents the value computed by the name's formula. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Value)]
 		object Value { get; }
+
 		/// <summary>
 		/// Specifies whether the object is visible or not.
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Visible)]
 		bool Visible { get; set; }
+
+		/// <summary>
+		/// Deletes the given name.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Delete)]
+		void Delete();
+
+		/// <summary>
+		/// Represents the comment associated with this name.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Comment)]
+		string Comment { get; set; }
+
+		/// <summary>
+		/// Indicates whether the name is scoped to the workbook or to a specific worksheet. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Scope)]
+		NamedItemScope Scope { get; }
+
+		/// <summary>
+		/// Returns the worksheet on which the named item is scoped to. Throws an exception if the items is scoped to the workbook instead.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_Worksheet)]
+		Worksheet Worksheet { get; }
+
+		/// <summary>
+		/// Returns the worksheet on which the named item is scoped to. Returns a null object if the item is scoped to the workbook instead.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.NamedItem_WorksheetOrNull)]
+		Worksheet WorksheetOrNullObject { get; }
 	}
 	#endregion NamedItem
 
@@ -1801,7 +1995,7 @@ namespace Microsoft.ExcelServices
 		event EventHandler<BindingSelectionChangedEventArgs> SelectionChanged;
 
 		/// <summary>
-		/// Occurs when data within the binding is changed.
+		/// Occurs when data or formatting within the binding is changed.
 		/// </summary>
 		[ApiSet(Version=1.2, IntroducedInVersion = 1.3)]
 		event EventHandler<BindingDataChangedEventArgs> DataChanged;
@@ -1823,13 +2017,13 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.BindingCollection_Indexer)]
 		Binding this[string id] { get; }
 		/// <summary>
-		/// Gets a binding object by ID. If the binding object does not exist, the return object's isNull property will be true.
+		/// Gets a binding object by ID. If the binding object does not exist, will return a null object.
 		/// </summary>
 		/// <param name="id">Id of the binding object to be retrieved.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.BindingCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.BindingCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		Binding GetItemOrNull(string id);
+		Binding GetItemOrNullObject(string id);
 		/// <summary>
 		/// Returns the number of bindings in the collection. Read-only.
 		/// </summary>
@@ -1890,7 +2084,7 @@ namespace Microsoft.ExcelServices
 
 #region Table
 	/// <summary>
-	/// Represents a collection of all the tables that are part of the workbook.
+	/// Represents a collection of all the tables that are part of the workbook or worksheet, depending on how it was reached.
 	/// </summary>
 	[ApiSet(Version = 1.1)]
 	[ClientCallableType(CreateItemOperationName = "Add")]
@@ -1908,13 +2102,13 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.TableCollection_Indexer)]
 		Table this[[TypeScriptType("number|string")]object key] { get; }
 		/// <summary>
-		/// Gets a table by Name or ID. If the table does not exist, the return object's isNull property will be true.
+		/// Gets a table by Name or ID. If the table does not exist, will return a null object.
 		/// </summary>
 		/// <param name="key">Name or ID of the table to be retrieved.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.TableCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		Table GetItemOrNull([TypeScriptType("number|string")]object key);
+		Table GetItemOrNullObject([TypeScriptType("number|string")]object key);
 		/// <summary>
 		/// Returns the number of tables in the workbook. Read-only.
 		/// </summary>
@@ -2114,13 +2308,13 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.TableColumnCollection_Indexer)]
 		TableColumn this[[TypeScriptType("number|string")]object key] { get; }
 		/// <summary>
-		/// Gets a column object by Name or ID. If the column does not exist, the returned object's isNull property will be true.
+		/// Gets a column object by Name or ID. If the column does not exist, will return a null object.
 		/// </summary>
 		/// <param name="key"> Column Name or ID.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.TableColumnCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.TableColumnCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		TableColumn GetItemOrNull([TypeScriptType("number|string")]object key);
+		TableColumn GetItemOrNullObject([TypeScriptType("number|string")]object key);
 		/// <summary>
 		/// Returns the number of columns in the table. Read-only.
 		/// </summary>
@@ -2140,9 +2334,10 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		/// <param name="index">Specifies the relative position of the new column. If null or -1, the addition happens at the end. Columns with a higher index will be shifted to the side. Zero-indexed.</param>
 		/// <param name="values">A 2-dimensional array of unformatted values of the table column.</param>
-		[ApiSet(Version = 1.1, CustomText = "1.1 requires an index smaller than the total column count; 1.4 allows index to be optional (null or -1) and will append a column at the end.")]
+		/// <param name="name">Specifies the name of the new column. If null, the default name will be used.</param>
+		[ApiSet(Version = 1.1, CustomText = "1.1 requires an index smaller than the total column count; 1.4 allows index to be optional (null or -1) and will append a column at the end; 1.4 allows name parameter at creation time.")]
 		[ClientCallableComMember(DispatchId = DispatchIds.TableColumnCollection_Insert)]
-		TableColumn Add([Optional]int? index, [Optional][TypeScriptType("Array<Array<boolean|string|number>>|boolean|string|number")]object values);
+		TableColumn Add([Optional]int? index, [Optional][TypeScriptType("Array<Array<boolean|string|number>>|boolean|string|number")]object values, [Optional]string name);
 	}
 
 	/// <summary>
@@ -2163,11 +2358,11 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.TableColumn_Id)]
 		int Id { get; }
 		/// <summary>
-		/// Returns the name of the table column. Read-only.
+		/// Represents the name of the table column.
 		/// </summary>
-		[ApiSet(Version = 1.1)]
+		[ApiSet(Version = 1.1, CustomText = "1.1 for getting the name; 1.4 for setting it.")]
 		[ClientCallableComMember(DispatchId = DispatchIds.TableColumn_Name)]
-		string Name { get; }
+		string Name { get; set; }
 		/// <summary>
 		/// Returns the index number of the column within the columns collection of the table. Zero-indexed. Read-only.
 		/// </summary>
@@ -2324,18 +2519,23 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeFormat_Fill)]
+		[JsonStringify()]
 		RangeFill Fill { get; }
 		/// <summary>
-		/// Collection of border objects that apply to the overall range selected Read-only.
+		/// Collection of border objects that apply to the overall range. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeFormat_Borders)]
+		// TODO: Bug 1011502: [ExcelApi] Expose border collection items as properties.
+		//    Once we do, include the attribute
+		//    "[JsonStringify(Include = true, SuppressCodeGenErrorCheck = true)]"
 		RangeBorderCollection Borders { get; }
 		/// <summary>
-		/// Returns the font object defined on the overall range selected Read-only.
+		/// Returns the font object defined on the overall range. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeFormat_Font)]
+		[JsonStringify()]
 		RangeFont Font { get; }
 		/// <summary>
 		/// Represents the horizontal alignment for the specified object. See Excel.HorizontalAlignment for details.
@@ -2372,6 +2572,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.2)]
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeFormat_Protection)]
+		[JsonStringify()]
 		FormatProtection Protection { get; }
 	}
 
@@ -2572,13 +2773,13 @@ namespace Microsoft.ExcelServices
 		Chart GetItem(string name);
 		/// <summary>
 		/// Gets a chart using its name. If there are multiple charts with the same name, the first one will be returned.
-		/// If the chart does not exist, the returned object's isNull property will be true.
+		/// If the chart does not exist, will return a null object.
 		/// </summary>
 		/// <param name="name">Name of the chart to be retrieved.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.ChartCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ChartCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		Chart GetItemOrNull(string name);
+		Chart GetItemOrNullObject(string name);
 
 		/// <summary>
 		/// Creates a new chart.
@@ -2630,6 +2831,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_Axes)]
+		[JsonStringify()]
 		ChartAxes Axes { get; }
 
 		/// <summary>
@@ -2637,6 +2839,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_DataLabels)]
+		[JsonStringify()]
 		ChartDataLabels DataLabels { get; }
 
 		/// <summary>
@@ -2665,6 +2868,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_Legend)]
+		[JsonStringify()]
 		ChartLegend Legend { get; }
 
 		/// <summary>
@@ -2706,6 +2910,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_Title)]
+		[JsonStringify()]
 		ChartTitle Title { get; }
 
 		/// <summary>
@@ -2727,6 +2932,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_Format)]
+		[JsonStringify()]
 		ChartAreaFormat Format { get; }
 
 		/// <summary>
@@ -2765,6 +2971,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAreaFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 
 		/// <summary>
@@ -2772,6 +2979,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAreaFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 	}
 
@@ -2819,6 +3027,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartSeries_Format)]
+		[JsonStringify()]
 		ChartSeriesFormat Format { get; }
 
 		/// <summary>
@@ -2852,6 +3061,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartSeriesFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 
 		/// <summary>
@@ -2859,6 +3069,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartSeriesFormat_Line)]
+		[JsonStringify()]
 		ChartLineFormat Line { get; }
 	}
 
@@ -2906,6 +3117,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartPoint_Format)]
+		[JsonStringify()]
 		ChartPointFormat Format { get; }
 
 		/// <summary>
@@ -2932,6 +3144,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAreaFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 	}
 
@@ -2951,6 +3164,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxes_Category)]
+		[JsonStringify()]
 		ChartAxis CategoryAxis { get; }
 
 		/// <summary>
@@ -2958,6 +3172,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxes_Series)]
+		[JsonStringify()]
 		ChartAxis SeriesAxis { get; }
 
 		/// <summary>
@@ -2965,6 +3180,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxes_Value)]
+		[JsonStringify()]
 		ChartAxis ValueAxis { get; }
 	}
 
@@ -2984,6 +3200,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxis_Format)]
+		[JsonStringify()]
 		ChartAxisFormat Format { get; }
 
 		/// <summary>
@@ -2991,6 +3208,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxis_MajorGridlines)]
+		[JsonStringify()]
 		ChartGridlines MajorGridlines { get; }
 
 		/// <summary>
@@ -3019,6 +3237,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxis_MinorGridlines)]
+		[JsonStringify()]
 		ChartGridlines MinorGridlines { get; }
 
 		/// <summary>
@@ -3033,6 +3252,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxis_Title)]
+		[JsonStringify()]
 		ChartAxisTitle Title { get; }
 	}
 
@@ -3052,6 +3272,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxisFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 
 		/// <summary>
@@ -3059,6 +3280,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxisFormat_Line)]
+		[JsonStringify()]
 		ChartLineFormat Line { get; }
 	}
 
@@ -3078,6 +3300,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxisTitle_Format)]
+		[JsonStringify()]
 		ChartAxisTitleFormat Format { get; }
 
 		/// <summary>
@@ -3111,6 +3334,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartAxisTitleFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 	}
 
@@ -3130,6 +3354,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartDataLabels_Format)]
+		[JsonStringify()]
 		ChartDataLabelFormat Format { get; }
 
 		/// <summary>
@@ -3205,6 +3430,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartDataLabelFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 
 		/// <summary>
@@ -3212,6 +3438,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartDataLabelFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 	}
 
@@ -3238,6 +3465,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartGridlines_Format)]
+		[JsonStringify()]
 		ChartGridlinesFormat Format { get; }
 	}
 
@@ -3258,6 +3486,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartGridlinesFormat_Line)]
+		[JsonStringify()]
 		ChartLineFormat Line { get; }
 	}
 
@@ -3277,6 +3506,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartLegend_Format)]
+		[JsonStringify()]
 		ChartLegendFormat Format { get; }
 
 		/// <summary>
@@ -3317,6 +3547,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartLegendFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 
 		/// <summary>
@@ -3324,6 +3555,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartLegendFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 	}
 
@@ -3343,6 +3575,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartTitle_Format)]
+		[JsonStringify()]
 		ChartTitleFormat Format { get; }
 
 		/// <summary>
@@ -3383,6 +3616,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartTitleFormat_Font)]
+		[JsonStringify()]
 		ChartFont Font { get; }
 
 		/// <summary>
@@ -3390,6 +3624,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ChartTitleFormat_Fill)]
+		[JsonStringify()]
 		ChartFill Fill { get; }
 	}
 
@@ -3756,6 +3991,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.2)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Filter_Criteria)]
+		[JsonStringify()]
 		FilterCriteria Criteria { get; }
 	}
 
@@ -3883,6 +4119,243 @@ namespace Microsoft.ExcelServices
 	}
 	#endregion Images
 
+	#region Custom XML Parts
+	/// <summary>
+	/// A scoped collection of custom XML parts.
+	/// A scoped collection is the result of some operation, e.g. filtering by namespace.
+	/// A scoped collection cannot be scoped any further.
+	/// </summary>
+	[ApiSet(Version = 1.4)]
+	[ClientCallableType(UseItemAsIndexerNameInODataId = true)]
+	[ClientCallableComType(Name = "ICustomXmlPartScopedCollection", InterfaceId = "2C27E984-EF91-4F48-9A4C-BC96DEF777CE", CoClassName = "CustomXmlPartScopedCollection", SupportEnumeration = true)]
+	public interface CustomXmlPartScopedCollection : IEnumerable<CustomXmlPart>
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+
+		/// <summary>
+		/// Gets a custom XML part based on its ID.
+		/// </summary>
+		/// <param name="id">ID of the object to be retrieved.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_Indexer)]
+		CustomXmlPart this[string id] { get; }
+
+		/// <summary>
+		/// Gets the number of items in the collection.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_GetCount)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		int GetCount();
+
+		/// <summary>
+		/// Gets a custom XML part based on its ID.
+		/// If the CustomXmlPart does not exist, the return object's isNull property will be true.
+		/// </summary>
+		/// <param name="id">ID of the object to be retrieved.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_GetItemOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
+		CustomXmlPart GetItemOrNullObject(string id);
+
+		/// <summary>
+		/// If the collection contains exactly one item, this method returns it.
+		/// Otherwise, this method produces an error.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_GetOnlyItem)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		CustomXmlPart GetOnlyItem();
+
+		/// <summary>
+		/// If the collection contains exactly one item, this method returns it.
+		/// Otherwise, this method returns Null.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartScopedCollection_GetOnlyItemOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
+		CustomXmlPart GetOnlyItemOrNullObject();
+	}
+
+	/// <summary>
+	/// A collection of custom XML parts.
+	/// </summary>
+	[ApiSet(Version = 1.4)]
+	[ClientCallableComType(Name = "ICustomXmlPartCollection", InterfaceId = "BD3EE512-94FF-4981-9C3A-18F379FAEE41", CoClassName = "CustomXmlPartCollection", SupportEnumeration = true)]
+	public interface CustomXmlPartCollection : IEnumerable<CustomXmlPart>
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+
+		/// <summary>
+		/// Gets a custom XML part based on its ID.
+		/// </summary>
+		/// <param name="id">ID of the object to be retrieved.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_Indexer)]
+		CustomXmlPart this[string id] { get; }
+
+		/// <summary>
+		/// Adds a new custom XML part to the workbook.
+		/// </summary>
+		/// <param name="xml">XML content. Must be a valid XML fragment.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_Add)]
+		CustomXmlPart Add(string xml);
+
+		/// <summary>
+		/// Gets a new scoped collection of custom XML parts whose namespaces match the given namespace.
+		/// </summary>
+		/// <param name="namespaceUri"></param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_GetByNamespace)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		CustomXmlPartScopedCollection GetByNamespace(string namespaceUri);
+
+		/// <summary>
+		/// Gets the number of items in the collection.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_GetCount)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		int GetCount();
+
+		/// <summary>
+		/// Gets a custom XML part based on its ID.
+		/// If the CustomXmlPart does not exist, the return object's isNull property will be true.
+		/// </summary>
+		/// <param name="id">ID of the object to be retrieved.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPartCollection_GetItemOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
+		CustomXmlPart GetItemOrNullObject(string id);
+	}
+
+	/// <summary>
+	/// Represents a custom XML part object in a workbook.
+	/// </summary>
+	[ApiSet(Version = 1.4)]
+	[ClientCallableType(DeleteOperationName = "Delete")]
+	[ClientCallableComType(Name = "ICustomXmlPart", InterfaceId = "2694275E-2EA7-40C8-B98A-EF84C5E22580", CoClassName = "CustomXmlPart")]
+	public interface CustomXmlPart
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+
+		/// <summary>
+		/// Deletes the custom XML part.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_Delete)]
+		[ApiSet(Version = 1.4)]
+		void Delete();
+
+		/// <summary>
+		/// The custom XML part's ID. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_Id)]
+		[ApiSet(Version = 1.4)]
+		string Id { get; }
+
+		/// <summary>
+		/// The custom XML part's namespace URI. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_NamespaceUri)]
+		[ApiSet(Version = 1.4)]
+		string NamespaceUri { get; }
+
+		/// <summary>
+		/// Gets the custom XML part's full XML content.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_GetXml)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.4)]
+		string GetXml();
+
+		/// <summary>
+		/// Sets the custom XML part's full XML content.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_SetXml)]
+		[ApiSet(Version = 1.4)]
+		void SetXml(string xml);
+
+		/// <summary>
+		/// Inserts the given XML under the parent element identified by xpath at child position index.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the parent element in XPath notation.</param>
+		/// <param name="xml">XML content to be inserted.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		/// <param name="index">Zero-based position at which the new XML to be inserted. If omitted, the XML will be appended as the last child of this parent.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_InsertElement)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void InsertElement(string xpath, string xml, object namespaceMappings, int? index);
+
+		/// <summary>
+		/// Updates the XML of the element identified by xpath.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the element in XPath notation.</param>
+		/// <param name="xml">New XML content to be stored.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_UpdateElement)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void UpdateElement(string xpath, string xml, object namespaceMappings);
+
+		/// <summary>
+		/// Deletes the element identified by xpath.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the element in XPath notation.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_DeleteElement)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void DeleteElement(string xpath, object namespaceMappings);
+
+		/// <summary>
+		/// Queries the XML content.
+		/// </summary>
+		/// <param name="xpath">An XPath query.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		/// <returns>An array where each item represents an entry matched by the XPath query.</returns>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_Query)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		string[] Query(string xpath, object namespaceMappings);
+
+		/// <summary>
+		/// Inserts an attribute with the given name and value to the element identified by xpath.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the element in XPath notation.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		/// <param name="name">Name of the attribute.</param>
+		/// <param name="value">Value of the attribute.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_InsertAttribute)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void InsertAttribute(string xpath, object namespaceMappings, string name, string value);
+
+		/// <summary>
+		/// Updates the value of an attribute with the given name of the element identified by xpath.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the element in XPath notation.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		/// <param name="name">Name of the attribute.</param>
+		/// <param name="value">New value of the attribute.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_UpdateAttribute)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void UpdateAttribute(string xpath, object namespaceMappings, string name, string value);
+
+		/// <summary>
+		/// Deletes an attribute with the given name from the element identified by xpath.
+		/// </summary>
+		/// <param name="xpath">Absolute path to the element in XPath notation.</param>
+		/// <param name="namespaceMappings">An object whose properties represent namespace aliases and the values are the actual namespace URIs.</param>
+		/// <param name="name">Name of the attribute.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomXmlPart_DeleteAttribute)]
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		void DeleteAttribute(string xpath, object namespaceMappings, string name);
+	}
+	#endregion
+
 	#region V1Api
 	[ClientCallableType(ExcludedFromRest = true)]
 	[ApiSet(Version = 1.3)]
@@ -3895,23 +4368,19 @@ namespace Microsoft.ExcelServices
 		V1StatusOnlyOutput BindingAddColumns(V1AddRowsColsInput input);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingAddFromSelection)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		V1BindingDescriptorOutput BindingAddFromSelection(V1BindingAddFromSelectionInput input);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingAddFromNamedItem)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		V1BindingDescriptorOutput BindingAddFromNamedItem(V1BindingAddFromNamedItemInput input);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingAddFromPrompt)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		V1BindingDescriptorOutput BindingAddFromPrompt(V1BindingAddFromPromptInput input);
 
 		[ApiSet(Version = 1.3)]
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingAddRows)]
-		[ClientCallableOperation(OperationType = OperationType.Default)]
 		V1StatusOnlyOutput BindingAddRows(V1AddRowsColsInput input);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingGetData)]
@@ -3930,7 +4399,6 @@ namespace Microsoft.ExcelServices
 		V1BindingArrayOutput BindingGetAll();
 
 		[ClientCallableComMember(DispatchId = DispatchIds.V1Api_BindingReleaseById)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		V1StatusOnlyOutput BindingReleaseById(V1BindingIdOnlyInput input);
 
@@ -4578,13 +5046,13 @@ namespace Microsoft.ExcelServices
 		[ClientCallableComMember(DispatchId = DispatchIds.PivotTableCollection_Indexer)]
 		PivotTable this[string name] { get; }
 		/// <summary>
-		/// Gets a PivotTable by name. If the PivotTable does not exist, the return object's isNull property will be true.
+		/// Gets a PivotTable by name. If the PivotTable does not exist, will return a null object.
 		/// </summary>
 		/// <param name="name">Name of the PivotTable to be retrieved.</param>
-		[ApiSet(Version = 1.3)]
-		[ClientCallableComMember(DispatchId = DispatchIds.PivotTableCollection_GetItemOrNull)]
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.PivotTableCollection_GetItemOrNullObject)]
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "")]
-		PivotTable GetItemOrNull(string name);
+		PivotTable GetItemOrNullObject(string name);
 		/// <summary>
 		/// Refreshes all the PivotTables in the collection.
 		/// </summary>
@@ -4655,8 +5123,14 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatCollection_ClearAll)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
 		void ClearAll();
+		/// <summary>
+		/// Adds a new conditional format to the collection at the first/top priority.
+		/// </summary>
+		/// <param name="type">The type of conditional format being added. See Excel.ConditionalFormatType for details.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatCollection_Add)]
+		ConditionalFormat Add(ConditionalFormatType type);
 	}
 
 	/// <summary>
@@ -4670,12 +5144,19 @@ namespace Microsoft.ExcelServices
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		void _OnAccess();
 		/// <summary>
-		/// Returns the range the conditonal format is applied to or null if the range is discontiguous. Read-only.
+		/// Returns the range the conditonal format is applied to or a null object if the range is discontiguous. Read-only.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_Range)]
 		[ClientCallableOperation(OperationType = OperationType.Read, InvalidateReturnObjectPathAfterRequest = true)]
-		Range GetRangeOrNull();
+		Range GetRange();
+		/// <summary>
+		/// Returns the range the conditonal format is applied to or a null object if the range is discontiguous. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_RangeOrNull)]
+		[ClientCallableOperation(OperationType = OperationType.Read, InvalidateReturnObjectPathAfterRequest = true, RESTfulName = "")]
+		Range GetRangeOrNullObject();
 		/// <summary>
 		/// If the conditions of this conditional format are met, no lower-priority formats shall take effect on that cell.
 		/// Null on databars, icon sets, and colorscales as there's no concept of StopIfTrue for these
@@ -4703,8 +5184,30 @@ namespace Microsoft.ExcelServices
 		/// If no properties are set, a databar is created with the automatic default settings.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
-		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_DataBarOrNull)]
-		ConditionalFormatDataBar DataBarOrNull { get; }
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_DataBar)]
+		DataBarConditionalFormat DataBar { get; }
+		/// <summary>
+		/// Represents databars with customizable color, gradient, axis, and range format options.
+		/// If no properties are set, a databar is created with the automatic default settings.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_DataBarOrNullObject)]
+		[JsonStringify()]
+		[ClientCallableProperty(ExcludedFromRest = true)]
+		DataBarConditionalFormat DataBarOrNullObject { get; }
+		/// <summary>
+		/// A custom conditional format and rule.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_Custom)]
+		CustomConditionalFormat Custom { get; }
+		/// <summary>
+		/// A custom conditional format and rule.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormat_CustomOrNullObject)]
+		[ClientCallableProperty(ExcludedFromRest = true)]
+		CustomConditionalFormat CustomOrNullObject { get; }
 		/// <summary>
 		/// Deletes this conditional format.
 		/// </summary>
@@ -4715,9 +5218,9 @@ namespace Microsoft.ExcelServices
 	/// <summary>
 	/// Represents an Excel Conditional Data Bar Type.
 	/// </summary>
-	[ClientCallableComType(Name = "IConditionalFormatDataBar", InterfaceId = "3378CAB4-80C2-448B-A896-A3BAC8887923", CoClassName = "ConditionalFormatDataBar")]
+	[ClientCallableComType(Name = "IDataBarConditionalFormat", InterfaceId = "3378CAB4-80C2-448B-A896-A3BAC8887923", CoClassName = "DataBarConditionalFormat")]
 	[ApiSet(Version = 1.4)]
-	public interface ConditionalFormatDataBar
+	public interface DataBarConditionalFormat
 	{
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_OnAccess)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -4733,7 +5236,7 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_AxisFormat)]
-		ConditionalFormatDataBarAxisFormat AxisFormat { get; set; }
+		ConditionalDataBarAxisFormat AxisFormat { get; set; }
 		/// <summary>
 		/// HTML color code representing the color of the Axis line, of the form #RRGGBB (e.g. "FFA500") or as a named HTML color (e.g. "orange").
 		/// "" (empty string) if no axis is present or set.
@@ -4746,39 +5249,43 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_BarDirection)]
-		ConditionalFormatDataBarDirection BarDirection { get; set; }
+		ConditionalDataBarDirection BarDirection { get; set; }
 		/// <summary>
 		/// Representation of all values to the right of the axis in an Excel data bar.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_PositiveFormat)]
-		ConditionalFormatDataBarPositiveFormat PositiveFormat { get; }
+		[JsonStringify()]
+		ConditionalDataBarPositiveFormat PositiveFormat { get; }
 		/// <summary>
 		/// Representation of all values to the left of the axis in an Excel data bar.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_NegativeFormat)]
-		ConditionalFormatDataBarNegativeFormat NegativeFormat { get; }
+		[JsonStringify()]
+		ConditionalDataBarNegativeFormat NegativeFormat { get; }
 		/// <summary>
 		/// The rule for what consistutes the lower bound (and how to calculate it, if applicable) for a data bar.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_LowerBoundRule)]
-		ConditionalFormatDataBarRule LowerBoundRule { get; }
+		[JsonStringify()]
+		ConditionalDataBarRule LowerBoundRule { get; set; }
 		/// <summary>
 		/// The rule for what constitutes the upper bound (and how to calculate it, if applicable) for a data bar.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBar_UpperBoundRule)]
-		ConditionalFormatDataBarRule UpperBoundRule { get; }
+		[JsonStringify()]
+		ConditionalDataBarRule UpperBoundRule { get; set; }
 	}
 
 	/// <summary>
 	/// Represents a conditional format DataBar Format for the positive side of the data bar.
 	/// </summary>
-	[ClientCallableComType(Name = "IConditionalFormatDataBarPositiveFormat", InterfaceId = "0702CE16-E69F-45E4-A08A-25C6558957BA", CoClassName = "ConditionalFormatDataBarPositiveFormat")]
+	[ClientCallableComType(Name = "IConditionalDataBarPositiveFormat", InterfaceId = "0702CE16-E69F-45E4-A08A-25C6558957BA", CoClassName = "ConditionalDataBarPositiveFormat")]
 	[ApiSet(Version = 1.4)]
-	public interface ConditionalFormatDataBarPositiveFormat
+	public interface ConditionalDataBarPositiveFormat
 	{
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarPositiveFormat_OnAccess)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -4807,9 +5314,9 @@ namespace Microsoft.ExcelServices
 	/// <summary>
 	/// Represents a conditional format DataBar Format for the negative side of the data bar.
 	/// </summary>
-	[ClientCallableComType(Name = "IConditionalFormatDataBarNegativeFormat", InterfaceId = "631DC6F5-9973-45AD-829C-5339028C37C3", CoClassName = "ConditionalFormatDataBarNegativeFormat")]
+	[ClientCallableComType(Name = "IConditionalDataBarNegativeFormat", InterfaceId = "631DC6F5-9973-45AD-829C-5339028C37C3", CoClassName = "ConditionalDataBarNegativeFormat")]
 	[ApiSet(Version = 1.4)]
-	public interface ConditionalFormatDataBarNegativeFormat
+	public interface ConditionalDataBarNegativeFormat
 	{
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarNegativeFormat_OnAccess)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -4844,15 +5351,12 @@ namespace Microsoft.ExcelServices
 	/// <summary>
 	/// Represents a rule-type for a Data Bar.
 	/// </summary>
-	[ClientCallableComType(Name = "IConditionalFormatDataBarRule", InterfaceId = "DECA24F4-4C74-482A-978A-6CC56137A302", CoClassName = "ConditionalFormatDataBarRule")]
+	[ClientCallableComType(Name = "IConditionalDataBarRule", InterfaceId = "DECA24F4-4C74-482A-978A-6CC56137A302", CoClassName = "ConditionalDataBarRule", CoClassId = "4CCC8780-5D06-4DD5-BD5D-834DE3AEC7F6")]
 	[ApiSet(Version = 1.4)]
-	public interface ConditionalFormatDataBarRule
+	public struct ConditionalDataBarRule
 	{
-		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarRule_OnAccess)]
-		[ClientCallableOperation(OperationType = OperationType.Read)]
-		void _OnAccess();
 		/// <summary>
-		/// What the databar should be based on.
+		/// The type of rule for the databar.
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarRule_Type)]
@@ -4862,26 +5366,381 @@ namespace Microsoft.ExcelServices
 		/// </summary>
 		[ApiSet(Version = 1.4)]
 		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarRule_Formula)]
-		[TypeScriptType("string|number")]
+		[TypeScriptType("string")]
+		[Optional]
 		object Formula { get; set; }
-		/// <summary>
-		/// The formula, if required, to evaluate the databar rule on in the user's language.
-		/// </summary>
-		[ApiSet(Version = 1.4)]
-		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarRule_FormulaLocal)]
-		[TypeScriptType("string|number")]
-		object FormulaLocal { get; set; }
-		/// <summary>
-		/// The formula, if required, to evaluate the databar rule on in R1C1-style notation.
-		/// </summary>
-		[ApiSet(Version = 1.4)]
-		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatDataBarRule_FormulaR1C1)]
-		[TypeScriptType("string|number")]
-		object FormulaR1C1 { get; set; }
 	}
-#endregion Conditional Formats
 
-#region Enums
+	/// <summary>
+	/// Represents a custom conditional format type.
+	/// </summary>
+	[ClientCallableComType(Name = "ICustomConditionalFormat", InterfaceId = "593C6A29-E4E4-4C0B-AE80-FA808764AB71", CoClassName = "CustomConditionalFormat")]
+	[ApiSet(Version = 1.4)]
+	public interface CustomConditionalFormat
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatCustom_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// Represents the Rule object on this conditional format.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatCustom_Rule)]
+		ConditionalFormatRule Rule { get; }
+		/// <summary>
+		/// Returns a format object, encapsulating the conditional formats font, fill, borders, and other properties. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatCustom_Format)]
+		ConditionalRangeFormat Format { get; }
+	}
+
+	/// <summary>
+	/// Represents a rule, for all traditional rule/format pairings.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalFormatRule", InterfaceId = "55EF76CF-A73F-465D-9F43-EDEE79B6AF95", CoClassName = "ConditionalFormatRule")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalFormatRule
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula1)]
+		[TypeScriptType("string")]
+		object Formula1 { get; set; }
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on in the user's language.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula1Local)]
+		[TypeScriptType("string")]
+		object Formula1Local { get; set; }
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on in R1C1-style notation.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula1R1C1)]
+		[TypeScriptType("string")]
+		object Formula1R1C1 { get; set; }
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula2)]
+		[TypeScriptType("string")]
+		object Formula2 { get; set; }
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on in the user's language.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula2Local)]
+		[TypeScriptType("string")]
+		object Formula2Local { get; set; }
+		/// <summary>
+		/// The formula, if required, to evaluate the conditional format rule on in R1C1-style notation.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatRule_Formula2R1C1)]
+		[TypeScriptType("string")]
+		object Formula2R1C1 { get; set; }
+	}
+
+	// TODO Final ConditionalFormat work OC:1062046
+	///// <summary>
+	///// Represents an IconSet criteria for conditional formatting.
+	///// </summary>
+	//[ClientCallableComType(Name = "IIconSetConditionalFormat", InterfaceId = "340E6F69-7A27-4607-864D-0D8AE339B019", CoClassName = "IconSetConditionalFormat")]
+	//[ApiSet(Version = 1.4)]
+	//public interface IconSetConditionalFormat
+	//{
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIcon_OnAccess)]
+	//	[ClientCallableOperation(OperationType = OperationType.Read)]
+	//	void _OnAccess();
+	//	/// <summary>
+	//	/// If true, reverses the icon orders for the IconSet.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIcon_ReverseIconOrder)]
+	//	bool ReverseIconOrder { get; set; }
+
+	//	/// <summary>
+	//	/// If true, hides the values and only shows icons.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIcon_ShowIconOnly)]
+	//	bool ShowIconOnly { get; set; }
+
+	//	/// <summary>
+	//	/// If set, displays the IconSet option for the conditional format.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIcon_Style)]
+	//	IconSet Style { get; set; }
+
+	//	/// <summary>
+	//	/// An array of Criteria and IconSets for the rules and potential custom icons for conditional icons.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIcon_Criteria)]
+	//	ConditionalIconCriterion GetCriterionAt(int iIndex);
+	//}
+
+	///// <summary>
+	///// Represents an Icon Criterion which contains a type, value, an Operator, and an optional custom icon, if not using an iconset.
+	///// </summary>
+	//[ClientCallableComType(Name = "IConditionalIconCriterion", InterfaceId = "CB2BD063-47BD-4331-8ABA-E7D3888E0528", CoClassName = "ConditionalIconCriterion")]
+	//[ApiSet(Version = 1.4)]
+	//public interface ConditionalIconCriterion
+	//{
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIconCriterion_OnAccess)]
+	//	[ClientCallableOperation(OperationType = OperationType.Read)]
+	//	void _OnAccess();
+	//	/// <summary>
+	//	/// What the icon conditional formula should be based on.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIconCriterion_Type)]
+	//	ConditionalFormatRuleType Type { get; set; }
+
+	//	/// <summary>
+	//	/// A number, a formula, or null (if Type is LowestValue, HighestValue, or Automatic).
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIconCriterion_Formula)]
+	//	[TypeScriptType("string|number")]
+	//	object Formula { get; set; }
+
+	//	/// <summary>
+	//	/// GreaterThan or GreaterThanOrEqual for each of the rule type for the Icon conditional format.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIconCriterion_Operator)]
+	//	IconCriterionOperator Operator { get; set; }
+
+	//	/// <summary>
+	//	/// An icon type, where one can select a specific icon for this criterion.
+	//	/// </summary>
+	//	[ApiSet(Version = 1.4)]
+	//	[ClientCallableComMember(DispatchId = DispatchIds.ConditionalFormatIconCriterion_CustomIcon)]
+	//	[Optional]
+	//	Icon CustomIcon { get; set; }
+	//}
+
+
+	/// <summary>
+	/// A format object encapsulating the conditional formats range's font, fill, borders, and other properties.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalRangeFormat", InterfaceId = "2501401A-42DC-4123-AA48-06AE9F2AB9EE", CoClassName = "ConditionalRangeFormat")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalRangeFormat
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFormat_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// Returns the fill object defined on the overall conditional format range. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFormat_Fill)]
+		ConditionalRangeFill Fill { get; }
+		/// <summary>
+		/// Collection of border objects that apply to the overall conditional format range. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFormat_Borders)]
+		ConditionalRangeBorderCollection Borders { get; }
+		/// <summary>
+		/// Returns the font object defined on the overall conditional format range. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFormat_Font)]
+		ConditionalRangeFont Font { get; }
+
+		/// <summary>
+		/// Represents Excel's number format code for the given range. Cleared if null is passed in.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFormat_NumberFormat)]
+		object NumberFormat { get; set; }
+	}
+
+	/// <summary>
+	/// This object represents the font attributes (font style,, color, etc.) for an object.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalRangeFont", InterfaceId = "2AA0159D-35F2-432B-8DA6-D8C7182F90F1", CoClassName = "ConditionalRangeFont")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalRangeFont
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// Represents the bold status of font.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Bold)]
+		bool? Bold { get; set; }
+		/// <summary>
+		/// HTML color code representation of the text color. E.g. #FF0000 represents Red.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Color)]
+		string Color { get; set; }
+		/// <summary>
+		/// Represents the italic status of the font.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Italic)]
+		bool? Italic { get; set; }
+		/// <summary>
+		/// Represents the strikethrough status of the font.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Strikethrough)]
+		bool? Strikethrough { get; set; }
+		/// <summary>
+		/// Type of underline applied to the font. See Excel.ConditionalRangeFontUnderlineStyle for details.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Underline)]
+		ConditionalRangeFontUnderlineStyle? Underline { get; set; }
+		/// <summary>
+		/// Resets the font formats.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFont_Clear)]
+		void Clear();
+	}
+
+	/// <summary>
+	/// Represents the background of a conditional range object.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalRangeFill", InterfaceId = "E2488882-675D-4392-8C80-01D6380406D9", CoClassName = "ConditionalRangeFill")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalRangeFill
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFill_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// HTML color code representing the color of the fill, of the form #RRGGBB (e.g. "FFA500") or as a named HTML color (e.g. "orange").
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFill_Color)]
+		string Color { get; set; }
+		/// <summary>
+		/// Resets the fill.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeFill_Clear)]
+		void Clear();
+	}
+
+	/// <summary>
+	/// Represents the border of an object.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalRangeBorder", InterfaceId = "BE3C21C2-66F4-454D-B1BB-7BBCFBA9604B", CoClassName = "ConditionalRangeBorder")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalRangeBorder
+	{
+		/// <summary>
+		/// Represents border identifier. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorder_Id)]
+		[ClientCallableProperty(ExcludedFromClientLibrary = true)]
+		[ApiSet(Version = 1.4)]
+		ConditionalRangeBorderIndex Id { get; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorder_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// HTML color code representing the color of the border line, of the form #RRGGBB (e.g. "FFA500") or as a named HTML color (e.g. "orange").
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorder_Color)]
+		string Color { get; set; }
+		/// <summary>
+		/// One of the constants of line style specifying the line style for the border. See Excel.BorderLineStyle for details.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorder_LineStyle)]
+		ConditionalRangeBorderLineStyle? Style { get; set; }
+		/// <summary>
+		/// Constant value that indicates the specific side of the border. See Excel.ConditionalRangeBorderIndex for details. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorder_SideIndex)]
+		ConditionalRangeBorderIndex? SideIndex { get; }
+	}
+
+	/// <summary>
+	/// Represents the border objects that make up range border.
+	/// </summary>
+	[ClientCallableComType(Name = "IConditionalRangeBorderCollection", InterfaceId = "E18F283E-6188-48FD-A364-C65973CF228C", CoClassName = "ConditionalRangeBorderCollection")]
+	[ApiSet(Version = 1.4)]
+	public interface ConditionalRangeBorderCollection : IEnumerable<ConditionalRangeBorder>
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_OnAccess)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		void _OnAccess();
+		/// <summary>
+		/// Gets a border object using its name
+		/// </summary>
+		/// <param name="index">Index value of the border object to be retrieved. See Excel.ConditionalRangeBorderIndex for details.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Indexer)]
+		ConditionalRangeBorder this[ConditionalRangeBorderIndex index] { get; }
+		/// <summary>
+		/// Number of border objects in the collection. Read-only.
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Count)]
+		int Count { get; }
+		/// <summary>
+		/// Gets a border object using its index
+		/// </summary>
+		/// <param name="index">Index value of the object to be retrieved. Zero-indexed.</param>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_ItemAt)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		ConditionalRangeBorder GetItemAt(int index);
+
+		/// <summary>
+		/// Gets the top border
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Top)]
+		ConditionalRangeBorder Top { get; }
+
+		/// <summary>
+		/// Gets the top border
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Bottom)]
+		ConditionalRangeBorder Bottom { get; }
+
+		/// <summary>
+		/// Gets the top border
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Left)]
+		ConditionalRangeBorder Left { get; }
+
+		/// <summary>
+		/// Gets the top border
+		/// </summary>
+		[ApiSet(Version = 1.4)]
+		[ClientCallableComMember(DispatchId = DispatchIds.ConditionalRangeBorderCollection_Right)]
+		ConditionalRangeBorder Right { get; }
+	}
+	#endregion Conditional Formats
+
+	#region Enums
 	[ApiSet(Version = 1.1)]
 	public enum BindingType
 	{
@@ -5122,7 +5981,7 @@ namespace Microsoft.ExcelServices
 	/// Represents the format options for a Data Bar Axis.
 	/// </summary>
 	[ApiSet(Version = 1.4)]
-	public enum ConditionalFormatDataBarAxisFormat
+	public enum ConditionalDataBarAxisFormat
 	{
 		Automatic = 0,
 		None = 1,
@@ -5133,7 +5992,7 @@ namespace Microsoft.ExcelServices
 	/// Represents the Data Bar direction within a cell. 
 	/// </summary>
 	[ApiSet(Version = 1.4)]
-	public enum ConditionalFormatDataBarDirection
+	public enum ConditionalDataBarDirection
 	{
 		Context = 0,
 		LeftToRight = 1,
@@ -5165,13 +6024,14 @@ namespace Microsoft.ExcelServices
 	[ApiSet(Version = 1.4)]
 	public enum ConditionalFormatRuleType
 	{
-		Automatic = 0,
-		LowestValue = 1,
-		HighestValue = 2,
-		Number = 3,
-		Percent = 4,
-		Formula = 5,
-		Percentile = 6,
+		Invalid = 0,
+		Automatic = 1,
+		LowestValue = 2,
+		HighestValue = 3,
+		Number = 4,
+		Percent = 5,
+		Formula = 6,
+		Percentile = 7,
 	}
 
 	/// <summary>
@@ -5191,6 +6051,53 @@ namespace Microsoft.ExcelServices
 		Error = 8,
 		TextContains = 9,
 		DateOccurring = 10,
+	}
+
+	/// <summary>
+	/// Represents all of the potential rule types for formats.
+	/// </summary>
+	[ApiSet(Version = 1.4)]
+	public enum ConditionalFormatCustomRuleType
+	{
+		Formula = 0,
+		Between = 1,
+		NotBetween = 2,
+		Count = 3,
+		Percent = 4,
+		Average = 5,
+		Blank = 6,
+		Unique = 7,
+		Error = 8,
+		TextContains = 9,
+		DateOccurring = 10,
+	}
+
+	[ApiSet(Version = 1.4)]
+	public enum ConditionalRangeBorderIndex
+	{
+		EdgeTop = 0,
+		EdgeBottom = 1,
+		EdgeLeft = 2,
+		EdgeRight = 3,
+	};
+
+	[ApiSet(Version = 1.4)]
+	public enum ConditionalRangeBorderLineStyle
+	{
+		None = 0,
+		Continuous = 1,
+		Dash = 2,
+		DashDot = 3,
+		DashDotDot = 4,
+		Dot = 5,
+	};
+
+	[ApiSet(Version = 1.4)]
+	public enum ConditionalRangeFontUnderlineStyle
+	{
+		None = 0,
+		Single = 1,
+		Double = 2,
 	}
 
 	[ApiSet(Version = 1.1)]
@@ -5314,6 +6221,16 @@ namespace Microsoft.ExcelServices
 		FiveBoxes,
 	}
 
+	/// <summary>
+	/// Represents the operator for each icon criteria.
+	/// </summary>
+	[ApiSet(Version = 1.4)]
+	public enum IconCriterionOperator
+	{
+		GreaterThan = 0,
+		GreaterThanOrEqual = 1
+	}
+
 	/* This enum must be kept synchronized with an identically-named enum in xlshared/inc/api/iapichartwrapper.h */
 	[ApiSet(Version = 1.2)]
 	public enum ImageFittingMode
@@ -5330,6 +6247,13 @@ namespace Microsoft.ExcelServices
 		Right = 1,
 	}
 
+	[ApiSet(Version = 1.4)]
+	public enum NamedItemScope
+	{
+		Worksheet,
+		Workbook
+	}
+
 	[ApiSet(Version = 1.1)]
 	public enum NamedItemType
 	{
@@ -5338,6 +6262,7 @@ namespace Microsoft.ExcelServices
 		Double = 2,
 		Boolean = 3,
 		Range = 4,
+		Error = 5,
 	}
 
 	[ApiSet(Version = 1.1)]

@@ -14,9 +14,11 @@ if __name__ == "__main__":
     requestUrlAndHeaders.url = "pipe://./excel/_api";
     runtime.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders
     context = excel.RequestContext()
-    print("Populating data");
+    print("Clear workbook")
+    exceldemolib.ExcelDemoLib.clearWorkbook(context)
+    print("Populating data")
     exceldemolib.ExcelDemoLib.populateData(context)
-    print("Populated data");
+    print("Populated data")
     exceldemolib.ExcelDemoLib.analyzeData(context)
     print("Analyzed data")
     imageBase64 = exceldemolib.ExcelDemoLib.getChartImage(context)

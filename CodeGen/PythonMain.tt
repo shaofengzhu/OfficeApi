@@ -12,6 +12,6 @@
 	this.SetParameter(ParameterName_Input, @"X:\git\OfficeApi\ExcelApiMetadata\bin\Debug\Excel.dll");
 	this.SetParameter(ParameterName_Refs, @"X:\git\OfficeApi\CodeGen\Microsoft.OfficeExtension.CodeGen.Attributes.dll");
 	this.SetParameter(ParameterName_OutputDirectory, @"X:\git\OfficeApi\Python\Runtime");
-	this.SetParameter(ParameterName_MaxVersion, "1.3");
+	this.SetParameter(ParameterName_MaxVersion, "1.4");
 	this.WritePython();
 #>

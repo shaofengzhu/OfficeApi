@@ -10,6 +10,7 @@ using Microsoft.OfficeExtension.CodeGen;
 [assembly: HResultError(ExcelApi.HResultExpressions.E_BOUNDS, HttpStatusCode.BadRequest, ExcelApi.ErrorCodes.OutOfRange, ExcelApi.ErrorMessageIds.OutOfRange)]
 [assembly: HResultError(ExcelApi.HResultExpressions.E_CHANGED_STATE, HttpStatusCode.Conflict, ExcelApi.ErrorCodes.Conflict, ExcelApi.ErrorMessageIds.Conflict)]
 [assembly: HResultError(ExcelApi.HResultExpressions.E_INVALIDARG, HttpStatusCode.BadRequest, ExcelApi.ErrorCodes.InvalidParameter, ExcelApi.ErrorMessageIds.InvalidParameter)]
+[assembly: HResultError(ExcelApi.HResultExpressions.DISP_E_UNKNOWNNAME, HttpStatusCode.BadRequest, ExcelApi.ErrorCodes.ApiNotFound, ExcelApi.ErrorMessageIds.ApiNotFound)]
 [assembly: HResultDefaultError(HttpStatusCode.InternalServerError, ExcelApi.ErrorCodes.GeneralException, ExcelApi.ErrorMessageIds.GeneralException)]
 
 namespace ExcelApi
@@ -25,6 +26,7 @@ namespace ExcelApi
 		internal const int Application_GetObjectByReferenceId = 4;
 		internal const int Application_RemoveReference = 5;
 		internal const int Application_HasBase = 6;
+		internal const int Application_TestCaseObject = 7;
 
 		internal const int Chart_Name = 1;
 		internal const int Chart_ChartType = 2;
@@ -40,6 +42,8 @@ namespace ExcelApi
 		internal const int ChartCollection_Indexer = 2;
 		internal const int ChartCollection_Add = 3;
 		internal const int ChartCollection_GetItemAt = 4;
+
+		internal const int ErrorRange_ErrorProp = 1;
 
 		internal const int QueryWithSortField_RowLimit = 1;
 		internal const int QueryWithSortField_Field = 2;
@@ -63,6 +67,9 @@ namespace ExcelApi
 		internal const int Range_NotRestMethod = 17;
 		internal const int Range_Sort = 18;
 
+		internal const int RangeCollection_GetCount = 1;
+		internal const int RangeCollection_GetItemAt = 2;
+
 		internal const int RangeSort_Apply = 1;
 		internal const int RangeSort_Fields = 2;
 		internal const int RangeSort_ApplyAndReturnFirstField = 3;
@@ -70,6 +77,25 @@ namespace ExcelApi
 		internal const int RangeSort_ApplyQueryWithSortField = 5;
 		internal const int RangeSort_ApplyMixed = 6;
 		internal const int RangeSort_Fields2 = 7;
+		internal const int RangeSort_GetFirstField = 8;
+
+		internal const int Row_Index = 1;
+
+		internal const int RowCollection_Count = 1;
+		internal const int RowCollection_GetItemAt = 2;
+
+		internal const int Section_Id = 1;
+		internal const int Section_Charts = 2;
+
+		internal const int SectionCollection_Indexer = 1;
+
+		internal const int SectionGroup_Id = 1;
+		internal const int SectionGroup_Sections = 2;
+		internal const int SectionGroup_Groups = 3;
+
+		internal const int SectionGroupCollection_GetCount = 1;
+		internal const int SectionGroupCollection_GetItemAt = 2;
+		internal const int SectionGroupCollection_Indexer = 3;
 
 		internal const int SortField_ColumnIndex = 1;
 		internal const int SortField_Assending = 2;
@@ -86,6 +112,15 @@ namespace ExcelApi
 		internal const int TestCaseObject_TestUrlPathEncode = 9;
 		internal const int TestCaseObject_Sum = 10;
 		internal const int TestCaseObject_MatrixSum = 11;
+		internal const int TestCaseObject_Test2DArray = 12;
+		internal const int TestCaseObject_TestEnumArray = 13;
+		internal const int TestCaseObject_TestEnum2DArray = 14;
+		internal const int TestCaseObject_TestParamDateTime = 15;
+		internal const int TestCaseObject_TestParamNullableDateTime = 16;
+		internal const int TestCaseObject_GetNullableDateTimeValue = 17;
+		internal const int TestCaseObject_TestParamDateTimeArray = 18;
+		internal const int TestCaseObject_TestJsonParse = 19;
+		internal const int TestCaseObject_TestJsonStringify = 20;
 
 		internal const int TestWorkbook_ErrorWorksheet = 1;
 		internal const int TestWorkbook_ErrorMethod = 2;
@@ -97,6 +132,15 @@ namespace ExcelApi
 		internal const int TestWorkbook_GetNullableEnumValue = 8;
 		internal const int TestWorkbook_GetNullableBoolValue = 9;
 		internal const int TestWorkbook_GetCachedObjectCount = 10;
+		internal const int TestWorkbook_Created = 11;
+		internal const int TestWorkbook_NullableCreated = 12;
+		internal const int TestWorkbook_Sections = 13;
+		internal const int TestWorkbook_SectionGroups = 14;
+		internal const int TestWorkbook_TestParamNameValueDict = 15;
+		internal const int TestWorkbook_TestParamObject = 16;
+		internal const int TestWorkbook_GetScopedSections = 17;
+
+		internal const int HiRange_Text = 1;
 
 		internal const int Workbook_Sheets = 1;
 		internal const int Workbook_ActiveWorksheet = 2;
@@ -104,6 +148,12 @@ namespace ExcelApi
 		internal const int Workbook_GetChartByType = 4;
 		internal const int Workbook_GetChartByTypeTitle = 5;
 		internal const int Workbook_SomeAction = 6;
+		internal const int Workbook_AddChart = 7;
+		internal const int Workbook_GetChartById = 8;
+		internal const int Workbook_HiStringProp = 100;
+		internal const int Workbook_HiStringMethod = 101;
+		internal const int Workbook_HiRangeProp = 102;
+		internal const int Workbook_HiRangeMethod = 103;
 
 		internal const int Worksheet_Range = 1;
 		internal const int Worksheet_SomeRangeOperation = 2;
@@ -115,6 +165,12 @@ namespace ExcelApi
 		internal const int Worksheet_NullRange = 8;
 		internal const int Worksheet_NullChart = 9;
 		internal const int Worksheet_RestOnly = 10;
+		internal const int Worksheet_Rows = 11;
+		internal const int Worksheet_RangeProp = 12;
+		internal const int Worksheet_RangePropOrNull = 13;
+		internal const int Worksheet_ErrorRangeProp = 14;
+		internal const int Worksheet_ErrorRangeMethod = 15;
+		internal const int Worksheet_Ranges = 16;
 
 		internal const int WorksheetCollection_Indexer = 1;
 		internal const int WorksheetCollection_GetActiveWorksheetInvalidAfterRequest = 2;
@@ -130,6 +186,7 @@ namespace ExcelApi
 		internal const string E_CHANGED_STATE = "E_CHANGED_STATE";
 		internal const string E_BOUNDS = "E_BOUNDS";
 		internal const string E_ABORT = "E_ABORT";
+		internal const string DISP_E_UNKNOWNNAME = "DISP_E_UNKNOWNNAME";
 	}
 
 	internal static class ErrorCodes
@@ -143,19 +200,21 @@ namespace ExcelApi
 		internal const string Aborted = "Aborted";
 		internal const string Aborted2 = "Aborted2";
 		internal const string GeneralException = "GeneralException";
+		internal const string ApiNotFound = "ApiNotFound";
 	}
 
 	internal static class ErrorMessageIds
 	{
-		internal const string InvalidParameter = "(int)ResourceIds::InvalidParameter";
-		internal const string AccessDenied = "(int)ResourceIds::AccessDenied";
-		internal const string AccessDenied2 = "(int)ResourceIds::AccessDenied";
-		internal const string Conflict = "(int)ResourceIds::Conflict";
-		internal const string Conflict2 = "(int)ResourceIds::Conflict";
-		internal const string OutOfRange = "(int)ResourceIds::OutOfRange";
-		internal const string Aborted = "(int)ResourceIds::Aborted";
-		internal const string Aborted2 = "(int)ResourceIds::Aborted";
-		internal const string GeneralException = "(int)ResourceIds::GeneralException";
+		internal const string InvalidParameter = "static_cast<int>(ResourceIds::InvalidParameter)";
+		internal const string AccessDenied = "static_cast<int>(ResourceIds::AccessDenied)";
+		internal const string AccessDenied2 = "static_cast<int>(ResourceIds::AccessDenied)";
+		internal const string Conflict = "static_cast<int>(ResourceIds::Conflict)";
+		internal const string Conflict2 = "static_cast<int>(ResourceIds::Conflict)";
+		internal const string OutOfRange = "static_cast<int>(ResourceIds::OutOfRange)";
+		internal const string Aborted = "static_cast<int>(ResourceIds::Aborted)";
+		internal const string Aborted2 = "static_cast<int>(ResourceIds::Aborted)";
+		internal const string GeneralException = "static_cast<int>(ResourceIds::GeneralException)";
+		internal const string ApiNotFound = "static_cast<int>(ResourceIds::ApiNotFound)";
 	}
 
 	/// <summary>
@@ -184,6 +243,16 @@ namespace ExcelApi
 		/// 3D chart
 		/// </summary>
 		_3DBar = 4,
+
+		/// <summary>
+		/// Obsolete chart
+		/// </summary>
+		[Obsolete("Use bar instead")]
+		ObsoleteChart = 5,
+
+		
+		[Obsolete("Use line instead")]
+		ObsoleteChartWithoutComment = 6,
 	}
 
 	public enum RangeValueType
@@ -199,13 +268,19 @@ namespace ExcelApi
 
 
 	[ClientCallableComType(Name = "IApplication", InterfaceId = "669eb674-96a9-431b-b26a-2f0b82b2542a", CoClassName = "Application")]
+	[ApiSet(CustomBase ="SomeOtherApiSet", Version = 1.1)]
 	public interface Application
 	{
 		[ClientCallableComMember(DispatchId = DispatchIds.Application_ActiveWorkbook)]
+		[ApiSet(CustomBase = "SomeOtherApiSet", CustomText = "1.1 for get, 1.2 for set")]
+		///<summary>Some description</summary>
 		Workbook ActiveWorkbook { get; }
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Application_TestWorkbook)]
 		TestWorkbook TestWorkbook { get; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.Application_TestCaseObject)]
+		TestCaseObject TestCaseObject { get; }
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Application_GetObjectByReferenceId)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -259,6 +334,7 @@ namespace ExcelApi
 		/// <summary>
 		/// Delete the chart
 		/// </summary>
+		[ApiSet(Version = 1.1)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Chart_Delete)]
 		void Delete();
 	}
@@ -373,6 +449,43 @@ namespace ExcelApi
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_GetNullableEnumValue)]
 		ChartType? GetNullableEnumValue(bool nullable);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_Created)]
+		DateTime Created { get; set; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_NullableCreated)]
+		DateTime? NullableCreated { get; set; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_Sections)]
+		SectionCollection Sections { get; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_SectionGroups)]
+		SectionGroupCollection SectionGroups { get; }
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_TestParamNameValueDict)]
+		string TestParamNameValueDict(object value);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_TestParamObject)]
+		object TestParamObject(object value);
+
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.TestWorkbook_GetScopedSections)]
+		SectionCollection GetScopedSections(string ns);
+	}
+
+	[ClientCallableType(ExcludedFromRest = true)]
+	public struct WorkbookSelectionChangedEventArgs
+	{
+		Worksheet SelectedSheet { get; set; }
+	}
+
+	[ClientCallableType(ExcludedFromRest = true)]
+	public struct WorksheetDataChangedEventArgs
+	{
+		Worksheet Worksheet { get; set; }
+		string Address { get; set; }
+		object OldValue { get; set; }
+		object NewValue { get; set; }
 	}
 
 	[ClientCallableComType(Name = "IWorkbook", InterfaceId = "bb02266c-6204-4e0d-baa3-cc1a928f573e", CoClassName = "Workbook")]
@@ -388,6 +501,14 @@ namespace ExcelApi
 		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_Charts)]
 		ChartCollection Charts { get; }
 
+		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_AddChart)]
+		[ClientCallableOperation(InvalidateReturnObjectPathAfterRequest = true, ReturnObjectGetByIdMethodName = "_GetChartById")]
+		Chart AddChart(string name, ChartType chartType);
+
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_GetChartById)]
+		Chart _GetChartById(int id);
+
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_GetChartByType)]
 		Chart GetChartByType(ChartType chartType);
@@ -398,6 +519,36 @@ namespace ExcelApi
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Workbook_SomeAction)]
 		string SomeAction(int intVal, string strVal, ChartType enumVal);
+
+		/// <summary>
+		/// Event that occurs when selection is changed.
+		/// </summary>
+		[ApiSet(Version = 1.1, IntroducedInVersion = 1.2)]
+		event EventHandler<WorkbookSelectionChangedEventArgs> SelectionChanged;
+
+		/// <summary>
+		/// Event that occurs when selection is changed. Error in registration
+		/// </summary>
+		event EventHandler<WorkbookSelectionChangedEventArgs> SelectionChangedErrorInRegistration;
+		
+		/// <summary>
+		/// Event that occurs when selection is changed. Error in unregistration
+		/// </summary>
+		event EventHandler<WorkbookSelectionChangedEventArgs> SelectionChangedErrorInUnregistration;
+
+		//The following method are used to test the API not available.
+		//It's to simulate that they are defined in higher version of product
+		//[ClientCallableComMember(DispatchId = DispatchIds.Workbook_HiStringProp)]
+		//string HiStringProp { get; set; }
+
+		//[ClientCallableComMember(DispatchId = DispatchIds.Workbook_HiStringMethod)]
+		//string HiStringMethod(string value);
+
+		//[ClientCallableComMember(DispatchId = DispatchIds.Workbook_HiRangeProp)]
+		//HiRange HiRangeProp { get; }
+
+		//[ClientCallableComMember(DispatchId = DispatchIds.Workbook_HiRangeMethod)]
+		//HiRange HiRangeMethod(string value);
 	}
 
 	[ClientCallableComType(Name = "IWorksheet", InterfaceId = "b86e5ae1-476e-4e56-825d-885468e549f3", CoClassName = "Worksheet")]
@@ -406,13 +557,13 @@ namespace ExcelApi
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Id)]
 		int _Id { get; }
 
-		[ClientCallableProperty(IsVolatile = true)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_ActiveCell)]
-		Range ActiveCell { get; }
+        [ClientCallableOperation(OperationType = OperationType.Read)]
+        Range GetActiveCell();
 
-		[ClientCallableProperty(InvalidateReturnObjectPathAfterRequest = true)]
+		[ClientCallableOperation(InvalidateReturnObjectPathAfterRequest = true, OperationType = OperationType.Read)]
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_ActiveCellInvalidAfterRequest)]
-		Range ActiveCellInvalidAfterRequest { get; }
+		Range GetActiveCellInvalidAfterRequest();
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Name)]
 		string Name { get; }
@@ -427,11 +578,26 @@ namespace ExcelApi
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_NullRange)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
 		Range NullRange(string address);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_RangeProp)]
+		[ApiSet(Version = 1.3)]
+		Range RangeProp
+		{
+			get;
+		}
+
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_RangePropOrNull)]
+		[ApiSet(Version = 1.3)]
+		Range RangePropOrNull
+		{
+			get;
+		}
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_NullChart)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
-		Chart NullChart(string address);
+		Chart NullChart([ApiSet(Version = 1.3)] string address);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_SomeRangeOperation)]
 		[ClientCallableOperation(WacAsync = true)]
@@ -441,7 +607,31 @@ namespace ExcelApi
 		[ClientCallableOperation(OperationType = OperationType.Read, RESTfulName = "RestOnlyOperation")]
 		string _RestOnly();
 
+		/// <summary>
+		/// Event occurs when data is changed.
+		/// </summary>
+		event EventHandler<WorksheetDataChangedEventArgs> DataChanged;
+
+		[ApiSet(Version = 1.3)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Rows)]
+		RowCollection Rows { get; }
+
+		[ApiSet(Version = ApiSetAttribute.Spec)]
+		string SpecOnlyMethod(string input);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_ErrorRangeProp)]
+		ErrorRange ErrorRangeProp
+		{
+			get;
 		}
+
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_ErrorRangeMethod)]
+		ErrorRange GetErrorRangeMethod();
+
+		[ClientCallableComMember(DispatchId = DispatchIds.Worksheet_Ranges)]
+		RangeCollection Ranges { get; }
+	}
 
 	[ClientCallableType(HiddenIndexerMethod = true, CreateItemOperationName = "Add")]
 	[ClientCallableComType(Name = "IWorksheetCollection", InterfaceId = "55a36c77-3310-4afb-aa64-3c1a685f2f50", CoClassName = "WorksheetCollection", SupportEnumeration = true)]
@@ -531,6 +721,25 @@ namespace ExcelApi
 		RangeSort Sort { get; }
 	}
 
+	[ClientCallableComType(Name = "IRangeCollection", InterfaceId = "320b9d4e-6175-49d3-a8d6-5473b4f0eb15", CoClassName = "RangeCollection")]
+	public interface RangeCollection: IEnumerable<Range>
+	{
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId =DispatchIds.RangeCollection_GetCount)]
+		int GetCount();
+		[ClientCallableComMember(DispatchId = DispatchIds.RangeCollection_GetItemAt)]
+		Range GetItemAt(int index);
+	}
+
+
+	[ClientCallableComType(Name = "IErrorRange", InterfaceId = "6d2ecdb8-a9f3-4063-8e63-c5283d950461", CoClassName = "ErrorRange")]
+	public interface ErrorRange
+	{
+		// when the property is accessed, it will always throw error.
+		[ClientCallableComMember(DispatchId = DispatchIds.ErrorRange_ErrorProp)]
+		int ErrorProp { get; }
+	}
+
 	[ClientCallableComType(Name = "ITestCaseObject", InterfaceId = "53984705-84a6-4393-87f3-a118cc7bb047", CoClassName = "TestCaseObject", CoClassId = "4c4fd77f-8fb3-4e12-a796-84fde62d4eda")]
 	public interface TestCaseObject
 	{
@@ -538,27 +747,34 @@ namespace ExcelApi
 		string CalculateAddressAndSaveToRange(string street, string city, Range range);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamBool)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		bool TestParamBool(bool value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamInt)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		int TestParamInt([Optional] int value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamDouble)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		double TestParamDouble(double value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamFloat)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		float TestParamFloat(float value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamString)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		string TestParamString([Optional] string value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamRange)]
 		Range TestParamRange(Range value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestUrlKeyValueDecode)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		string TestUrlKeyValueDecode(string value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestUrlPathEncode)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		string TestUrlPathEncode(string value);
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_Sum)]
@@ -566,6 +782,33 @@ namespace ExcelApi
 
 		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_MatrixSum)]
 		double MatrixSum(object[][] matrix);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_Test2DArray)]
+		object Test2DArray();
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestEnumArray)]
+		RangeValueType[] TestEnumArray(RangeValueType[] values);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestEnum2DArray)]
+		RangeValueType[][] TestEnum2DArray(RangeValueType[][] values);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamDateTime)]
+		DateTime TestParamDateTime(DateTime value);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamNullableDateTime)]
+		DateTime? TestParamNullableDateTime(DateTime? value);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestParamDateTimeArray)]
+		DateTime[] TestParamDateTimeArray(DateTime[] value);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_GetNullableDateTimeValue)]
+		DateTime? GetNullableDateTimeValue(bool nullable);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestJsonParse)]
+		object TestJsonParse(string value);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.TestCaseObject_TestJsonStringify)]
+		string TestJsonStringify(object value);
 	}
 
 	[ClientCallableComType(Name = "IRangeSort", InterfaceId = "b0eb6d54-c934-479c-974c-bf872c924656", CoClassName = "RangeSort")]
@@ -592,6 +835,10 @@ namespace ExcelApi
 
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeSort_ApplyQueryWithSortField)]
 		QueryWithSortField ApplyQueryWithSortFieldAndReturnLast(QueryWithSortField[] fields);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.RangeSort_GetFirstField)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		SortField GetFirstField(SortField[] fields);
 	}
 
 	[ClientCallableComType(Name = "ISortField", InterfaceId = "337ff52d-6bd6-47b6-8047-d1a57f5abed4", CoClassName = "SortField", CoClassId = "8c274050-f0bd-4ac1-8a1f-3b67ffd4c29d")]
@@ -616,4 +863,86 @@ namespace ExcelApi
 		[ClientCallableComMember(DispatchId = DispatchIds.QueryWithSortField_Field)]
 		SortField Field { get; set; }
 	}
+
+	/// <summary>
+	/// A row class without Id property. It's to test the case when there is no Id property.
+	/// </summary>
+	[ApiSet(Version = 1.3)]
+	[ClientCallableComType(Name = "IRow", InterfaceId = "3fb69b4b-4b71-4c19-8210-d16200a19390", CoClassName = "Row")]
+	public interface Row
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.Row_Index)]
+		int Index { get; }
+	}
+
+	[ApiSet(Version = 1.3)]
+	[ClientCallableComType(Name = "IRowCollection", InterfaceId = "a7ada4c7-9d5c-40af-b188-f28d8ef506f7", CoClassName = "RowCollection")]
+	public interface RowCollection: IEnumerable<Row>
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.RowCollection_Count)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		int GetCount();
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.RowCollection_GetItemAt)]
+		Row GetItemAt(int index);
+	}
+
+	[ClientCallableComType(Name = "ISectionGroup", InterfaceId = "fb38bf3f-219f-47d7-8665-7559403b0b79", CoClassName = "SectionGroup")]
+	public interface SectionGroup
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroup_Id)]
+		int Id { get; }
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroup_Sections)]
+		SectionCollection Sections { get; }
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroup_Groups)]
+		SectionGroupCollection SectionGroups { get; }
+
+	}
+
+	[ClientCallableComType(Name = "ISectionGroupCollection", InterfaceId = "3201cc2b-90d8-4dc3-a331-16c08ced5ca8", CoClassName = "SectionGroupCollection")]
+	public interface SectionGroupCollection: IEnumerable<SectionGroup>
+	{
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroupCollection_GetCount)]
+		int GetCount();
+
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroupCollection_GetItemAt)]
+		SectionGroup GetItemAt(int index);
+
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionGroupCollection_Indexer)]
+		SectionGroup this[int id]
+		{
+			get;
+		}
+	}
+
+	[ClientCallableComType(Name = "ISection", InterfaceId = "0237b125-b76a-46ce-a9c2-7747f00ec38c", CoClassName = "Section")]
+	public interface Section
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.Section_Id)]
+		int Id { get; }
+		[ClientCallableComMember(DispatchId = DispatchIds.Section_Charts)]
+		ChartCollection Charts { get; }
+	}
+
+	[ClientCallableType(UseItemAsIndexerNameInODataId = true)]
+	[ClientCallableComType(Name = "ISectionCollection", InterfaceId = "b6e956ec-ad9f-4b56-8f0e-59167345c88a", CoClassName = "SectionCollection", SupportEnumeration = true)]
+	public interface SectionCollection: IEnumerable<Section>
+	{
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionCollection_Indexer)]
+		Section this[int id]
+		{
+			get;
+		}
+	}
+
+	// The HiRange is to test the API not available. It's to simulate that
+	// the type is defined in the higher version of product.
+	//[ClientCallableComType(Name = "IHiRange", InterfaceId = "dbc8a3c6-526a-44d9-904a-1ae491819799", CoClassName = "HiRange")]
+	//public interface HiRange
+	//{
+	//	[ClientCallableComMember(DispatchId = DispatchIds.HiRange_Text)]
+	//	string Text { get; set; }
+	//}
 }

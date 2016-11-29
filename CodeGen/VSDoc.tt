@@ -30,11 +30,18 @@
 
 			XDocument xdoc = XDocument.Load(this.DocXmlFilePath);
 
+			string validateApiSetsParamValue = this.GetParameterValue("ValidateApiSetAnnotations");
+			if (!string.IsNullOrWhiteSpace(validateApiSetsParamValue))
+			{
+				Utility.ValidateApiSetAnnotations = Boolean.Parse(validateApiSetsParamValue);
+			}
+
 			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
 			var namespaces = new HashSet<string>();
-			templateFileManager.StartNewFile(this.FileBaseName + "-vsdoc.js");
+			templateFileManager.StartNewFile(this.FileBaseName + this.FileNamePostfix + "-vsdoc.js");
 
-			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			Utility.ApiSetDefaultName = this.GetParameterValue("ApiSetDefaultName");
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 			assemblyReader.Process();
 			var typeInfos = assemblyReader.Types.OrderBy(type => type.FullName);
 			foreach (ClientCallableTypeInfo typeInfo in typeInfos)
@@ -64,9 +71,13 @@
 
 	void WriteType(ClientCallableTypeInfo typeInfo, XDocument xdoc)
 	{
-		if (typeInfo.IsClientObject || typeInfo.IsValueObject)
+		if (typeInfo.IsClientObject)
 		{
 			WriteClientObject(typeInfo, xdoc);
+		}
+		else if (typeInfo.IsValueObject)
+		{
+			WriteMetadataStruct(typeInfo, xdoc);
 		}
 		else if (typeInfo.IsEnum)
 		{
@@ -87,9 +98,10 @@
 		__extends(<#= typeInfo.Name #>, _super);
 		function <#= typeInfo.Name #>() {
 			<#= Utility.BuildVsDocSummaryForType(typeInfo, xdoc) #>
-			/// <field name="context" type="<#= typeInfo.TypescriptNamespace #>.RequestContext">The request context associated with this object</field>
+			/// <field name="context" type="<#= typeInfo.TypescriptNamespace #>.RequestContext">The request context associated with this object.</field>
+			/// <field name="isNull" type="Boolean">Returns a boolean value for whether the corresponding object is null. You must call "context.sync()" before reading the isNull property.</field>
 <#+
-		WriteClientObjectFields(typeInfo, xdoc);
+		WriteClientObjectFields(typeInfo, xdoc, 0 /*extraIndent*/);
 #>
 		}
 
@@ -102,7 +114,29 @@
 		}
 <#+
 		WriteClientObjectMethods(typeInfo, xdoc);
+		WriteClientObjectEvents(typeInfo, xdoc);
+
+		if (typeInfo.Methods.Where((method) => method.Name == "_KeepReference").Any())
+		{
 #>
+
+		<#= typeInfo.Name #>.prototype.track = function() {
+			/// <summary>
+			/// Track the object for automatic adjustment based on surrounding changes in the document. This call is a shorthand for context.trackedObjects.add(thisObject). If you are using this object across ".sync" calls and outside the sequential execution of a ".run" batch, and get an "InvalidObjectPath" error when setting a property or invoking a method on the object, you needed to have added the object to the tracked object collection when the object was first created.
+			/// </summary>
+			/// <returns type="<#= typeInfo.TypescriptNamespace #>.<#= typeInfo.Name #>"/>
+		}
+
+		<#= typeInfo.Name #>.prototype.untrack = function() {
+			/// <summary>
+			/// Release the memory associated with this object, if has previous been tracked. This call is shorthand for context.trackedObjects.remove(thisObject). Having many tracked objects slows down the host application, so please remember to free any objects you add, once you're done using them. You will need to call "context.sync()" before the memory release takes effect.
+			/// </summary>
+			/// <returns type="<#= typeInfo.TypescriptNamespace #>.<#= typeInfo.Name #>"/>
+		}
+<#+
+		}
+#>
+
 		return <#= typeInfo.Name #>;
 	})(OfficeExtension.ClientObject);
 	<#= typeInfo.TypescriptNamespace #>.<#= typeInfo.Name #> = <#= typeInfo.Name #>;
@@ -110,22 +144,108 @@
 		WriteNamespacePostamble(typeInfo.TypescriptNamespace);
 	}
 
-	void WriteClientObjectFields(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	void WriteMetadataStruct(ClientCallableTypeInfo typeInfo, XDocument xdoc)
 	{
+		// Skip over any of the "V1" helper structs that are internal and are only meant to transfer data to/from V1.0 APIs
+		if (typeInfo.Name.StartsWith("V1"))
+		{
+			return;
+		}
+
+		this.WriteLine(string.Empty);
+#>
+var <#= typeInfo.TypescriptNamespace #>;
+(function (<#= typeInfo.TypescriptNamespace #>) {
+	var Interfaces;
+	(function (Interfaces) {
+		var <#= typeInfo.Name #> = (function() {
+			function <#= typeInfo.Name #>() {
+				<#= Utility.BuildVsDocSummaryForType(typeInfo, xdoc) #>
+<#+
+		WriteClientObjectFields(typeInfo, xdoc, 1 /*extraIndent*/);
+#>
+			}
+			return <#= typeInfo.Name #>;
+		})();
+		Interfaces.<#= typeInfo.Name #>.__proto__ = null;
+		Interfaces.<#= typeInfo.Name #> = <#= typeInfo.Name #>;
+	})(Interfaces = <#= typeInfo.TypescriptNamespace #>.Interfaces || (<#= typeInfo.TypescriptNamespace #>.Interfaces = { __proto__: null}));
+})(<#= typeInfo.TypescriptNamespace #> || (<#= typeInfo.TypescriptNamespace #> = {__proto__: null}));
+<#+
+	}
+
+	private void WriteClientObjectEvents(ClientCallableTypeInfo typeInfo, XDocument xdoc)
+	{
+		foreach (ClientCallableEventInfo evt in typeInfo.Events)
+		{
+			ClientCallableTypeInfo argType = evt.EventArgsType.ClientCallableType;
+			string fullTSName = argType.TypescriptNamespace + "." +
+				(argType.IsValueObject /*Is a metadata struct, e.g., a JS interface*/ ? "Interfaces." : "") +
+				argType.Name;
+
+			string memberName = DocConstants.XmlDocTypePrefix + argType.FullName;
+			XElement member = xdoc
+				.Descendants(XName.Get(DocConstants.XmlDocElementName_Member))
+				.Where(elem => elem.Attribute(DocConstants.XmlDocAttributeName_Name).Value == memberName)
+				.FirstOrDefault();
+
+			string handlerParamStringConcise = "/// <param name=\"handler\" type=\"function(eventArgs: " + fullTSName + ")\">Handler for the event.</param>";
+			var handlerParamStringOnAdd = handlerParamStringConcise;
+			if (member != null)
+			{
+				handlerParamStringOnAdd = handlerParamStringConcise.Replace(".</param>",
+					". EventArgs: " + Utility.PrepVsDocDescription(member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim()) + " ") + "</param>";
+			}
+#>
+		<#= typeInfo.Name #>.prototype.on<#= evt.Name #> = {
+			__proto__: null,
+			add: function (handler) {
+				<#= handlerParamStringOnAdd #>
+				/// <returns type="OfficeExtension.EventHandlerResult"></returns>
+				var eventInfo = new <#= fullTSName #>();
+				eventInfo.__proto__ = null;
+				handler(eventInfo);
+			},
+			remove: function (handler) {
+				<#= handlerParamStringConcise #>
+				return;
+			},
+			removeAll: function () {
+				return;
+			}
+		};
+<#+
+		}
+	}
+
+	void WriteClientObjectFields(ClientCallableTypeInfo typeInfo, XDocument xdoc, int extraIndent)
+	{
+		string indentStringIfAny = string.Empty;
+		for (var i = 0; i < extraIndent; i++) {
+			indentStringIfAny += "\t";
+		}
+
 		foreach (ClientCallablePropertyInfo propInfo in typeInfo.Properties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 			if (propInfo.Name.StartsWith("_")) {
 				continue;
 			}
 #>
-			<#= Utility.BuildVsDocForProperty(typeInfo, propInfo, xdoc) #>
+			<#= indentStringIfAny #><#= Utility.BuildVsDocForProperty(typeInfo, propInfo, xdoc) #>
+<#+;
+		}
+
+		foreach (ClientCallableEventInfo eventInfo in typeInfo.Events)
+		{
+#>
+			<#= indentStringIfAny #><#= Utility.BuildVsDocForEvent(typeInfo, eventInfo, xdoc) #>
 <#+;
 		}
 		
 		if (typeInfo.ClientType.ChildItemClientType != null)
 		{
 #>
-			/// <field name="items" type="Array" <#= Utility.GetVSDocTypeOrValue(typeInfo.ClientType.ChildItemClientType, true /*isArrayElementType*/) #>>Gets the loaded child items in this collection.</field>
+			<#= indentStringIfAny #>/// <field name="items" type="Array" <#= Utility.GetVSDocTypeOrValue(typeInfo.ClientType.ChildItemClientType, true /*isArrayElementType*/) #>>Gets the loaded child items in this collection.</field>
 <#+;
 		}
 	}
@@ -158,10 +278,11 @@
 		this.WriteLine(string.Empty);
 		WriteNamespacePreamble(type.TypescriptNamespace);
 #>
+	<#= Utility.BuildVsDocSummaryForType(type, xdoc) #>
 	var <#= type.Name #> = {
 		__proto__: null,
 <#+
-		foreach (KeyValuePair<string, int> field in type.EnumFields)
+		foreach (KeyValuePair<string, int> field in type.EnumFields.Where(f => !type.ObsoleteMemberNames.ContainsKey(f.Key)))
 		{
 #>
 		"<#= Utility.ToCamelLowerCase(field.Key) #>": "<#= Utility.ToCamelLowerCase(field.Key) #>",
@@ -196,16 +317,44 @@
 	<#= typescriptNamespace #>.RequestContext = RequestContext;
 
 	<#= typescriptNamespace #>.run = function (batch) {
+		/// <signature>
 		/// <summary>
-		/// Executes a batch script that performs actions on the <#= typescriptNamespace #> object model. When the promise is resolved, any tracked objects that were automatically allocated during execution will be released.
+		/// Executes a batch script that performs actions on the <#= typescriptNamespace #> object model, using a new RequestContext. When the promise is resolved, any tracked objects that were automatically allocated during execution will be released.
 		/// </summary>
 		/// <param name="batch" type="function(context) { ... }">
 		/// A function that takes in a RequestContext and returns a promise (typically, just the result of "context.sync()").
 		/// <br />
-		/// The context parameter facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the request context is required to get access to the <#= typescriptNamespace #> object model from the add-in.
+		/// The context parameter facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the RequestContext is required to get access to the <#= typescriptNamespace #> object model from the add-in.
 		/// </param>
-		batch(new <#= typescriptNamespace #>.RequestContext());
-		return new OfficeExtension.IPromise();
+		/// </signature>
+		/// <signature>
+		/// <summary>
+		/// Executes a batch script that performs actions on the <#= typescriptNamespace #> object model, using the RequestContext of a previously-created API object. When the promise is resolved, any tracked objects that were automatically allocated during execution will be released.
+		/// </summary>
+		/// <param name="object" type="OfficeExtension.ClientObject">
+		/// A previously-created API object. The batch will use the same RequestContext as the passed-in object, which means that any changes applied to the object will be picked up by "context.sync()".
+		/// </param>
+		/// <param name="batch" type="function(context) { ... }">
+		/// A function that takes in a RequestContext and returns a promise (typically, just the result of "context.sync()").
+		/// <br />
+		/// The context parameter facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the RequestContext is required to get access to the <#= typescriptNamespace #> object model from the add-in.
+		/// </param>
+		/// </signature>
+		/// <signature>
+		/// <summary>
+		/// Executes a batch script that performs actions on the <#= typescriptNamespace #> object model, using the RequestContext of a previously-created API object. When the promise is resolved, any tracked objects that were automatically allocated during execution will be released.
+		/// </summary>
+		/// <param name="objects" type="Array&lt;OfficeExtension.ClientObject&gt;">
+		/// An array of previously-created API objects. The array will be validated to make sure that all of the objects share the same context. The batch will use this shared RequestContext, which means that any changes applied to these objects will be picked up by "context.sync()".
+		/// </param>
+		/// <param name="batch" type="function(context) { ... }">
+		/// A function that takes in a RequestContext and returns a promise (typically, just the result of "context.sync()").
+		/// <br />
+		/// The context parameter facilitates requests to the <#= typescriptNamespace #> application. Since the Office add-in and the <#= typescriptNamespace #> application run in two different processes, the RequestContext is required to get access to the <#= typescriptNamespace #> object model from the add-in.
+		/// </param>
+		/// </signature>
+		arguments[arguments.length - 1](new <#= typescriptNamespace #>.RequestContext());
+		return new OfficeExtension.Promise();
 	}
 <#+
 		WriteNamespacePostamble(typescriptNamespace);
@@ -233,7 +382,7 @@ var <#= typescriptNamespace #>;
 	void WriteNamespacePostamble(string typescriptNamespace)
 	{
 #>
-})(<#= typescriptNamespace #> || (<#= typescriptNamespace #> = {}));
+})(<#= typescriptNamespace #> || (<#= typescriptNamespace #> = {__proto__: null}));
 <#+
 	}
 #>

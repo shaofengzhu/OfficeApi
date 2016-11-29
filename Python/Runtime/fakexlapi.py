@@ -37,6 +37,8 @@ class ChartType:
     bar = "Bar"
     line = "Line"
     _3DBar = "3DBar"
+    obsoleteChart = "ObsoleteChart"
+    obsoleteChartWithoutComment = "ObsoleteChartWithoutComment"
 
 class RangeValueType:
     unknown = "Unknown"
@@ -54,6 +56,7 @@ class Application(OfficeExtension.ClientObject):
         super(self.__class__, self).__init__(context, objectPath)
         self._activeWorkbook = None
         self._hasBase = None
+        self._testCaseObject = None
         self._testWorkbook = None
 
     @property
@@ -61,6 +64,11 @@ class Application(OfficeExtension.ClientObject):
         if self._activeWorkbook is None:
             self._activeWorkbook = Workbook(self.context, _createPropertyObjectPath(self.context, self, "ActiveWorkbook", False, False))
         return self._activeWorkbook
+    @property
+    def testCaseObject(self) -> 'TestCaseObject':
+        if self._testCaseObject is None:
+            self._testCaseObject = TestCaseObject(self.context, _createPropertyObjectPath(self.context, self, "TestCaseObject", False, False))
+        return self._testCaseObject
     @property
     def testWorkbook(self) -> 'TestWorkbook':
         if self._testWorkbook is None:
@@ -108,6 +116,8 @@ class Application(OfficeExtension.ClientObject):
             self._hasBase = obj.get("HasBase")
         if "ActiveWorkbook" in obj:
             self.activeWorkbook._handleResult(obj.get("ActiveWorkbook"))
+        if "TestCaseObject" in obj:
+            self.testCaseObject._handleResult(obj.get("TestCaseObject"))
         if "TestWorkbook" in obj:
             self.testWorkbook._handleResult(obj.get("TestWorkbook"))
     
@@ -337,8 +347,12 @@ class TestWorkbook(OfficeExtension.ClientObject):
     # End_PlaceHolder_TestWorkbook_Custom_Members
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
+        self._created = None
         self._errorWorksheet = None
         self._errorWorksheet2 = None
+        self._nullableCreated = None
+        self._sectionGroups = None
+        self._sections = None
 
     @property
     def errorWorksheet(self) -> 'Worksheet':
@@ -350,6 +364,42 @@ class TestWorkbook(OfficeExtension.ClientObject):
         if self._errorWorksheet2 is None:
             self._errorWorksheet2 = Worksheet(self.context, _createPropertyObjectPath(self.context, self, "ErrorWorksheet2", False, False))
         return self._errorWorksheet2
+    @property
+    def sectionGroups(self) -> 'SectionGroupCollection':
+        if self._sectionGroups is None:
+            self._sectionGroups = SectionGroupCollection(self.context, _createPropertyObjectPath(self.context, self, "SectionGroups", True, False))
+        return self._sectionGroups
+    @property
+    def sections(self) -> 'SectionCollection':
+        if self._sections is None:
+            self._sections = SectionCollection(self.context, _createPropertyObjectPath(self.context, self, "Sections", True, False))
+        return self._sections
+
+    @property
+    def created(self) -> 'datetime.datetime':
+        _loadIfInstantSyncExecutionMode(self, "created", self._created)
+        _throwIfNotLoaded("created", self._created, "TestWorkbook", self._isNull)
+        return self._created
+    
+
+    @created.setter
+    def created(self, value : 'datetime.datetime'):
+        self._created = value
+        _createSetPropertyAction(self.context, self, "Created", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def nullableCreated(self) -> 'datetime.datetime':
+        _loadIfInstantSyncExecutionMode(self, "nullableCreated", self._nullableCreated)
+        _throwIfNotLoaded("nullableCreated", self._nullableCreated, "TestWorkbook", self._isNull)
+        return self._nullableCreated
+    
+
+    @nullableCreated.setter
+    def nullableCreated(self, value : 'datetime.datetime'):
+        self._nullableCreated = value
+        _createSetPropertyAction(self.context, self, "NullableCreated", value)
+        _syncIfInstantSyncExecutionMode(self)
 
     def errorMethod(self, input : 'str') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestWorkbook_ErrorMethod
@@ -411,10 +461,34 @@ class TestWorkbook(OfficeExtension.ClientObject):
         _syncIfInstantSyncExecutionMode(self)
         return ret
 
+    def getScopedSections(self, ns : 'str') -> 'SectionCollection':
+        # Begin_PlaceHolder_TestWorkbook_GetScopedSections
+        # End_PlaceHolder_TestWorkbook_GetScopedSections
+        ret = SectionCollection(self.context, _createMethodObjectPath(self.context, self, "GetScopedSections", OfficeExtension.OperationType.Read, [ns], True, False))
+        return ret
+
     def testNullableInputValue(self, chartType : 'str', boolValue : 'bool') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestWorkbook_TestNullableInputValue
         # End_PlaceHolder_TestWorkbook_TestNullableInputValue
         action = _createMethodAction(self.context, self, "TestNullableInputValue", OfficeExtension.OperationType.Default, [chartType, boolValue])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testParamNameValueDict(self, value : 'any') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestWorkbook_TestParamNameValueDict
+        # End_PlaceHolder_TestWorkbook_TestParamNameValueDict
+        action = _createMethodAction(self.context, self, "TestParamNameValueDict", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testParamObject(self, value : 'any') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestWorkbook_TestParamObject
+        # End_PlaceHolder_TestWorkbook_TestParamObject
+        action = _createMethodAction(self.context, self, "TestParamObject", OfficeExtension.OperationType.Default, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -426,10 +500,18 @@ class TestWorkbook(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
+        if "Created" in obj:
+            self._created = _adjustToDateTime(obj.get("Created"))
+        if "NullableCreated" in obj:
+            self._nullableCreated = _adjustToDateTime(obj.get("NullableCreated"))
         if "ErrorWorksheet" in obj:
             self.errorWorksheet._handleResult(obj.get("ErrorWorksheet"))
         if "ErrorWorksheet2" in obj:
             self.errorWorksheet2._handleResult(obj.get("ErrorWorksheet2"))
+        if "SectionGroups" in obj:
+            self.sectionGroups._handleResult(obj.get("SectionGroups"))
+        if "Sections" in obj:
+            self.sections._handleResult(obj.get("Sections"))
     
     def load(self, option = None) -> 'TestWorkbook':
         _load(self, option)
@@ -464,6 +546,12 @@ class Workbook(OfficeExtension.ClientObject):
             self._sheets = WorksheetCollection(self.context, _createPropertyObjectPath(self.context, self, "Sheets", True, False))
         return self._sheets
 
+    def addChart(self, name : 'str', chartType : 'str') -> 'Chart':
+        # Begin_PlaceHolder_Workbook_AddChart
+        # End_PlaceHolder_Workbook_AddChart
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "AddChart", OfficeExtension.OperationType.Default, [name, chartType], False, True))
+        return ret
+
     def getChartByType(self, chartType : 'str') -> 'Chart':
         # Begin_PlaceHolder_Workbook_GetChartByType
         # End_PlaceHolder_Workbook_GetChartByType
@@ -483,6 +571,12 @@ class Workbook(OfficeExtension.ClientObject):
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def _GetChartById(self, id : 'int') -> 'Chart':
+        # Begin_PlaceHolder_Workbook__GetChartById
+        # End_PlaceHolder_Workbook__GetChartById
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "_GetChartById", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
     # Handle results returned from the document
@@ -512,15 +606,39 @@ class Worksheet(OfficeExtension.ClientObject):
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
         self._calculatedName = None
+        self._errorRangeProp = None
         self._name = None
+        self._rangeProp = None
+        self._rangePropOrNull = None
+        self._ranges = None
+        self._rows = None
         self.__Id = None
 
-
-    def getActiveCell(self) -> 'Range':
-        return Range(self.context, _createPropertyObjectPath(self.context, self, "ActiveCell", False, False))
-
-    def getActiveCellInvalidAfterRequest(self) -> 'Range':
-        return Range(self.context, _createPropertyObjectPath(self.context, self, "ActiveCellInvalidAfterRequest", False, True))
+    @property
+    def errorRangeProp(self) -> 'ErrorRange':
+        if self._errorRangeProp is None:
+            self._errorRangeProp = ErrorRange(self.context, _createPropertyObjectPath(self.context, self, "ErrorRangeProp", False, False))
+        return self._errorRangeProp
+    @property
+    def rangeProp(self) -> 'Range':
+        if self._rangeProp is None:
+            self._rangeProp = Range(self.context, _createPropertyObjectPath(self.context, self, "RangeProp", False, False))
+        return self._rangeProp
+    @property
+    def rangePropOrNull(self) -> 'Range':
+        if self._rangePropOrNull is None:
+            self._rangePropOrNull = Range(self.context, _createPropertyObjectPath(self.context, self, "RangePropOrNull", False, False))
+        return self._rangePropOrNull
+    @property
+    def ranges(self) -> 'RangeCollection':
+        if self._ranges is None:
+            self._ranges = RangeCollection(self.context, _createPropertyObjectPath(self.context, self, "Ranges", True, False))
+        return self._ranges
+    @property
+    def rows(self) -> 'RowCollection':
+        if self._rows is None:
+            self._rows = RowCollection(self.context, _createPropertyObjectPath(self.context, self, "Rows", True, False))
+        return self._rows
 
     @property
     def calculatedName(self) -> 'str':
@@ -549,6 +667,24 @@ class Worksheet(OfficeExtension.ClientObject):
         return self.__Id
     
 
+    def getActiveCell(self) -> 'Range':
+        # Begin_PlaceHolder_Worksheet_GetActiveCell
+        # End_PlaceHolder_Worksheet_GetActiveCell
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetActiveCell", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getActiveCellInvalidAfterRequest(self) -> 'Range':
+        # Begin_PlaceHolder_Worksheet_GetActiveCellInvalidAfterRequest
+        # End_PlaceHolder_Worksheet_GetActiveCellInvalidAfterRequest
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetActiveCellInvalidAfterRequest", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
+
+    def getErrorRangeMethod(self) -> 'ErrorRange':
+        # Begin_PlaceHolder_Worksheet_GetErrorRangeMethod
+        # End_PlaceHolder_Worksheet_GetErrorRangeMethod
+        ret = ErrorRange(self.context, _createMethodObjectPath(self.context, self, "GetErrorRangeMethod", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def nullChart(self, address : 'str') -> 'Chart':
         # Begin_PlaceHolder_Worksheet_NullChart
         # End_PlaceHolder_Worksheet_NullChart
@@ -576,6 +712,15 @@ class Worksheet(OfficeExtension.ClientObject):
         _syncIfInstantSyncExecutionMode(self)
         return ret
 
+    def specOnlyMethod(self, input : 'str') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_Worksheet_SpecOnlyMethod
+        # End_PlaceHolder_Worksheet_SpecOnlyMethod
+        action = _createMethodAction(self.context, self, "SpecOnlyMethod", OfficeExtension.OperationType.Default, [input])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
     def _RestOnly(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Worksheet__RestOnly
         # End_PlaceHolder_Worksheet__RestOnly
@@ -597,6 +742,16 @@ class Worksheet(OfficeExtension.ClientObject):
             self._name = obj.get("Name")
         if "_Id" in obj:
             self.__Id = obj.get("_Id")
+        if "ErrorRangeProp" in obj:
+            self.errorRangeProp._handleResult(obj.get("ErrorRangeProp"))
+        if "RangeProp" in obj:
+            self.rangeProp._handleResult(obj.get("RangeProp"))
+        if "RangePropOrNull" in obj:
+            self.rangePropOrNull._handleResult(obj.get("RangePropOrNull"))
+        if "Ranges" in obj:
+            self.ranges._handleResult(obj.get("Ranges"))
+        if "Rows" in obj:
+            self.rows._handleResult(obj.get("Rows"))
     
     def load(self, option = None) -> 'Worksheet':
         _load(self, option)
@@ -894,6 +1049,90 @@ class Range(OfficeExtension.ClientObject):
         if "_ReferenceId" in value:
             self.__ReferenceId = value.get("_ReferenceId")
 
+class RangeCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_RangeCollection_Custom_Members
+    # End_PlaceHolder_RangeCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of Range':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "RangeCollection", self._isNull)
+        return self.__items
+    
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_RangeCollection_GetCount
+        # End_PlaceHolder_RangeCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItemAt(self, index : 'int') -> 'Range':
+        # Begin_PlaceHolder_RangeCollection_GetItemAt
+        # End_PlaceHolder_RangeCollection_GetItemAt
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Default, [index], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = Range(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(False, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'RangeCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RangeCollection':
+        _load(self, None)
+        return self
+
+class ErrorRange(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ErrorRange_Custom_Members
+    # End_PlaceHolder_ErrorRange_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._errorProp = None
+
+
+    @property
+    def errorProp(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "errorProp", self._errorProp)
+        _throwIfNotLoaded("errorProp", self._errorProp, "ErrorRange", self._isNull)
+        return self._errorProp
+    
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "ErrorProp" in obj:
+            self._errorProp = obj.get("ErrorProp")
+    
+    def load(self, option = None) -> 'ErrorRange':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ErrorRange':
+        _load(self, None)
+        return self
+
 class TestCaseObject(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_TestCaseObject_Custom_Members
     # End_PlaceHolder_TestCaseObject_Custom_Members
@@ -906,6 +1145,15 @@ class TestCaseObject(OfficeExtension.ClientObject):
         # End_PlaceHolder_TestCaseObject_CalculateAddressAndSaveToRange
         action = _createMethodAction(self.context, self, "CalculateAddressAndSaveToRange", OfficeExtension.OperationType.Default, [street, city, range])
         ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getNullableDateTimeValue(self, nullable : 'bool') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_GetNullableDateTimeValue
+        # End_PlaceHolder_TestCaseObject_GetNullableDateTimeValue
+        action = _createMethodAction(self.context, self, "GetNullableDateTimeValue", OfficeExtension.OperationType.Default, [nullable])
+        ret = OfficeExtension.ClientResult(OfficeExtension.ClientResultProcessingType.date)
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
         return ret
@@ -928,11 +1176,74 @@ class TestCaseObject(OfficeExtension.ClientObject):
         _syncIfInstantSyncExecutionMode(self)
         return ret
 
+    def test2DArray(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_Test2DArray
+        # End_PlaceHolder_TestCaseObject_Test2DArray
+        action = _createMethodAction(self.context, self, "Test2DArray", OfficeExtension.OperationType.Default, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testEnum2DArray(self, values : 'list') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestEnum2DArray
+        # End_PlaceHolder_TestCaseObject_TestEnum2DArray
+        action = _createMethodAction(self.context, self, "TestEnum2DArray", OfficeExtension.OperationType.Default, [values])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testEnumArray(self, values : 'list') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestEnumArray
+        # End_PlaceHolder_TestCaseObject_TestEnumArray
+        action = _createMethodAction(self.context, self, "TestEnumArray", OfficeExtension.OperationType.Default, [values])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testJsonParse(self, value : 'str') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestJsonParse
+        # End_PlaceHolder_TestCaseObject_TestJsonParse
+        action = _createMethodAction(self.context, self, "TestJsonParse", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testJsonStringify(self, value : 'any') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestJsonStringify
+        # End_PlaceHolder_TestCaseObject_TestJsonStringify
+        action = _createMethodAction(self.context, self, "TestJsonStringify", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
     def testParamBool(self, value : 'bool') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestParamBool
         # End_PlaceHolder_TestCaseObject_TestParamBool
-        action = _createMethodAction(self.context, self, "TestParamBool", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestParamBool", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testParamDateTime(self, value : 'datetime.datetime') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestParamDateTime
+        # End_PlaceHolder_TestCaseObject_TestParamDateTime
+        action = _createMethodAction(self.context, self, "TestParamDateTime", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult(OfficeExtension.ClientResultProcessingType.date)
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testParamDateTimeArray(self, value : 'list') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestParamDateTimeArray
+        # End_PlaceHolder_TestCaseObject_TestParamDateTimeArray
+        action = _createMethodAction(self.context, self, "TestParamDateTimeArray", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult(OfficeExtension.ClientResultProcessingType.date)
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
         return ret
@@ -940,7 +1251,7 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testParamDouble(self, value : 'float') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestParamDouble
         # End_PlaceHolder_TestCaseObject_TestParamDouble
-        action = _createMethodAction(self.context, self, "TestParamDouble", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestParamDouble", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -949,7 +1260,7 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testParamFloat(self, value : 'float') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestParamFloat
         # End_PlaceHolder_TestCaseObject_TestParamFloat
-        action = _createMethodAction(self.context, self, "TestParamFloat", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestParamFloat", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -958,8 +1269,17 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testParamInt(self, value : 'int' = None) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestParamInt
         # End_PlaceHolder_TestCaseObject_TestParamInt
-        action = _createMethodAction(self.context, self, "TestParamInt", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestParamInt", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def testParamNullableDateTime(self, value : 'datetime.datetime') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_TestCaseObject_TestParamNullableDateTime
+        # End_PlaceHolder_TestCaseObject_TestParamNullableDateTime
+        action = _createMethodAction(self.context, self, "TestParamNullableDateTime", OfficeExtension.OperationType.Default, [value])
+        ret = OfficeExtension.ClientResult(OfficeExtension.ClientResultProcessingType.date)
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
         return ret
@@ -973,7 +1293,7 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testParamString(self, value : 'str' = None) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestParamString
         # End_PlaceHolder_TestCaseObject_TestParamString
-        action = _createMethodAction(self.context, self, "TestParamString", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestParamString", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -982,7 +1302,7 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testUrlKeyValueDecode(self, value : 'str') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestUrlKeyValueDecode
         # End_PlaceHolder_TestCaseObject_TestUrlKeyValueDecode
-        action = _createMethodAction(self.context, self, "TestUrlKeyValueDecode", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestUrlKeyValueDecode", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -991,7 +1311,7 @@ class TestCaseObject(OfficeExtension.ClientObject):
     def testUrlPathEncode(self, value : 'str') -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_TestCaseObject_TestUrlPathEncode
         # End_PlaceHolder_TestCaseObject_TestUrlPathEncode
-        action = _createMethodAction(self.context, self, "TestUrlPathEncode", OfficeExtension.OperationType.Default, [value])
+        action = _createMethodAction(self.context, self, "TestUrlPathEncode", OfficeExtension.OperationType.Read, [value])
         ret = OfficeExtension.ClientResult()
         _addActionResultHandler(self, action, ret)
         _syncIfInstantSyncExecutionMode(self)
@@ -1083,6 +1403,15 @@ class RangeSort(OfficeExtension.ClientObject):
         _syncIfInstantSyncExecutionMode(self)
         return ret
 
+    def getFirstField(self, fields : 'list') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_RangeSort_GetFirstField
+        # End_PlaceHolder_RangeSort_GetFirstField
+        action = _createMethodAction(self.context, self, "GetFirstField", OfficeExtension.OperationType.Read, [fields])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
     # Handle results returned from the document
     def _handleResult(self, value: dict) -> None:
         super(self.__class__, self)._handleIdResult(value)
@@ -1122,6 +1451,297 @@ class QueryWithSortField:
     # Begin_PlaceHolder_QueryWithSortField_Custom_Members
     # End_PlaceHolder_QueryWithSortField_Custom_Members
 
+
+class Row(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_Row_Custom_Members
+    # End_PlaceHolder_Row_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._index = None
+
+
+    @property
+    def index(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "index", self._index)
+        _throwIfNotLoaded("index", self._index, "Row", self._isNull)
+        return self._index
+    
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Index" in obj:
+            self._index = obj.get("Index")
+    
+    def load(self, option = None) -> 'Row':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Row':
+        _load(self, None)
+        return self
+
+class RowCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_RowCollection_Custom_Members
+    # End_PlaceHolder_RowCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of Row':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "RowCollection", self._isNull)
+        return self.__items
+    
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_RowCollection_GetCount
+        # End_PlaceHolder_RowCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItemAt(self, index : 'int') -> 'Row':
+        # Begin_PlaceHolder_RowCollection_GetItemAt
+        # End_PlaceHolder_RowCollection_GetItemAt
+        ret = Row(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = Row(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(False, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'RowCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'RowCollection':
+        _load(self, None)
+        return self
+
+class SectionGroup(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_SectionGroup_Custom_Members
+    # End_PlaceHolder_SectionGroup_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._id = None
+        self._sectionGroups = None
+        self._sections = None
+
+    @property
+    def sectionGroups(self) -> 'SectionGroupCollection':
+        if self._sectionGroups is None:
+            self._sectionGroups = SectionGroupCollection(self.context, _createPropertyObjectPath(self.context, self, "SectionGroups", True, False))
+        return self._sectionGroups
+    @property
+    def sections(self) -> 'SectionCollection':
+        if self._sections is None:
+            self._sections = SectionCollection(self.context, _createPropertyObjectPath(self.context, self, "Sections", True, False))
+        return self._sections
+
+    @property
+    def id(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "SectionGroup", self._isNull)
+        return self._id
+    
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Id" in obj:
+            self._id = obj.get("Id")
+        if "SectionGroups" in obj:
+            self.sectionGroups._handleResult(obj.get("SectionGroups"))
+        if "Sections" in obj:
+            self.sections._handleResult(obj.get("Sections"))
+    
+    def load(self, option = None) -> 'SectionGroup':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SectionGroup':
+        _load(self, None)
+        return self
+    def _handleIdResult(self, value) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if value is None:
+            return
+        if "Id" in value:
+            self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
+
+class SectionGroupCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_SectionGroupCollection_Custom_Members
+    # End_PlaceHolder_SectionGroupCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of SectionGroup':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "SectionGroupCollection", self._isNull)
+        return self.__items
+    
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_SectionGroupCollection_GetCount
+        # End_PlaceHolder_SectionGroupCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItem(self, id : 'int') -> 'SectionGroup':
+        # Begin_PlaceHolder_SectionGroupCollection_GetItem
+        # End_PlaceHolder_SectionGroupCollection_GetItem
+        return SectionGroup(self.context, _createIndexerObjectPath(self.context, self, [id]))
+
+    def getItemAt(self, index : 'int') -> 'SectionGroup':
+        # Begin_PlaceHolder_SectionGroupCollection_GetItemAt
+        # End_PlaceHolder_SectionGroupCollection_GetItemAt
+        ret = SectionGroup(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = SectionGroup(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'SectionGroupCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SectionGroupCollection':
+        _load(self, None)
+        return self
+
+class Section(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_Section_Custom_Members
+    # End_PlaceHolder_Section_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._charts = None
+        self._id = None
+
+    @property
+    def charts(self) -> 'ChartCollection':
+        if self._charts is None:
+            self._charts = ChartCollection(self.context, _createPropertyObjectPath(self.context, self, "Charts", True, False))
+        return self._charts
+
+    @property
+    def id(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "Section", self._isNull)
+        return self._id
+    
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Id" in obj:
+            self._id = obj.get("Id")
+        if "Charts" in obj:
+            self.charts._handleResult(obj.get("Charts"))
+    
+    def load(self, option = None) -> 'Section':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Section':
+        _load(self, None)
+        return self
+    def _handleIdResult(self, value) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if value is None:
+            return
+        if "Id" in value:
+            self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
+
+class SectionCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_SectionCollection_Custom_Members
+    # End_PlaceHolder_SectionCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of Section':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "SectionCollection", self._isNull)
+        return self.__items
+    
+
+    def getItem(self, id : 'int') -> 'Section':
+        # Begin_PlaceHolder_SectionCollection_GetItem
+        # End_PlaceHolder_SectionCollection_GetItem
+        return Section(self.context, _createIndexerObjectPath(self.context, self, [id]))
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = Section(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'SectionCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SectionCollection':
+        _load(self, None)
+        return self
 
 # Begin_PlaceHolder_GlobalFooter
 class RequestContext(OfficeExtension.ClientRequestContext):

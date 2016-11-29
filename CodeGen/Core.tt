@@ -17,7 +17,7 @@
 <#+
     // DO NOT EDIT DIRECTLY -- this is a generated file
     //
-    // Last generated on 10/15/2016 10:12:24 PM
+    // Last generated on 11/15/2016 3:32:26 PM
     //
     // Its content is copied from CodeGen.cs
     // To update it, please run:
@@ -409,18 +409,6 @@
 		}
 
 		public bool IsReadonly
-		{
-			get;
-			set;
-		}
-
-		public bool IsVolatile
-		{
-			get;
-			set;
-		}
-
-		public bool InvalidateReturnObjectPathAfterRequest
 		{
 			get;
 			set;
@@ -2447,15 +2435,7 @@
 				{
 					foreach (CustomAttributeNamedArgument arg in attr.NamedArguments)
 					{
-						if (arg.MemberName == Constants.MemberNames.IsVolatile)
-						{
-							clientProperty.IsVolatile = (bool)arg.TypedValue.Value;
-						}
-						else if (arg.MemberName == Constants.MemberNames.InvalidateReturnObjectPathAfterRequest)
-						{
-							clientProperty.InvalidateReturnObjectPathAfterRequest = (bool)arg.TypedValue.Value;
-						}
-						else if (arg.MemberName == Constants.MemberNames.WacAsync)
+						if (arg.MemberName == Constants.MemberNames.WacAsync)
 						{
 							clientProperty.WacAsync = (bool)arg.TypedValue.Value;
 						}
@@ -2505,17 +2485,6 @@
 
 					clientProperty.IncludeInJsonStringify = include;
 				}
-			}
-
-			if (!clientProperty.PropertyType.IsClientObject)
-			{
-				clientProperty.IsVolatile = false;
-				clientProperty.InvalidateReturnObjectPathAfterRequest = false;
-			}
-
-			if (clientProperty.InvalidateReturnObjectPathAfterRequest)
-			{
-				clientProperty.IsVolatile = true;
 			}
 
 			bool isApiSetRequired = !clientProperty.Name.StartsWith("_", StringComparison.Ordinal);
@@ -2953,6 +2922,11 @@
 
 		public static bool ShouldSkipWritingTypeInterface(ClientCallableTypeInfo type)
 		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
 			if (type.IsEnum || type.IsValueObject)
 			{
 				// For purposes of TypeScript-generation, can skip over certain structs (those are just TS interfaces,
@@ -3937,12 +3911,17 @@
 				yield return " * ";
 				yield return " * " + member.Element(DocConstants.XmlDocElementName_Summary).Value.Trim();
 				yield return " *";
+				yield return " * " + method.ApiSet;
 
-				var iParam = 0;
-				foreach (XElement xePara in member.Elements(DocConstants.XmlDocElementName_Param))
+				var funcParams = member.Elements(DocConstants.XmlDocElementName_Param).ToList();
+				if (funcParams.Count > 0) {
+					yield return " *";
+				}
+
+				for (var iParam = 0; iParam < funcParams.Count; iParam++)
 				{
 					var apiSetIfAny = method.Parameters[iParam].ApiSetIfAny;
-					iParam++;
+					var xePara = funcParams[iParam];
 					yield return " * @param " + xePara.Attribute(DocConstants.XmlDocAttributeName_Name).Value + " " + xePara.Value.Trim() +
 						(String.IsNullOrWhiteSpace(apiSetIfAny) ? "" : " " + apiSetIfAny);
 				}
@@ -3952,11 +3931,6 @@
 					yield return " * @returns " + member.Element(DocConstants.XmlDocElementName_Returns).Value.Trim();
 				}
 
-				if (iParam > 0)
-				{
-					yield return " *";
-				}
-				yield return " * " + method.ApiSet;
 				yield return " */";
 			}
 		}
@@ -4341,7 +4315,6 @@
 			public const string TypeScriptNamespaceName = "TypeScriptNamespaceName";
 			public const string WacNamespaceName = "WacNamespaceName";
 			public const string OperationType = "OperationType";
-			public const string IsVolatile = "IsVolatile";
 			public const string RESTfulName = "RESTfulName";
 			public const string WacName = "WacName";
 			public const string WacAsync = "WacAsync";

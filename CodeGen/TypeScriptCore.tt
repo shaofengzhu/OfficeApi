@@ -170,6 +170,8 @@ export module ErrorCodes
 		}
 
 		this.WriteLine(string.Empty);
+
+		this.WritePlaceHolderContent(type.Name + "_BeforeDeclaration", existingFileContent);
 		this.WriteComments(Utility.BuildJsDocForType(type, xdoc));
 
 		if (type.IsEnum)
@@ -184,6 +186,9 @@ export module ErrorCodes
 		{
 			WriteClientObjectType(type, xdoc, existingFileContent);
 		}
+
+		this.WritePlaceHolderContent(type.Name + "_AfterDeclaration", existingFileContent);
+		this.WriteLine(string.Empty);
 	}
 
 	private void WriteEnumType(ClientCallableTypeInfo type, XDocument xdoc)
@@ -268,7 +273,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 
 	private void WriteTypeFields(ClientCallableTypeInfo type)
 	{
-		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.Properties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 			var comments = new List<string>();
 			if (!prop.IncludeInJsonStringify)
@@ -299,7 +304,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 
 	private void WriteObjectProperties(ClientCallableTypeInfo type, XDocument xdoc, string[] existingFileContent)
 	{
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 			this.PushIndent(Constants.IndentString);
 			this.WriteComments(Utility.BuildJsDocForProperty(type, prop, xdoc));
@@ -339,45 +344,6 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		<#=Constants.MemberFullNames.CreateSetPropertyAction#>(this.context, this, "<#=prop.Name#>", value);
 	}
 <#+	
-			}
-		}
-
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => p.IsVolatile && !p.ExcludedFromClientLibrary))
-		{
-			this.WriteLine(string.Empty);
-			this.PushIndent(Constants.IndentString);
-			this.WriteComments(Utility.BuildJsDocForProperty(type, prop, xdoc));
-			this.PopIndent();
-#>
-	get<#=Utility.ToCamelUpperCase(prop.Name)#>(): <#=prop.PropertyType.TypeScriptTypeName#>{
-<#+
-			this.PushIndent(Constants.IndentString);
-			this.PushIndent(Constants.IndentString);
-			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_get", existingFileContent);
-			this.PopIndent();
-			this.PopIndent();
-#>
-		return new <#=prop.PropertyType.TypeScriptTypeName#>(this.context, <#=Constants.MemberFullNames.CreatePropertyObjectPath#>(this.context, this, "<#=prop.Name#>", <#=Utility.GetBooleanLiteral(prop.PropertyType.IsClientObjectCollection)#> /*isCollection*/, <#=Utility.GetBooleanLiteral(prop.InvalidateReturnObjectPathAfterRequest)#> /*isInvalidAfterRequest*/));
-	}
-<#+
-			if (!prop.IsReadonly)
-			{
-				this.WriteLine(string.Empty);
-				// NOTE: Do *NOT* write JSDOC comments on setters. Doing so creates a doubled-up comment on the property in the final TypeScript / d.ts file.
-				// Just writing the JSDOC comment on the getter is perfectly sufficient (and our underlying assumption is that there are
-				// no such things as write-only properties -- that same assumption is already used above, when creating the getter).
-#>
-	set<#=Utility.ToCamelUpperCase(prop.Name)#>(value: <#=prop.PropertyType.TypeScriptTypeName#>){
-<#+
-			this.PushIndent(Constants.IndentString);
-			this.PushIndent(Constants.IndentString);
-			this.WritePlaceHolderContent(type.Name + "_" + prop.Name + "_set", existingFileContent);
-			this.PopIndent();
-			this.PopIndent();
-#>
-		<#=Constants.MemberFullNames.CreateSetPropertyAction#>(this.context, this, "<#=prop.Name#>", value);
-	}
-<#+
 			}
 		}
 
@@ -712,7 +678,7 @@ export class <#= typeNameOrCustom #> extends <#=Constants.TypeFullNames.ClientOb
 		}
 
 		List<string> navPropNames = new List<string>();
-		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.IsVolatile && !p.ExcludedFromClientLibrary))
+		foreach (ClientCallablePropertyInfo prop in type.ObjectProperties.Where(p => !p.ExcludedFromClientLibrary))
 		{
 			navPropNames.Add("\"" + Utility.ToCamelLowerCase(prop.Name) + "\"");
 			navPropNames.Add("\"" + prop.Name + "\"");
@@ -868,7 +834,7 @@ export interface <#=type.Name#> {
 	}
 
 	/**
-	 * Release the memory associated with this object, if has previous been tracked. This call is shorthand for context.trackedObjects.remove(thisObject). Having many tracked objects slows down the host application, so please remember to free any objects you add, once you're done using them. You will need to call "context.sync()" before the memory release takes effect.
+	 * Release the memory associated with this object, if it has previously been tracked. This call is shorthand for context.trackedObjects.remove(thisObject). Having many tracked objects slows down the host application, so please remember to free any objects you add, once you're done using them. You will need to call "context.sync()" before the memory release takes effect.
 	 */
 	untrack(): <#= GetClientTypeOrCustomTypescriptName(type) #> {
 		this.context.trackedObjects.remove(this);

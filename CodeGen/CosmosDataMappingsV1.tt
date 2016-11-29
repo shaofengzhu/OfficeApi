@@ -29,7 +29,7 @@
 			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
 			templateFileManager.StartNewFile(this.FileBaseName + ".csv");
 
-			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 			assemblyReader.Process();
 			var typeInfos = assemblyReader.Types.OrderBy(type => type.FullName);
 			foreach (ClientCallableTypeInfo typeInfo in typeInfos)

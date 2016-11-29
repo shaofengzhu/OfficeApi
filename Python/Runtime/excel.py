@@ -76,6 +76,7 @@ class Workbook(OfficeExtension.ClientObject):
         super(self.__class__, self).__init__(context, objectPath)
         self._application = None
         self._bindings = None
+        self._customXmlParts = None
         self._functions = None
         self._names = None
         self._pivotTables = None
@@ -93,6 +94,11 @@ class Workbook(OfficeExtension.ClientObject):
         if self._bindings is None:
             self._bindings = BindingCollection(self.context, _createPropertyObjectPath(self.context, self, "Bindings", True, False))
         return self._bindings
+    @property
+    def customXmlParts(self) -> 'CustomXmlPartCollection':
+        if self._customXmlParts is None:
+            self._customXmlParts = CustomXmlPartCollection(self.context, _createPropertyObjectPath(self.context, self, "CustomXmlParts", True, False))
+        return self._customXmlParts
     @property
     def functions(self) -> 'Functions':
         if self._functions is None:
@@ -179,6 +185,8 @@ class Workbook(OfficeExtension.ClientObject):
             self.application._handleResult(obj.get("Application"))
         if "Bindings" in obj:
             self.bindings._handleResult(obj.get("Bindings"))
+        if "CustomXmlParts" in obj:
+            self.customXmlParts._handleResult(obj.get("CustomXmlParts"))
         if "Functions" in obj:
             self.functions._handleResult(obj.get("Functions"))
         if "Names" in obj:
@@ -208,6 +216,7 @@ class Worksheet(OfficeExtension.ClientObject):
         self._charts = None
         self._id = None
         self._name = None
+        self._names = None
         self._pivotTables = None
         self._position = None
         self._protection = None
@@ -219,6 +228,11 @@ class Worksheet(OfficeExtension.ClientObject):
         if self._charts is None:
             self._charts = ChartCollection(self.context, _createPropertyObjectPath(self.context, self, "Charts", True, False))
         return self._charts
+    @property
+    def names(self) -> 'NamedItemCollection':
+        if self._names is None:
+            self._names = NamedItemCollection(self.context, _createPropertyObjectPath(self.context, self, "Names", True, False))
+        return self._names
     @property
     def pivotTables(self) -> 'PivotTableCollection':
         if self._pivotTables is None:
@@ -327,6 +341,8 @@ class Worksheet(OfficeExtension.ClientObject):
             self._visibility = obj.get("Visibility")
         if "Charts" in obj:
             self.charts._handleResult(obj.get("Charts"))
+        if "Names" in obj:
+            self.names._handleResult(obj.get("Names"))
         if "PivotTables" in obj:
             self.pivotTables._handleResult(obj.get("PivotTables"))
         if "Protection" in obj:
@@ -385,10 +401,10 @@ class WorksheetCollection(OfficeExtension.ClientObject):
         # End_PlaceHolder_WorksheetCollection_GetItem
         return Worksheet(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
-    def getItemOrNull(self, key : 'str') -> 'Worksheet':
-        # Begin_PlaceHolder_WorksheetCollection_GetItemOrNull
-        # End_PlaceHolder_WorksheetCollection_GetItemOrNull
-        ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+    def getItemOrNullObject(self, key : 'str') -> 'Worksheet':
+        # Begin_PlaceHolder_WorksheetCollection_GetItemOrNullObject
+        # End_PlaceHolder_WorksheetCollection_GetItemOrNullObject
+        ret = Worksheet(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
     # Handle results returned from the document
@@ -496,6 +512,7 @@ class Range(OfficeExtension.ClientObject):
         self._columnCount = None
         self._columnHidden = None
         self._columnIndex = None
+        self._conditionalFormats = None
         self._format = None
         self._formulas = None
         self._formulasLocal = None
@@ -512,6 +529,11 @@ class Range(OfficeExtension.ClientObject):
         self._worksheet = None
         self.__ReferenceId = None
 
+    @property
+    def conditionalFormats(self) -> 'ConditionalFormatCollection':
+        if self._conditionalFormats is None:
+            self._conditionalFormats = ConditionalFormatCollection(self.context, _createPropertyObjectPath(self.context, self, "ConditionalFormats", True, False))
+        return self._conditionalFormats
     @property
     def format(self) -> 'RangeFormat':
         if self._format is None:
@@ -756,10 +778,10 @@ class Range(OfficeExtension.ClientObject):
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersection", OfficeExtension.OperationType.Read, [anotherRange], False, True))
         return ret
 
-    def getIntersectionOrNull(self, anotherRange : 'any') -> 'Range':
-        # Begin_PlaceHolder_Range_GetIntersectionOrNull
-        # End_PlaceHolder_Range_GetIntersectionOrNull
-        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersectionOrNull", OfficeExtension.OperationType.Read, [anotherRange], False, True))
+    def getIntersectionOrNullObject(self, anotherRange : 'any') -> 'Range':
+        # Begin_PlaceHolder_Range_GetIntersectionOrNullObject
+        # End_PlaceHolder_Range_GetIntersectionOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetIntersectionOrNullObject", OfficeExtension.OperationType.Read, [anotherRange], False, True))
         return ret
 
     def getLastCell(self) -> 'Range':
@@ -900,6 +922,8 @@ class Range(OfficeExtension.ClientObject):
             self._values = obj.get("Values")
         if "_ReferenceId" in obj:
             self.__ReferenceId = obj.get("_ReferenceId")
+        if "ConditionalFormats" in obj:
+            self.conditionalFormats._handleResult(obj.get("ConditionalFormats"))
         if "Format" in obj:
             self.format._handleResult(obj.get("Format"))
         if "Sort" in obj:
@@ -1163,21 +1187,22 @@ class SettingCollection(OfficeExtension.ClientObject):
         return self.__items
     
 
+    def add(self, key : 'str', value : 'any') -> 'Setting':
+        # Begin_PlaceHolder_SettingCollection_Add
+        # End_PlaceHolder_SettingCollection_Add
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [key, value], False, True))
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
     def getItem(self, key : 'str') -> 'Setting':
         # Begin_PlaceHolder_SettingCollection_GetItem
         # End_PlaceHolder_SettingCollection_GetItem
         return Setting(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
-    def getItemOrNull(self, key : 'str') -> 'Setting':
-        # Begin_PlaceHolder_SettingCollection_GetItemOrNull
-        # End_PlaceHolder_SettingCollection_GetItemOrNull
-        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
-        return ret
-
-    def _Add(self, key : 'str', value : 'str') -> 'Setting':
-        # Begin_PlaceHolder_SettingCollection__Add
-        # End_PlaceHolder_SettingCollection__Add
-        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "_Add", OfficeExtension.OperationType.Default, [key, value], False, False))
+    def getItemOrNullObject(self, key : 'str') -> 'Setting':
+        # Begin_PlaceHolder_SettingCollection_GetItemOrNullObject
+        # End_PlaceHolder_SettingCollection_GetItemOrNullObject
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
     # Handle results returned from the document
@@ -1208,7 +1233,7 @@ class Setting(OfficeExtension.ClientObject):
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
         self._key = None
-        self.__Value = None
+        self._value = None
 
 
     @property
@@ -1219,16 +1244,16 @@ class Setting(OfficeExtension.ClientObject):
     
 
     @property
-    def _Value(self) -> 'str':
-        _loadIfInstantSyncExecutionMode(self, "_Value", self.__Value)
-        _throwIfNotLoaded("_Value", self.__Value, "Setting", self._isNull)
-        return self.__Value
+    def value(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "Setting", self._isNull)
+        return self._value
     
 
-    @_Value.setter
-    def _Value(self, value : 'str'):
-        self.__Value = value
-        _createSetPropertyAction(self.context, self, "_Value", value)
+    @value.setter
+    def value(self, value : 'any'):
+        self._value = value
+        _createSetPropertyAction(self.context, self, "Value", value)
         _syncIfInstantSyncExecutionMode(self)
 
     def delete(self) -> None:
@@ -1245,8 +1270,8 @@ class Setting(OfficeExtension.ClientObject):
         obj = value;
         if "Key" in obj:
             self._key = obj.get("Key")
-        if "_Value" in obj:
-            self.__Value = obj.get("_Value")
+        if "Value" in obj:
+            self._value = obj.get("Value")
     
     def load(self, option = None) -> 'Setting':
         _load(self, option)
@@ -1271,15 +1296,28 @@ class NamedItemCollection(OfficeExtension.ClientObject):
         return self.__items
     
 
+    def add(self, name : 'str', reference : 'any', comment : 'str' = None) -> 'NamedItem':
+        # Begin_PlaceHolder_NamedItemCollection_Add
+        # End_PlaceHolder_NamedItemCollection_Add
+        ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [name, reference, comment], False, True))
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def addFormulaLocal(self, name : 'str', formula : 'str', comment : 'str' = None) -> 'NamedItem':
+        # Begin_PlaceHolder_NamedItemCollection_AddFormulaLocal
+        # End_PlaceHolder_NamedItemCollection_AddFormulaLocal
+        ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "AddFormulaLocal", OfficeExtension.OperationType.Default, [name, formula, comment], False, False))
+        return ret
+
     def getItem(self, name : 'str') -> 'NamedItem':
         # Begin_PlaceHolder_NamedItemCollection_GetItem
         # End_PlaceHolder_NamedItemCollection_GetItem
         return NamedItem(self.context, _createIndexerObjectPath(self.context, self, [name]))
 
-    def getItemOrNull(self, name : 'str') -> 'NamedItem':
-        # Begin_PlaceHolder_NamedItemCollection_GetItemOrNull
-        # End_PlaceHolder_NamedItemCollection_GetItemOrNull
-        ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+    def getItemOrNullObject(self, name : 'str') -> 'NamedItem':
+        # Begin_PlaceHolder_NamedItemCollection_GetItemOrNullObject
+        # End_PlaceHolder_NamedItemCollection_GetItemOrNullObject
+        ret = NamedItem(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     # Handle results returned from the document
@@ -1309,18 +1347,52 @@ class NamedItem(OfficeExtension.ClientObject):
     # End_PlaceHolder_NamedItem_Custom_Members
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
+        self._comment = None
         self._name = None
+        self._scope = None
         self._type = None
         self._value = None
         self._visible = None
+        self._worksheet = None
+        self._worksheetOrNullObject = None
         self.__Id = None
 
+    @property
+    def worksheet(self) -> 'Worksheet':
+        if self._worksheet is None:
+            self._worksheet = Worksheet(self.context, _createPropertyObjectPath(self.context, self, "Worksheet", False, False))
+        return self._worksheet
+    @property
+    def worksheetOrNullObject(self) -> 'Worksheet':
+        if self._worksheetOrNullObject is None:
+            self._worksheetOrNullObject = Worksheet(self.context, _createPropertyObjectPath(self.context, self, "WorksheetOrNullObject", False, False))
+        return self._worksheetOrNullObject
+
+    @property
+    def comment(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "comment", self._comment)
+        _throwIfNotLoaded("comment", self._comment, "NamedItem", self._isNull)
+        return self._comment
+    
+
+    @comment.setter
+    def comment(self, value : 'str'):
+        self._comment = value
+        _createSetPropertyAction(self.context, self, "Comment", value)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def name(self) -> 'str':
         _loadIfInstantSyncExecutionMode(self, "name", self._name)
         _throwIfNotLoaded("name", self._name, "NamedItem", self._isNull)
         return self._name
+    
+
+    @property
+    def scope(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "scope", self._scope)
+        _throwIfNotLoaded("scope", self._scope, "NamedItem", self._isNull)
+        return self._scope
     
 
     @property
@@ -1357,10 +1429,22 @@ class NamedItem(OfficeExtension.ClientObject):
         return self.__Id
     
 
+    def delete(self) -> None:
+        # Begin_PlaceHolder_NamedItem_Delete
+        # End_PlaceHolder_NamedItem_Delete
+        _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
     def getRange(self) -> 'Range':
         # Begin_PlaceHolder_NamedItem_GetRange
         # End_PlaceHolder_NamedItem_GetRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
+
+    def getRangeOrNullObject(self) -> 'Range':
+        # Begin_PlaceHolder_NamedItem_GetRangeOrNullObject
+        # End_PlaceHolder_NamedItem_GetRangeOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRangeOrNullObject", OfficeExtension.OperationType.Read, [], False, True))
         return ret
 
     # Handle results returned from the document
@@ -1369,8 +1453,12 @@ class NamedItem(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
+        if "Comment" in obj:
+            self._comment = obj.get("Comment")
         if "Name" in obj:
             self._name = obj.get("Name")
+        if "Scope" in obj:
+            self._scope = obj.get("Scope")
         if "Type" in obj:
             self._type = obj.get("Type")
         if "Value" in obj:
@@ -1379,6 +1467,10 @@ class NamedItem(OfficeExtension.ClientObject):
             self._visible = obj.get("Visible")
         if "_Id" in obj:
             self.__Id = obj.get("_Id")
+        if "Worksheet" in obj:
+            self.worksheet._handleResult(obj.get("Worksheet"))
+        if "WorksheetOrNullObject" in obj:
+            self.worksheetOrNullObject._handleResult(obj.get("WorksheetOrNullObject"))
     
     def load(self, option = None) -> 'NamedItem':
         _load(self, option)
@@ -1530,10 +1622,10 @@ class BindingCollection(OfficeExtension.ClientObject):
         ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
-    def getItemOrNull(self, id : 'str') -> 'Binding':
-        # Begin_PlaceHolder_BindingCollection_GetItemOrNull
-        # End_PlaceHolder_BindingCollection_GetItemOrNull
-        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [id], False, False))
+    def getItemOrNullObject(self, id : 'str') -> 'Binding':
+        # Begin_PlaceHolder_BindingCollection_GetItemOrNullObject
+        # End_PlaceHolder_BindingCollection_GetItemOrNullObject
+        ret = Binding(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
     # Handle results returned from the document
@@ -1601,10 +1693,10 @@ class TableCollection(OfficeExtension.ClientObject):
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
-    def getItemOrNull(self, key : 'any') -> 'Table':
-        # Begin_PlaceHolder_TableCollection_GetItemOrNull
-        # End_PlaceHolder_TableCollection_GetItemOrNull
-        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+    def getItemOrNullObject(self, key : 'any') -> 'Table':
+        # Begin_PlaceHolder_TableCollection_GetItemOrNullObject
+        # End_PlaceHolder_TableCollection_GetItemOrNullObject
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
     # Handle results returned from the document
@@ -1920,10 +2012,10 @@ class TableColumnCollection(OfficeExtension.ClientObject):
         return self._count
     
 
-    def add(self, index : 'int' = None, values : 'any' = None) -> 'TableColumn':
+    def add(self, index : 'int' = None, values : 'any' = None, name : 'str' = None) -> 'TableColumn':
         # Begin_PlaceHolder_TableColumnCollection_Add
         # End_PlaceHolder_TableColumnCollection_Add
-        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values], False, True))
+        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [index, values, name], False, True))
         _syncIfInstantSyncExecutionMode(self)
         return ret
 
@@ -1938,10 +2030,10 @@ class TableColumnCollection(OfficeExtension.ClientObject):
         ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
-    def getItemOrNull(self, key : 'any') -> 'TableColumn':
-        # Begin_PlaceHolder_TableColumnCollection_GetItemOrNull
-        # End_PlaceHolder_TableColumnCollection_GetItemOrNull
-        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [key], False, False))
+    def getItemOrNullObject(self, key : 'any') -> 'TableColumn':
+        # Begin_PlaceHolder_TableColumnCollection_GetItemOrNullObject
+        # End_PlaceHolder_TableColumnCollection_GetItemOrNullObject
+        ret = TableColumn(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
         return ret
 
     # Handle results returned from the document
@@ -2005,6 +2097,12 @@ class TableColumn(OfficeExtension.ClientObject):
         _throwIfNotLoaded("name", self._name, "TableColumn", self._isNull)
         return self._name
     
+
+    @name.setter
+    def name(self, value : 'str'):
+        self._name = value
+        _createSetPropertyAction(self.context, self, "Name", value)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def values(self) -> 'list':
@@ -2754,10 +2852,10 @@ class ChartCollection(OfficeExtension.ClientObject):
         ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
         return ret
 
-    def getItemOrNull(self, name : 'str') -> 'Chart':
-        # Begin_PlaceHolder_ChartCollection_GetItemOrNull
-        # End_PlaceHolder_ChartCollection_GetItemOrNull
-        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+    def getItemOrNullObject(self, name : 'str') -> 'Chart':
+        # Begin_PlaceHolder_ChartCollection_GetItemOrNullObject
+        # End_PlaceHolder_ChartCollection_GetItemOrNullObject
+        ret = Chart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     def _GetItem(self, key : 'str') -> 'Chart':
@@ -4518,6 +4616,218 @@ class Icon:
     # End_PlaceHolder_Icon_Custom_Members
 
 
+class CustomXmlPartScopedCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_CustomXmlPartScopedCollection_Custom_Members
+    # End_PlaceHolder_CustomXmlPartScopedCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of CustomXmlPart':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "CustomXmlPartScopedCollection", self._isNull)
+        return self.__items
+    
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_CustomXmlPartScopedCollection_GetCount
+        # End_PlaceHolder_CustomXmlPartScopedCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItem(self, id : 'str') -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartScopedCollection_GetItem
+        # End_PlaceHolder_CustomXmlPartScopedCollection_GetItem
+        return CustomXmlPart(self.context, _createIndexerObjectPath(self.context, self, [id]))
+
+    def getItemOrNullObject(self, id : 'str') -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartScopedCollection_GetItemOrNullObject
+        # End_PlaceHolder_CustomXmlPartScopedCollection_GetItemOrNullObject
+        ret = CustomXmlPart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [id], False, False))
+        return ret
+
+    def getOnlyItem(self) -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartScopedCollection_GetOnlyItem
+        # End_PlaceHolder_CustomXmlPartScopedCollection_GetOnlyItem
+        ret = CustomXmlPart(self.context, _createMethodObjectPath(self.context, self, "GetOnlyItem", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getOnlyItemOrNullObject(self) -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartScopedCollection_GetOnlyItemOrNullObject
+        # End_PlaceHolder_CustomXmlPartScopedCollection_GetOnlyItemOrNullObject
+        ret = CustomXmlPart(self.context, _createMethodObjectPath(self.context, self, "GetOnlyItemOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = CustomXmlPart(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'CustomXmlPartScopedCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomXmlPartScopedCollection':
+        _load(self, None)
+        return self
+
+class CustomXmlPartCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_CustomXmlPartCollection_Custom_Members
+    # End_PlaceHolder_CustomXmlPartCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of CustomXmlPart':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "CustomXmlPartCollection", self._isNull)
+        return self.__items
+    
+
+    def add(self, xml : 'str') -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartCollection_Add
+        # End_PlaceHolder_CustomXmlPartCollection_Add
+        ret = CustomXmlPart(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [xml], False, True))
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getByNamespace(self, namespaceUri : 'str') -> 'CustomXmlPartScopedCollection':
+        # Begin_PlaceHolder_CustomXmlPartCollection_GetByNamespace
+        # End_PlaceHolder_CustomXmlPartCollection_GetByNamespace
+        ret = CustomXmlPartScopedCollection(self.context, _createMethodObjectPath(self.context, self, "GetByNamespace", OfficeExtension.OperationType.Read, [namespaceUri], True, False))
+        return ret
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_CustomXmlPartCollection_GetCount
+        # End_PlaceHolder_CustomXmlPartCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItem(self, id : 'str') -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartCollection_GetItem
+        # End_PlaceHolder_CustomXmlPartCollection_GetItem
+        return CustomXmlPart(self.context, _createIndexerObjectPath(self.context, self, [id]))
+
+    def getItemOrNullObject(self, id : 'str') -> 'CustomXmlPart':
+        # Begin_PlaceHolder_CustomXmlPartCollection_GetItemOrNullObject
+        # End_PlaceHolder_CustomXmlPartCollection_GetItemOrNullObject
+        ret = CustomXmlPart(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [id], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = CustomXmlPart(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'CustomXmlPartCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomXmlPartCollection':
+        _load(self, None)
+        return self
+
+class CustomXmlPart(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_CustomXmlPart_Custom_Members
+    # End_PlaceHolder_CustomXmlPart_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._id = None
+        self._namespaceUri = None
+
+
+    @property
+    def id(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "id", self._id)
+        _throwIfNotLoaded("id", self._id, "CustomXmlPart", self._isNull)
+        return self._id
+    
+
+    @property
+    def namespaceUri(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "namespaceUri", self._namespaceUri)
+        _throwIfNotLoaded("namespaceUri", self._namespaceUri, "CustomXmlPart", self._isNull)
+        return self._namespaceUri
+    
+
+    def delete(self) -> None:
+        # Begin_PlaceHolder_CustomXmlPart_Delete
+        # End_PlaceHolder_CustomXmlPart_Delete
+        _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def getXml(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_CustomXmlPart_GetXml
+        # End_PlaceHolder_CustomXmlPart_GetXml
+        action = _createMethodAction(self.context, self, "GetXml", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def setXml(self, xml : 'str') -> None:
+        # Begin_PlaceHolder_CustomXmlPart_SetXml
+        # End_PlaceHolder_CustomXmlPart_SetXml
+        _createMethodAction(self.context, self, "SetXml", OfficeExtension.OperationType.Default, [xml])
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Id" in obj:
+            self._id = obj.get("Id")
+        if "NamespaceUri" in obj:
+            self._namespaceUri = obj.get("NamespaceUri")
+    
+    def load(self, option = None) -> 'CustomXmlPart':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomXmlPart':
+        _load(self, None)
+        return self
+    def _handleIdResult(self, value) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if value is None:
+            return
+        if "Id" in value:
+            self._id = value.get("Id")
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return self._id
+
 class PivotTableCollection(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_PivotTableCollection_Custom_Members
     # End_PlaceHolder_PivotTableCollection_Custom_Members
@@ -4538,10 +4848,10 @@ class PivotTableCollection(OfficeExtension.ClientObject):
         # End_PlaceHolder_PivotTableCollection_GetItem
         return PivotTable(self.context, _createIndexerObjectPath(self.context, self, [name]))
 
-    def getItemOrNull(self, name : 'str') -> 'PivotTable':
-        # Begin_PlaceHolder_PivotTableCollection_GetItemOrNull
-        # End_PlaceHolder_PivotTableCollection_GetItemOrNull
-        ret = PivotTable(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNull", OfficeExtension.OperationType.Read, [name], False, False))
+    def getItemOrNullObject(self, name : 'str') -> 'PivotTable':
+        # Begin_PlaceHolder_PivotTableCollection_GetItemOrNullObject
+        # End_PlaceHolder_PivotTableCollection_GetItemOrNullObject
+        ret = PivotTable(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [name], False, False))
         return ret
 
     def refreshAll(self) -> None:
@@ -4627,6 +4937,1012 @@ class PivotTable(OfficeExtension.ClientObject):
     def __str__(self) -> str:
         _loadIfInstantSyncExecutionMode(self, "Name", self._name)
         return self._name
+
+class ConditionalFormatCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalFormatCollection_Custom_Members
+    # End_PlaceHolder_ConditionalFormatCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of ConditionalFormat':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ConditionalFormatCollection", self._isNull)
+        return self.__items
+    
+
+    def add(self, type : 'str') -> 'ConditionalFormat':
+        # Begin_PlaceHolder_ConditionalFormatCollection_Add
+        # End_PlaceHolder_ConditionalFormatCollection_Add
+        ret = ConditionalFormat(self.context, _createMethodObjectPath(self.context, self, "Add", OfficeExtension.OperationType.Default, [type], False, True))
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def clearAll(self) -> None:
+        # Begin_PlaceHolder_ConditionalFormatCollection_ClearAll
+        # End_PlaceHolder_ConditionalFormatCollection_ClearAll
+        _createMethodAction(self.context, self, "ClearAll", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_ConditionalFormatCollection_GetCount
+        # End_PlaceHolder_ConditionalFormatCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItemAt(self, index : 'int') -> 'ConditionalFormat':
+        # Begin_PlaceHolder_ConditionalFormatCollection_GetItemAt
+        # End_PlaceHolder_ConditionalFormatCollection_GetItemAt
+        ret = ConditionalFormat(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = ConditionalFormat(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(False, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'ConditionalFormatCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalFormatCollection':
+        _load(self, None)
+        return self
+
+class ConditionalFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalFormat_Custom_Members
+    # End_PlaceHolder_ConditionalFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._custom = None
+        self._customOrNullObject = None
+        self._dataBar = None
+        self._dataBarOrNullObject = None
+        self._priority = None
+        self._stopIfTrue = None
+        self._type = None
+
+    @property
+    def custom(self) -> 'CustomConditionalFormat':
+        if self._custom is None:
+            self._custom = CustomConditionalFormat(self.context, _createPropertyObjectPath(self.context, self, "Custom", False, False))
+        return self._custom
+    @property
+    def customOrNullObject(self) -> 'CustomConditionalFormat':
+        if self._customOrNullObject is None:
+            self._customOrNullObject = CustomConditionalFormat(self.context, _createPropertyObjectPath(self.context, self, "CustomOrNullObject", False, False))
+        return self._customOrNullObject
+    @property
+    def dataBar(self) -> 'DataBarConditionalFormat':
+        if self._dataBar is None:
+            self._dataBar = DataBarConditionalFormat(self.context, _createPropertyObjectPath(self.context, self, "DataBar", False, False))
+        return self._dataBar
+    @property
+    def dataBarOrNullObject(self) -> 'DataBarConditionalFormat':
+        if self._dataBarOrNullObject is None:
+            self._dataBarOrNullObject = DataBarConditionalFormat(self.context, _createPropertyObjectPath(self.context, self, "DataBarOrNullObject", False, False))
+        return self._dataBarOrNullObject
+
+    @property
+    def priority(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "priority", self._priority)
+        _throwIfNotLoaded("priority", self._priority, "ConditionalFormat", self._isNull)
+        return self._priority
+    
+
+    @priority.setter
+    def priority(self, value : 'int'):
+        self._priority = value
+        _createSetPropertyAction(self.context, self, "Priority", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def stopIfTrue(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "stopIfTrue", self._stopIfTrue)
+        _throwIfNotLoaded("stopIfTrue", self._stopIfTrue, "ConditionalFormat", self._isNull)
+        return self._stopIfTrue
+    
+
+    @stopIfTrue.setter
+    def stopIfTrue(self, value : 'bool'):
+        self._stopIfTrue = value
+        _createSetPropertyAction(self.context, self, "StopIfTrue", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def type(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "type", self._type)
+        _throwIfNotLoaded("type", self._type, "ConditionalFormat", self._isNull)
+        return self._type
+    
+
+    def delete(self) -> None:
+        # Begin_PlaceHolder_ConditionalFormat_Delete
+        # End_PlaceHolder_ConditionalFormat_Delete
+        _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def getRange(self) -> 'Range':
+        # Begin_PlaceHolder_ConditionalFormat_GetRange
+        # End_PlaceHolder_ConditionalFormat_GetRange
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRange", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
+
+    def getRangeOrNullObject(self) -> 'Range':
+        # Begin_PlaceHolder_ConditionalFormat_GetRangeOrNullObject
+        # End_PlaceHolder_ConditionalFormat_GetRangeOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetRangeOrNullObject", OfficeExtension.OperationType.Read, [], False, True))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Priority" in obj:
+            self._priority = obj.get("Priority")
+        if "StopIfTrue" in obj:
+            self._stopIfTrue = obj.get("StopIfTrue")
+        if "Type" in obj:
+            self._type = obj.get("Type")
+        if "Custom" in obj:
+            self.custom._handleResult(obj.get("Custom"))
+        if "CustomOrNullObject" in obj:
+            self.customOrNullObject._handleResult(obj.get("CustomOrNullObject"))
+        if "DataBar" in obj:
+            self.dataBar._handleResult(obj.get("DataBar"))
+        if "DataBarOrNullObject" in obj:
+            self.dataBarOrNullObject._handleResult(obj.get("DataBarOrNullObject"))
+    
+    def load(self, option = None) -> 'ConditionalFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalFormat':
+        _load(self, None)
+        return self
+
+class DataBarConditionalFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_DataBarConditionalFormat_Custom_Members
+    # End_PlaceHolder_DataBarConditionalFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._axisColor = None
+        self._axisFormat = None
+        self._barDirection = None
+        self._lowerBoundRule = None
+        self._negativeFormat = None
+        self._positiveFormat = None
+        self._showDataBarOnly = None
+        self._upperBoundRule = None
+
+    @property
+    def negativeFormat(self) -> 'ConditionalDataBarNegativeFormat':
+        if self._negativeFormat is None:
+            self._negativeFormat = ConditionalDataBarNegativeFormat(self.context, _createPropertyObjectPath(self.context, self, "NegativeFormat", False, False))
+        return self._negativeFormat
+    @property
+    def positiveFormat(self) -> 'ConditionalDataBarPositiveFormat':
+        if self._positiveFormat is None:
+            self._positiveFormat = ConditionalDataBarPositiveFormat(self.context, _createPropertyObjectPath(self.context, self, "PositiveFormat", False, False))
+        return self._positiveFormat
+
+    @property
+    def axisColor(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "axisColor", self._axisColor)
+        _throwIfNotLoaded("axisColor", self._axisColor, "DataBarConditionalFormat", self._isNull)
+        return self._axisColor
+    
+
+    @axisColor.setter
+    def axisColor(self, value : 'str'):
+        self._axisColor = value
+        _createSetPropertyAction(self.context, self, "AxisColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def axisFormat(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "axisFormat", self._axisFormat)
+        _throwIfNotLoaded("axisFormat", self._axisFormat, "DataBarConditionalFormat", self._isNull)
+        return self._axisFormat
+    
+
+    @axisFormat.setter
+    def axisFormat(self, value : 'str'):
+        self._axisFormat = value
+        _createSetPropertyAction(self.context, self, "AxisFormat", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def barDirection(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "barDirection", self._barDirection)
+        _throwIfNotLoaded("barDirection", self._barDirection, "DataBarConditionalFormat", self._isNull)
+        return self._barDirection
+    
+
+    @barDirection.setter
+    def barDirection(self, value : 'str'):
+        self._barDirection = value
+        _createSetPropertyAction(self.context, self, "BarDirection", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def lowerBoundRule(self) -> 'ConditionalDataBarRule':
+        _loadIfInstantSyncExecutionMode(self, "lowerBoundRule", self._lowerBoundRule)
+        _throwIfNotLoaded("lowerBoundRule", self._lowerBoundRule, "DataBarConditionalFormat", self._isNull)
+        return self._lowerBoundRule
+    
+
+    @lowerBoundRule.setter
+    def lowerBoundRule(self, value : 'ConditionalDataBarRule'):
+        self._lowerBoundRule = value
+        _createSetPropertyAction(self.context, self, "LowerBoundRule", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def showDataBarOnly(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "showDataBarOnly", self._showDataBarOnly)
+        _throwIfNotLoaded("showDataBarOnly", self._showDataBarOnly, "DataBarConditionalFormat", self._isNull)
+        return self._showDataBarOnly
+    
+
+    @showDataBarOnly.setter
+    def showDataBarOnly(self, value : 'bool'):
+        self._showDataBarOnly = value
+        _createSetPropertyAction(self.context, self, "ShowDataBarOnly", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def upperBoundRule(self) -> 'ConditionalDataBarRule':
+        _loadIfInstantSyncExecutionMode(self, "upperBoundRule", self._upperBoundRule)
+        _throwIfNotLoaded("upperBoundRule", self._upperBoundRule, "DataBarConditionalFormat", self._isNull)
+        return self._upperBoundRule
+    
+
+    @upperBoundRule.setter
+    def upperBoundRule(self, value : 'ConditionalDataBarRule'):
+        self._upperBoundRule = value
+        _createSetPropertyAction(self.context, self, "UpperBoundRule", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "AxisColor" in obj:
+            self._axisColor = obj.get("AxisColor")
+        if "AxisFormat" in obj:
+            self._axisFormat = obj.get("AxisFormat")
+        if "BarDirection" in obj:
+            self._barDirection = obj.get("BarDirection")
+        if "LowerBoundRule" in obj:
+            self._lowerBoundRule = obj.get("LowerBoundRule")
+        if "ShowDataBarOnly" in obj:
+            self._showDataBarOnly = obj.get("ShowDataBarOnly")
+        if "UpperBoundRule" in obj:
+            self._upperBoundRule = obj.get("UpperBoundRule")
+        if "NegativeFormat" in obj:
+            self.negativeFormat._handleResult(obj.get("NegativeFormat"))
+        if "PositiveFormat" in obj:
+            self.positiveFormat._handleResult(obj.get("PositiveFormat"))
+    
+    def load(self, option = None) -> 'DataBarConditionalFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'DataBarConditionalFormat':
+        _load(self, None)
+        return self
+
+class ConditionalDataBarPositiveFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalDataBarPositiveFormat_Custom_Members
+    # End_PlaceHolder_ConditionalDataBarPositiveFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._borderColor = None
+        self._fillColor = None
+        self._gradientFill = None
+
+
+    @property
+    def borderColor(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "borderColor", self._borderColor)
+        _throwIfNotLoaded("borderColor", self._borderColor, "ConditionalDataBarPositiveFormat", self._isNull)
+        return self._borderColor
+    
+
+    @borderColor.setter
+    def borderColor(self, value : 'str'):
+        self._borderColor = value
+        _createSetPropertyAction(self.context, self, "BorderColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def fillColor(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "fillColor", self._fillColor)
+        _throwIfNotLoaded("fillColor", self._fillColor, "ConditionalDataBarPositiveFormat", self._isNull)
+        return self._fillColor
+    
+
+    @fillColor.setter
+    def fillColor(self, value : 'str'):
+        self._fillColor = value
+        _createSetPropertyAction(self.context, self, "FillColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def gradientFill(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "gradientFill", self._gradientFill)
+        _throwIfNotLoaded("gradientFill", self._gradientFill, "ConditionalDataBarPositiveFormat", self._isNull)
+        return self._gradientFill
+    
+
+    @gradientFill.setter
+    def gradientFill(self, value : 'bool'):
+        self._gradientFill = value
+        _createSetPropertyAction(self.context, self, "GradientFill", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "BorderColor" in obj:
+            self._borderColor = obj.get("BorderColor")
+        if "FillColor" in obj:
+            self._fillColor = obj.get("FillColor")
+        if "GradientFill" in obj:
+            self._gradientFill = obj.get("GradientFill")
+    
+    def load(self, option = None) -> 'ConditionalDataBarPositiveFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalDataBarPositiveFormat':
+        _load(self, None)
+        return self
+
+class ConditionalDataBarNegativeFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalDataBarNegativeFormat_Custom_Members
+    # End_PlaceHolder_ConditionalDataBarNegativeFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._borderColor = None
+        self._fillColor = None
+        self._matchPositiveBorderColor = None
+        self._matchPositiveFillColor = None
+
+
+    @property
+    def borderColor(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "borderColor", self._borderColor)
+        _throwIfNotLoaded("borderColor", self._borderColor, "ConditionalDataBarNegativeFormat", self._isNull)
+        return self._borderColor
+    
+
+    @borderColor.setter
+    def borderColor(self, value : 'str'):
+        self._borderColor = value
+        _createSetPropertyAction(self.context, self, "BorderColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def fillColor(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "fillColor", self._fillColor)
+        _throwIfNotLoaded("fillColor", self._fillColor, "ConditionalDataBarNegativeFormat", self._isNull)
+        return self._fillColor
+    
+
+    @fillColor.setter
+    def fillColor(self, value : 'str'):
+        self._fillColor = value
+        _createSetPropertyAction(self.context, self, "FillColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def matchPositiveBorderColor(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "matchPositiveBorderColor", self._matchPositiveBorderColor)
+        _throwIfNotLoaded("matchPositiveBorderColor", self._matchPositiveBorderColor, "ConditionalDataBarNegativeFormat", self._isNull)
+        return self._matchPositiveBorderColor
+    
+
+    @matchPositiveBorderColor.setter
+    def matchPositiveBorderColor(self, value : 'bool'):
+        self._matchPositiveBorderColor = value
+        _createSetPropertyAction(self.context, self, "MatchPositiveBorderColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def matchPositiveFillColor(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "matchPositiveFillColor", self._matchPositiveFillColor)
+        _throwIfNotLoaded("matchPositiveFillColor", self._matchPositiveFillColor, "ConditionalDataBarNegativeFormat", self._isNull)
+        return self._matchPositiveFillColor
+    
+
+    @matchPositiveFillColor.setter
+    def matchPositiveFillColor(self, value : 'bool'):
+        self._matchPositiveFillColor = value
+        _createSetPropertyAction(self.context, self, "MatchPositiveFillColor", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "BorderColor" in obj:
+            self._borderColor = obj.get("BorderColor")
+        if "FillColor" in obj:
+            self._fillColor = obj.get("FillColor")
+        if "MatchPositiveBorderColor" in obj:
+            self._matchPositiveBorderColor = obj.get("MatchPositiveBorderColor")
+        if "MatchPositiveFillColor" in obj:
+            self._matchPositiveFillColor = obj.get("MatchPositiveFillColor")
+    
+    def load(self, option = None) -> 'ConditionalDataBarNegativeFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalDataBarNegativeFormat':
+        _load(self, None)
+        return self
+
+class ConditionalDataBarRule:
+    def __init__(self):
+        self.formula = None
+        self.type = None
+
+    # Begin_PlaceHolder_ConditionalDataBarRule_Custom_Members
+    # End_PlaceHolder_ConditionalDataBarRule_Custom_Members
+
+
+class CustomConditionalFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_CustomConditionalFormat_Custom_Members
+    # End_PlaceHolder_CustomConditionalFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._format = None
+        self._rule = None
+
+    @property
+    def format(self) -> 'ConditionalRangeFormat':
+        if self._format is None:
+            self._format = ConditionalRangeFormat(self.context, _createPropertyObjectPath(self.context, self, "Format", False, False))
+        return self._format
+    @property
+    def rule(self) -> 'ConditionalFormatRule':
+        if self._rule is None:
+            self._rule = ConditionalFormatRule(self.context, _createPropertyObjectPath(self.context, self, "Rule", False, False))
+        return self._rule
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Format" in obj:
+            self.format._handleResult(obj.get("Format"))
+        if "Rule" in obj:
+            self.rule._handleResult(obj.get("Rule"))
+    
+    def load(self, option = None) -> 'CustomConditionalFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'CustomConditionalFormat':
+        _load(self, None)
+        return self
+
+class ConditionalFormatRule(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalFormatRule_Custom_Members
+    # End_PlaceHolder_ConditionalFormatRule_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._formula1 = None
+        self._formula1Local = None
+        self._formula1R1C1 = None
+        self._formula2 = None
+        self._formula2Local = None
+        self._formula2R1C1 = None
+
+
+    @property
+    def formula1(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula1", self._formula1)
+        _throwIfNotLoaded("formula1", self._formula1, "ConditionalFormatRule", self._isNull)
+        return self._formula1
+    
+
+    @formula1.setter
+    def formula1(self, value : 'any'):
+        self._formula1 = value
+        _createSetPropertyAction(self.context, self, "Formula1", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def formula1Local(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula1Local", self._formula1Local)
+        _throwIfNotLoaded("formula1Local", self._formula1Local, "ConditionalFormatRule", self._isNull)
+        return self._formula1Local
+    
+
+    @formula1Local.setter
+    def formula1Local(self, value : 'any'):
+        self._formula1Local = value
+        _createSetPropertyAction(self.context, self, "Formula1Local", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def formula1R1C1(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula1R1C1", self._formula1R1C1)
+        _throwIfNotLoaded("formula1R1C1", self._formula1R1C1, "ConditionalFormatRule", self._isNull)
+        return self._formula1R1C1
+    
+
+    @formula1R1C1.setter
+    def formula1R1C1(self, value : 'any'):
+        self._formula1R1C1 = value
+        _createSetPropertyAction(self.context, self, "Formula1R1C1", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def formula2(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula2", self._formula2)
+        _throwIfNotLoaded("formula2", self._formula2, "ConditionalFormatRule", self._isNull)
+        return self._formula2
+    
+
+    @formula2.setter
+    def formula2(self, value : 'any'):
+        self._formula2 = value
+        _createSetPropertyAction(self.context, self, "Formula2", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def formula2Local(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula2Local", self._formula2Local)
+        _throwIfNotLoaded("formula2Local", self._formula2Local, "ConditionalFormatRule", self._isNull)
+        return self._formula2Local
+    
+
+    @formula2Local.setter
+    def formula2Local(self, value : 'any'):
+        self._formula2Local = value
+        _createSetPropertyAction(self.context, self, "Formula2Local", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def formula2R1C1(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "formula2R1C1", self._formula2R1C1)
+        _throwIfNotLoaded("formula2R1C1", self._formula2R1C1, "ConditionalFormatRule", self._isNull)
+        return self._formula2R1C1
+    
+
+    @formula2R1C1.setter
+    def formula2R1C1(self, value : 'any'):
+        self._formula2R1C1 = value
+        _createSetPropertyAction(self.context, self, "Formula2R1C1", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Formula1" in obj:
+            self._formula1 = obj.get("Formula1")
+        if "Formula1Local" in obj:
+            self._formula1Local = obj.get("Formula1Local")
+        if "Formula1R1C1" in obj:
+            self._formula1R1C1 = obj.get("Formula1R1C1")
+        if "Formula2" in obj:
+            self._formula2 = obj.get("Formula2")
+        if "Formula2Local" in obj:
+            self._formula2Local = obj.get("Formula2Local")
+        if "Formula2R1C1" in obj:
+            self._formula2R1C1 = obj.get("Formula2R1C1")
+    
+    def load(self, option = None) -> 'ConditionalFormatRule':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalFormatRule':
+        _load(self, None)
+        return self
+
+class ConditionalRangeFormat(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalRangeFormat_Custom_Members
+    # End_PlaceHolder_ConditionalRangeFormat_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._borders = None
+        self._fill = None
+        self._font = None
+        self._numberFormat = None
+
+    @property
+    def borders(self) -> 'ConditionalRangeBorderCollection':
+        if self._borders is None:
+            self._borders = ConditionalRangeBorderCollection(self.context, _createPropertyObjectPath(self.context, self, "Borders", True, False))
+        return self._borders
+    @property
+    def fill(self) -> 'ConditionalRangeFill':
+        if self._fill is None:
+            self._fill = ConditionalRangeFill(self.context, _createPropertyObjectPath(self.context, self, "Fill", False, False))
+        return self._fill
+    @property
+    def font(self) -> 'ConditionalRangeFont':
+        if self._font is None:
+            self._font = ConditionalRangeFont(self.context, _createPropertyObjectPath(self.context, self, "Font", False, False))
+        return self._font
+
+    @property
+    def numberFormat(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "numberFormat", self._numberFormat)
+        _throwIfNotLoaded("numberFormat", self._numberFormat, "ConditionalRangeFormat", self._isNull)
+        return self._numberFormat
+    
+
+    @numberFormat.setter
+    def numberFormat(self, value : 'any'):
+        self._numberFormat = value
+        _createSetPropertyAction(self.context, self, "NumberFormat", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "NumberFormat" in obj:
+            self._numberFormat = obj.get("NumberFormat")
+        if "Borders" in obj:
+            self.borders._handleResult(obj.get("Borders"))
+        if "Fill" in obj:
+            self.fill._handleResult(obj.get("Fill"))
+        if "Font" in obj:
+            self.font._handleResult(obj.get("Font"))
+    
+    def load(self, option = None) -> 'ConditionalRangeFormat':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalRangeFormat':
+        _load(self, None)
+        return self
+
+class ConditionalRangeFont(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalRangeFont_Custom_Members
+    # End_PlaceHolder_ConditionalRangeFont_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._bold = None
+        self._color = None
+        self._italic = None
+        self._strikethrough = None
+        self._underline = None
+
+
+    @property
+    def bold(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "bold", self._bold)
+        _throwIfNotLoaded("bold", self._bold, "ConditionalRangeFont", self._isNull)
+        return self._bold
+    
+
+    @bold.setter
+    def bold(self, value : 'bool'):
+        self._bold = value
+        _createSetPropertyAction(self.context, self, "Bold", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def color(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ConditionalRangeFont", self._isNull)
+        return self._color
+    
+
+    @color.setter
+    def color(self, value : 'str'):
+        self._color = value
+        _createSetPropertyAction(self.context, self, "Color", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def italic(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "italic", self._italic)
+        _throwIfNotLoaded("italic", self._italic, "ConditionalRangeFont", self._isNull)
+        return self._italic
+    
+
+    @italic.setter
+    def italic(self, value : 'bool'):
+        self._italic = value
+        _createSetPropertyAction(self.context, self, "Italic", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def strikethrough(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "strikethrough", self._strikethrough)
+        _throwIfNotLoaded("strikethrough", self._strikethrough, "ConditionalRangeFont", self._isNull)
+        return self._strikethrough
+    
+
+    @strikethrough.setter
+    def strikethrough(self, value : 'bool'):
+        self._strikethrough = value
+        _createSetPropertyAction(self.context, self, "Strikethrough", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def underline(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "underline", self._underline)
+        _throwIfNotLoaded("underline", self._underline, "ConditionalRangeFont", self._isNull)
+        return self._underline
+    
+
+    @underline.setter
+    def underline(self, value : 'str'):
+        self._underline = value
+        _createSetPropertyAction(self.context, self, "Underline", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    def clear(self) -> None:
+        # Begin_PlaceHolder_ConditionalRangeFont_Clear
+        # End_PlaceHolder_ConditionalRangeFont_Clear
+        _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Bold" in obj:
+            self._bold = obj.get("Bold")
+        if "Color" in obj:
+            self._color = obj.get("Color")
+        if "Italic" in obj:
+            self._italic = obj.get("Italic")
+        if "Strikethrough" in obj:
+            self._strikethrough = obj.get("Strikethrough")
+        if "Underline" in obj:
+            self._underline = obj.get("Underline")
+    
+    def load(self, option = None) -> 'ConditionalRangeFont':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalRangeFont':
+        _load(self, None)
+        return self
+
+class ConditionalRangeFill(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalRangeFill_Custom_Members
+    # End_PlaceHolder_ConditionalRangeFill_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._color = None
+
+
+    @property
+    def color(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ConditionalRangeFill", self._isNull)
+        return self._color
+    
+
+    @color.setter
+    def color(self, value : 'str'):
+        self._color = value
+        _createSetPropertyAction(self.context, self, "Color", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    def clear(self) -> None:
+        # Begin_PlaceHolder_ConditionalRangeFill_Clear
+        # End_PlaceHolder_ConditionalRangeFill_Clear
+        _createMethodAction(self.context, self, "Clear", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Color" in obj:
+            self._color = obj.get("Color")
+    
+    def load(self, option = None) -> 'ConditionalRangeFill':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalRangeFill':
+        _load(self, None)
+        return self
+
+class ConditionalRangeBorder(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalRangeBorder_Custom_Members
+    # End_PlaceHolder_ConditionalRangeBorder_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._color = None
+        self._sideIndex = None
+        self._style = None
+
+
+    @property
+    def color(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "color", self._color)
+        _throwIfNotLoaded("color", self._color, "ConditionalRangeBorder", self._isNull)
+        return self._color
+    
+
+    @color.setter
+    def color(self, value : 'str'):
+        self._color = value
+        _createSetPropertyAction(self.context, self, "Color", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def sideIndex(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "sideIndex", self._sideIndex)
+        _throwIfNotLoaded("sideIndex", self._sideIndex, "ConditionalRangeBorder", self._isNull)
+        return self._sideIndex
+    
+
+    @property
+    def style(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "style", self._style)
+        _throwIfNotLoaded("style", self._style, "ConditionalRangeBorder", self._isNull)
+        return self._style
+    
+
+    @style.setter
+    def style(self, value : 'str'):
+        self._style = value
+        _createSetPropertyAction(self.context, self, "Style", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Color" in obj:
+            self._color = obj.get("Color")
+        if "SideIndex" in obj:
+            self._sideIndex = obj.get("SideIndex")
+        if "Style" in obj:
+            self._style = obj.get("Style")
+    
+    def load(self, option = None) -> 'ConditionalRangeBorder':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalRangeBorder':
+        _load(self, None)
+        return self
+    
+    def __str__(self) -> str:
+        _loadIfInstantSyncExecutionMode(self, "Id", self._id)
+        return str(self._id)
+
+class ConditionalRangeBorderCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_ConditionalRangeBorderCollection_Custom_Members
+    # End_PlaceHolder_ConditionalRangeBorderCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._bottom = None
+        self._count = None
+        self._left = None
+        self._right = None
+        self._top = None
+        self.__items = None
+
+    @property
+    def bottom(self) -> 'ConditionalRangeBorder':
+        if self._bottom is None:
+            self._bottom = ConditionalRangeBorder(self.context, _createPropertyObjectPath(self.context, self, "Bottom", False, False))
+        return self._bottom
+    @property
+    def left(self) -> 'ConditionalRangeBorder':
+        if self._left is None:
+            self._left = ConditionalRangeBorder(self.context, _createPropertyObjectPath(self.context, self, "Left", False, False))
+        return self._left
+    @property
+    def right(self) -> 'ConditionalRangeBorder':
+        if self._right is None:
+            self._right = ConditionalRangeBorder(self.context, _createPropertyObjectPath(self.context, self, "Right", False, False))
+        return self._right
+    @property
+    def top(self) -> 'ConditionalRangeBorder':
+        if self._top is None:
+            self._top = ConditionalRangeBorder(self.context, _createPropertyObjectPath(self.context, self, "Top", False, False))
+        return self._top
+    
+    @property
+    def items(self) -> 'list of ConditionalRangeBorder':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "ConditionalRangeBorderCollection", self._isNull)
+        return self.__items
+    
+
+    @property
+    def count(self) -> 'int':
+        _loadIfInstantSyncExecutionMode(self, "count", self._count)
+        _throwIfNotLoaded("count", self._count, "ConditionalRangeBorderCollection", self._isNull)
+        return self._count
+    
+
+    def getItem(self, index : 'str') -> 'ConditionalRangeBorder':
+        # Begin_PlaceHolder_ConditionalRangeBorderCollection_GetItem
+        # End_PlaceHolder_ConditionalRangeBorderCollection_GetItem
+        return ConditionalRangeBorder(self.context, _createIndexerObjectPath(self.context, self, [index]))
+
+    def getItemAt(self, index : 'int') -> 'ConditionalRangeBorder':
+        # Begin_PlaceHolder_ConditionalRangeBorderCollection_GetItemAt
+        # End_PlaceHolder_ConditionalRangeBorderCollection_GetItemAt
+        ret = ConditionalRangeBorder(self.context, _createMethodObjectPath(self.context, self, "GetItemAt", OfficeExtension.OperationType.Read, [index], False, False))
+        return ret
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Count" in obj:
+            self._count = obj.get("Count")
+        if "Bottom" in obj:
+            self.bottom._handleResult(obj.get("Bottom"))
+        if "Left" in obj:
+            self.left._handleResult(obj.get("Left"))
+        if "Right" in obj:
+            self.right._handleResult(obj.get("Right"))
+        if "Top" in obj:
+            self.top._handleResult(obj.get("Top"))
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = ConditionalRangeBorder(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'ConditionalRangeBorderCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'ConditionalRangeBorderCollection':
+        _load(self, None)
+        return self
 
 class BindingType:
     range = "Range"
@@ -4782,6 +6098,81 @@ class ChartUnderlineStyle:
     none = "None"
     single = "Single"
 
+class ConditionalDataBarAxisFormat:
+    automatic = "Automatic"
+    none = "None"
+    cellMidPoint = "CellMidPoint"
+
+class ConditionalDataBarDirection:
+    context = "Context"
+    leftToRight = "LeftToRight"
+    rightToLeft = "RightToLeft"
+
+class ConditionalFormatDirection:
+    top = "Top"
+    bottom = "Bottom"
+
+class ConditionalFormatType:
+    custom = "Custom"
+    dataBar = "DataBar"
+    colorScale = "ColorScale"
+    iconSet = "IconSet"
+
+class ConditionalFormatRuleType:
+    invalid = "Invalid"
+    automatic = "Automatic"
+    lowestValue = "LowestValue"
+    highestValue = "HighestValue"
+    number = "Number"
+    percent = "Percent"
+    formula = "Formula"
+    percentile = "Percentile"
+
+class ConditionalRangeFormatRuleType:
+    blank = "Blank"
+    expression = "Expression"
+    between = "Between"
+    notBetween = "NotBetween"
+    count = "Count"
+    percent = "Percent"
+    average = "Average"
+    unique = "Unique"
+    error = "Error"
+    textContains = "TextContains"
+    dateOccurring = "DateOccurring"
+
+class ConditionalFormatCustomRuleType:
+    formula = "Formula"
+    between = "Between"
+    notBetween = "NotBetween"
+    count = "Count"
+    percent = "Percent"
+    average = "Average"
+    blank = "Blank"
+    unique = "Unique"
+    error = "Error"
+    textContains = "TextContains"
+    dateOccurring = "DateOccurring"
+
+class ConditionalRangeBorderIndex:
+    edgeTop = "EdgeTop"
+    edgeBottom = "EdgeBottom"
+    edgeLeft = "EdgeLeft"
+    edgeRight = "EdgeRight"
+
+class ConditionalRangeBorderLineStyle:
+    none = "None"
+    continuous = "Continuous"
+    dash = "Dash"
+    dashDot = "DashDot"
+    dashDotDot = "DashDotDot"
+    dot = "Dot"
+
+class ConditionalRangeFontUnderlineStyle:
+    none = "None"
+    single = "Single"
+    double = "Double"
+
 class DeleteShiftDirection:
     up = "Up"
     left = "Left"
@@ -4880,6 +6271,10 @@ class IconSet:
     threeTriangles = "ThreeTriangles"
     fiveBoxes = "FiveBoxes"
 
+class IconCriterionOperator:
+    greaterThan = "GreaterThan"
+    greaterThanOrEqual = "GreaterThanOrEqual"
+
 class ImageFittingMode:
     fit = "Fit"
     fitAndCenter = "FitAndCenter"
@@ -4889,12 +6284,17 @@ class InsertShiftDirection:
     down = "Down"
     right = "Right"
 
+class NamedItemScope:
+    worksheet = "Worksheet"
+    workbook = "Workbook"
+
 class NamedItemType:
     string = "String"
     integer = "Integer"
     double = "Double"
     boolean = "Boolean"
     range = "Range"
+    error = "Error"
 
 class RangeUnderlineStyle:
     none = "None"

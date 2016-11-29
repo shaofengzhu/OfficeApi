@@ -26,7 +26,7 @@ namespace Microsoft.ExcelServices
 		string Error { get; }
 
 		/// <summary>
-		/// The value of function evaluation. The value field will be populated only if no error has occured (i.e., the Error property is not set).
+		/// The value of function evaluation. The value field will be populated only if no error has occurred (i.e., the Error property is not set).
 		/// </summary>
 		[ApiSet(Version = 1.2)]
 		[ClientCallableComMember(DispatchId = DispatchIds.FunctionResult_Value)]

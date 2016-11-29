@@ -102,6 +102,9 @@ namespace Microsoft.WordServices
 		internal const int Body_Tables = 12;
 		internal const int Body_ParentSection = 13;
 		internal const int Body_StyleBuiltIn = 14;
+		internal const int Body_ParentContentControlOrNullObject = 15;
+		internal const int Body_ParentBodyOrNullObject = 16;
+		internal const int Body_ParentSectionOrNullObject = 17;
 		// Methods
 		internal const int Body_OnAccess = MethodBase + 1;
 		internal const int Body_KeepReference = MethodBase + 2;
@@ -150,6 +153,9 @@ namespace Microsoft.WordServices
 		internal const int ContentControl_Subtype = 23;
 		internal const int ContentControl_StyleBuiltIn = 24;
 		internal const int ContentControl_ParentBody = 25;
+		internal const int ContentControl_ParentContentControlOrNullObject = 26;
+		internal const int ContentControl_ParentTableCellOrNullObject = 27;
+		internal const int ContentControl_ParentTableOrNullObject = 28;
 		// Methods
 		internal const int ContentControl_OnAccess = MethodBase + 1;
 		internal const int ContentControl_KeepReference = MethodBase + 2;
@@ -186,6 +192,8 @@ namespace Microsoft.WordServices
 		internal const int ContentControlCollection_OnAccess = MethodBase + 5;
 		internal const int ContentControlCollection_GetByTypes = MethodBase + 6;
 		internal const int ContentControlCollection_GetFirst = MethodBase + 7;
+		internal const int ContentControlCollection_GetByIdOrNullObject = MethodBase + 8;
+		internal const int ContentControlCollection_GetFirstOrNullObject = MethodBase + 9;
 
 		//===============================================================================
 		// CustomProperty dispids
@@ -212,6 +220,7 @@ namespace Microsoft.WordServices
 		internal const int CustomPropertyCollection_Set = MethodBase + 3;
 		internal const int CustomPropertyCollection_GetCount = MethodBase + 4;
 		internal const int CustomPropertyCollection_DeleteAll = MethodBase + 5;
+		internal const int CustomPropertyCollection_GetItemOrNullObject = MethodBase + 6;
 
 		//===============================================================================
 		// Document dispids
@@ -236,6 +245,7 @@ namespace Microsoft.WordServices
 		internal const int Document_Open = MethodBase + 9;
 		internal const int Document_GetBookmarkRange = MethodBase + 10;
 		internal const int Document_DeleteBookmark = MethodBase + 11;
+		internal const int Document_GetBookmarkRangeOrNullObject = MethodBase + 12;
 
 		//===============================================================================
 		// DocumentProperties dispids
@@ -301,6 +311,9 @@ namespace Microsoft.WordServices
 		internal const int InlinePicture_ImageFormat = 11;
 		internal const int InlinePicture_ParentTableCell = 13;
 		internal const int InlinePicture_ParentTable = 14;
+		internal const int InlinePicture_ParentContentControlOrNullObject = 15;
+		internal const int InlinePicture_ParentTableCellOrNullObject = 16;
+		internal const int InlinePicture_ParentTableOrNullObject = 17;
 		// Methods
 		internal const int InlinePicture_OnAccess = MethodBase + 1;
 		internal const int InlinePicture_KeepReference = MethodBase + 2;
@@ -317,6 +330,7 @@ namespace Microsoft.WordServices
 		internal const int InlinePicture_Select = MethodBase + 13;
 		internal const int InlinePicture_GetRange = MethodBase + 14;
 		internal const int InlinePicture_GetNext = MethodBase + 15;
+		internal const int InlinePicture_GetNextOrNullObject = MethodBase + 16;
 
 		//===============================================================================
 		// InlinePictureCollection dispids
@@ -329,6 +343,7 @@ namespace Microsoft.WordServices
 		internal const int InlinePictureCollection_KeepReference = MethodBase + 1;
 		internal const int InlinePictureCollection_OnAccess = MethodBase + 2;
 		internal const int InlinePictureCollection_GetFirst = MethodBase + 3;
+		internal const int InlinePictureCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// List dispids
@@ -367,6 +382,8 @@ namespace Microsoft.WordServices
 		internal const int ListCollection_GetById = MethodBase + 2;
 		internal const int ListCollection_OnAccess = MethodBase + 3;
 		internal const int ListCollection_GetFirst = MethodBase + 4;
+		internal const int ListCollection_GetByIdOrNullObject = MethodBase + 5;
+		internal const int ListCollection_GetFirstOrNullObject = MethodBase + 6;
 
 		//===============================================================================
 		// ListItem dispids
@@ -381,6 +398,7 @@ namespace Microsoft.WordServices
 		internal const int ListItem_KeepReference = MethodBase + 2;
 		internal const int ListItem_GetAncestor = MethodBase + 3;
 		internal const int ListItem_GetDescendants = MethodBase + 4;
+		internal const int ListItem_GetAncestorOrNullObject = MethodBase + 5;
 
 		//===============================================================================
 		// Paragraph dispids
@@ -413,6 +431,11 @@ namespace Microsoft.WordServices
 		internal const int Paragraph_ListItem = 27;
 		internal const int Paragraph_IsLastParagraph = 28;
 		internal const int Paragraph_StyleBuiltIn = 29;
+		internal const int Paragraph_ParentContentControlOrNullObject = 30;
+		internal const int Paragraph_ParentTableCellOrNullObject = 31;
+		internal const int Paragraph_ParentTableOrNullObject = 32;
+		internal const int Paragraph_ListOrNullObject = 33;
+		internal const int Paragraph_ListItemOrNullObject = 34;
 		// Methods
 		internal const int Paragraph_OnAccess = MethodBase + 1;
 		internal const int Paragraph_KeepReference = MethodBase + 2;
@@ -439,6 +462,8 @@ namespace Microsoft.WordServices
 		internal const int Paragraph_DetachFromList = MethodBase + 23;
 		internal const int Paragraph_GetNext = MethodBase + 24;
 		internal const int Paragraph_GetPrevious = MethodBase + 25;
+		internal const int Paragraph_GetNextOrNullObject = MethodBase + 26;
+		internal const int Paragraph_GetPreviousOrNullObject = MethodBase + 27;
 
 		//===============================================================================
 		// ParagraphCollection dispids
@@ -453,6 +478,8 @@ namespace Microsoft.WordServices
 		internal const int ParagraphCollection_OnAccess = MethodBase + 2;
 		internal const int ParagraphCollection_GetFirst = MethodBase + 3;
 		internal const int ParagraphCollection_GetLast = MethodBase + 4;
+		internal const int ParagraphCollection_GetFirstOrNullObject = MethodBase + 5;
+		internal const int ParagraphCollection_GetLastOrNullObject = MethodBase + 6;
 
 		//===============================================================================
 		// Range dispids
@@ -475,6 +502,9 @@ namespace Microsoft.WordServices
 		internal const int Range_ParentTable = 15;
 		internal const int Range_ParentBody = 16;
 		internal const int Range_StyleBuiltIn = 17;
+		internal const int Range_ParentContentControlOrNullObject = 18;
+		internal const int Range_ParentTableCellOrNullObject = 19;
+		internal const int Range_ParentTableOrNullObject = 20;
 		// Methods
 		internal const int Range_OnAccess = MethodBase + 1;
 		internal const int Range_KeepReference = MethodBase + 2;
@@ -503,6 +533,9 @@ namespace Microsoft.WordServices
 		internal const int Range_GetTextRanges = MethodBase + 25;
 		internal const int Range_GetBookmarks = MethodBase + 26;
 		internal const int Range_InsertBookmark = MethodBase + 27;
+		internal const int Range_ExpandToOrNullObject = MethodBase + 28;
+		internal const int Range_IntersectWithOrNullObject = MethodBase + 29;
+		internal const int Range_GetNextTextRangeOrNullObject = MethodBase + 30;
 
 		//===============================================================================
 		// RangeCollection dispids
@@ -515,6 +548,7 @@ namespace Microsoft.WordServices
 		internal const int RangeCollection_KeepReference = MethodBase + 1;
 		internal const int RangeCollection_OnAccess = MethodBase + 2;
 		internal const int RangeCollection_GetFirst = MethodBase + 3;
+		internal const int RangeCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// SearchOptions dispids
@@ -536,12 +570,15 @@ namespace Microsoft.WordServices
 		internal const int Section_ReferenceId = 2;
 		internal const int Section_Body = 3;
 		// skip 4
+		internal const int Section_HeaderFooterFirstPageDifferent = 5;
+		internal const int Section_HeaderFooterEvenPageDifferent = 6;
 		// Methods
 		internal const int Section_OnAccess = MethodBase + 1;
 		internal const int Section_KeepReference = MethodBase + 2;
 		internal const int Section_GetHeader = MethodBase + 3;
 		internal const int Section_GetFooter = MethodBase + 4;
 		internal const int Section_GetNext = MethodBase + 5;
+		internal const int Section_GetNextOrNullObject = MethodBase + 6;
 
 		//===============================================================================
 		// SectionCollection dispids
@@ -554,6 +591,7 @@ namespace Microsoft.WordServices
 		internal const int SectionCollection_KeepReference = MethodBase + 1;
 		internal const int SectionCollection_OnAccess = MethodBase + 2;
 		internal const int SectionCollection_GetFirst = MethodBase + 3;
+		internal const int SectionCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// Setting dispids
@@ -579,6 +617,7 @@ namespace Microsoft.WordServices
 		internal const int SettingCollection_Set = MethodBase + 3;
 		internal const int SettingCollection_GetCount = MethodBase + 4;
 		internal const int SettingCollection_DeleteAll = MethodBase + 5;
+		internal const int SettingCollection_GetItemOrNullObject = MethodBase + 6;
 
 		//===============================================================================
 		// Table dispids
@@ -606,12 +645,13 @@ namespace Microsoft.WordServices
 		internal const int Table_VerticalAlignment = 23;
 		internal const int Table_Font = 24;
 		internal const int Table_ParentContentControl = 25;
-		internal const int Table_Height = 26;
 		internal const int Table_Width = 27;
-		internal const int Table_ParagraphBefore = 28;
-		internal const int Table_ParagraphAfter = 29;
 		internal const int Table_StyleBuiltIn = 31;
 		internal const int Table_ParentBody = 32;
+		internal const int Table_Alignment = 33;
+		internal const int Table_ParentTableCellOrNullObject = 34;
+		internal const int Table_ParentTableOrNullObject = 35;
+		internal const int Table_ParentContentControlOrNullObject = 36;
 		// Methods
 		internal const int Table_OnAccess = MethodBase + 1;
 		internal const int Table_KeepReference = MethodBase + 2;
@@ -623,9 +663,7 @@ namespace Microsoft.WordServices
 		internal const int Table_Clear = MethodBase + 8;
 		internal const int Table_DeleteRows = MethodBase + 9;
 		internal const int Table_DeleteColumns = MethodBase + 10;
-		internal const int Table_AutoFitContents = MethodBase + 11;
 		internal const int Table_AutoFitWindow = MethodBase + 12;
-		internal const int Table_DistributeRows = MethodBase + 13;
 		internal const int Table_DistributeColumns = MethodBase + 14;
 		internal const int Table_GetBorder = MethodBase + 15;
 		internal const int Table_Select = MethodBase + 17;
@@ -637,6 +675,12 @@ namespace Microsoft.WordServices
 		internal const int Table_GetCellPadding = MethodBase + 23;
 		internal const int Table_SetCellPadding = MethodBase + 24;
 		internal const int Table_GetNext = MethodBase + 25;
+		internal const int Table_GetParagraphBefore = MethodBase + 26;
+		internal const int Table_GetParagraphAfter = MethodBase + 27;
+		internal const int Table_GetCellOrNullObject = MethodBase + 28;
+		internal const int Table_GetNextOrNullObject = MethodBase + 29;
+		internal const int Table_GetParagraphBeforeOrNullObject = MethodBase + 30;
+		internal const int Table_GetParagraphAfterOrNullObject = MethodBase + 31;
 
 		//===============================================================================
 		// TableCollection dispids
@@ -649,6 +693,7 @@ namespace Microsoft.WordServices
 		internal const int TableCollection_KeepReference = MethodBase + 1;
 		internal const int TableCollection_OnAccess = MethodBase + 2;
 		internal const int TableCollection_GetFirst = MethodBase + 3;
+		internal const int TableCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// TableRow dispids
@@ -679,9 +724,10 @@ namespace Microsoft.WordServices
 		internal const int TableRow_Select = MethodBase + 7;
 		internal const int TableRow_Search = MethodBase + 8;
 		internal const int TableRow_GetBorder = MethodBase + 9;
-		internal const int TableRow_GetCellPadding = MethodBase + 10;
-		internal const int TableRow_SetCellPadding = MethodBase + 11;
 		internal const int TableRow_GetNext = MethodBase + 12;
+		internal const int TableRow_GetNextOrNullObject = MethodBase + 13;
+		internal const int TableRow_GetCellPadding = MethodBase + 23;
+		internal const int TableRow_SetCellPadding = MethodBase + 24;
 
 		//===============================================================================
 		// TableRowCollection dispids
@@ -694,6 +740,7 @@ namespace Microsoft.WordServices
 		internal const int TableRowCollection_OnAccess = MethodBase + 1;
 		internal const int TableRowCollection_KeepReference = MethodBase + 2;
 		internal const int TableRowCollection_GetFirst = MethodBase + 3;
+		internal const int TableRowCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// TableCell dispids
@@ -722,9 +769,10 @@ namespace Microsoft.WordServices
 		internal const int TableCell_DeleteRow = MethodBase + 6;
 		internal const int TableCell_DeleteColumn = MethodBase + 7;
 		internal const int TableCell_GetBorder = MethodBase + 8;
-		internal const int TableCell_GetCellPadding = MethodBase + 9;
-		internal const int TableCell_SetCellPadding = MethodBase + 10;
 		internal const int TableCell_GetNext = MethodBase + 11;
+		internal const int TableCell_GetNextOrNullObject = MethodBase + 12;
+		internal const int TableCell_GetCellPadding = MethodBase + 23;
+		internal const int TableCell_SetCellPadding = MethodBase + 24;
 
 		//===============================================================================
 		// TableCellCollection dispids
@@ -737,6 +785,7 @@ namespace Microsoft.WordServices
 		internal const int TableCellCollection_OnAccess = MethodBase + 1;
 		internal const int TableCellCollection_KeepReference = MethodBase + 2;
 		internal const int TableCellCollection_GetFirst = MethodBase + 3;
+		internal const int TableCellCollection_GetFirstOrNullObject = MethodBase + 4;
 
 		//===============================================================================
 		// TableBorder dispids
@@ -782,7 +831,7 @@ namespace Microsoft.WordServices
 		/// <param name="base64File">Optional. The base64 encoded .docx file. The default value is null.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Application_CreateDocument)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
-		[ApiSet(Version = 1.3)]
+		[ApiSet(Version = 1.4)]
 		Document CreateDocument([Optional] string base64File);
 	}
 
@@ -817,11 +866,18 @@ namespace Microsoft.WordServices
 		ContentControlCollection ContentControls { get; }
 
 		/// <summary>
-		/// Gets the content control that contains the body. Returns a null object if there isn't a parent content control. Read-only.
+		/// Gets the content control that contains the body. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentContentControl)]
 		[ApiSet(Version = 1.1)]
 		ContentControl ParentContentControl { get; }
+
+		/// <summary>
+		/// Gets the content control that contains the body. Returns a null object if there isn't a parent content control. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentContentControlOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the text format of the body. Use this to get and set font name, size, color and other properties. Read-only.
@@ -867,11 +923,18 @@ namespace Microsoft.WordServices
 		BodyType Type { get; }
 
 		/// <summary>
-		/// Gets the parent body of the body. For example, a table cell body's parent body could be a header. Read-only.
+		/// Gets the parent body of the body. For example, a table cell body's parent body could be a header. Throws if there isn't a parent body. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentBody)]
 		[ApiSet(Version = 1.3)]
 		Body ParentBody { get; }
+
+		/// <summary>
+		/// Gets the parent body of the body. For example, a table cell body's parent body could be a header. Returns a null object if there isn't a parent body. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentBodyOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Body ParentBodyOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the collection of list objects in the body. Read-only.
@@ -888,11 +951,18 @@ namespace Microsoft.WordServices
 		TableCollection Tables { get; }
 
 		/// <summary>
-		/// Gets the parent section of the body. Read-only.
+		/// Gets the parent section of the body. Throws if there isn't a parent section. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentSection)]
 		[ApiSet(Version = 1.3)]
 		Section ParentSection { get; }
+
+		/// <summary>
+		/// Gets the parent section of the body. Returns a null object if there isn't a parent section. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Body_ParentSectionOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Section ParentSectionOrNullObject { get; }
 
 		//===============================================================================
 		// Methods
@@ -1179,11 +1249,18 @@ namespace Microsoft.WordServices
 		ContentControlCollection ContentControls { get; }
 
 		/// <summary>
-		/// Gets the content control that contains the content control. Returns a null object if there isn't a parent content control. Read-only.
+		/// Gets the content control that contains the content control. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentContentControl)]
 		[ApiSet(Version = 1.1)]
 		ContentControl ParentContentControl { get; }
+
+		/// <summary>
+		/// Gets the content control that contains the content control. Returns a null object if there isn't a parent content control. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentContentControlOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the collection of inlinePicture objects in the content control. The collection does not include floating images. Read-only.
@@ -1214,18 +1291,32 @@ namespace Microsoft.WordServices
 		TableCollection Tables { get; }
 
 		/// <summary>
-		/// Gets the table cell that contains the content control. Returns a null object if it is not contained in a table cell. Read-only.
+		/// Gets the table cell that contains the content control. Throws if it is not contained in a table cell. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentTableCell)]
 		[ApiSet(Version = 1.3)]
 		TableCell ParentTableCell { get; }
 
 		/// <summary>
-		/// Gets the table that contains the content control. Returns a null object if it is not contained in a table. Read-only.
+		/// Gets the table cell that contains the content control. Returns a null object if it is not contained in a table cell. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentTableCellOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		TableCell ParentTableCellOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table that contains the content control. Throws if it is not contained in a table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentTable)]
 		[ApiSet(Version = 1.3)]
 		Table ParentTable { get; }
+
+		/// <summary>
+		/// Gets the table that contains the content control. Returns a null object if it is not contained in a table. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ContentControl_ParentTableOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Table ParentTableOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the parent body of the content control. Read-only.
@@ -1447,13 +1538,22 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets a content control by its identifier.
+		/// Gets a content control by its identifier. Throws if there isn't a content control with the identifier in this collection.
 		/// </summary>
 		/// <param name="id">Required. A content control identifier.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.ContentControlCollection_GetById)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.1)]
 		ContentControl GetById(int id);
+
+		/// <summary>
+		/// Gets a content control by its identifier. Returns a null object if there isn't a content control with the identifier in this collection.
+		/// </summary>
+		/// <param name="id">Required. A content control identifier.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.ContentControlCollection_GetByIdOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		ContentControl GetByIdOrNullObject(int id);
 
 		/// <summary>
 		/// Gets the content controls that have the specified title.
@@ -1483,12 +1583,20 @@ namespace Microsoft.WordServices
 		ContentControlCollection GetByTypes(ContentControlType[] types);
 
 		/// <summary>
-		/// Gets the first content control in this collection.
+		/// Gets the first content control in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ContentControlCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		ContentControl GetFirst();
+
+		/// <summary>
+		/// Gets the first content control in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ContentControlCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		ContentControl GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -1560,7 +1668,7 @@ namespace Microsoft.WordServices
 		// Properties
 		//===============================================================================
 		/// <summary>
-		/// Gets a custom property object by its key, which is case-insensitive.
+		/// Gets a custom property object by its key, which is case-insensitive. Throws if the custom property does not exist.
 		/// </summary>
 		/// <param name="key">The key that identifies the custom property object.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.CustomPropertyCollection_Indexer)]
@@ -1583,6 +1691,15 @@ namespace Microsoft.WordServices
 		[ClientCallableComMember(DispatchId = DispatchIds.CustomPropertyCollection_KeepReference)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		void _KeepReference();
+
+		/// <summary>
+		/// Gets a custom property object by its key, which is case-insensitive. Returns a null object if the custom property does not exist.
+		/// </summary>
+		/// <param name="key">Required. The key that identifies the custom property object.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.CustomPropertyCollection_GetItemOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		CustomProperty GetItemOrNullObject(string key);
 
 		/// <summary>
 		/// Creates or sets a custom property.
@@ -1716,19 +1833,29 @@ namespace Microsoft.WordServices
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Document_Open)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
-		[ApiSet(Version = 1.3)]
+		[ApiSet(Version = 1.4)]
 		void Open();
+
+		/// <summary>
+		/// Gets a bookmark's range. Throws if the bookmark does not exist.
+		/// </summary>
+		/// <param name="name">Required. The bookmark name, which is case-insensitive.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.Document_GetBookmarkRange)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.4)]
+		Range GetBookmarkRange(string name);
 
 		/// <summary>
 		/// Gets a bookmark's range. Returns a null object if the bookmark does not exist.
 		/// </summary>
 		/// <param name="name">Required. The bookmark name, which is case-insensitive.</param>
-		[ClientCallableComMember(DispatchId = DispatchIds.Document_GetBookmarkRange)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Document_GetBookmarkRangeOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.4)]
-		Range GetBookmarkRange(string name);
+		Range GetBookmarkRangeOrNullObject(string name);
 
 		/// <summary>
-		/// Deletes a bookmark, if exists, from this document.
+		/// Deletes a bookmark, if exists, from the document.
 		/// </summary>
 		/// <param name="name">Required. The bookmark name, which is case-insensitive.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Document_DeleteBookmark)]
@@ -2040,7 +2167,7 @@ namespace Microsoft.WordServices
 		float Height { get; set; }
 
 		/// <summary>
-		/// Gets or sets a hyperlink on the image. Use a newline character ('\n') to separate the address part from the optional location part.
+		/// Gets or sets a hyperlink on the image. Use a '#' to separate the address part from the optional location part.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_Hyperlink)]
 		[ApiSet(Version = 1.1)]
@@ -2061,11 +2188,18 @@ namespace Microsoft.WordServices
 		float Width { get; set; }
 
 		/// <summary>
-		/// Gets the content control that contains the inline image. Returns a null object if there isn't a parent content control. Read-only.
+		/// Gets the content control that contains the inline image. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentContentControl)]
 		[ApiSet(Version = 1.1)]
 		ContentControl ParentContentControl { get; }
+
+		/// <summary>
+		/// Gets the content control that contains the inline image. Returns a null object if there isn't a parent content control. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentContentControlOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the parent paragraph that contains the inline image. Read-only.
@@ -2082,18 +2216,32 @@ namespace Microsoft.WordServices
 		ImageFormat ImageFormat { get; }
 
 		/// <summary>
-		/// Gets the table cell that contains the inline image. Returns a null object if it is not contained in a table cell. Read-only.
+		/// Gets the table cell that contains the inline image. Throws if it is not contained in a table cell. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentTableCell)]
 		[ApiSet(Version = 1.3)]
 		TableCell ParentTableCell { get; }
 
 		/// <summary>
-		/// Gets the table that contains the inline image. Returns a null object if it is not contained in a table. Read-only.
+		/// Gets the table cell that contains the inline image. Returns a null object if it is not contained in a table cell. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentTableCellOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		TableCell ParentTableCellOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table that contains the inline image. Throws if it is not contained in a table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentTable)]
 		[ApiSet(Version = 1.3)]
 		Table ParentTable { get; }
+
+		/// <summary>
+		/// Gets the table that contains the inline image. Returns a null object if it is not contained in a table. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_ParentTableOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Table ParentTableOrNullObject { get; }
 
 		//===============================================================================
 		// Methods
@@ -2219,12 +2367,20 @@ namespace Microsoft.WordServices
 		Range GetRange([Optional] RangeLocation rangeLocation);
 
 		/// <summary>
-		/// Gets the next inline image.
+		/// Gets the next inline image. Throws if this inline image is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		InlinePicture GetNext();
+
+		/// <summary>
+		/// Gets the next inline image. Returns a null object if this inline image is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.InlinePicture_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		InlinePicture GetNextOrNullObject();
 	}
 
 	/// <summary>
@@ -2232,7 +2388,7 @@ namespace Microsoft.WordServices
 	/// </summary>
 	[ClientCallableType(HiddenIndexerMethod = true)]
 	[ClientCallableComType(Name = "IInlinePictureCollection", InterfaceId = "EA74232B-E74B-4A8B-9D30-04D181C29CFA",
-		CoClassName = "InlinePictureCollection", SupportEnumeration = true)]
+		CoClassName = "InlinePictureCollection", SupportEnumeration = true, SupportIEnumVARIANT = true)]
 	[ApiSet(Version = 1.1)]
 	public interface InlinePictureCollection : IEnumerable<InlinePicture>
 	{
@@ -2265,12 +2421,20 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets the first inline image in this collection.
+		/// Gets the first inline image in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.InlinePictureCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		InlinePicture GetFirst();
+
+		/// <summary>
+		/// Gets the first inline image in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.InlinePictureCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		InlinePicture GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -2474,7 +2638,7 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets a list by its identifier.
+		/// Gets a list by its identifier. Throws if there isn't a list with the identifier in this collection.
 		/// </summary>
 		/// <param name="id">Required. A list identifier.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.ListCollection_GetById)]
@@ -2483,12 +2647,29 @@ namespace Microsoft.WordServices
 		List GetById(int id);
 
 		/// <summary>
-		/// Gets the first list in this collection.
+		/// Gets a list by its identifier. Returns a null object if there isn't a list with the identifier in this collection.
+		/// </summary>
+		/// <param name="id">Required. A list identifier.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.ListCollection_GetByIdOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		List GetByIdOrNullObject(int id);
+
+		/// <summary>
+		/// Gets the first list in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ListCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		List GetFirst();
+
+		/// <summary>
+		/// Gets the first list in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ListCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		List GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -2538,13 +2719,22 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets the list item parent, or the closest ancestor if the parent does not exist.
+		/// Gets the list item parent, or the closest ancestor if the parent does not exist. Throws if the list item has no ancester.
 		/// </summary>
 		/// <param name="parentOnly">Optional. Specified only the list item's parent will be returned. The default is false that specifies to get the lowest ancestor.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.ListItem_GetAncestor)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Paragraph GetAncestor([Optional] bool parentOnly);
+
+		/// <summary>
+		/// Gets the list item parent, or the closest ancestor if the parent does not exist. Returns a null object if the list item has no ancester.
+		/// </summary>
+		/// <param name="parentOnly">Optional. Specified only the list item's parent will be returned. The default is false that specifies to get the lowest ancestor.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.ListItem_GetAncestorOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetAncestorOrNullObject([Optional] bool parentOnly);
 
 		/// <summary>
 		/// Gets all descendant list items of the list item.
@@ -2609,11 +2799,18 @@ namespace Microsoft.WordServices
 		ContentControlCollection ContentControls { get; }
 
 		/// <summary>
-		/// Gets the content control that contains the paragraph. Returns a null object if there isn't a parent content control. Read-only.
+		/// Gets the content control that contains the paragraph. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentContentControl)]
 		[ApiSet(Version = 1.1)]
 		ContentControl ParentContentControl { get; }
+
+		/// <summary>
+		/// Gets the content control that contains the paragraph. Returns a null object if there isn't a parent content control. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentContentControlOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets or sets the value, in points, for a first line or hanging indent. Use a positive value to set a first-line indent, and use a negative value to set a hanging indent.
@@ -2721,33 +2918,62 @@ namespace Microsoft.WordServices
 		Body ParentBody { get; }
 
 		/// <summary>
-		/// Gets the List to which this paragraph belongs. Returns a null object if the paragraph is not in a list. Read-only.
+		/// Gets the List to which this paragraph belongs. Throws if the paragraph is not in a list. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_List)]
 		[ApiSet(Version = 1.3)]
 		List List { get; }
 
 		/// <summary>
-		/// Gets the table cell that contains the paragraph. Returns a null object if it is not contained in a table cell. Read-only.
+		/// Gets the List to which this paragraph belongs. Returns a null object if the paragraph is not in a list. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ListOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		List ListOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table cell that contains the paragraph. Throws if it is not contained in a table cell. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentTableCell)]
 		[ApiSet(Version = 1.3)]
 		TableCell ParentTableCell { get; }
 
 		/// <summary>
-		/// Gets the table that contains the paragraph. Returns a null object if it is not contained in a table. Read-only.
+		/// Gets the table cell that contains the paragraph. Returns a null object if it is not contained in a table cell. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentTableCellOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		TableCell ParentTableCellOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table that contains the paragraph. Throws if it is not contained in a table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentTable)]
 		[ApiSet(Version = 1.3)]
 		Table ParentTable { get; }
 
 		/// <summary>
-		/// Gets the ListItem for the paragraph. Returns a null object if the paragraph is not part of a list. Read-only.
+		/// Gets the table that contains the paragraph. Returns a null object if it is not contained in a table. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ParentTableOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Table ParentTableOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the ListItem for the paragraph. Throws if the paragraph is not part of a list. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ListItem)]
 		[JsonStringify()]
 		[ApiSet(Version = 1.3)]
 		ListItem ListItem { get; }
+
+		/// <summary>
+		/// Gets the ListItem for the paragraph. Returns a null object if the paragraph is not part of a list. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_ListItemOrNullObject)]
+		[JsonStringify()]
+		[ApiSet(Version = 1.3)]
+		ListItem ListItemOrNullObject { get; }
 
 		/// <summary>
 		/// Indicates the paragraph is the last one inside its parent body. Read-only.
@@ -2961,7 +3187,7 @@ namespace Microsoft.WordServices
 		void DetachFromList();
 
 		/// <summary>
-		/// Gets the next paragraph.
+		/// Gets the next paragraph. Throws if the paragraph is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -2969,12 +3195,28 @@ namespace Microsoft.WordServices
 		Paragraph GetNext();
 
 		/// <summary>
-		/// Gets the previous paragraph.
+		/// Gets the next paragraph. Returns a null object if the paragraph is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetNextOrNullObject();
+
+		/// <summary>
+		/// Gets the previous paragraph. Throws if the paragraph is the first one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_GetPrevious)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Paragraph GetPrevious();
+
+		/// <summary>
+		/// Gets the previous paragraph. Returns a null object if the paragraph is the first one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Paragraph_GetPreviousOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetPreviousOrNullObject();
 	}
 
 	/// <summary>
@@ -3015,7 +3257,7 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets the first paragraph in this collection.
+		/// Gets the first paragraph in this collection. Throws if the collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ParagraphCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
@@ -3023,12 +3265,28 @@ namespace Microsoft.WordServices
 		Paragraph GetFirst();
 
 		/// <summary>
-		/// Gets the last paragraph in this collection.
+		/// Gets the first paragraph in this collection. Returns a null object if the collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ParagraphCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetFirstOrNullObject();
+
+		/// <summary>
+		/// Gets the last paragraph in this collection. Throws if the collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.ParagraphCollection_GetLast)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Paragraph GetLast();
+
+		/// <summary>
+		/// Gets the last paragraph in this collection. Returns a null object if the collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.ParagraphCollection_GetLastOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetLastOrNullObject();
 	}
 
 	/// <summary>
@@ -3091,11 +3349,18 @@ namespace Microsoft.WordServices
 		ContentControlCollection ContentControls { get; }
 
 		/// <summary>
-		/// Gets the content control that contains the range. Returns a null object if there isn't a parent content control. Read-only.
+		/// Gets the content control that contains the range. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentContentControl)]
 		[ApiSet(Version = 1.1)]
 		ContentControl ParentContentControl { get; }
+
+		/// <summary>
+		/// Gets the content control that contains the range. Returns a null object if there isn't a parent content control. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentContentControlOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets the collection of inline picture objects in the range. Read-only.
@@ -3119,7 +3384,7 @@ namespace Microsoft.WordServices
 		bool IsEmpty { get; }
 
 		/// <summary>
-		/// Gets the first hyperlink in the range, or sets a hyperlink on the range. All hyperlinks in the range are deleted when you set a new hyperlink on the range. Use a newline character ('\n') to separate the address part from the optional location part.
+		/// Gets the first hyperlink in the range, or sets a hyperlink on the range. All hyperlinks in the range are deleted when you set a new hyperlink on the range. Use a '#' to separate the address part from the optional location part.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_Hyperlink)]
 		[ApiSet(Version = 1.3)]
@@ -3147,18 +3412,32 @@ namespace Microsoft.WordServices
 		TableCollection Tables { get; }
 
 		/// <summary>
-		/// Gets the table cell that contains the range. Returns a null object if it is not contained in a table cell. Read-only.
+		/// Gets the table cell that contains the range. Throws if it is not contained in a table cell. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentTableCell)]
 		[ApiSet(Version = 1.3)]
 		TableCell ParentTableCell { get; }
 
 		/// <summary>
-		/// Gets the table that contains the range. Returns null if it is not contained in a table. Read-only.
+		/// Gets the table cell that contains the range. Returns a null object if it is not contained in a table cell. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentTableCellOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		TableCell ParentTableCellOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table that contains the range. Throws if it is not contained in a table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentTable)]
 		[ApiSet(Version = 1.3)]
 		Table ParentTable { get; }
+
+		/// <summary>
+		/// Gets the table that contains the range. Returns a null object if it is not contained in a table. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_ParentTableOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Table ParentTableOrNullObject { get; }
 
 		//===============================================================================
 		// Methods
@@ -3330,7 +3609,7 @@ namespace Microsoft.WordServices
 		LocationRelation CompareLocationWith(Range range);
 
 		/// <summary>
-		/// Returns a new range that extends from this range in either direction to cover another range. This range is not changed.
+		/// Returns a new range that extends from this range in either direction to cover another range. This range is not changed. Throws if the two ranges do not have a union.
 		/// </summary>
 		/// <param name="range">Required. Another range.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_ExpandTo)]
@@ -3338,7 +3617,15 @@ namespace Microsoft.WordServices
 		Range ExpandTo(Range range);
 
 		/// <summary>
-		/// Returns a new range as the intersection of this range with another range. This range is not changed.
+		/// Returns a new range that extends from this range in either direction to cover another range. This range is not changed. Returns a null object if the two ranges do not have a union.
+		/// </summary>
+		/// <param name="range">Required. Another range.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_ExpandToOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Range ExpandToOrNullObject(Range range);
+
+		/// <summary>
+		/// Returns a new range as the intersection of this range with another range. This range is not changed. Throws if the two ranges are not overlapped or adjacent.
 		/// </summary>
 		/// <param name="range">Required. Another range.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_IntersectWith)]
@@ -3346,7 +3633,15 @@ namespace Microsoft.WordServices
 		Range IntersectWith(Range range);
 
 		/// <summary>
-		/// Gets the next text range by using punctuation marks and/or other ending marks.
+		/// Returns a new range as the intersection of this range with another range. This range is not changed. Returns a null object if the two ranges are not overlapped or adjacent.
+		/// </summary>
+		/// <param name="range">Required. Another range.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_IntersectWithOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Range IntersectWithOrNullObject(Range range);
+
+		/// <summary>
+		/// Gets the next text range by using punctuation marks and/or other ending marks. Throws if this text range is the last one.
 		/// </summary>
 		/// <param name="endingMarks">Required. The punctuation marks and/or other ending marks as an array of strings.</param>
 		/// <param name="trimSpacing">Optional. Indicates whether to trim spacing characters (spaces, tabs, column breaks and paragraph end marks) from the start and end of the returned range. Default is false which indicates that spacing characters at the start and end of the range are included.</param>
@@ -3354,6 +3649,16 @@ namespace Microsoft.WordServices
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Range GetNextTextRange(string[] endingMarks, [Optional] bool trimSpacing);
+
+		/// <summary>
+		/// Gets the next text range by using punctuation marks and/or other ending marks. Returns a null object if this text range is the last one.
+		/// </summary>
+		/// <param name="endingMarks">Required. The punctuation marks and/or other ending marks as an array of strings.</param>
+		/// <param name="trimSpacing">Optional. Indicates whether to trim spacing characters (spaces, tabs, column breaks and paragraph end marks) from the start and end of the returned range. Default is false which indicates that spacing characters at the start and end of the range are included.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.Range_GetNextTextRangeOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Range GetNextTextRangeOrNullObject(string[] endingMarks, [Optional] bool trimSpacing);
 
 		/// <summary>
 		/// Gets hyperlink child ranges within the range.
@@ -3386,7 +3691,7 @@ namespace Microsoft.WordServices
 		RangeCollection GetTextRanges(string[] endingMarks, [Optional] bool trimSpacing);
 
 		/// <summary>
-		/// Gets the names all bookmarks in or overlapping the range. A bookmark is hidden if its name starts with an underscore character.
+		/// Gets the names all bookmarks in or overlapping the range. A bookmark is hidden if its name starts with the underscore character.
 		/// </summary>
 		/// <param name="includeHidden">Optional. Indicates whether to include hidden bookmarks. Default is false which indicates that the hidden bookmarks are excluded.</param>
 		/// <param name="includeAdjacent">Optional. Indicates whether to include bookmarks that are adjacent to the range. Default is false which indicates that the adjacent bookmarks are excluded.</param>
@@ -3396,7 +3701,7 @@ namespace Microsoft.WordServices
 		string[] GetBookmarks([Optional] bool includeHidden, [Optional] bool includeAdjacent);
 
 		/// <summary>
-		/// Inserts a bookmark on the range. If a bookmark of the same name exists, it is replaced.
+		/// Inserts a bookmark on the range. If a bookmark of the same name exists somewhere, it is deleted first.
 		/// </summary>
 		/// <param name="name">Required. The bookmark name, which is case-insensitive. If the name starts with an underscore character, the bookmark is an hidden one.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Range_InsertBookmark)]
@@ -3442,12 +3747,20 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets the first range in this collection.
+		/// Gets the first range in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.RangeCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Range GetFirst();
+
+		/// <summary>
+		/// Gets the first range in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.RangeCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Range GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -3550,6 +3863,20 @@ namespace Microsoft.WordServices
 		[ApiSet(Version = 1.1)]
 		Body Body { get; }
 
+		/// <summary>
+		/// Gets or sets a value that indicates whether the first page has a different header and footer from the other pages in the section.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Section_HeaderFooterFirstPageDifferent)]
+		[ApiSet(Version = 1.4)]
+		bool HeaderFooterFirstPageDifferent { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value that indicates whether even-numbered pages have a different header and footer from odd-numbered pages in the section.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Section_HeaderFooterEvenPageDifferent)]
+		[ApiSet(Version = 1.4)]
+		bool HeaderFooterEvenPageDifferent { get; set; }
+
 		//===============================================================================
 		// Methods
 		//===============================================================================
@@ -3580,12 +3907,20 @@ namespace Microsoft.WordServices
 		Body GetFooter(HeaderFooterType type);
 
 		/// <summary>
-		/// Gets the next section.
+		/// Gets the next section. Throws if this section is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Section_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Section GetNext();
+
+		/// <summary>
+		/// Gets the next section. Returns a null object if this section is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Section_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Section GetNextOrNullObject();
 	}
 
 	/// <summary>
@@ -3626,12 +3961,20 @@ namespace Microsoft.WordServices
 		void _KeepReference();
 
 		/// <summary>
-		/// Gets the first section in this collection.
+		/// Gets the first section in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.SectionCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Section GetFirst();
+
+		/// <summary>
+		/// Gets the first section in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.SectionCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Section GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -3702,7 +4045,7 @@ namespace Microsoft.WordServices
 		string _ReferenceId { get; }
 
 		/// <summary>
-		/// Gets a setting object by its key, which is case-sensitive.
+		/// Gets a setting object by its key, which is case-sensitive. Throws if the setting does not exist.
 		/// </summary>
 		/// <param name="key">The key that identifies the setting object.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_Indexer)]
@@ -3733,6 +4076,7 @@ namespace Microsoft.WordServices
 		/// Gets the count of settings.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_GetCount)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.4)]
 		int GetCount();
 
@@ -3742,6 +4086,15 @@ namespace Microsoft.WordServices
 		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_DeleteAll)]
 		[ApiSet(Version = 1.4)]
 		void DeleteAll();
+
+		/// <summary>
+		/// Gets a setting object by its key, which is case-sensitive. Returns a null object if the setting does not exist.
+		/// </summary>
+		/// <param name="key">Required. The key that identifies the setting object.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.SettingCollection_GetItemOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.4)]
+		Setting GetItemOrNullObject(string key);
 	}
 
 	/// <summary>
@@ -3796,18 +4149,32 @@ namespace Microsoft.WordServices
 		int NestingLevel { get; }
 
 		/// <summary>
-		/// Gets the table cell that contains this table. Returns a null object if it is not contained in a table cell. Read-only.
+		/// Gets the table cell that contains this table. Throws if it is not contained in a table cell. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentTableCell)]
 		[ApiSet(Version = 1.3)]
 		TableCell ParentTableCell { get; }
 
 		/// <summary>
-		/// Gets the table that contains this table. Returns a null object if it is not contained in a table. Read-only.
+		/// Gets the table cell that contains this table. Returns a null object if it is not contained in a table cell. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentTableCellOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		TableCell ParentTableCellOrNullObject { get; }
+
+		/// <summary>
+		/// Gets the table that contains this table. Throws if it is not contained in a table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentTable)]
 		[ApiSet(Version = 1.3)]
 		Table ParentTable { get; }
+
+		/// <summary>
+		/// Gets the table that contains this table. Returns a null object if it is not contained in a table. Read-only.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentTableOrNullObject)]
+		[ApiSet(Version = 1.3)]
+		Table ParentTableOrNullObject { get; }
 
 		/// <summary>
 		/// Gets and sets the text values in the table, as a 2D Javascript array.
@@ -3909,18 +4276,18 @@ namespace Microsoft.WordServices
 		Font Font { get; }
 
 		/// <summary>
-		/// Gets the content control that contains the table. Read-only.
+		/// Gets the content control that contains the table. Throws if there isn't a parent content control. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentContentControl)]
 		[ApiSet(Version = 1.3)]
 		ContentControl ParentContentControl { get; }
 
 		/// <summary>
-		/// Gets the height of the table in points. Read-only.
+		/// Gets the content control that contains the table. Returns a null object if there isn't a parent content control. Read-only.
 		/// </summary>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_Height)]
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentContentControlOrNullObject)]
 		[ApiSet(Version = 1.3)]
-		float Height { get; }
+		ContentControl ParentContentControlOrNullObject { get; }
 
 		/// <summary>
 		/// Gets and sets the width of the table in points.
@@ -3930,25 +4297,18 @@ namespace Microsoft.WordServices
 		float Width { get; set; }
 
 		/// <summary>
-		/// Gets the paragraph before the table. Read-only.
-		/// </summary>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParagraphBefore)]
-		[ApiSet(Version = 1.3)]
-		Paragraph ParagraphBefore { get; }
-
-		/// <summary>
-		/// Gets the paragraph after the table. Read-only.
-		/// </summary>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParagraphAfter)]
-		[ApiSet(Version = 1.3)]
-		Paragraph ParagraphAfter { get; }
-
-		/// <summary>
 		/// Gets the parent body of the table. Read-only.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_ParentBody)]
 		[ApiSet(Version = 1.3)]
 		Body ParentBody { get; }
+
+		/// <summary>
+		/// Gets or sets the alignment of the table against the page column. The value can be 'left', 'centered' or 'right'.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_Alignment)]
+		[ApiSet(Version = 1.3)]
+		Alignment Alignment { get; set; }
 
 		//===============================================================================
 		// Methods
@@ -3982,13 +4342,24 @@ namespace Microsoft.WordServices
 		void AddColumns(InsertLocation insertLocation, int columnCount, [Optional] string[][] values);
 
 		/// <summary>
-		/// Gets the table cell at a specified row and column.
+		/// Gets the table cell at a specified row and column. Throws if the specified table cell does not exist.
 		/// </summary>
 		/// <param name="rowIndex">Required. The index of the row.</param>
 		/// <param name="cellIndex">Required. The index of the cell in the row.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetCell)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		TableCell GetCell(int rowIndex, int cellIndex);
+
+		/// <summary>
+		/// Gets the table cell at a specified row and column. Returns a null object if the specified table cell does not exist.
+		/// </summary>
+		/// <param name="rowIndex">Required. The index of the row.</param>
+		/// <param name="cellIndex">Required. The index of the cell in the row.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetCellOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		TableCell GetCellOrNullObject(int rowIndex, int cellIndex);
 
 		/// <summary>
 		/// Merges the cells bounded inclusively by a first and last cell.
@@ -4035,13 +4406,6 @@ namespace Microsoft.WordServices
 		void DeleteColumns(int columnIndex, [Optional] int? columnCount);
 
 		/// <summary>
-		/// Autofits the table columns to the width of their contents.
-		/// </summary>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_AutoFitContents)]
-		[ApiSet(Version = 1.3)]
-		void AutoFitContents();
-
-		/// <summary>
 		/// Autofits the table columns to the width of the window.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_AutoFitWindow)]
@@ -4049,14 +4413,7 @@ namespace Microsoft.WordServices
 		void AutoFitWindow();
 
 		/// <summary>
-		/// Distributes the row heights evenly.
-		/// </summary>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_DistributeRows)]
-		[ApiSet(Version = 1.3)]
-		void DistributeRows();
-
-		/// <summary>
-		/// Distributes the column widths evenly.
+		/// Distributes the column widths evenly. This is applicable to uniform tables.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_DistributeColumns)]
 		[ApiSet(Version = 1.3)]
@@ -4142,17 +4499,58 @@ namespace Microsoft.WordServices
 		/// Sets cell padding in points.
 		/// </summary>
 		/// <param name="cellPaddingLocation">Required. The cell padding location can be 'Top', 'Left', 'Bottom' or 'Right'.</param>
+		/// <param name="cellPadding">Required. The cell padding.</param>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_SetCellPadding)]
 		[ApiSet(Version = 1.3)]
 		void SetCellPadding(CellPaddingLocation cellPaddingLocation, float cellPadding);
 
 		/// <summary>
-		/// Gets the next table.
+		/// Gets the next table. Throws if this table is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Table GetNext();
+
+		/// <summary>
+		/// Gets the next table. Returns a null object if this table is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Table GetNextOrNullObject();
+
+		/// <summary>
+		/// Gets the paragraph before the table. Throws if there isn't a paragraph before the table.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetParagraphBefore)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetParagraphBefore();
+
+		/// <summary>
+		/// Gets the paragraph before the table. Returns a null object if there isn't a paragraph before the table.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetParagraphBeforeOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetParagraphBeforeOrNullObject();
+
+		/// <summary>
+		/// Gets the paragraph after the table. Throws if there isn't a paragraph after the table.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetParagraphAfter)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetParagraphAfter();
+
+		/// <summary>
+		/// Gets the paragraph after the table. Returns a null object if there isn't a paragraph after the table.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetParagraphAfterOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Paragraph GetParagraphAfterOrNullObject();
 	}
 
 	/// <summary>
@@ -4193,12 +4591,20 @@ namespace Microsoft.WordServices
 		void _OnAccess();
 
 		/// <summary>
-		/// Gets the first table in this collection.
+		/// Gets the first table in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		Table GetFirst();
+
+		/// <summary>
+		/// Gets the first table in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		Table GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -4253,11 +4659,11 @@ namespace Microsoft.WordServices
 		int RowIndex { get; }
 
 		/// <summary>
-		/// Gets and sets the text values in the row, as a 1D Javascript array.
+		/// Gets and sets the text values in the row, as a 2D Javascript array.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableRow_Values)]
 		[ApiSet(Version = 1.3)]
-		string[] Values { get; set; }
+		string[][] Values { get; set; }
 
 		/// <summary>
 		/// Gets and sets the shading color.
@@ -4377,7 +4783,7 @@ namespace Microsoft.WordServices
 		/// Gets cell padding in points. 
 		/// </summary>
 		/// <param name="cellPaddingLocation">Required. The cell padding location can be 'Top', 'Left', 'Bottom' or 'Right'.</param>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetCellPadding)]
+		[ClientCallableComMember(DispatchId = DispatchIds.TableRow_GetCellPadding)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		float? GetCellPadding(CellPaddingLocation cellPaddingLocation);
@@ -4386,17 +4792,26 @@ namespace Microsoft.WordServices
 		/// Sets cell padding in points.
 		/// </summary>
 		/// <param name="cellPaddingLocation">Required. The cell padding location can be 'Top', 'Left', 'Bottom' or 'Right'.</param>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_SetCellPadding)]
+		/// <param name="cellPadding">Required. The cell padding.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableRow_SetCellPadding)]
 		[ApiSet(Version = 1.3)]
 		void SetCellPadding(CellPaddingLocation cellPaddingLocation, float cellPadding);
 
 		/// <summary>
-		/// Gets the next row.
+		/// Gets the next row. Throws if this row is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableRow_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		TableRow GetNext();
+
+		/// <summary>
+		/// Gets the next row. Returns a null object if this row is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableRow_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		TableRow GetNextOrNullObject();
 	}
 
 	/// <summary>
@@ -4437,12 +4852,20 @@ namespace Microsoft.WordServices
 		void _OnAccess();
 
 		/// <summary>
-		/// Gets the first row in this collection.
+		/// Gets the first row in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableRowCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		TableRow GetFirst();
+
+		/// <summary>
+		/// Gets the first row in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableRowCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		TableRow GetFirstOrNullObject();
 	}
 
 	/// <summary>
@@ -4613,7 +5036,7 @@ namespace Microsoft.WordServices
 		/// Gets cell padding in points. 
 		/// </summary>
 		/// <param name="cellPaddingLocation">Required. The cell padding location can be 'Top', 'Left', 'Bottom' or 'Right'.</param>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_GetCellPadding)]
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCell_GetCellPadding)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		float? GetCellPadding(CellPaddingLocation cellPaddingLocation);
@@ -4622,17 +5045,26 @@ namespace Microsoft.WordServices
 		/// Sets cell padding in points.
 		/// </summary>
 		/// <param name="cellPaddingLocation">Required. The cell padding location can be 'Top', 'Left', 'Bottom' or 'Right'.</param>
-		[ClientCallableComMember(DispatchId = DispatchIds.Table_SetCellPadding)]
+		/// <param name="cellPadding">Required. The cell padding.</param>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCell_SetCellPadding)]
 		[ApiSet(Version = 1.3)]
 		void SetCellPadding(CellPaddingLocation cellPaddingLocation, float cellPadding);
 
 		/// <summary>
-		/// Gets the next cell.
+		/// Gets the next cell. Throws if this cell is the last one.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableCell_GetNext)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		TableCell GetNext();
+
+		/// <summary>
+		/// Gets the next cell. Returns a null object if this cell is the last one.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCell_GetNextOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		TableCell GetNextOrNullObject();
 	}
 
 	/// <summary>
@@ -4673,12 +5105,20 @@ namespace Microsoft.WordServices
 		void _OnAccess();
 
 		/// <summary>
-		/// Gets the first table cell in this collection.
+		/// Gets the first table cell in this collection. Throws if this collection is empty.
 		/// </summary>
 		[ClientCallableComMember(DispatchId = DispatchIds.TableCellCollection_GetFirst)]
 		[ClientCallableOperation(OperationType = OperationType.Read)]
 		[ApiSet(Version = 1.3)]
 		TableCell GetFirst();
+
+		/// <summary>
+		/// Gets the first table cell in this collection. Returns a null object if this collection is empty.
+		/// </summary>
+		[ClientCallableComMember(DispatchId = DispatchIds.TableCellCollection_GetFirstOrNullObject)]
+		[ClientCallableOperation(OperationType = OperationType.Read)]
+		[ApiSet(Version = 1.3)]
+		TableCell GetFirstOrNullObject();
 	}
 
 	/// <summary>

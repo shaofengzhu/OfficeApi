@@ -36,8 +36,10 @@
 	WriteLine("    // Last generated on " + DateTime.Now.ToString());
 	WriteLine("    //");
 	WriteLine("    // Its content is copied from CodeGen.cs");
-	WriteLine("    // Please go to CodeGen directory and run");
-	WriteLine("    //     TextTransform.exe -out Core.tt Core.Gen.tt");
+	WriteLine("    // To update it, please run:");
+	WriteLine("    //      cd %SRCROOT%\\otools\\inc\\osfclient\\RichApi\\CodeGen\\");
+	WriteLine("    //      sd edit Core.tt");
+	WriteLine("    //      TextTransform.exe -out Core.tt Core.Gen.tt");
 	WriteLine("    // to generate this file.");
 
 	string inputFile = this.Host.ResolvePath(@"..\..\..\..\..\osfclient\RichApi\CodeGen\Core\CodeGen.cs");

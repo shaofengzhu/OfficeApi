@@ -15,7 +15,7 @@
 		LaunchDebuggerIfNecessary();
 		if (this.CheckInputParameters())
 		{
-			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths);
+			AssemblyReader assemblyReader = new AssemblyReader(this.InputFilePath, null, this.ReferencedAssemblyPaths, this.MaxVersion);
 			assemblyReader.Process();
 
 			CodeGenTemplateFileManager templateFileManager = new CodeGenTemplateFileManager(this.GenerationEnvironment);
@@ -30,13 +30,13 @@
 			templateFileManager.EndBlock();
 			foreach(ClientCallableTypeInfo type in assemblyReader.Types)
 			{
-				templateFileManager.StartNewFile(type.Name + ".cs");
-				WriteWacType(type, System.IO.Path.Combine(this.OutputDirectory, type.Name + ".cs"));
+				templateFileManager.StartNewFile(type.Name + this.FileNamePostfix + ".cs");
+				WriteWacType(type, System.IO.Path.Combine(this.OutputDirectory, type.Name + this.FileNamePostfix + ".cs"));
 				templateFileManager.EndBlock();
 			}
 
-			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg.cs");
-			WriteWacTypeReg(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "TypeReg.cs"));
+			templateFileManager.StartNewFile(this.FileBaseName + "TypeReg" + this.FileNamePostfix + ".cs");
+			WriteWacTypeReg(assemblyReader, System.IO.Path.Combine(this.OutputDirectory, this.FileBaseName + "TypeReg"+ this.FileNamePostfix + ".cs"));
 			templateFileManager.EndBlock();
 
 			templateFileManager.WriteTo(this.OutputDirectory, this.CheckoutCommandPrefix);
@@ -49,7 +49,7 @@
 		{
 			WriteWacTypeEnum(type, filePath);
 		}
-		else
+		else if (type.ComType != null)
 		{
 			WriteWacTypeObject(type, filePath);
 		}
@@ -596,7 +596,7 @@ namespace <#=ns#>
 <#+
 				}
 			}
-			else
+			else if (type.ComType != null)
 			{
 				string classId = string.Empty;
 				if (type.CoClassId != Guid.Empty)
@@ -605,12 +605,17 @@ namespace <#=ns#>
 				}
 
 #>
-			typeInfo = typeReg.AddType("<#=type.FullName#>", "<#=type.InterfaceId.ToString("B")#>", "<#=classId#>");
+			typeInfo = typeReg.AddType("<#=type.FullName#>", "<#=type.InterfaceId.ToString("B")#>", "<#=classId#>", OfficeExtension.WacRuntime.TypeCategory.<#=type.IsValueObject ? "ValueObject" : "ClassObject"#>);
 <#+
 				foreach (ClientCallablePropertyInfo prop in type.Properties)
 				{
+					string knownTypeName = "null";
+					if (prop.KnownType != null)
+					{
+						knownTypeName = "\"" + prop.KnownType.TypeRegistrationTypeName + "\"";
+					}
 #>
-			propInfo = typeInfo.AddProperty("<#=prop.Name#>", <#=prop.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, "<#=prop.PropertyType.TypeRegistrationTypeName#>", TypeCategory.<#=prop.PropertyType.TypeRegistrationTypeCategory#>, <#=prop.IsReadonly? "true" :"false"#>);
+			propInfo = typeInfo.AddProperty("<#=prop.Name#>", <#=prop.ComMember.DispatchId.ToString(CultureInfo.InvariantCulture)#>, "<#=prop.PropertyType.TypeRegistrationTypeName#>", TypeCategory.<#=prop.PropertyType.TypeRegistrationTypeCategory#>, <#=prop.IsReadonly? "true" :"false"#>, <#=knownTypeName#>);
 <#+
 				}
 
@@ -631,8 +636,13 @@ namespace <#=ns#>
 
 					foreach(ClientCallableParameterInfo par in method.Parameters)
 					{
+						string knownTypeName = "null";
+						if (par.KnownType != null)
+						{
+							knownTypeName = "\"" + par.KnownType.TypeRegistrationTypeName + "\"";
+						}
 #>
-			methodInfo.AddParameter("<#=par.Name#>", "<#=par.ParameterType.TypeRegistrationTypeName#>", TypeCategory.<#=par.ParameterType.TypeRegistrationTypeCategory#>);
+			methodInfo.AddParameter("<#=par.Name#>", "<#=par.ParameterType.TypeRegistrationTypeName#>", TypeCategory.<#=par.ParameterType.TypeRegistrationTypeCategory#>, <#=knownTypeName#>);
 <#+
 					}
 				}

@@ -68,8 +68,11 @@ class Body(OfficeExtension.ClientObject):
         self._lists = None
         self._paragraphs = None
         self._parentBody = None
+        self._parentBodyOrNullObject = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentSection = None
+        self._parentSectionOrNullObject = None
         self._style = None
         self._styleBuiltIn = None
         self._tables = None
@@ -108,15 +111,30 @@ class Body(OfficeExtension.ClientObject):
             self._parentBody = Body(self.context, _createPropertyObjectPath(self.context, self, "ParentBody", False, False))
         return self._parentBody
     @property
+    def parentBodyOrNullObject(self) -> 'Body':
+        if self._parentBodyOrNullObject is None:
+            self._parentBodyOrNullObject = Body(self.context, _createPropertyObjectPath(self.context, self, "ParentBodyOrNullObject", False, False))
+        return self._parentBodyOrNullObject
+    @property
     def parentContentControl(self) -> 'ContentControl':
         if self._parentContentControl is None:
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
     @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
+    @property
     def parentSection(self) -> 'Section':
         if self._parentSection is None:
             self._parentSection = Section(self.context, _createPropertyObjectPath(self.context, self, "ParentSection", False, False))
         return self._parentSection
+    @property
+    def parentSectionOrNullObject(self) -> 'Section':
+        if self._parentSectionOrNullObject is None:
+            self._parentSectionOrNullObject = Section(self.context, _createPropertyObjectPath(self.context, self, "ParentSectionOrNullObject", False, False))
+        return self._parentSectionOrNullObject
     @property
     def tables(self) -> 'TableCollection':
         if self._tables is None:
@@ -300,10 +318,16 @@ class Body(OfficeExtension.ClientObject):
             self.paragraphs._handleResult(obj.get("Paragraphs"))
         if "ParentBody" in obj:
             self.parentBody._handleResult(obj.get("ParentBody"))
+        if "ParentBodyOrNullObject" in obj:
+            self.parentBodyOrNullObject._handleResult(obj.get("ParentBodyOrNullObject"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentSection" in obj:
             self.parentSection._handleResult(obj.get("ParentSection"))
+        if "ParentSectionOrNullObject" in obj:
+            self.parentSectionOrNullObject._handleResult(obj.get("ParentSectionOrNullObject"))
         if "Tables" in obj:
             self.tables._handleResult(obj.get("Tables"))
     
@@ -338,8 +362,11 @@ class ContentControl(OfficeExtension.ClientObject):
         self._paragraphs = None
         self._parentBody = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentTable = None
         self._parentTableCell = None
+        self._parentTableCellOrNullObject = None
+        self._parentTableOrNullObject = None
         self._placeholderText = None
         self._removeWhenEdited = None
         self._style = None
@@ -388,6 +415,11 @@ class ContentControl(OfficeExtension.ClientObject):
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
     @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
+    @property
     def parentTable(self) -> 'Table':
         if self._parentTable is None:
             self._parentTable = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTable", False, False))
@@ -397,6 +429,16 @@ class ContentControl(OfficeExtension.ClientObject):
         if self._parentTableCell is None:
             self._parentTableCell = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCell", False, False))
         return self._parentTableCell
+    @property
+    def parentTableCellOrNullObject(self) -> 'TableCell':
+        if self._parentTableCellOrNullObject is None:
+            self._parentTableCellOrNullObject = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCellOrNullObject", False, False))
+        return self._parentTableCellOrNullObject
+    @property
+    def parentTableOrNullObject(self) -> 'Table':
+        if self._parentTableOrNullObject is None:
+            self._parentTableOrNullObject = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTableOrNullObject", False, False))
+        return self._parentTableOrNullObject
     @property
     def tables(self) -> 'TableCollection':
         if self._tables is None:
@@ -732,10 +774,16 @@ class ContentControl(OfficeExtension.ClientObject):
             self.parentBody._handleResult(obj.get("ParentBody"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentTable" in obj:
             self.parentTable._handleResult(obj.get("ParentTable"))
         if "ParentTableCell" in obj:
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
+        if "ParentTableCellOrNullObject" in obj:
+            self.parentTableCellOrNullObject._handleResult(obj.get("ParentTableCellOrNullObject"))
+        if "ParentTableOrNullObject" in obj:
+            self.parentTableOrNullObject._handleResult(obj.get("ParentTableOrNullObject"))
         if "Tables" in obj:
             self.tables._handleResult(obj.get("Tables"))
     
@@ -788,6 +836,12 @@ class ContentControlCollection(OfficeExtension.ClientObject):
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetById", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
+    def getByIdOrNullObject(self, id : 'int') -> 'ContentControl':
+        # Begin_PlaceHolder_ContentControlCollection_GetByIdOrNullObject
+        # End_PlaceHolder_ContentControlCollection_GetByIdOrNullObject
+        ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetByIdOrNullObject", OfficeExtension.OperationType.Read, [id], False, False))
+        return ret
+
     def getByTag(self, tag : 'str') -> 'ContentControlCollection':
         # Begin_PlaceHolder_ContentControlCollection_GetByTag
         # End_PlaceHolder_ContentControlCollection_GetByTag
@@ -810,6 +864,12 @@ class ContentControlCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_ContentControlCollection_GetFirst
         # End_PlaceHolder_ContentControlCollection_GetFirst
         ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'ContentControl':
+        # Begin_PlaceHolder_ContentControlCollection_GetFirstOrNullObject
+        # End_PlaceHolder_ContentControlCollection_GetFirstOrNullObject
+        ret = ContentControl(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getItem(self, index : 'any') -> 'ContentControl':
@@ -982,6 +1042,12 @@ class CustomPropertyCollection(OfficeExtension.ClientObject):
         # End_PlaceHolder_CustomPropertyCollection_GetItem
         return CustomProperty(self.context, _createIndexerObjectPath(self.context, self, [key]))
 
+    def getItemOrNullObject(self, key : 'str') -> 'CustomProperty':
+        # Begin_PlaceHolder_CustomPropertyCollection_GetItemOrNullObject
+        # End_PlaceHolder_CustomPropertyCollection_GetItemOrNullObject
+        ret = CustomProperty(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
+
     def set(self, key : 'str', value : 'any') -> 'CustomProperty':
         # Begin_PlaceHolder_CustomPropertyCollection_Set
         # End_PlaceHolder_CustomPropertyCollection_Set
@@ -1034,6 +1100,7 @@ class Document(OfficeExtension.ClientObject):
         self._properties = None
         self._saved = None
         self._sections = None
+        self._settings = None
         self.__ReferenceId = None
 
     @property
@@ -1056,6 +1123,11 @@ class Document(OfficeExtension.ClientObject):
         if self._sections is None:
             self._sections = SectionCollection(self.context, _createPropertyObjectPath(self.context, self, "Sections", True, False))
         return self._sections
+    @property
+    def settings(self) -> 'SettingCollection':
+        if self._settings is None:
+            self._settings = SettingCollection(self.context, _createPropertyObjectPath(self.context, self, "Settings", True, False))
+        return self._settings
 
     @property
     def saved(self) -> 'bool':
@@ -1070,6 +1142,24 @@ class Document(OfficeExtension.ClientObject):
         _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Document", self._isNull)
         return self.__ReferenceId
     
+
+    def deleteBookmark(self, name : 'str') -> None:
+        # Begin_PlaceHolder_Document_DeleteBookmark
+        # End_PlaceHolder_Document_DeleteBookmark
+        _createMethodAction(self.context, self, "DeleteBookmark", OfficeExtension.OperationType.Default, [name])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def getBookmarkRange(self, name : 'str') -> 'Range':
+        # Begin_PlaceHolder_Document_GetBookmarkRange
+        # End_PlaceHolder_Document_GetBookmarkRange
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetBookmarkRange", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
+
+    def getBookmarkRangeOrNullObject(self, name : 'str') -> 'Range':
+        # Begin_PlaceHolder_Document_GetBookmarkRangeOrNullObject
+        # End_PlaceHolder_Document_GetBookmarkRangeOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetBookmarkRangeOrNullObject", OfficeExtension.OperationType.Read, [name], False, False))
+        return ret
 
     def getSelection(self) -> 'Range':
         # Begin_PlaceHolder_Document_GetSelection
@@ -1143,6 +1233,8 @@ class Document(OfficeExtension.ClientObject):
             self.properties._handleResult(obj.get("Properties"))
         if "Sections" in obj:
             self.sections._handleResult(obj.get("Sections"))
+        if "Settings" in obj:
+            self.settings._handleResult(obj.get("Settings"))
     
     def load(self, option = None) -> 'Document':
         _load(self, option)
@@ -1673,11 +1765,15 @@ class InlinePicture(OfficeExtension.ClientObject):
         self._altTextTitle = None
         self._height = None
         self._hyperlink = None
+        self._imageFormat = None
         self._lockAspectRatio = None
         self._paragraph = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentTable = None
         self._parentTableCell = None
+        self._parentTableCellOrNullObject = None
+        self._parentTableOrNullObject = None
         self._width = None
         self.__Id = None
         self.__ReferenceId = None
@@ -1693,6 +1789,11 @@ class InlinePicture(OfficeExtension.ClientObject):
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
     @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
+    @property
     def parentTable(self) -> 'Table':
         if self._parentTable is None:
             self._parentTable = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTable", False, False))
@@ -1702,6 +1803,16 @@ class InlinePicture(OfficeExtension.ClientObject):
         if self._parentTableCell is None:
             self._parentTableCell = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCell", False, False))
         return self._parentTableCell
+    @property
+    def parentTableCellOrNullObject(self) -> 'TableCell':
+        if self._parentTableCellOrNullObject is None:
+            self._parentTableCellOrNullObject = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCellOrNullObject", False, False))
+        return self._parentTableCellOrNullObject
+    @property
+    def parentTableOrNullObject(self) -> 'Table':
+        if self._parentTableOrNullObject is None:
+            self._parentTableOrNullObject = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTableOrNullObject", False, False))
+        return self._parentTableOrNullObject
 
     @property
     def altTextDescription(self) -> 'str':
@@ -1754,6 +1865,13 @@ class InlinePicture(OfficeExtension.ClientObject):
         self._hyperlink = value
         _createSetPropertyAction(self.context, self, "Hyperlink", value)
         _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def imageFormat(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "imageFormat", self._imageFormat)
+        _throwIfNotLoaded("imageFormat", self._imageFormat, "InlinePicture", self._isNull)
+        return self._imageFormat
+    
 
     @property
     def lockAspectRatio(self) -> 'bool':
@@ -1814,6 +1932,12 @@ class InlinePicture(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_InlinePicture_GetNext
         # End_PlaceHolder_InlinePicture_GetNext
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getNextOrNullObject(self) -> 'InlinePicture':
+        # Begin_PlaceHolder_InlinePicture_GetNextOrNullObject
+        # End_PlaceHolder_InlinePicture_GetNextOrNullObject
+        ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
@@ -1896,6 +2020,8 @@ class InlinePicture(OfficeExtension.ClientObject):
             self._height = obj.get("Height")
         if "Hyperlink" in obj:
             self._hyperlink = obj.get("Hyperlink")
+        if "ImageFormat" in obj:
+            self._imageFormat = obj.get("ImageFormat")
         if "LockAspectRatio" in obj:
             self._lockAspectRatio = obj.get("LockAspectRatio")
         if "Width" in obj:
@@ -1908,10 +2034,16 @@ class InlinePicture(OfficeExtension.ClientObject):
             self.paragraph._handleResult(obj.get("Paragraph"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentTable" in obj:
             self.parentTable._handleResult(obj.get("ParentTable"))
         if "ParentTableCell" in obj:
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
+        if "ParentTableCellOrNullObject" in obj:
+            self.parentTableCellOrNullObject._handleResult(obj.get("ParentTableCellOrNullObject"))
+        if "ParentTableOrNullObject" in obj:
+            self.parentTableOrNullObject._handleResult(obj.get("ParentTableOrNullObject"))
     
     def load(self, option = None) -> 'InlinePicture':
         _load(self, option)
@@ -1956,6 +2088,12 @@ class InlinePictureCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_InlinePictureCollection_GetFirst
         # End_PlaceHolder_InlinePictureCollection_GetFirst
         ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'InlinePicture':
+        # Begin_PlaceHolder_InlinePictureCollection_GetFirstOrNullObject
+        # End_PlaceHolder_InlinePictureCollection_GetFirstOrNullObject
+        ret = InlinePicture(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'InlinePicture':
@@ -2044,10 +2182,25 @@ class List(OfficeExtension.ClientObject):
         return self.__ReferenceId
     
 
+    def getLevelFont(self, level : 'int') -> 'Font':
+        # Begin_PlaceHolder_List_GetLevelFont
+        # End_PlaceHolder_List_GetLevelFont
+        ret = Font(self.context, _createMethodObjectPath(self.context, self, "GetLevelFont", OfficeExtension.OperationType.Read, [level], False, False))
+        return ret
+
     def getLevelParagraphs(self, level : 'int') -> 'ParagraphCollection':
         # Begin_PlaceHolder_List_GetLevelParagraphs
         # End_PlaceHolder_List_GetLevelParagraphs
         ret = ParagraphCollection(self.context, _createMethodObjectPath(self.context, self, "GetLevelParagraphs", OfficeExtension.OperationType.Read, [level], True, False))
+        return ret
+
+    def getLevelPicture(self, level : 'int') -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_List_GetLevelPicture
+        # End_PlaceHolder_List_GetLevelPicture
+        action = _createMethodAction(self.context, self, "GetLevelPicture", OfficeExtension.OperationType.Read, [level])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
         return ret
 
     def getLevelString(self, level : 'int') -> OfficeExtension.ClientResult:
@@ -2064,6 +2217,12 @@ class List(OfficeExtension.ClientObject):
         # End_PlaceHolder_List_InsertParagraph
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "InsertParagraph", OfficeExtension.OperationType.Default, [paragraphText, insertLocation], False, True))
         return ret
+
+    def resetLevelFont(self, level : 'int', resetFontName : 'bool' = None) -> None:
+        # Begin_PlaceHolder_List_ResetLevelFont
+        # End_PlaceHolder_List_ResetLevelFont
+        _createMethodAction(self.context, self, "ResetLevelFont", OfficeExtension.OperationType.Default, [level, resetFontName])
+        _syncIfInstantSyncExecutionMode(self)
 
     def setLevelAlignment(self, level : 'int', alignment : 'str') -> None:
         # Begin_PlaceHolder_List_SetLevelAlignment
@@ -2087,6 +2246,12 @@ class List(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_List_SetLevelNumbering
         # End_PlaceHolder_List_SetLevelNumbering
         _createMethodAction(self.context, self, "SetLevelNumbering", OfficeExtension.OperationType.Default, [level, listNumbering, formatString])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def setLevelPicture(self, level : 'int', base64EncodedImage : 'str' = None) -> None:
+        # Begin_PlaceHolder_List_SetLevelPicture
+        # End_PlaceHolder_List_SetLevelPicture
+        _createMethodAction(self.context, self, "SetLevelPicture", OfficeExtension.OperationType.Default, [level, base64EncodedImage])
         _syncIfInstantSyncExecutionMode(self)
 
     def setLevelStartingNumber(self, level : 'int', startingNumber : 'int') -> None:
@@ -2167,10 +2332,22 @@ class ListCollection(OfficeExtension.ClientObject):
         ret = List(self.context, _createMethodObjectPath(self.context, self, "GetById", OfficeExtension.OperationType.Read, [id], False, False))
         return ret
 
+    def getByIdOrNullObject(self, id : 'int') -> 'List':
+        # Begin_PlaceHolder_ListCollection_GetByIdOrNullObject
+        # End_PlaceHolder_ListCollection_GetByIdOrNullObject
+        ret = List(self.context, _createMethodObjectPath(self.context, self, "GetByIdOrNullObject", OfficeExtension.OperationType.Read, [id], False, False))
+        return ret
+
     def getFirst(self) -> 'List':
         # Begin_PlaceHolder_ListCollection_GetFirst
         # End_PlaceHolder_ListCollection_GetFirst
         ret = List(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'List':
+        # Begin_PlaceHolder_ListCollection_GetFirstOrNullObject
+        # End_PlaceHolder_ListCollection_GetFirstOrNullObject
+        ret = List(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getItem(self, index : 'any') -> 'List':
@@ -2265,6 +2442,12 @@ class ListItem(OfficeExtension.ClientObject):
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetAncestor", OfficeExtension.OperationType.Read, [parentOnly], False, False))
         return ret
 
+    def getAncestorOrNullObject(self, parentOnly : 'bool' = None) -> 'Paragraph':
+        # Begin_PlaceHolder_ListItem_GetAncestorOrNullObject
+        # End_PlaceHolder_ListItem_GetAncestorOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetAncestorOrNullObject", OfficeExtension.OperationType.Read, [parentOnly], False, False))
+        return ret
+
     def getDescendants(self, directChildrenOnly : 'bool' = None) -> 'ParagraphCollection':
         # Begin_PlaceHolder_ListItem_GetDescendants
         # End_PlaceHolder_ListItem_GetDescendants
@@ -2324,11 +2507,16 @@ class Paragraph(OfficeExtension.ClientObject):
         self._lineUnitBefore = None
         self._list = None
         self._listItem = None
+        self._listItemOrNullObject = None
+        self._listOrNullObject = None
         self._outlineLevel = None
         self._parentBody = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentTable = None
         self._parentTableCell = None
+        self._parentTableCellOrNullObject = None
+        self._parentTableOrNullObject = None
         self._rightIndent = None
         self._spaceAfter = None
         self._spaceBefore = None
@@ -2365,6 +2553,16 @@ class Paragraph(OfficeExtension.ClientObject):
             self._listItem = ListItem(self.context, _createPropertyObjectPath(self.context, self, "ListItem", False, False))
         return self._listItem
     @property
+    def listItemOrNullObject(self) -> 'ListItem':
+        if self._listItemOrNullObject is None:
+            self._listItemOrNullObject = ListItem(self.context, _createPropertyObjectPath(self.context, self, "ListItemOrNullObject", False, False))
+        return self._listItemOrNullObject
+    @property
+    def listOrNullObject(self) -> 'List':
+        if self._listOrNullObject is None:
+            self._listOrNullObject = List(self.context, _createPropertyObjectPath(self.context, self, "ListOrNullObject", False, False))
+        return self._listOrNullObject
+    @property
     def parentBody(self) -> 'Body':
         if self._parentBody is None:
             self._parentBody = Body(self.context, _createPropertyObjectPath(self.context, self, "ParentBody", False, False))
@@ -2375,6 +2573,11 @@ class Paragraph(OfficeExtension.ClientObject):
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
     @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
+    @property
     def parentTable(self) -> 'Table':
         if self._parentTable is None:
             self._parentTable = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTable", False, False))
@@ -2384,6 +2587,16 @@ class Paragraph(OfficeExtension.ClientObject):
         if self._parentTableCell is None:
             self._parentTableCell = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCell", False, False))
         return self._parentTableCell
+    @property
+    def parentTableCellOrNullObject(self) -> 'TableCell':
+        if self._parentTableCellOrNullObject is None:
+            self._parentTableCellOrNullObject = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCellOrNullObject", False, False))
+        return self._parentTableCellOrNullObject
+    @property
+    def parentTableOrNullObject(self) -> 'Table':
+        if self._parentTableOrNullObject is None:
+            self._parentTableOrNullObject = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTableOrNullObject", False, False))
+        return self._parentTableOrNullObject
 
     @property
     def alignment(self) -> 'str':
@@ -2622,6 +2835,12 @@ class Paragraph(OfficeExtension.ClientObject):
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getNextOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Paragraph_GetNextOrNullObject
+        # End_PlaceHolder_Paragraph_GetNextOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def getOoxml(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Paragraph_GetOoxml
         # End_PlaceHolder_Paragraph_GetOoxml
@@ -2635,6 +2854,12 @@ class Paragraph(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_Paragraph_GetPrevious
         # End_PlaceHolder_Paragraph_GetPrevious
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetPrevious", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getPreviousOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Paragraph_GetPreviousOrNullObject
+        # End_PlaceHolder_Paragraph_GetPreviousOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetPreviousOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
@@ -2785,14 +3010,24 @@ class Paragraph(OfficeExtension.ClientObject):
             self.list._handleResult(obj.get("List"))
         if "ListItem" in obj:
             self.listItem._handleResult(obj.get("ListItem"))
+        if "ListItemOrNullObject" in obj:
+            self.listItemOrNullObject._handleResult(obj.get("ListItemOrNullObject"))
+        if "ListOrNullObject" in obj:
+            self.listOrNullObject._handleResult(obj.get("ListOrNullObject"))
         if "ParentBody" in obj:
             self.parentBody._handleResult(obj.get("ParentBody"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentTable" in obj:
             self.parentTable._handleResult(obj.get("ParentTable"))
         if "ParentTableCell" in obj:
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
+        if "ParentTableCellOrNullObject" in obj:
+            self.parentTableCellOrNullObject._handleResult(obj.get("ParentTableCellOrNullObject"))
+        if "ParentTableOrNullObject" in obj:
+            self.parentTableOrNullObject._handleResult(obj.get("ParentTableOrNullObject"))
     
     def load(self, option = None) -> 'Paragraph':
         _load(self, option)
@@ -2839,10 +3074,22 @@ class ParagraphCollection(OfficeExtension.ClientObject):
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getFirstOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_ParagraphCollection_GetFirstOrNullObject
+        # End_PlaceHolder_ParagraphCollection_GetFirstOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def getLast(self) -> 'Paragraph':
         # Begin_PlaceHolder_ParagraphCollection_GetLast
         # End_PlaceHolder_ParagraphCollection_GetLast
         ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetLast", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getLastOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_ParagraphCollection_GetLastOrNullObject
+        # End_PlaceHolder_ParagraphCollection_GetLastOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetLastOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Paragraph':
@@ -2900,8 +3147,11 @@ class Range(OfficeExtension.ClientObject):
         self._paragraphs = None
         self._parentBody = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentTable = None
         self._parentTableCell = None
+        self._parentTableCellOrNullObject = None
+        self._parentTableOrNullObject = None
         self._style = None
         self._styleBuiltIn = None
         self._tables = None
@@ -2945,6 +3195,11 @@ class Range(OfficeExtension.ClientObject):
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
     @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
+    @property
     def parentTable(self) -> 'Table':
         if self._parentTable is None:
             self._parentTable = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTable", False, False))
@@ -2954,6 +3209,16 @@ class Range(OfficeExtension.ClientObject):
         if self._parentTableCell is None:
             self._parentTableCell = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCell", False, False))
         return self._parentTableCell
+    @property
+    def parentTableCellOrNullObject(self) -> 'TableCell':
+        if self._parentTableCellOrNullObject is None:
+            self._parentTableCellOrNullObject = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCellOrNullObject", False, False))
+        return self._parentTableCellOrNullObject
+    @property
+    def parentTableOrNullObject(self) -> 'Table':
+        if self._parentTableOrNullObject is None:
+            self._parentTableOrNullObject = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTableOrNullObject", False, False))
+        return self._parentTableOrNullObject
     @property
     def tables(self) -> 'TableCollection':
         if self._tables is None:
@@ -3054,6 +3319,21 @@ class Range(OfficeExtension.ClientObject):
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "ExpandTo", OfficeExtension.OperationType.Default, [range], False, False))
         return ret
 
+    def expandToOrNullObject(self, range : 'Range') -> 'Range':
+        # Begin_PlaceHolder_Range_ExpandToOrNullObject
+        # End_PlaceHolder_Range_ExpandToOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "ExpandToOrNullObject", OfficeExtension.OperationType.Default, [range], False, False))
+        return ret
+
+    def getBookmarks(self, includeHidden : 'bool' = None, includeAdjacent : 'bool' = None) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_Range_GetBookmarks
+        # End_PlaceHolder_Range_GetBookmarks
+        action = _createMethodAction(self.context, self, "GetBookmarks", OfficeExtension.OperationType.Read, [includeHidden, includeAdjacent])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
     def getHtml(self) -> OfficeExtension.ClientResult:
         # Begin_PlaceHolder_Range_GetHtml
         # End_PlaceHolder_Range_GetHtml
@@ -3073,6 +3353,12 @@ class Range(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_Range_GetNextTextRange
         # End_PlaceHolder_Range_GetNextTextRange
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetNextTextRange", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], False, False))
+        return ret
+
+    def getNextTextRangeOrNullObject(self, endingMarks : 'list', trimSpacing : 'bool' = None) -> 'Range':
+        # Begin_PlaceHolder_Range_GetNextTextRangeOrNullObject
+        # End_PlaceHolder_Range_GetNextTextRangeOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetNextTextRangeOrNullObject", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], False, False))
         return ret
 
     def getOoxml(self) -> OfficeExtension.ClientResult:
@@ -3095,6 +3381,12 @@ class Range(OfficeExtension.ClientObject):
         # End_PlaceHolder_Range_GetTextRanges
         ret = RangeCollection(self.context, _createMethodObjectPath(self.context, self, "GetTextRanges", OfficeExtension.OperationType.Read, [endingMarks, trimSpacing], True, False))
         return ret
+
+    def insertBookmark(self, name : 'str') -> None:
+        # Begin_PlaceHolder_Range_InsertBookmark
+        # End_PlaceHolder_Range_InsertBookmark
+        _createMethodAction(self.context, self, "InsertBookmark", OfficeExtension.OperationType.Default, [name])
+        _syncIfInstantSyncExecutionMode(self)
 
     def insertBreak(self, breakType : 'str', insertLocation : 'str') -> None:
         # Begin_PlaceHolder_Range_InsertBreak
@@ -3156,6 +3448,12 @@ class Range(OfficeExtension.ClientObject):
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "IntersectWith", OfficeExtension.OperationType.Default, [range], False, False))
         return ret
 
+    def intersectWithOrNullObject(self, range : 'Range') -> 'Range':
+        # Begin_PlaceHolder_Range_IntersectWithOrNullObject
+        # End_PlaceHolder_Range_IntersectWithOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "IntersectWithOrNullObject", OfficeExtension.OperationType.Default, [range], False, False))
+        return ret
+
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
         # Begin_PlaceHolder_Range_Search
         # End_PlaceHolder_Range_Search
@@ -3214,10 +3512,16 @@ class Range(OfficeExtension.ClientObject):
             self.parentBody._handleResult(obj.get("ParentBody"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentTable" in obj:
             self.parentTable._handleResult(obj.get("ParentTable"))
         if "ParentTableCell" in obj:
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
+        if "ParentTableCellOrNullObject" in obj:
+            self.parentTableCellOrNullObject._handleResult(obj.get("ParentTableCellOrNullObject"))
+        if "ParentTableOrNullObject" in obj:
+            self.parentTableOrNullObject._handleResult(obj.get("ParentTableOrNullObject"))
         if "Tables" in obj:
             self.tables._handleResult(obj.get("Tables"))
     
@@ -3264,6 +3568,12 @@ class RangeCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_RangeCollection_GetFirst
         # End_PlaceHolder_RangeCollection_GetFirst
         ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'Range':
+        # Begin_PlaceHolder_RangeCollection_GetFirstOrNullObject
+        # End_PlaceHolder_RangeCollection_GetFirstOrNullObject
+        ret = Range(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Range':
@@ -3453,6 +3763,8 @@ class Section(OfficeExtension.ClientObject):
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
         self._body = None
+        self._headerFooterEvenPageDifferent = None
+        self._headerFooterFirstPageDifferent = None
         self.__Id = None
         self.__ReferenceId = None
 
@@ -3461,6 +3773,32 @@ class Section(OfficeExtension.ClientObject):
         if self._body is None:
             self._body = Body(self.context, _createPropertyObjectPath(self.context, self, "Body", False, False))
         return self._body
+
+    @property
+    def headerFooterEvenPageDifferent(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "headerFooterEvenPageDifferent", self._headerFooterEvenPageDifferent)
+        _throwIfNotLoaded("headerFooterEvenPageDifferent", self._headerFooterEvenPageDifferent, "Section", self._isNull)
+        return self._headerFooterEvenPageDifferent
+    
+
+    @headerFooterEvenPageDifferent.setter
+    def headerFooterEvenPageDifferent(self, value : 'bool'):
+        self._headerFooterEvenPageDifferent = value
+        _createSetPropertyAction(self.context, self, "HeaderFooterEvenPageDifferent", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def headerFooterFirstPageDifferent(self) -> 'bool':
+        _loadIfInstantSyncExecutionMode(self, "headerFooterFirstPageDifferent", self._headerFooterFirstPageDifferent)
+        _throwIfNotLoaded("headerFooterFirstPageDifferent", self._headerFooterFirstPageDifferent, "Section", self._isNull)
+        return self._headerFooterFirstPageDifferent
+    
+
+    @headerFooterFirstPageDifferent.setter
+    def headerFooterFirstPageDifferent(self, value : 'bool'):
+        self._headerFooterFirstPageDifferent = value
+        _createSetPropertyAction(self.context, self, "HeaderFooterFirstPageDifferent", value)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def _Id(self) -> 'int':
@@ -3494,6 +3832,12 @@ class Section(OfficeExtension.ClientObject):
         ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getNextOrNullObject(self) -> 'Section':
+        # Begin_PlaceHolder_Section_GetNextOrNullObject
+        # End_PlaceHolder_Section_GetNextOrNullObject
+        ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def _KeepReference(self) -> None:
         # Begin_PlaceHolder_Section__KeepReference
         # End_PlaceHolder_Section__KeepReference
@@ -3506,6 +3850,10 @@ class Section(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
+        if "HeaderFooterEvenPageDifferent" in obj:
+            self._headerFooterEvenPageDifferent = obj.get("HeaderFooterEvenPageDifferent")
+        if "HeaderFooterFirstPageDifferent" in obj:
+            self._headerFooterFirstPageDifferent = obj.get("HeaderFooterFirstPageDifferent")
         if "_Id" in obj:
             self.__Id = obj.get("_Id")
         if "_ReferenceId" in obj:
@@ -3558,6 +3906,12 @@ class SectionCollection(OfficeExtension.ClientObject):
         ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getFirstOrNullObject(self) -> 'Section':
+        # Begin_PlaceHolder_SectionCollection_GetFirstOrNullObject
+        # End_PlaceHolder_SectionCollection_GetFirstOrNullObject
+        ret = Section(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def _GetItem(self, index : 'any') -> 'Section':
         # Begin_PlaceHolder_SectionCollection__GetItem
         # End_PlaceHolder_SectionCollection__GetItem
@@ -3599,23 +3953,191 @@ class SectionCollection(OfficeExtension.ClientObject):
         if "_ReferenceId" in value:
             self.__ReferenceId = value.get("_ReferenceId")
 
+class Setting(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_Setting_Custom_Members
+    # End_PlaceHolder_Setting_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self._key = None
+        self._value = None
+        self.__ReferenceId = None
+
+
+    @property
+    def key(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "key", self._key)
+        _throwIfNotLoaded("key", self._key, "Setting", self._isNull)
+        return self._key
+    
+
+    @property
+    def value(self) -> 'any':
+        _loadIfInstantSyncExecutionMode(self, "value", self._value)
+        _throwIfNotLoaded("value", self._value, "Setting", self._isNull)
+        return self._value
+    
+
+    @value.setter
+    def value(self, value : 'any'):
+        self._value = value
+        _createSetPropertyAction(self.context, self, "Value", value)
+        _syncIfInstantSyncExecutionMode(self)
+
+    @property
+    def _ReferenceId(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "Setting", self._isNull)
+        return self.__ReferenceId
+    
+
+    def delete(self) -> None:
+        # Begin_PlaceHolder_Setting_Delete
+        # End_PlaceHolder_Setting_Delete
+        _createMethodAction(self.context, self, "Delete", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def _KeepReference(self) -> None:
+        # Begin_PlaceHolder_Setting__KeepReference
+        # End_PlaceHolder_Setting__KeepReference
+        _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "Key" in obj:
+            self._key = obj.get("Key")
+        if "Value" in obj:
+            self._value = obj.get("Value")
+        if "_ReferenceId" in obj:
+            self.__ReferenceId = obj.get("_ReferenceId")
+    
+    def load(self, option = None) -> 'Setting':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'Setting':
+        _load(self, None)
+        return self
+    def _handleIdResult(self, value) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if value is None:
+            return
+        if "_ReferenceId" in value:
+            self.__ReferenceId = value.get("_ReferenceId")
+
+class SettingCollection(OfficeExtension.ClientObject):
+    # Begin_PlaceHolder_SettingCollection_Custom_Members
+    # End_PlaceHolder_SettingCollection_Custom_Members
+    def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
+        super(self.__class__, self).__init__(context, objectPath)
+        self.__ReferenceId = None
+        self.__items = None
+
+    
+    @property
+    def items(self) -> 'list of Setting':
+        _loadIfInstantSyncExecutionMode(self, "items", self.__items)
+        _throwIfNotLoaded("items", self.__items, "SettingCollection", self._isNull)
+        return self.__items
+    
+
+    @property
+    def _ReferenceId(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "_ReferenceId", self.__ReferenceId)
+        _throwIfNotLoaded("_ReferenceId", self.__ReferenceId, "SettingCollection", self._isNull)
+        return self.__ReferenceId
+    
+
+    def deleteAll(self) -> None:
+        # Begin_PlaceHolder_SettingCollection_DeleteAll
+        # End_PlaceHolder_SettingCollection_DeleteAll
+        _createMethodAction(self.context, self, "DeleteAll", OfficeExtension.OperationType.Default, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def getCount(self) -> OfficeExtension.ClientResult:
+        # Begin_PlaceHolder_SettingCollection_GetCount
+        # End_PlaceHolder_SettingCollection_GetCount
+        action = _createMethodAction(self.context, self, "GetCount", OfficeExtension.OperationType.Read, [])
+        ret = OfficeExtension.ClientResult()
+        _addActionResultHandler(self, action, ret)
+        _syncIfInstantSyncExecutionMode(self)
+        return ret
+
+    def getItem(self, key : 'str') -> 'Setting':
+        # Begin_PlaceHolder_SettingCollection_GetItem
+        # End_PlaceHolder_SettingCollection_GetItem
+        return Setting(self.context, _createIndexerObjectPath(self.context, self, [key]))
+
+    def getItemOrNullObject(self, key : 'str') -> 'Setting':
+        # Begin_PlaceHolder_SettingCollection_GetItemOrNullObject
+        # End_PlaceHolder_SettingCollection_GetItemOrNullObject
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "GetItemOrNullObject", OfficeExtension.OperationType.Read, [key], False, False))
+        return ret
+
+    def set(self, key : 'str', value : 'any') -> 'Setting':
+        # Begin_PlaceHolder_SettingCollection_Set
+        # End_PlaceHolder_SettingCollection_Set
+        ret = Setting(self.context, _createMethodObjectPath(self.context, self, "Set", OfficeExtension.OperationType.Default, [key, value], False, False))
+        return ret
+
+    def _KeepReference(self) -> None:
+        # Begin_PlaceHolder_SettingCollection__KeepReference
+        # End_PlaceHolder_SettingCollection__KeepReference
+        _createMethodAction(self.context, self, "_KeepReference", OfficeExtension.OperationType.Read, [])
+        _syncIfInstantSyncExecutionMode(self)
+
+    # Handle results returned from the document
+    def _handleResult(self, value: dict) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if _isNullOrUndefined(value):
+            return
+        obj = value;
+        if "_ReferenceId" in obj:
+            self.__ReferenceId = obj.get("_ReferenceId")
+        if OfficeExtension.Constants.items in obj:
+            self.__items = []
+            data = obj.get(OfficeExtension.Constants.items)
+            for i, itemData in enumerate(data):
+                item = Setting(self.context, _createChildItemObjectPathUsingIndexerOrGetItemAt(True, self.context, self, itemData, i))
+                item._handleResult(itemData)
+                self.__items.append(item)
+    
+    def load(self, option = None) -> 'SettingCollection':
+        _load(self, option)
+        return self
+    
+    def reload(self) -> 'SettingCollection':
+        _load(self, None)
+        return self
+    def _handleIdResult(self, value) -> None:
+        super(self.__class__, self)._handleIdResult(value)
+        if value is None:
+            return
+        if "_ReferenceId" in value:
+            self.__ReferenceId = value.get("_ReferenceId")
+
 class Table(OfficeExtension.ClientObject):
     # Begin_PlaceHolder_Table_Custom_Members
     # End_PlaceHolder_Table_Custom_Members
     def __init__(self, context: OfficeExtension.ClientRequestContext, objectPath: OfficeExtension.ObjectPath):
         super(self.__class__, self).__init__(context, objectPath)
+        self._alignment = None
         self._font = None
         self._headerRowCount = None
-        self._height = None
         self._horizontalAlignment = None
         self._isUniform = None
         self._nestingLevel = None
-        self._paragraphAfter = None
-        self._paragraphBefore = None
         self._parentBody = None
         self._parentContentControl = None
+        self._parentContentControlOrNullObject = None
         self._parentTable = None
         self._parentTableCell = None
+        self._parentTableCellOrNullObject = None
+        self._parentTableOrNullObject = None
         self._rowCount = None
         self._rows = None
         self._shadingColor = None
@@ -3639,16 +4161,6 @@ class Table(OfficeExtension.ClientObject):
             self._font = Font(self.context, _createPropertyObjectPath(self.context, self, "Font", False, False))
         return self._font
     @property
-    def paragraphAfter(self) -> 'Paragraph':
-        if self._paragraphAfter is None:
-            self._paragraphAfter = Paragraph(self.context, _createPropertyObjectPath(self.context, self, "ParagraphAfter", False, False))
-        return self._paragraphAfter
-    @property
-    def paragraphBefore(self) -> 'Paragraph':
-        if self._paragraphBefore is None:
-            self._paragraphBefore = Paragraph(self.context, _createPropertyObjectPath(self.context, self, "ParagraphBefore", False, False))
-        return self._paragraphBefore
-    @property
     def parentBody(self) -> 'Body':
         if self._parentBody is None:
             self._parentBody = Body(self.context, _createPropertyObjectPath(self.context, self, "ParentBody", False, False))
@@ -3658,6 +4170,11 @@ class Table(OfficeExtension.ClientObject):
         if self._parentContentControl is None:
             self._parentContentControl = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControl", False, False))
         return self._parentContentControl
+    @property
+    def parentContentControlOrNullObject(self) -> 'ContentControl':
+        if self._parentContentControlOrNullObject is None:
+            self._parentContentControlOrNullObject = ContentControl(self.context, _createPropertyObjectPath(self.context, self, "ParentContentControlOrNullObject", False, False))
+        return self._parentContentControlOrNullObject
     @property
     def parentTable(self) -> 'Table':
         if self._parentTable is None:
@@ -3669,6 +4186,16 @@ class Table(OfficeExtension.ClientObject):
             self._parentTableCell = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCell", False, False))
         return self._parentTableCell
     @property
+    def parentTableCellOrNullObject(self) -> 'TableCell':
+        if self._parentTableCellOrNullObject is None:
+            self._parentTableCellOrNullObject = TableCell(self.context, _createPropertyObjectPath(self.context, self, "ParentTableCellOrNullObject", False, False))
+        return self._parentTableCellOrNullObject
+    @property
+    def parentTableOrNullObject(self) -> 'Table':
+        if self._parentTableOrNullObject is None:
+            self._parentTableOrNullObject = Table(self.context, _createPropertyObjectPath(self.context, self, "ParentTableOrNullObject", False, False))
+        return self._parentTableOrNullObject
+    @property
     def rows(self) -> 'TableRowCollection':
         if self._rows is None:
             self._rows = TableRowCollection(self.context, _createPropertyObjectPath(self.context, self, "Rows", True, False))
@@ -3678,6 +4205,19 @@ class Table(OfficeExtension.ClientObject):
         if self._tables is None:
             self._tables = TableCollection(self.context, _createPropertyObjectPath(self.context, self, "Tables", True, False))
         return self._tables
+
+    @property
+    def alignment(self) -> 'str':
+        _loadIfInstantSyncExecutionMode(self, "alignment", self._alignment)
+        _throwIfNotLoaded("alignment", self._alignment, "Table", self._isNull)
+        return self._alignment
+    
+
+    @alignment.setter
+    def alignment(self, value : 'str'):
+        self._alignment = value
+        _createSetPropertyAction(self.context, self, "Alignment", value)
+        _syncIfInstantSyncExecutionMode(self)
 
     @property
     def headerRowCount(self) -> 'int':
@@ -3691,13 +4231,6 @@ class Table(OfficeExtension.ClientObject):
         self._headerRowCount = value
         _createSetPropertyAction(self.context, self, "HeaderRowCount", value)
         _syncIfInstantSyncExecutionMode(self)
-
-    @property
-    def height(self) -> 'float':
-        _loadIfInstantSyncExecutionMode(self, "height", self._height)
-        _throwIfNotLoaded("height", self._height, "Table", self._isNull)
-        return self._height
-    
 
     @property
     def horizontalAlignment(self) -> 'str':
@@ -3902,12 +4435,6 @@ class Table(OfficeExtension.ClientObject):
         ret = TableRowCollection(self.context, _createMethodObjectPath(self.context, self, "AddRows", OfficeExtension.OperationType.Default, [insertLocation, rowCount, values], True, False))
         return ret
 
-    def autoFitContents(self) -> None:
-        # Begin_PlaceHolder_Table_AutoFitContents
-        # End_PlaceHolder_Table_AutoFitContents
-        _createMethodAction(self.context, self, "AutoFitContents", OfficeExtension.OperationType.Default, [])
-        _syncIfInstantSyncExecutionMode(self)
-
     def autoFitWindow(self) -> None:
         # Begin_PlaceHolder_Table_AutoFitWindow
         # End_PlaceHolder_Table_AutoFitWindow
@@ -3944,12 +4471,6 @@ class Table(OfficeExtension.ClientObject):
         _createMethodAction(self.context, self, "DistributeColumns", OfficeExtension.OperationType.Default, [])
         _syncIfInstantSyncExecutionMode(self)
 
-    def distributeRows(self) -> None:
-        # Begin_PlaceHolder_Table_DistributeRows
-        # End_PlaceHolder_Table_DistributeRows
-        _createMethodAction(self.context, self, "DistributeRows", OfficeExtension.OperationType.Default, [])
-        _syncIfInstantSyncExecutionMode(self)
-
     def getBorder(self, borderLocation : 'str') -> 'TableBorder':
         # Begin_PlaceHolder_Table_GetBorder
         # End_PlaceHolder_Table_GetBorder
@@ -3959,7 +4480,13 @@ class Table(OfficeExtension.ClientObject):
     def getCell(self, rowIndex : 'int', cellIndex : 'int') -> 'TableCell':
         # Begin_PlaceHolder_Table_GetCell
         # End_PlaceHolder_Table_GetCell
-        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Default, [rowIndex, cellIndex], False, False))
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetCell", OfficeExtension.OperationType.Read, [rowIndex, cellIndex], False, False))
+        return ret
+
+    def getCellOrNullObject(self, rowIndex : 'int', cellIndex : 'int') -> 'TableCell':
+        # Begin_PlaceHolder_Table_GetCellOrNullObject
+        # End_PlaceHolder_Table_GetCellOrNullObject
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetCellOrNullObject", OfficeExtension.OperationType.Read, [rowIndex, cellIndex], False, False))
         return ret
 
     def getCellPadding(self, cellPaddingLocation : 'str') -> OfficeExtension.ClientResult:
@@ -3975,6 +4502,36 @@ class Table(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_Table_GetNext
         # End_PlaceHolder_Table_GetNext
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getNextOrNullObject(self) -> 'Table':
+        # Begin_PlaceHolder_Table_GetNextOrNullObject
+        # End_PlaceHolder_Table_GetNextOrNullObject
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getParagraphAfter(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Table_GetParagraphAfter
+        # End_PlaceHolder_Table_GetParagraphAfter
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetParagraphAfter", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getParagraphAfterOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Table_GetParagraphAfterOrNullObject
+        # End_PlaceHolder_Table_GetParagraphAfterOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetParagraphAfterOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getParagraphBefore(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Table_GetParagraphBefore
+        # End_PlaceHolder_Table_GetParagraphBefore
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetParagraphBefore", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getParagraphBeforeOrNullObject(self) -> 'Paragraph':
+        # Begin_PlaceHolder_Table_GetParagraphBeforeOrNullObject
+        # End_PlaceHolder_Table_GetParagraphBeforeOrNullObject
+        ret = Paragraph(self.context, _createMethodObjectPath(self.context, self, "GetParagraphBeforeOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def getRange(self, rangeLocation : 'str' = None) -> 'Range':
@@ -3999,6 +4556,12 @@ class Table(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_Table_InsertTable
         # End_PlaceHolder_Table_InsertTable
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "InsertTable", OfficeExtension.OperationType.Default, [rowCount, columnCount, insertLocation, values], False, True))
+        return ret
+
+    def mergeCells(self, topRow : 'int', firstCell : 'int', bottomRow : 'int', lastCell : 'int') -> 'TableCell':
+        # Begin_PlaceHolder_Table_MergeCells
+        # End_PlaceHolder_Table_MergeCells
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "MergeCells", OfficeExtension.OperationType.Default, [topRow, firstCell, bottomRow, lastCell], False, True))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
@@ -4031,10 +4594,10 @@ class Table(OfficeExtension.ClientObject):
         if _isNullOrUndefined(value):
             return
         obj = value;
+        if "Alignment" in obj:
+            self._alignment = obj.get("Alignment")
         if "HeaderRowCount" in obj:
             self._headerRowCount = obj.get("HeaderRowCount")
-        if "Height" in obj:
-            self._height = obj.get("Height")
         if "HorizontalAlignment" in obj:
             self._horizontalAlignment = obj.get("HorizontalAlignment")
         if "IsUniform" in obj:
@@ -4071,18 +4634,20 @@ class Table(OfficeExtension.ClientObject):
             self.__ReferenceId = obj.get("_ReferenceId")
         if "Font" in obj:
             self.font._handleResult(obj.get("Font"))
-        if "ParagraphAfter" in obj:
-            self.paragraphAfter._handleResult(obj.get("ParagraphAfter"))
-        if "ParagraphBefore" in obj:
-            self.paragraphBefore._handleResult(obj.get("ParagraphBefore"))
         if "ParentBody" in obj:
             self.parentBody._handleResult(obj.get("ParentBody"))
         if "ParentContentControl" in obj:
             self.parentContentControl._handleResult(obj.get("ParentContentControl"))
+        if "ParentContentControlOrNullObject" in obj:
+            self.parentContentControlOrNullObject._handleResult(obj.get("ParentContentControlOrNullObject"))
         if "ParentTable" in obj:
             self.parentTable._handleResult(obj.get("ParentTable"))
         if "ParentTableCell" in obj:
             self.parentTableCell._handleResult(obj.get("ParentTableCell"))
+        if "ParentTableCellOrNullObject" in obj:
+            self.parentTableCellOrNullObject._handleResult(obj.get("ParentTableCellOrNullObject"))
+        if "ParentTableOrNullObject" in obj:
+            self.parentTableOrNullObject._handleResult(obj.get("ParentTableOrNullObject"))
         if "Rows" in obj:
             self.rows._handleResult(obj.get("Rows"))
         if "Tables" in obj:
@@ -4131,6 +4696,12 @@ class TableCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_TableCollection_GetFirst
         # End_PlaceHolder_TableCollection_GetFirst
         ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'Table':
+        # Begin_PlaceHolder_TableCollection_GetFirstOrNullObject
+        # End_PlaceHolder_TableCollection_GetFirstOrNullObject
+        ret = Table(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'Table':
@@ -4342,10 +4913,22 @@ class TableRow(OfficeExtension.ClientObject):
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getNextOrNullObject(self) -> 'TableRow':
+        # Begin_PlaceHolder_TableRow_GetNextOrNullObject
+        # End_PlaceHolder_TableRow_GetNextOrNullObject
+        ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def insertRows(self, insertLocation : 'str', rowCount : 'int', values : 'list' = None) -> 'TableRowCollection':
         # Begin_PlaceHolder_TableRow_InsertRows
         # End_PlaceHolder_TableRow_InsertRows
         ret = TableRowCollection(self.context, _createMethodObjectPath(self.context, self, "InsertRows", OfficeExtension.OperationType.Read, [insertLocation, rowCount, values], True, False))
+        return ret
+
+    def merge(self) -> 'TableCell':
+        # Begin_PlaceHolder_TableRow_Merge
+        # End_PlaceHolder_TableRow_Merge
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "Merge", OfficeExtension.OperationType.Default, [], False, False))
         return ret
 
     def search(self, searchText : 'str', searchOptions : 'SearchOptions' = None) -> 'RangeCollection':
@@ -4448,6 +5031,12 @@ class TableRowCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_TableRowCollection_GetFirst
         # End_PlaceHolder_TableRowCollection_GetFirst
         ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'TableRow':
+        # Begin_PlaceHolder_TableRowCollection_GetFirstOrNullObject
+        # End_PlaceHolder_TableRowCollection_GetFirstOrNullObject
+        ret = TableRow(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'TableRow':
@@ -4659,6 +5248,12 @@ class TableCell(OfficeExtension.ClientObject):
         ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetNext", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
+    def getNextOrNullObject(self) -> 'TableCell':
+        # Begin_PlaceHolder_TableCell_GetNextOrNullObject
+        # End_PlaceHolder_TableCell_GetNextOrNullObject
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetNextOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
     def insertColumns(self, insertLocation : 'str', columnCount : 'int', values : 'list' = None) -> None:
         # Begin_PlaceHolder_TableCell_InsertColumns
         # End_PlaceHolder_TableCell_InsertColumns
@@ -4675,6 +5270,12 @@ class TableCell(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_TableCell_SetCellPadding
         # End_PlaceHolder_TableCell_SetCellPadding
         _createMethodAction(self.context, self, "SetCellPadding", OfficeExtension.OperationType.Default, [cellPaddingLocation, cellPadding])
+        _syncIfInstantSyncExecutionMode(self)
+
+    def split(self, rowCount : 'int', columnCount : 'int') -> None:
+        # Begin_PlaceHolder_TableCell_Split
+        # End_PlaceHolder_TableCell_Split
+        _createMethodAction(self.context, self, "Split", OfficeExtension.OperationType.Default, [rowCount, columnCount])
         _syncIfInstantSyncExecutionMode(self)
 
     def _KeepReference(self) -> None:
@@ -4759,6 +5360,12 @@ class TableCellCollection(OfficeExtension.ClientObject):
         # Begin_PlaceHolder_TableCellCollection_GetFirst
         # End_PlaceHolder_TableCellCollection_GetFirst
         ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetFirst", OfficeExtension.OperationType.Read, [], False, False))
+        return ret
+
+    def getFirstOrNullObject(self) -> 'TableCell':
+        # Begin_PlaceHolder_TableCellCollection_GetFirstOrNullObject
+        # End_PlaceHolder_TableCellCollection_GetFirstOrNullObject
+        ret = TableCell(self.context, _createMethodObjectPath(self.context, self, "GetFirstOrNullObject", OfficeExtension.OperationType.Read, [], False, False))
         return ret
 
     def _GetItem(self, index : 'any') -> 'TableCell':

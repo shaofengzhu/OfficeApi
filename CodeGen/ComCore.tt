@@ -1016,6 +1016,7 @@ HRESULT <#=type.ComType.CoClassName#>::<#=method.ComMember.Name#>Invoke(const ::
 			if (par.ParameterType.IsClientObject || par.ParameterType.IsClientValueObject)
 			{
 				sbInvokeParameterList.Append(this.GetArgumentLocalCntPtrName(par));
+				sbInvokeParameterList.Append(".Get()");
 			}
 			else
 			{
