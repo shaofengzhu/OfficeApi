@@ -6,8 +6,19 @@ import datetime
 import json
 import exceldemolib
 import worddemolib
+import os
+import shutil
+import time
 
 if __name__ == "__main__":
+    #copy file
+    print("Setup demo")
+    shutil.copyfile("blank.xlsx", "demo.xlsx")
+    shutil.copyfile("blank.docx", "demo.docx")
+    os.startfile("demo.xlsx")
+    os.startfile("demo.docx")
+    time.sleep(30)
+    print("Start demo")
     #set context to excel
     requestUrlAndHeaders = runtime.RequestUrlAndHeaderInfo();
     # requestUrlAndHeaders.url = "http://localhost:8052";
