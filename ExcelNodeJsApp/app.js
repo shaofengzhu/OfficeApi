@@ -7,7 +7,7 @@ var OfficeExtension = require('office.runtime');
 
 OfficeExtension.Utility._logEnabled = true;
 
-var requestHeaders;
+var session;
 
 oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
     .then(function(accessToken){
@@ -21,16 +21,16 @@ oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
             requestHeaders);
     })
     .then(function(workbookUrl){
-        return excelhelper.createSessionAndBuildUrlAndHeaders(workbookUrl, requestHeaders);
-    })
-    .then(function(requestUrlAndHeaders){
-        OfficeExtension.ClientRequestContext.defaultRequestUrlAndHeaders = requestUrlAndHeaders;
+        session = new Excel.Session(workbookUrl, requestHeaders);
     })
     .then(function(){
-        return exceldemolib.dataPopulateSetup();
+        return exceldemolib.dataPopulateSetup(session);
     })
     .then(function(){
-        return exceldemolib.dataPopulateRun();
+        return exceldemolib.dataPopulateRun(session);
+    })
+    .then(function(){
+        return session.close();
     })
     .catch(function(ex){
         console.error(JSON.stringify(ex));
