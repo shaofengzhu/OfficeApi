@@ -1,6 +1,5 @@
 var oauthhelper = require('./oauthhelper.js');
 var excelhelper = require('./excelhelper.js');
-var request = require('request');
 var Excel = require('excel');
 var exceldemolib = require('./exceldemolib.js');
 var OfficeExtension = require('office.runtime');
