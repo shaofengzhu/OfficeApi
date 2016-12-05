@@ -23,9 +23,11 @@ oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
         session = new Excel.Session(workbookUrl, requestHeaders);
     })
     .then(function(){
+        console.log("dataPopulateSetup");
         return exceldemolib.dataPopulateSetup(session);
     })
     .then(function(){
+        console.log("dataPopulateRun");
         return exceldemolib.dataPopulateRun(session);
     })
     .then(function(){
