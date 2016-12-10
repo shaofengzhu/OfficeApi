@@ -1,6 +1,6 @@
-var Excel = require('excel');
+var Excel = require('@microsoft/office-js/excel');
 var exceldemolib = require('./exceldemolib.js')
-var OfficeExtension = require('office.runtime');
+var OfficeExtension = require('@microsoft/office-js/office.runtime');
 
 // OfficeExtension.Utility._logEnabled = true;
 

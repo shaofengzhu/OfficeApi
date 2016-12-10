@@ -1,5 +1,5 @@
-var Excel = require('excel');
-var OfficeExtension = require('office.runtime');
+var Excel = require('@microsoft/office-js/excel');
+var OfficeExtension = require('@microsoft/office-js/office.runtime');
 
 function getAccessToken(clientId, refreshToken){
 	var tokenServiceUrl = "https://login.windows.net/common/oauth2/token";

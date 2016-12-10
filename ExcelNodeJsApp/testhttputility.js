@@ -1,4 +1,4 @@
-var OfficeExtension = require('office.runtime');
+var OfficeExtension = require('@microsoft/office-js/office.runtime');
 var Tests = {};
 Tests.test1 = function(){
     return OfficeExtension.HttpUtility.sendRequest({
