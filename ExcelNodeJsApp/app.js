@@ -4,10 +4,18 @@ var request = require('request');
 var Excel = require('excel');
 var exceldemolib = require('./exceldemolib.js');
 var OfficeExtension = require('office.runtime');
+var fetch = require('node-fetch');
 
 OfficeExtension.Utility._logEnabled = true;
 
 var session;
+
+OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
+    return fetch(req.url, {method: req.method, headers: req.headers, body: req.body})
+    .then(function(resp){
+        return {statusCode: resp.status, headers: resp.headers, body: resp.body};
+    });
+});
 
 oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
     .then(function(accessToken){
