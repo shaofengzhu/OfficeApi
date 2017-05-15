@@ -1,5 +1,5 @@
-var Excel = require('excel');
-var OfficeExtension = require('office.runtime');
+var Excel = require('@microsoft/office-js/excel');
+var OfficeExtension = require('@microsoft/office-js/office.runtime');
 
 function dataPopulateRun(session) {
     return Excel.run(session, function (context) {    

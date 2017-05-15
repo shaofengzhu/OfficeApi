@@ -3,7 +3,6 @@
 var excel = require('./excel.js');
 var excelhelper = require('./excelhelper.js');
 var oauthhelper = require('./oauthhelper.js');
-var request = require('request');
 
 var Excel = excel.Excel;
 var OfficeExtension = excel.OfficeExtension;

@@ -1,10 +1,9 @@
 var oauthhelper = require('./oauthhelper.js');
 var excelhelper = require('./excelhelper.js');
-var request = require('request');
-var Excel = require('excel');
+var Excel = require('@microsoft/office-js/excel');
 var exceldemolib = require('./exceldemolib.js');
-var OfficeExtension = require('office.runtime');
 var fetch = require('node-fetch');
+var OfficeExtension = require('@microsoft/office-js/office.runtime');
 
 OfficeExtension.Utility._logEnabled = true;
 
@@ -32,9 +31,11 @@ oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
         session = new Excel.Session(workbookUrl, requestHeaders);
     })
     .then(function(){
+        console.log("dataPopulateSetup");
         return exceldemolib.dataPopulateSetup(session);
     })
     .then(function(){
+        console.log("dataPopulateRun");
         return exceldemolib.dataPopulateRun(session);
     })
     .then(function(){
