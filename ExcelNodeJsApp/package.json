@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "node-fetch": "^1.6.3",
-    "request": "^2.75.0"
     "@microsoft/office-js": "0.1.0-beta.1"
   }
 }

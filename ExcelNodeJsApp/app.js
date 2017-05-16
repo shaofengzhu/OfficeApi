@@ -9,13 +9,6 @@ OfficeExtension.Utility._logEnabled = true;
 
 var session;
 
-OfficeExtension.HttpUtility.setCustomSendRequestFunc(function(req){
-    return fetch(req.url, {method: req.method, headers: req.headers, body: req.body})
-    .then(function(resp){
-        return {statusCode: resp.status, headers: resp.headers, body: resp.body};
-    });
-});
-
 oauthhelper.getAccessToken(oauthhelper.clientId, oauthhelper.refreshToken)
     .then(function(accessToken){
         requestHeaders = {Authorization: "Bearer " + accessToken};
