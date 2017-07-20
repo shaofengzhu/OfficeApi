@@ -1,9 +1,10 @@
 var oauthhelper = require('./oauthhelper.js');
 var excelhelper = require('./excelhelper.js');
-var Excel = require('@microsoft/office-js/excel');
+var Excel = require('@microsoft/office-api/excel');
 var exceldemolib = require('./exceldemolib.js');
 var fetch = require('node-fetch');
-var OfficeExtension = require('@microsoft/office-js/office.runtime');
+var OfficeExtension = require('@microsoft/office-api/office.runtime');
+require('@microsoft/office-api/office.runtime.node');
 
 OfficeExtension.Utility._logEnabled = true;
 

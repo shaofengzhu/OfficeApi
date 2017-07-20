@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-fetch": "^1.6.3",
-    "@microsoft/office-js": "0.1.0-beta.1"
+    "@microsoft/office-api": "0.1.0-beta.1",
+    "node-fetch": "^1.7.1"
   }
 }
